@@ -6,7 +6,7 @@ var config = {
     scene: {
         preload: function () {
             // Aquí cargamos los assets (sprites de personajes, background y esas cosas)
-            this.load.image('personaje', 'assets/personaje.png') /* Ejemplo!!!!! */
+            this.load.image('personaje', 'personaje.png') /* Ejemplo!!!!! */
         },
         create: function () {
             this.add.text(300, 50, 'AutoChess Mini - Prototipo', { fontSize: '24px', fill: '#fff' });
