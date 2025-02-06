@@ -31,9 +31,20 @@ public class RootController {
         model.addAttribute("loginError", error);
         return "login";
     }
+    
+    @GetMapping("/reglas")
+    public String reglas(Model model) {
+        return "reglas";
+    }
 
+    @GetMapping("/game")
+    public String game(Model model) {
+        return "game";
+    }
+    
 	@GetMapping("/")
     public String index(Model model) {
         return "index";
     }
+
 }
