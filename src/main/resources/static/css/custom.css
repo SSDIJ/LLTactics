@@ -28,6 +28,11 @@ img.preview {
 
 /* PÁGINA DE INICIO */
 
+#homepage-main-container {
+    width: 100%;
+    height: 70%;
+}
+
 #title {
     font-family:  "Jacquard 12", serif;
     margin-bottom: 0;
@@ -35,6 +40,7 @@ img.preview {
 
 #keywords-container {
     margin-top: -15px;
+    font-weight: bold;
 }
 
 #homepage-animation-container {
@@ -43,6 +49,15 @@ img.preview {
     width: 600px;
     height: 100px;
     gap: 30px;
+}
+
+#homepage-sword {
+    position: absolute;
+    z-index: -2;
+    opacity: 0.15;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(180deg) scale(120%);
 }
 
 #homepage-island {
@@ -63,7 +78,7 @@ img.preview {
 #homepage-character-container {
     border-radius: 15px;
     width: 80px;
-    border: 2px solid rgb(84, 122, 216);
+    border: 1px solid rgb(0, 0, 0);
 }
 
 #homepage-character {
@@ -82,7 +97,6 @@ img.preview {
     width: 10px;
     height: 10px;
     background-color: rgba(0, 0, 0, 0.8);
-    border-radius: 50%;
     animation: subir 3s linear infinite;
     z-index: -1;
     pointer-events: none;
@@ -92,7 +106,7 @@ img.preview {
 @keyframes subir {
   0% {
     transform: translateY(0);
-    opacity: 0.5;
+    opacity: 0.2;
   }
   100% {
     transform: translateY(-200px);

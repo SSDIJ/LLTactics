@@ -11,11 +11,42 @@ const characters = [
             "../img/units/humans/general/general-melee6.png",
         ]
     },
+    {
+        name: "leader",
+        animation: [
+            "../img/units/orcs/leader/leader-attack-1.png",
+            "../img/units/orcs/leader/leader-attack-2.png",
+            "../img/units/orcs/leader/leader-attack-3.png",
+            "../img/units/orcs/leader/leader-attack-4.png",
+            "../img/units/orcs/leader/leader-attack-5.png",
+        ]
+    },
+    {
+        name: "spearman",
+        animation: [
+            "../img/units/goblins/spearman/spearman-idle-2.png",
+            "../img/units/goblins/spearman/spearman-idle-1.png",
+            "../img/units/goblins/spearman/spearman-idle-3.png",
+            "../img/units/goblins/spearman/spearman-idle-4.png",
+            "../img/units/goblins/spearman/spearman-idle-5.png",
+            "../img/units/goblins/spearman/spearman-idle-6.png",
+            "../img/units/goblins/spearman/spearman-idle-7.png",
+            "../img/units/goblins/spearman/spearman-idle-8.png",
+            "../img/units/goblins/spearman/spearman-idle-9.png",
+            "../img/units/goblins/spearman/spearman-idle-10.png",
+            "../img/units/goblins/spearman/spearman-idle-11.png",
+            "../img/units/goblins/spearman/spearman-idle-12.png",
+
+        ]
+    }
+
 ];
 
 // Índice actual de personaje y animación
 let currentCharacterIndex = 0;
 let currentAnimationIndex = 0;
+
+const TIME_TO_CHANGE_CHARACTER = 5000;
 
 // Función para cambiar de personaje
 function changeCharacter() {
@@ -34,10 +65,10 @@ function startCharacterAnimation(animationFrames) {
     // Detiene la animación
     setTimeout(() => {
         clearInterval(animationInterval);
-    }, 10000);
+    }, TIME_TO_CHANGE_CHARACTER );
 }
 
-setInterval(changeCharacter, 10000);
+setInterval(changeCharacter, TIME_TO_CHANGE_CHARACTER);
 changeCharacter();
 
 // - PARTÍCULAS -
