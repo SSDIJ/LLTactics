@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>LL Tactics</title>
+</head>
+
+<body class="h-100">
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+
+    <div id="homepage-main-container" class="container d-flex flex-column align-items-center justify-content-center text-center mt-5">
+
+        <div class="container">
+
+            <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
+
+            <!-- Título -->
+            <div class="container mt-5">
+                <h1 id="title" class="display-1">Ranking</h1>
+            </div>
+
+            <div id="keywords-container" class="container">
+                Estrategia 
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dot" viewBox="0 0 16 16">
+                    <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                </svg>
+                Batallas
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dot" viewBox="0 0 16 16">
+                    <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                </svg>
+                Sinergias
+            </div>
+        </div>
+       
+        <!-- Botones -->
+        <div class="container d-flex align-items-center justify-content-center mt-3 gap-3">
+            <a href="/game"><button type="button" class="btn btn-outline-primary">Hola</button></a>
+            <div id="homepage-character-container">
+                <img id="homepage-character">
+            </div>
+            <a href="/autores"><button type="button" class="btn btn-outline-secondary">Autor</button></a>
+        </div>
+
+        <div id="particulas" class="mt-4"></div>
+        <img src="/img/homepage/island.png" alt="Plataforma" id="homepage-island">
+    </div>
+
+    <!-- Degradado en la parte inferior -->
+    <div class="degradado"></div>
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+
+    <script type="module" src="/js/homepage-animations.js"></script>
+
+</body>
+
+</html>
