@@ -45,9 +45,14 @@ public class RootController {
      public String ranking (Model model){
         return "ranking";
      }
+     @GetMapping("/galeria")
+     public String galeria (Model model){
+        return "galeria";
+     }
 	@GetMapping("/")
     public String index(Model model) {
         return "index";
     }
+    
 
 }

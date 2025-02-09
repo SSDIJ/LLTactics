@@ -232,3 +232,97 @@ td img.icon {
     opacity: 0.9;
     z-index: -2;
 }
+
+/* GALERIA INICIO*/
+
+/* Estilos generales para la galería */
+#heroes-gallery {
+    width: 80%;
+    margin: 0 auto;
+    padding: 30px 0;
+    text-align: center;
+}
+
+#heroes-gallery h1 {
+    font-family: "Jacquard 12", serif;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+#gallery-description {
+    font-family: 'Uncial Antiqua', serif;
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 40px;
+}
+
+/* Estilo de la tarjeta de héroe */
+.card {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 300px;  /* Establecer un ancho fijo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card-img-top {
+    width: 100%;
+    height: auto;
+    border-bottom: 2px solid #ddd;
+}
+
+.card-body {
+    padding: 15px;
+    text-align: center;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #444;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.card-description {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.4;
+    margin-top: 10px;
+}
+
+/* Asegura que las tarjetas se distribuyan en múltiples filas y se ajusten al tamaño de pantalla */
+#gallery-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    .card {
+        width: 100%;
+        max-width: 250px;  /* Ajustar tamaño para pantallas pequeñas */
+        margin-bottom: 20px;
+    }
+}
+
+
+/* GALERIA FIN */
