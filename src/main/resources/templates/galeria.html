@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>LL Tactics - Galería de Héroes</title>
+</head>
+
+<body class="h-100">
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+
+    <div id="heroes-gallery" class="container d-flex flex-column align-items-center justify-content-center text-center mt-5">
+
+        <!-- Título de la Galería -->
+        <div class="container mt-5">
+            <h1 id="title-gallery" class="display-gallery">🛡️ Galería de Héroes 🛡️</h1>
+        </div>
+
+        <!-- Descripción de la Galería -->
+        <div id="gallery-description">
+            ¡Conoce a los héroes más valientes del reino! (Y algún que otro villano...)
+        </div>
+
+        <!-- Aquí empieza la tabla de la galería de héroes -->
+        <div id="gallery-container" class="d-flex flex-wrap justify-content-center">
+            <div class="card">
+                <img src="/img/units/goblins/spearman/spearman-idle-1.png" class="card-img-top" alt="Duende lanzero">
+                <div class="card-body">
+                    <h5 class="card-title">Duende lanzero</h5>
+                    <p class="card-text">Fuerza: 90 | Defensa: 85 | Velocidad: 70</p>
+                    <p class="card-description">El Duende Lanzero es un experto en ataques rápidos a larga distancia. A pesar de su pequeño tamaño, su fuerza y destreza lo hacen muy peligroso en el campo de batalla.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="/img/units/humans/general/general-breeze1.png" class="card-img-top" alt="General de tierra">
+                <div class="card-body">
+                    <h5 class="card-title">General de tierra</h5>
+                    <p class="card-text">Fuerza: 75 | Defensa: 60 | Magia: 95</p>
+                    <p class="card-description">El General de Tierra es conocido por su sabiduría táctica y su habilidad para controlar el terreno a su favor. Su dominio de la magia de la tierra lo convierte en un formidable enemigo.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="/img/units/orcs/leader/leader.png" class="card-img-top" alt="Orco Jefe">
+                <div class="card-body">
+                    <h5 class="card-title">Orco Jefe</h5>
+                    <p class="card-text">Fuerza: 100 | Defensa: 90 | Velocidad: 50</p>
+                    <p class="card-description">El Orco Jefe es un guerrero brutal y poderoso, líder de su clan. Su fuerza y resistencia son inigualables, y su presencia en el campo de batalla es aterradora.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Degradado en la parte inferior -->
+        <div class="degradado"></div>
+
+        <!-- Pie de página -->
+        <th:block th:replace="~{fragments/footer.html :: footer}" />
+
+        <script type="module" src="/js/homepage-animations.js"></script>
+    </body>
+
+</html>
