@@ -121,7 +121,7 @@ img.preview {
     left: 0;
     width: 100%;
     height: 400px;
-    background: linear-gradient(to top, rgba(173, 216, 230, 1), rgba(173, 216, 230, 0));
+    background: linear-gradient(to top, rgb(231, 206, 160), rgba(230, 205, 173, 0));
     pointer-events: none;
     z-index: -1;
 }
@@ -326,3 +326,90 @@ td img.icon {
 
 
 /* GALERIA FIN */
+
+/*REGLAS INICIO*/
+
+
+#titulo {
+    font-family:  "Jacquard 12", serif;
+    position: absolute;
+    top: 20px; /* Ajusta según necesites */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 3rem; /* Ajusta el tamaño si es necesario */
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+}
+
+.apartado{
+    text-align: left;
+    font-family: 'Uncial Antiqua', serif;
+    font-size:25px;
+    margin-top:25px;
+}
+
+.regla{
+    font-family: 'Uncial Antiqua', serif;
+    font-size:17px;
+}
+
+.lista-reglas{
+
+    max-width: 800px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:75px;
+}
+
+.reglas-buttons {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Alinear los botones de navegación horizontalmente */
+  .navigation {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+
+.flecha{
+    max-width: 35px;
+}
+
+#index-button {
+    margin-top: 15px;
+}
+
+.sword {
+    position: absolute;
+    width: 300px; /* Ajusta el tamaño de las espadas */
+    height: auto;
+    opacity: 0.15;
+}
+
+.left-sword {
+    margin-left: 20;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.right-sword {
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.stats{
+    font-weight: bold;
+}
+
+/*REGLAS FIN*/

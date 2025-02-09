@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>Reglas</title>
+</head>
+<body>
+    <h1 id = "titulo">Reglas</h1>
+    <br>
+    <div class="content-container">
+        <img src="/img/homepage/sword.png" alt="Espada"  class="sword left-sword">
+        <div class = "lista-reglas">
+            <h1 class ="apartado">Inicio del Juego</h1>
+                <ul>
+                    <li class="regla">Cuatro jugadores se conectan a una partida</li>
+                    <li class="regla">Cada jugador selecciona una serie de personajes para colocar en el campo de batalla</li>
+                </ul>
+            <h1 class ="apartado">Campo de Batalla</h1>
+                <ul>
+                    <li class="regla">El campo de batalla es una única fila con un frente en el centro</li>
+                    <li class="regla">Cada jugador posiciona sus personajes en fila frente a su oponente directo</li>
+                    <li class="regla">Los personajes atacan al primer enemigo de la fila contraria</li>
+                    <li class="regla">Cuando un personaje es derrotado, el personaje inmediatamente detrás toma su lugar en el frente</li>
+                </ul>
+            <h1 class ="apartado">Condiciones de Victoria y Derrota</h1>
+                <ul>
+                    <li class="regla">Cada jugador tiene una barra de vida global</li>
+                    <li class="regla">Se pierden puntos de vida al perder batallas</li>
+                    <li class="regla">Si la barra de vida de un jugador llega a 0, queda eliminado</li>
+                    <li class="regla">El último jugador en pie gana la partida</li>
+                </ul>
+            <h1 class ="apartado">Atributos de los Personajes</h1>
+                <ul>
+                    <li class="regla">Vida: determina cuántos ataques puede resistir un personaje</li>
+                    <li class="regla">Armadura: reduce el daño recibido por el personaje</li>
+                    <li class="regla">Velocidad: determina el orden de ataque en cada ronda</li>
+                    <li class="regla">Daño: cantidad de puntos restados a la vida del enemigo</li>
+                    <li class="regla">El daño resultante de un ataque se calcula como: <span class="stats">vidaDespués = vidaAntes - (daño - armadura)</span></li>
+                </ul>
+        </div>
+        <img src="/img/homepage/sword.png" alt="Espada"  class="sword right-sword">
+    </div>
+    
+    <div class="reglas-buttons">
+        <div class="navigation">
+            <button class="btn btn-outline-secondary" disabled><img class ="flecha" src="/img/reglas/flecha-izq.png"></button>
+            <a href="/reglas2">
+                <button class="btn btn-outline-secondary"><img class ="flecha" src="/img/reglas/flecha-der.png"></button>
+            </a>
+        </div>
+        <a href="/" id="index-button"><button class="btn btn-outline-secondary">Volver</button></a>
+    </div>
+    <!-- Degradado en la parte inferior -->
+    <div class="degradado"></div>
+
+    <!-- Pie de página -->
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+    
+</body>
+</html>

@@ -32,9 +32,14 @@ public class RootController {
         return "login";
     }
     
-    @GetMapping("/reglas")
-    public String reglas(Model model) {
-        return "reglas";
+    @GetMapping("/reglas1")
+    public String reglas1(Model model) {
+        return "reglas1";
+    }
+
+    @GetMapping("/reglas2")
+    public String reglas2(Model model) {
+        return "reglas2";
     }
 
     @GetMapping("/game")

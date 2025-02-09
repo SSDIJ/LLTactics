@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>Reglas</title>
+</head>
+<body>
+    <h1 id = "titulo">Reglas</h1>
+    <br>
+    <div class="content-container">
+        <img src="/img/homepage/sword.png" alt="Espada"  class="sword left-sword">
+        <div class = "lista-reglas">
+            <h1 class ="apartado">Selección de Personajes y Objetos</h1>
+                <ul>
+                    <li class="regla">Los personajes y objetos se obtienen a través de dos carruseles que se actualizan cada ronda</li>
+                    <li class="regla">Los jugadores pueden elegir qué personajes y objetos comprar</li>
+                </ul>
+            <h1 class ="apartado">Sinergias</h1>
+                <ul>
+                    <li class="regla">Algunos personajes tienen sinergias entre ellos</li>
+                    <li class="regla">Las sinergias otorgan estadísticas de grupo, mejorando el rendimiento de los personajes</li>
+                </ul>
+            <h1 class ="apartado">Economía</h1>
+                <ul>
+                    <li class="regla">Los jugadores ganan monedas progresivamente en función de su estado de partida</li>
+                    <li class="regla">Las monedas pueden usarse para</li>
+                        <ul>
+                            <li class="regla">Comprar nuevos personajes</li>
+                            <li class="regla">Adquirir objetos que mejoren las estadísticas de los personajes</li>
+                        </ul>
+                </ul>
+            <h1 class ="apartado">Mecánica de Combate</h1>
+                <ul>
+                    <li class="regla">El combate es automático, los personajes atacan según su velocidad</li>
+                    <li class="regla">Los ataques continúan hasta que uno de los jugadores queda sin personajes en su fila</li>
+                </ul>
+        </div>
+        <img src="/img/homepage/sword.png" alt="Espada"  class="sword right-sword">
+    </div>
+    
+    
+    <div class="reglas-buttons">
+        <div class="navigation">
+            <a href="/reglas1">
+                <button class="btn btn-outline-secondary"><img class ="flecha" src="/img/reglas/flecha-izq.png"></button>
+            </a>
+            <button class="btn btn-outline-secondary" disabled><img class ="flecha" src="/img/reglas/flecha-der.png"></button>
+        </div>
+        <a href="/" id="index-button"><button class="btn btn-outline-secondary">Volver</button></a>
+    </div>
+    <!-- Degradado en la parte inferior -->
+    <div class="degradado"></div>
+
+    <!-- Pie de página -->
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+</body>
+</html>
