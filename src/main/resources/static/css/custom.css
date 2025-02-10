@@ -360,21 +360,22 @@ td img.icon {
     margin-left:auto;
     margin-right:auto;
     margin-top:75px;
+    margin-bottom: 20px;
 }
 
 .reglas-buttons {
-    bottom: 30px;
-    transform: translateX(-50%);
-    margin-left:750px;
+    margin: auto;
+    position: relative;
+    text-align: center;
 }
   
 /* Alinear los botones de navegación horizontalmente */
 .navigation {
-display: flex;
-justify-content: center;
-gap: 10px;
-margin-top: 10px;
-margin-bottom:10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom:5px;
 }
   
 
@@ -383,8 +384,8 @@ margin-bottom:10px;
 }
 
 #index-button {
-    margin-top: 30px;
-    margin-left:345px
+    display: inline-block;; 
+    margin: 15px auto; 
 }
 
 .sword {
