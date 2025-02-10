@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/autores.css">
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>Autores del Proyecto</title>
+</head>
+<body>
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+    <h1 id="tituloAutores">Autores del Proyecto</h1>
+    <br>
+    <div class="content-container">
+        <img src="/img/homepage/sword.png" alt="Espada" class="sword left-sword">
+        <div class="lista-autores">
+            
+            <div class="autores">
+                <div class="autor-card">
+                    <img src="/img/units/dragons/1. DTanque/enforcer-blade.png" alt="Autor 1" class="autor-img">
+                    <h2 class="autor-nombre">Samuel Carrillo</h2>
+                </div>
+                <div class="autor-card">
+                    <img src="/img/units/dragons/1. DTanque/enforcer-blade.png" alt="Autor 2" class="autor-img">
+                    <h2 class="autor-nombre">David Cendejas</h2>
+                </div>
+                <div class="autor-card">
+                    <img src="/img/units/dragons/1. DTanque/enforcer-blade.png" alt="Autor 3" class="autor-img">
+                    <h2 class="autor-nombre">Sandra Sanz</h2>
+                </div>
+                <div class="autor-card">
+                    <img src="/img/units/dragons/1. DTanque/enforcer-blade.png" alt="Autor 4" class="autor-img">
+                    <h2 class="autor-nombre">Iván Toribio</h2>
+                </div>
+                <div class="autor-card">
+                    <img src="/img/units/dragons/1. DTanque/enforcer-blade.png" alt="Autor 5" class="autor-img">
+                    <h2 class="autor-nombre">Javier Martín</h2>
+                </div>
+            </div>
+        </div>
+        <img src="/img/homepage/sword.png" alt="Espada" class="sword right-sword">
+    </div>
+    
+    <div class="autores-buttons">
+        <a href="/" id="index-button"><button class="btn btn-outline-secondary">Volver</button></a>
+    </div>
+    
+    <!-- Degradado en la parte inferior -->
+    <div class="degradado"></div>
+    
+    <!-- Pie de página -->
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+</body>
+</html>

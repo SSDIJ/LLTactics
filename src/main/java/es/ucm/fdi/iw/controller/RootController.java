@@ -54,6 +54,12 @@ public class RootController {
      public String galeria (Model model){
         return "galeria";
      }
+
+     @GetMapping("/autores")
+    public String autores(Model model) {
+        return "autores";
+    }
+
 	@GetMapping("/")
     public String index(Model model) {
         return "index";

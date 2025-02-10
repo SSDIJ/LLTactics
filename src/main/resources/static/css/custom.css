@@ -327,6 +327,55 @@ td img.icon {
 
 /* GALERIA FIN */
 
+/* AUTORES INICIO */
+
+#tituloAutores {
+    padding: 15px;
+}
+
+.autores {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centra los elementos en el contenedor */
+    gap: 20px; /* Espaciado entre cada tarjeta de autor */
+    text-align: center; /* Asegura que el texto dentro de cada autor esté centrado */
+    
+}
+
+.autor {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra los elementos dentro de cada autor */
+    max-width: 250px; /* Controla el ancho de cada tarjeta de autor */
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1); /* Fondo semi-transparente */
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.autor-img {
+    width: 120px; /* Ajusta el tamaño de la imagen del autor */
+    height: 120px;
+    border-radius: 50%; /* Hace la imagen circular */
+    margin-bottom: 10px;
+}
+
+.autor h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #fff; /* Asegura un buen contraste de color */
+}
+
+.autor p {
+    font-size: 1rem;
+    color: #ddd;
+    max-width: 200px;
+}
+
+/* AUTORES FIN */
+
+
 /*REGLAS INICIO*/
 
 
