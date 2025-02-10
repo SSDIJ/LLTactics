@@ -333,7 +333,7 @@ td img.icon {
 #titulo {
     font-family:  "Jacquard 12", serif;
     position: absolute;
-    top: 20px; /* Ajusta según necesites */
+    top:55px; /* Ajusta según necesites */
     left: 50%;
     transform: translateX(-50%);
     font-size: 3rem; /* Ajusta el tamaño si es necesario */
