@@ -63,6 +63,7 @@ public class SecurityConfig {
 				.requestMatchers("/api/**", "/reglas1").permitAll()            // <-- public api access
 				.requestMatchers("/api/**", "/reglas2").permitAll()            // <-- public api access
 				.requestMatchers("/api/**", "/galeria").permitAll()            // <-- public api access
+				.requestMatchers("/api/**", "/autores").permitAll()            // <-- public api access
 				.requestMatchers("/admin/**").hasRole("ADMIN")	   // <-- administration
 				.requestMatchers("/user/**").hasRole("USER")	   // <-- logged-in users
 				.anyRequest().authenticated()
