@@ -363,22 +363,19 @@ td img.icon {
 }
 
 .reglas-buttons {
-    position: fixed;
     bottom: 30px;
-    left: 50%;
     transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+    margin-left:750px;
+}
   
-  /* Alinear los botones de navegación horizontalmente */
-  .navigation {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 10px;
-  }
+/* Alinear los botones de navegación horizontalmente */
+.navigation {
+display: flex;
+justify-content: center;
+gap: 10px;
+margin-top: 10px;
+margin-bottom:10px;
+}
   
 
 .flecha{
@@ -386,7 +383,8 @@ td img.icon {
 }
 
 #index-button {
-    margin-top: 15px;
+    margin-top: 30px;
+    margin-left:345px
 }
 
 .sword {
