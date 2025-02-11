@@ -45,10 +45,11 @@ public class RootController {
      public String ranking (Model model){
         return "ranking";
      }
+     /*/
      @GetMapping("/galeria")
      public String galeria (Model model){
         return "galeria";
-     }
+     }  */
 
      @GetMapping("/autores")
     public String autores(Model model) {
