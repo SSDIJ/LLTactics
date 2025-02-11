@@ -28,54 +28,56 @@
             ¡Escala hacía la cima combatiendo y llega al top del Ranking!
         </div>
 
-<!--Tabla del ranking-->
-<div id="ranking-container">
-    <h1>🏆 Ranking de Guerreros 🏆</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Jugador</th>
-                <th> Puntuación</th>
-                <th> Partidas Jugadas</th>
-                <th> Victorias</th>
-                <th> Derrotas</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1º</td>
-                <td><img class="icon" src="/img/ranking/gold_shield.png">Sir Lancelot</td>
-                <td>3200</td>
-                <td>10</td>
-                <td>8</td>
-                <td>2</td>
-            </tr>
-            <tr>
-                <td>2º</td>
-                <td><img class="icon" src="/img/raking/silver_shield.png">Lady Morgana</td>
-                <td>3100</td>
-                <td>10</td>
-                <td>7</td>
-                <td>3</td>
-            </tr>
-            <tr>
-                <td>3º</td>
-                <td><img class="icon" src="/img/ranking/bronze_shield.png">Dragón Rojo</td>
-                <td>2900</td>
-                <td>10</td>
-                <td>6</td>
-                <td>4</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
 
-        <!-- Degradado en la parte inferior -->
-        <div class="degradado"></div>
-        <th:block th:replace="~{fragments/footer.html :: footer}" />
+    </div>
+    <!--Tabla del ranking-->
+    <div id="ranking-container">
+        <h1>🏆 Ranking de Guerreros 🏆</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Jugador</th>
+                    <th> Puntuación</th>
+                    <th> Partidas Jugadas</th>
+                    <th> Victorias</th>
+                    <th> Derrotas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1º</td>
+                    <td><img class="icon" src="/img/ranking/gold_shield.png">Sir Lancelot</td>
+                    <td>3200</td>
+                    <td>10</td>
+                    <td>8</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>2º</td>
+                    <td><img class="icon" src="/img/raking/silver_shield.png">Lady Morgana</td>
+                    <td>3100</td>
+                    <td>10</td>
+                    <td>7</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td>3º</td>
+                    <td><img class="icon" src="/img/ranking/bronze_shield.png">Dragón Rojo</td>
+                    <td>2900</td>
+                    <td>10</td>
+                    <td>6</td>
+                    <td>4</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-        <script type="module" src="/js/homepage-animations.js"></script>
+    <!-- Degradado en la parte inferior -->
+    <div class="degradado"></div>
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+
+    <script type="module" src="/js/homepage-animations.js"></script>
 
 </body>
 

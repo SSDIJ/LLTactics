@@ -54,7 +54,10 @@ public class RootController {
     public String autores(Model model) {
         return "autores";
     }
-
+    @GetMapping("/prophile")
+    public String prophile(Model model) {
+        return "prophile";
+    }
 	@GetMapping("/")
     public String index(Model model) {
         return "index";
