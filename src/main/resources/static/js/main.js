@@ -3,6 +3,7 @@ var config = {
     width: 1200,
     height: 600,
     backgroundColor: '#222',
+    parent: 'game-container',
     scene: {
         preload: function () {
             /* IMAGENES */
@@ -12,6 +13,7 @@ var config = {
             this.load.image('arquero', 'img/units/humans/4. Arquero/longbowman-idle-1.png');
             this.load.image('mago', 'img/units/humans/5. Mago/white-mage-idle-1.png');
         },
+        
         create: function () {
             /* DEBUG */
             this.debugText = this.add.text(10, 10, 'Debug info:', { fontSize: '8px', fill: '#fff' });
@@ -76,7 +78,7 @@ var config = {
                 let origin = gameObject.getData('origin');
 
                 // Si origen es tienda o slot de jugador
-                if (origin === 'shop' || this.playerSlots[slotIndex] !== null) { 
+                if (origin === 'shop' || this.playerSlots[slotIndex] !== null) { // TODO:
                     // Actualizamos
                     this.draggingCharacter = gameObject;
                     this.previousSlot = slotIndex;

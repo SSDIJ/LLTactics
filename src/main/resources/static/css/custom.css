@@ -11,6 +11,10 @@ body {
     color: #2d2b26;
 }
 
+.title {
+    font-family: var(--TITLE-FONT-FAMILY);
+}
+
 .iwthumb {
     height: 32px;
     width: 32px;
@@ -255,24 +259,25 @@ td img.icon {
 }
 
 #gallery-description {
-    font-family: 'Uncial Antiqua', serif;
     font-size: 1.2rem;
     color: #555;
     margin-bottom: 40px;
 }
 
 /* Estilo de la tarjeta de héroe */
+
 .card {
     border: 2px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
     width: 300px;  /* Establecer un ancho fijo */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
     transition: transform 0.3s, box-shadow 0.3s;
     margin: 15px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
 }
 
@@ -282,7 +287,7 @@ td img.icon {
 }
 
 .card-img-top {
-    width: 100%;
+    width: 150px;
     height: auto;
     border-bottom: 2px solid #ddd;
 }
@@ -327,6 +332,23 @@ td img.icon {
         margin-bottom: 20px;
     }
 }
+#img-gallery-bg {
+    opacity: 0.05;
+    position: absolute;
+    top: 200px;
+    width: 500px;
+    animation: rotation 1000s infinite linear;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 
 
 /* GALERIA FIN */
@@ -428,6 +450,14 @@ td img.icon {
     max-width: 800px;
 }
 /*REGLAS FIN*/
+
+.stat {
+    max-width: 100%;
+}
+
+.unit-img {
+    width: 200px !important;
+}
 
 
 .prophile_container {

@@ -11,7 +11,7 @@
         <link rel="stylesheet" th:href="@{/css/custom.css}" href="css/custom.css" type="text/css" />
         <link rel="icon" th:href="@{/img/favicon.ico}" href="/img/favicon.ico" type="image/x-icon">
         <script type="text/javascript">
-            const config = {
+            const iwconfig = {
                 socketUrl: "[[${ws}?:'']]", // empty is false, will result in no WS being opened
                 rootUrl: "[[${url}?:'']]",
                 csrf: {
@@ -21,7 +21,7 @@
                 admin: "[[${u != null && u.hasRole('ADMIN')} ? true : false]]",
                 userId: +"[[${u != null} ? ${u.id} : -1]]"
             };
-            config.admin = config.admin == "true"; // ensure boolean
+            iwconfig.admin = iwconfig.admin == "true"; // ensure boolean
         </script>
     </th:block>
 </head>

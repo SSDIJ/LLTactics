@@ -68,8 +68,8 @@ function startCharacterAnimation(animationFrames) {
     }, TIME_TO_CHANGE_CHARACTER );
 }
 
-setInterval(changeCharacter, TIME_TO_CHANGE_CHARACTER);
-changeCharacter();
+// setInterval(changeCharacter, TIME_TO_CHANGE_CHARACTER);
+// changeCharacter();
 
 // - PARTÍCULAS -
 
