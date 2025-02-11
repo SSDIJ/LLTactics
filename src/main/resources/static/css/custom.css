@@ -1,5 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Jacquard+12&display=swap');
 
+:root {
+    --TITLE-FONT-FAMILY: "Jacquard 12", serif;
+    --TEXT-FONT-FAMILY: "Times New Roman", Times, serif;
+}
+
+body {
+    font-family: var(--TEXT-FONT-FAMILY);
+    /* background-color: #f9f6f1; */
+    color: #2d2b26;
+}
+
 .iwthumb {
     height: 32px;
     width: 32px;
@@ -121,7 +132,7 @@ img.preview {
     left: 0;
     width: 100%;
     height: 400px;
-    background: linear-gradient(to top, rgb(231, 206, 160), rgba(230, 205, 173, 0));
+    background: linear-gradient(to top, rgb(247, 230, 199), rgba(230, 205, 173, 0));
     pointer-events: none;
     z-index: -1;
 }
@@ -149,14 +160,7 @@ img.preview {
     color: #555;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Jacquard+12&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap');
 
-body {
-    font-family: 'Uncial Antiqua', serif;
-    background-color: #f9f6f1;
-    color: #2d2b26;
-}
 
 #ranking-container {
     border: 2px solid #8c7b75;
@@ -378,43 +382,8 @@ td img.icon {
 
 /*REGLAS INICIO*/
 
-
-#titulo {
-    font-family:  "Jacquard 12", serif;
-    position: absolute;
-    top:55px; /* Ajusta según necesites */
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 3rem; /* Ajusta el tamaño si es necesario */
-    font-weight: bold;
-    text-align: center;
-    width: 100%;
-}
-
-.apartado{
-    text-align: left;
-    font-family: 'Uncial Antiqua', serif;
-    font-size:25px;
-    margin-top:25px;
-}
-
-.regla{
-    font-family: 'Uncial Antiqua', serif;
-    font-size:17px;
-}
-
-.lista-reglas{
-
-    max-width: 800px;
-    margin-left:auto;
-    margin-right:auto;
-    margin-top:75px;
-    margin-bottom: 20px;
-}
-
-.reglas-buttons {
-    margin: auto;
-    position: relative;
+#rules-title {
+    font-family:  var(--TITLE-FONT-FAMILY);
     text-align: center;
 }
   
@@ -437,27 +406,25 @@ td img.icon {
     margin: 15px auto; 
 }
 
-.sword {
-    position: absolute;
-    width: 300px; /* Ajusta el tamaño de las espadas */
-    height: auto;
-    opacity: 0.15;
-}
-
-.left-sword {
-    margin-left: 20;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.right-sword {
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-}
 
 .stats{
     font-weight: bold;
 }
 
+.accordion-button:not(.collapsed) {
+    background-color: rgba(0, 0, 0, 0.7) !important; /* Fondo más oscuro cuando está activo */
+    color: white !important; /* Asegura que el texto sea blanco en estado activo */
+}
+
+.accordion-button:not(.collapsed)::after {
+    filter: brightness(0) invert(1); /* Asegura que siga blanca cuando está activo */
+}
+
+.link {
+    color: #55a961;
+}
+
+#rules-container {
+    max-width: 800px;
+}
 /*REGLAS FIN*/

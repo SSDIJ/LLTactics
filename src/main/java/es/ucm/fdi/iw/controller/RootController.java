@@ -37,11 +37,6 @@ public class RootController {
         return "reglas1";
     }
 
-    @GetMapping("/reglas2")
-    public String reglas2(Model model) {
-        return "reglas2";
-    }
-
     @GetMapping("/game")
     public String game(Model model) {
         return "game";

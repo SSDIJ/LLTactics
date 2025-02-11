@@ -6,52 +6,180 @@
     <title>Reglas</title>
 </head>
 <body>
+
     <header th:replace="~{fragments/nav.html :: nav}"></header>
-    <h1 id = "titulo">Reglas</h1>
-    <br>
-    <div class="content-container">
-        <img src="/img/homepage/sword.png" alt="Espada"  class="sword left-sword">
-        <div class = "lista-reglas">
-            <h1 class ="apartado">Inicio del Juego</h1>
-                <ul>
-                    <li class="regla">Cuatro jugadores se conectan a una partida</li>
-                    <li class="regla">Cada jugador selecciona una serie de personajes para colocar en el campo de batalla</li>
-                </ul>
-            <h1 class ="apartado">Campo de Batalla</h1>
-                <ul>
-                    <li class="regla">El campo de batalla es una única fila con un frente en el centro</li>
-                    <li class="regla">Cada jugador posiciona sus personajes en fila frente a su oponente directo</li>
-                    <li class="regla">Los personajes atacan al primer enemigo de la fila contraria</li>
-                    <li class="regla">Cuando un personaje es derrotado, el personaje inmediatamente detrás toma su lugar en el frente</li>
-                </ul>
-            <h1 class ="apartado">Condiciones de Victoria y Derrota</h1>
-                <ul>
-                    <li class="regla">Cada jugador tiene una barra de vida global</li>
-                    <li class="regla">Se pierden puntos de vida al perder batallas</li>
-                    <li class="regla">Si la barra de vida de un jugador llega a 0, queda eliminado</li>
-                    <li class="regla">El último jugador en pie gana la partida</li>
-                </ul>
-            <h1 class ="apartado">Atributos de los Personajes</h1>
-                <ul>
-                    <li class="regla">Vida: determina cuántos ataques puede resistir un personaje</li>
-                    <li class="regla">Armadura: reduce el daño recibido por el personaje</li>
-                    <li class="regla">Velocidad: determina el orden de ataque en cada ronda</li>
-                    <li class="regla">Daño: cantidad de puntos restados a la vida del enemigo</li>
-                    <li class="regla">El daño resultante de un ataque se calcula como: <span class="stats">vidaDespués = vidaAntes - (daño - armadura)</span></li>
-                </ul>
+
+    <div id="rules-container" class="container d-flex flex-column justify-content-center align-items-center mt-4">
+
+        <div class="d-flex gap-3 align-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-square-fill" viewBox="0 0 16 16">
+                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2z"/>
+            </svg>
+            &#xF582;
+
+            <!--Título-->
+            <h1 id="rules-title" class="display-1">Reglas</h1>
+
+            &#xF582;
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-square-fill" viewBox="0 0 16 16">
+                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2z"/>
+            </svg>
         </div>
-        <img src="/img/homepage/sword.png" alt="Espada"  class="sword right-sword">
-    </div>
+        
+
+        <div class="container">
+            <div class="accordion" id="gameRulesAccordion">
+            
+                <!-- Inicio del Juego -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Inicio del juego
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#gameRulesAccordion">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>Cuatro jugadores se conectan a una partida</li>
+                                <li>Cada jugador selecciona una serie de personajes para colocar en el campo de batalla</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Campo de Batalla -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Campo de batalla
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#gameRulesAccordion">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>El campo de batalla es una única fila con un frente en el centro</li>
+                                <li>Cada jugador posiciona sus personajes en fila frente a su oponente directo</li>
+                                <li>Los personajes atacan al primer enemigo de la fila contraria</li>
+                                <li>Cuando un personaje es derrotado, el personaje inmediatamente detrás toma su lugar en el frente</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Condiciones de Victoria y Derrota -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Condiciones de victoria y derrota
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#gameRulesAccordion">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>Cada jugador tiene una barra de vida global</li>
+                                <li>Se pierden puntos de vida al perder batallas</li>
+                                <li>Si la barra de vida de un jugador llega a 0, queda eliminado</li>
+                                <li>El último jugador en pie gana la partida</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Atributos de los Personajes -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Atributos de los personajes
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#gameRulesAccordion">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>Vida: determina cuántos ataques puede resistir un personaje</li>
+                                <li>Armadura: reduce el daño recibido por el personaje</li>
+                                <li>Velocidad: determina el orden de ataque en cada ronda</li>
+                                <li>Daño: cantidad de puntos restados a la vida del enemigo</li>
+                                <li>El daño resultante de un ataque se calcula como: <span class="fw-bold">vidaDespués = vidaAntes - (daño - armadura)</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Selección de Personajes y Objetos -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFive">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                            Selección de personajes y objetos
+                        </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#gameRulesAccordion">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>Los personajes y objetos se obtienen a través de dos carruseles que se actualizan cada ronda</li>
+                                <li>Los jugadores pueden elegir qué personajes y objetos comprar</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
     
-    <div class="reglas-buttons">
-        <div class="navigation">
-            <button class="btn btn-outline-secondary" disabled><img class ="flecha" src="/img/reglas/flecha-izq.png"></button>
-            <a href="/reglas2">
-                <button class="btn btn-outline-secondary"><img class ="flecha" src="/img/reglas/flecha-der.png"></button>
-            </a>
+                <!-- Sinergias -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingSix">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                            Sinergias
+                        </button>
+                    </h2>
+                    <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#gameRulesAccordion">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>Algunos personajes tienen sinergias entre ellos</li>
+                                <li>Las sinergias otorgan estadísticas de grupo, mejorando el rendimiento de los personajes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Economía -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingSeven">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                            Economía
+                        </button>
+                    </h2>
+                    <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#gameRulesAccordion">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>Los jugadores ganan monedas progresivamente en función de su estado de partida</li>
+                                <li>Las monedas pueden usarse para comprar nuevos personajes o adquirir objetos que mejoren las estadísticas de los personajes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mecánica de combate -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingEight">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                            Mecánica de combate
+                        </button>
+                    </h2>
+                    <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#gameRulesAccordion">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>El combate es automático, los personajes atacan según su velocidad</li>
+                                <li>Los ataques continúan hasta que uno de los jugadores queda sin personajes en su fila</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-        <a href="/" id="index-button"><button class="btn btn-outline-secondary">Volver</button></a>
+        <p class="mt-3"><a class="link-opacity-75 link" href="/">Regresar a inicio</a></p>
     </div>
+
+    
+    
     <!-- Degradado en la parte inferior -->
     <div class="degradado"></div>
 

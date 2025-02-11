@@ -61,7 +61,6 @@ public class SecurityConfig {
 				.requestMatchers("/css/**", "/js/**", "/img/**", "/", "/error").permitAll()
 				.requestMatchers("/api/**", "/ranking").permitAll()            // <-- public api access
 				.requestMatchers("/api/**", "/reglas1").permitAll()            // <-- public api access
-				.requestMatchers("/api/**", "/reglas2").permitAll()            // <-- public api access
 				.requestMatchers("/api/**", "/galeria").permitAll()            // <-- public api access
 				.requestMatchers("/api/**", "/autores").permitAll()            // <-- public api access
 				.requestMatchers("/admin/**").hasRole("ADMIN")	   // <-- administration
