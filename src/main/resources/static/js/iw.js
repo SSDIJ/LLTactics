@@ -21,7 +21,7 @@ const ws = {
         }
     },
 
-    headers: { 'X-CSRF-TOKEN': config.csrf.value },
+    headers: { 'X-CSRF-TOKEN': iwconfig.csrf.value },
 
     /**
      * Attempts to establish communication with the specified
@@ -90,7 +90,7 @@ function go(url, method, data = {}, headers = false) {
         // GET requests cannot have body; I could URL-encode, but it would not be used here
         delete params.body;
     } else {
-        params.headers["X-CSRF-TOKEN"] = config.csrf.value;
+        params.headers["X-CSRF-TOKEN"] = iwconfig.csrf.value;
     }
     console.log("sending", url, params)
     return fetch(url, params)
@@ -195,16 +195,16 @@ function postImage(img, endpoint, name, filename) {
  * Actions to perform once the page is fully loaded
  */
 document.addEventListener("DOMContentLoaded", () => {
-    if (config.socketUrl) {
-        let subs = config.admin ? ["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
-        ws.initialize(config.socketUrl, subs);
+    if (iwconfig.socketUrl) {
+        let subs = iwconfig.admin ? ["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
+        ws.initialize(iwconfig.socketUrl, subs);
 
         let p = document.querySelector("#nav-unread");
         if (p) {
-            go(`${config.rootUrl}/user/unread`, "GET").then(d => p.textContent = d.unread);
+            go(`${iwconfig.rootUrl}/user/unread`, "GET").then(d => p.textContent = d.unread);
         }
     } else {
-        console.log("Not opening websocket: missing config", config)
+        console.log("Not opening websocket: missing iwconfig", iwconfig)
     }
 
     // add your after-page-loaded JS code here; or even better, call 
