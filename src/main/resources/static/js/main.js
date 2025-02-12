@@ -2,7 +2,7 @@ var config = {
     type: Phaser.AUTO,
     width: 1200,
     height: 600,
-    backgroundColor: '#222',
+    backgroundColor: 'transparent',
     parent: 'game-container',
     scene: {
         preload: function () {
@@ -152,7 +152,10 @@ var config = {
         
             this.debugText.setText(debugInfo);
             /* DEBUG */
-        }
+        },
+
+        transparent: true,
+        antialias: true
         
     }
 };
