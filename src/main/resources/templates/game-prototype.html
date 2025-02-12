@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Cabecera -->
+    <th:block th:replace="~{fragments/head :: header}"></th:block>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLTactics</title>
+
+    <!-- Phaser, juego y estilo -->
+    <script th:src="@{/js/phaser.min.js}"></script>
+    <script th:src="@{/js/main.js}"></script> <!-- Carga Phaser -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">    
+</head>
+
+<body class="game-page">
+    <!-- Cabecera -->
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+
+    <!-- Contenedor principal -->
+    <div id="game-page-container" class="container d-flex flex-column align-items-center justify-content-center text-center mt-5 flex-grow-1">
+
+        <!-- Contenedor del juego -->
+        <div id="prototype-game-container" class="w-100" style="max-width: 1200px"></div>
+
+        <!-- Botones debajo del juego -->
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <a href="/autores" class="btn btn-outline-primary">Autores</a>
+        </div>
+
+        <div class="degradado"></div>
+    </div>
+
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+</body>
+</html>

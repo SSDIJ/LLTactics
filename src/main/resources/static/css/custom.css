@@ -598,7 +598,7 @@ text-align: center;
     height: 100%;
 }
 
-#game-container {
+#prototype-game-container {
     width: 100%;
     height: 100%;
     display: flex;
@@ -622,3 +622,178 @@ text-align: center;
     border-radius: 0 0 20px 20px; /* Bordes redondeados abajo */
 }
 /* JUEGO FIN */
+
+
+/* --- PARTIDA --- */
+#round-info-container {
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+#round-name {
+
+    width: 200px;
+    height: 40px;
+
+    background-color: #1a1a1a;
+    
+    color: white;
+    border-radius: 0px 0px 10px 10px;
+}
+
+#round-timer {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translate(-50%);
+
+    width: 100px;
+    height: 30px;
+
+    background-color: #feb47b;
+    color: white;
+
+    border-radius: 0px 0px 10px 10px;
+}
+
+#player-objects-container {
+    width: 80px;
+    height: 440px;
+
+    position: absolute;
+    top: 100px;
+    left: 0;
+
+    background-color: #1a1a1a;
+    border-radius: 0px 10px 10px 0px;
+}
+
+#opponents-info-container {
+    width: 80px;
+    height: 440px;
+
+    position: absolute;
+    top: 100px;
+    right: 0;
+
+    background-color: #1a1a1a;
+    border-radius: 10px 0px 0px 10px;
+}
+
+.object-cell {
+    width: 35px;
+    height: 35px;
+
+    background-color: transparent;
+    border: 1px solid white;
+    border-radius: 5px;
+}
+
+#players-units-container {
+    position: absolute;
+    top: 250px;
+    left: 50%;
+    transform: translate(-50%);
+
+    width: 1300px;
+    height: 200px;
+
+    justify-content: space-between;
+}
+
+#players-units-container .object-cell {
+    border-color: #1a1a1a;
+}
+
+.unit-life {
+    width: 80px;
+}
+
+.unit-game-img {
+    width: 115px;
+}
+
+#opponent-units-container .unit-game-img {
+    transform: rotateY(180deg);
+}
+
+#game-versus {
+    font-family: var(--TITLE-FONT-FAMILY);
+    position: absolute;
+    top: 65px;
+    left: 50%;
+    transform: translate(-50%);
+
+    font-size: 4rem;
+}
+
+#player-profiles-container {
+    position: absolute;
+    top: -90px;
+    left: 50%;
+    transform: translate(-50%);
+    gap: 175px;
+}
+
+#shop-container {
+
+    width: 600px;
+    height: 200px;
+    background-color: #1a1a1a;
+
+    position: fixed;
+    bottom: 0px;
+    left: 0;
+
+    border-radius: 0 10px 0 0;
+    padding: 20px;
+
+}
+
+.shop-unit {
+    width: 100px;
+    height: 150px;
+    border: 1px solid white;
+    border-radius: 10px;
+}
+
+.object-shop {
+    width: 50px !important;
+    height: 50px !important;
+}
+
+#ready-container {
+    width: 100%;
+    height: 50px;
+    background-color: #55a961;
+    border-radius: 10px;
+}
+
+#player-stats-container {
+    width: 200px;
+    height: 200px;
+    background-color: #2d2b26;
+
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%);
+    bottom: 0;
+    border-radius: 10px 10px 0 0;
+}
+
+#chat-container {
+
+    width: 600px;
+    height: 200px;
+    background-color: #1a1a1a;
+
+    position: fixed;
+    bottom: 0;
+    right: 0;
+
+    border-radius: 10px 0 0 0;
+    padding: 20px;
+
+}
