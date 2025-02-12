@@ -2,8 +2,9 @@ var config = {
     type: Phaser.AUTO,
     width: 1200,
     height: 600,
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(255, 255, 255, 0)',
     parent: 'game-container',
+    transparent: true,
     scene: {
         preload: function () {
             /* IMAGENES */
@@ -16,11 +17,11 @@ var config = {
         
         create: function () {
             /* DEBUG */
-            this.debugText = this.add.text(10, 10, 'Debug info:', { fontSize: '8px', fill: '#fff' });
+            this.debugText = this.add.text(10, 10, 'Debug info:', { fontSize: '8px', fill: '#000' });
             /* DEBUG */
 
             /* DECLARACIONES */
-            this.add.text(300, 50, 'LLTactics - Prototipo', { fontSize: '24px', fill: '#fff' });
+            this.add.text(300, 50, 'LLTactics - Prototipo', { fontSize: '24px', fill: '#000' });
 
             this.playerPositions = [100, 200, 300, 400, 500];
             this.enemyPositions = [700, 800, 900, 1000, 1100];
@@ -78,9 +79,16 @@ var config = {
                 let origin = gameObject.getData('origin');
 
                 // Si origen es tienda o slot de jugador
-                if (origin === 'shop' || this.playerSlots[slotIndex] !== null) { // TODO:
+                if (origin === 'shop' || this.playerSlots[slotIndex] !== null) {
                     // Actualizamos
                     this.draggingCharacter = gameObject;
+
+                    for (let idx in this.playerSlots) {
+                        if (this.playerSlots[idx] === gameObject) {
+                            this.previousSlot = parseInt(idx); // Guardamos el slot REAL
+                            return;
+                        }
+                    }
                     this.previousSlot = slotIndex;
                 } else { 
                     // Inválido
@@ -105,6 +113,11 @@ var config = {
                 // Rango de 25px para seleccionar slot
                 let droppedOnSlot = this.playerPositions.findIndex(posX => Math.abs(pointer.x - posX) < 25);
 
+                if (droppedOnSlot === this.previousSlot) {
+                    this.draggingCharacter.x = this.playerPositions[this.previousSlot];
+                    this.draggingCharacter.y = 300;
+                    return;
+                }
                 if (droppedOnSlot !== -1) { // Si se soltó en una posición válida
                     if (this.playerSlots[droppedOnSlot] === null) { 
                         // Si el slot está vacío, mover directamente
@@ -118,6 +131,9 @@ var config = {
                         personajeEnDestino.y = 300;
 
                         this.playerSlots[droppedOnSlot] = this.draggingCharacter; // Arrastrado en slot seleccionado
+                        this.draggingCharacter.x = this.playerPositions[droppedOnSlot];
+                        this.draggingCharacter.y = 300;
+                        return;
                     }
 
                     // Mueve el personaje a su nueva posición
@@ -152,10 +168,7 @@ var config = {
         
             this.debugText.setText(debugInfo);
             /* DEBUG */
-        },
-
-        transparent: true,
-        antialias: true
+        }
         
     }
 };
