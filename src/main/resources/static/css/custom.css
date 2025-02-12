@@ -625,6 +625,7 @@ text-align: center;
 
 
 /* --- PARTIDA --- */
+
 #round-info-container {
     position: absolute;
     top: 0px;
@@ -797,3 +798,24 @@ text-align: center;
     padding: 20px;
 
 }
+
+/* --- LOGIN --- */
+
+#login-container {
+    margin-top: 100px;
+}
+.form-signin-heading {
+    font-family: var(--TITLE-FONT-FAMILY);
+}
+
+#login-btn {
+    border: 1px solid #55a961;
+    color: #55a961;
+}
+
+#login-btn:hover {
+    color: white;
+    background-color: #1a1a1a;
+    transition: 0.5s;
+}
+
