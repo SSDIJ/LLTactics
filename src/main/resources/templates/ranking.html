@@ -4,81 +4,60 @@
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <th:block th:replace="~{fragments/head :: header}" />
-    <title>LL Tactics</title>
+    <title>LL Tactics - Ranking</title>
 </head>
 
 <body class="h-100">
     <header th:replace="~{fragments/nav.html :: nav}"></header>
 
-    <div id="ranking-main-container"
-        class="container d-flex flex-column align-items-center justify-content-center text-center mt-5">
-
+    <div id="ranking-main-container" class="container d-flex flex-column align-items-center justify-content-center text-center mt-5">
         <div class="container">
-
             <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
-
-            <!-- Título -->
             <div class="container mt-5">
                 <h1 id="title-ranking" class="display-ranking">Ranking</h1>
             </div>
         </div>
-
-        <!--Aqui encontramos la descripcion del ranking-->
         <div id="ranking-description">
-            ¡Escala hacía la cima combatiendo y llega al top del Ranking!
+            ¡Escala hacia la cima combatiendo y llega al top del Ranking!
         </div>
-
-
     </div>
-    <!--Tabla del ranking-->
+
+    <!-- Tabla del ranking -->
     <div id="ranking-container">
+        <p th:if="${#lists.isEmpty(jugadores)}">No hay jugadores disponibles</p>
         <h1>🏆 Ranking de Guerreros 🏆</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Jugador</th>
-                    <th> Puntuación</th>
-                    <th> Partidas Jugadas</th>
-                    <th> Victorias</th>
-                    <th> Derrotas</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1º</td>
-                    <td><img class="icon" src="/img/ranking/gold_shield.png">Sir Lancelot</td>
-                    <td>3200</td>
-                    <td>10</td>
-                    <td>8</td>
-                    <td>2</td>
-                </tr>
-                <tr>
-                    <td>2º</td>
-                    <td><img class="icon" src="/img/raking/silver_shield.png">Lady Morgana</td>
-                    <td>3100</td>
-                    <td>10</td>
-                    <td>7</td>
-                    <td>3</td>
-                </tr>
-                <tr>
-                    <td>3º</td>
-                    <td><img class="icon" src="/img/ranking/bronze_shield.png">Dragón Rojo</td>
-                    <td>2900</td>
-                    <td>10</td>
-                    <td>6</td>
-                    <td>4</td>
-                </tr>
-            </tbody>
-        </table>
+        
+        <!-- Contenedor adicional para centrar la tabla -->
+        <div id="ranking-table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Jugador</th>
+                        <th>Puntuación</th>
+                        <th>Partidas Jugadas</th>
+                        <th>Victorias</th>
+                        <th>Derrotas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="jugador, stat : ${jugadores}">
+                        <td th:text="${stat.index + 1}"></td>
+                        <td th:text="${jugador.nombre}"></td>
+                        <td th:text="${jugador.puntuacion}"></td>
+                        <td th:text="${jugador.partidasGanadas + jugador.partidasPerdidas}"></td>
+                        <td th:text="${jugador.partidasGanadas}"></td>
+                        <td th:text="${jugador.partidasPerdidas}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+    
 
-    <!-- Degradado en la parte inferior -->
     <div class="degradado"></div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 
     <script type="module" src="/js/homepage-animations.js"></script>
-
 </body>
-
 </html>

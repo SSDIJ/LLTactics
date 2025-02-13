@@ -148,48 +148,73 @@ img.preview {
 /* RANKING */
 #ranking-main-container {
     width: 100%;
-    height: 70%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px 0;
 }
-#title-ranking{
-    font-family:  "Jacquard 12", serif;
-    position: absolute;
-    top: 20px; /* Ajusta según necesites */
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 3rem; /* Ajusta el tamaño si es necesario */
+
+#title-ranking {
+    font-family: "Uncial Antiqua", serif;
+    font-size: 3rem;
     font-weight: bold;
     text-align: center;
     width: 100%;
+    margin-top: 20px;
+    color: #4b3832;
+    text-shadow: 3px 3px 5px rgba(255, 255, 255, 0.9);
 }
 
 #ranking-description {
-    font-family:  "Ancient", serif;
+    font-family: "EB Garamond", serif;
     font-size: 1.2rem;
-    color: #555;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-
-
 #ranking-container {
-    border: 2px solid #8c7b75;
-    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra todo el contenido */
+    border: 3px solid #8c7b75;
+    border-radius: 12px;
     padding: 20px;
-    background: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    width: 80%;
+    max-width: 1000px;
+    text-align: center;
+    position: relative;
+    margin: 0 auto; /* Centra el contenedor en la página */
 }
 
 #ranking-container h1 {
-    font-size: 2em;
+    font-size: 2.5em;
     color: #efb810;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    font-family: "Uncial Antiqua", serif;
+}
+
+/* Contenedor que centra la tabla */
+#ranking-table-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 table {
-    width: 100%;
+    width: 80%; /* Ajuste para que no ocupe todo el ancho */
+    max-width: 800px;
     border-collapse: collapse;
-    position: relative;
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
+    background: rgba(255, 255, 255, 0.85);
+    position: relative;
+    margin: 0 auto; /* Centrar la tabla */
 }
 
 table::before {
@@ -201,47 +226,49 @@ table::before {
     height: 100%;
     background: url('/img/ranking/castle_background.jpg') no-repeat center center;
     background-size: cover;
-    opacity: 0.9; /* Ajusta la opacidad solo del fondo */
+    opacity: 0.4;
     z-index: -1;
 }
 
-
 th, td {
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #8c7b75;
     text-align: center;
+    font-size: 1.1rem;
     color: #1a1a1a;
-    text-shadow: 2px 2px 3px rgba(255, 255, 255, 0.8);
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 th {
-    background-color: rgba(232, 226, 212, 0.8);
+    background-color: rgba(232, 226, 212, 0.9);
     color: #4b3832;
-    font-size: 1.1em;
+    font-size: 1.2em;
+    font-weight: bold;
 }
 
 tr:nth-child(even) {
-    background-color: rgba(244, 240, 230, 0.8);
+    background-color: rgba(244, 240, 230, 0.9);
 }
 
 tr:hover {
-    background-color: rgba(221, 221, 221, 0.8);
+    background-color: rgba(221, 221, 221, 0.9);
 }
 
 td img.icon {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     vertical-align: middle;
     margin-right: 8px;
 }
+
 #ranking-castle {
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
     width: auto;
-    height: 75vh; /* Ocupa 3/4 de la pantalla */
-    opacity: 0.9;
+    height: 75vh;
+    opacity: 0.8;
     z-index: -2;
 }
 

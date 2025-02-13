@@ -41,12 +41,13 @@ public class RootController {
     public String game(Model model) {
         return "game";
     }
-
+/* 
      @GetMapping("/ranking")
      public String ranking (Model model){
         return "ranking";
      }
-     /*/
+    
+     
      @GetMapping("/galeria")
      public String galeria (Model model){
         return "galeria";
