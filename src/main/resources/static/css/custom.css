@@ -53,7 +53,7 @@ img.preview {
 }
 
 #title {
-    font-family:  "Jacquard 12", serif;
+    font-family:  var(--TEXT-FONT-FAMILY);
     margin-bottom: 0;
 }
 
@@ -968,3 +968,31 @@ text-align: center;
     background-color: var(--COLOR-DARK-1);
     transition: 0.5s;
 }
+
+
+.sectionContainer {
+    display: flex;
+    flex-wrap: wrap;
+    height: 100vh;
+    margin: 0;
+}
+.section {
+    border-left: 1px solid #a16209a7;
+    border-right: 1px solid #a16209a7;
+    border-top: 1px solid #a16209a7;
+    padding: 20px;
+    box-sizing: border-box;
+    width: 50%;
+    height: 50%;
+}
+
+.adminTitle{
+    font-family: "Uncial Antiqua", serif;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+#partidas-actuales { order: 1; }
+#usuarios-reportados { order: 2; }
+#partidas-terminadas { order: 3; }
+#busqueda-perfiles { order: 4; }
+
