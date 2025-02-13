@@ -17,12 +17,15 @@ LLTactics es un juego web de fantasía medieval donde jugadores deberán luchar 
   * Galeria.html usa la clase card.html para mostrar a los personajes, con sus estadísticas y su descripción 
 - **Vista perfil**
   * Muestra tu perfil, con tus estadísticas
+  * Por el momento muestra un perfil estático con datos inventados, lo modificaremos en la futura entrega
 - **Vista reglas**
   * Muestra las reglas del juego 
 - **Vista autores**
   * Muestra los nombres de los miembros del grupo y creadores del juego
+- **Vista inicio de sesión**
+  * Permite iniciar sesión a los jugadores
 
-**NOTA:** Todos los sprites de los personajes pertenecen a [Wesnoth](https://github.com/wesnoth/wesnoth/blob/master/data/core/images/units/human-loyalists/paladin/paladin-breeze-s-1.png)
+  **NOTA:** Todos los sprites de los personajes pertenecen a [Wesnoth](https://github.com/wesnoth/wesnoth)
 
 ## Contenido futuro
 - Vista y acciones de los admins

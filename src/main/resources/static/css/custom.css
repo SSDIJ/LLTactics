@@ -949,6 +949,45 @@ text-align: center;
 
 }
 
+#game-messages-container {
+    color:whitesmoke !important;
+}
+
+.info-container {
+    align-items: baseline;
+    height: 24px;
+}
+
+.user-emisor {
+    font-weight: bold;
+}
+.timestamp {
+    font-size: 0.8rem;
+}
+
+.message-text {
+    font-size: 0.8rem;
+    opacity: 0.7;
+} 
+
+#message-input-chat {
+
+    position: fixed;
+    bottom: 20px;
+    right:80px;
+    width: 500px;
+    height: 35px;
+    color: whitesmoke;
+
+    background-color: transparent;
+
+    border: 1px solid whitesmoke;
+    border-radius: 10px;
+    padding: 7px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
 /* --- LOGIN --- */
 
 #login-container {

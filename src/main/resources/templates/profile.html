@@ -17,41 +17,54 @@
 
             <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
 
-            <!-- Título -->
             <div class="prophile_container">
                 <!-- FOTO, NOMBRE, VICTORIAS, DERROTAS, FACCION FAVORITA -->
                 <div class="prophile-photo">
-                    <img src="https://via.placeholder.com/100" alt="Foto de perfil">
+                    <img src="/img/players/arthur.png" alt="Foto de perfil">
                 </div>
                 <div class="prophile_stats">
-                    <h2> NOMBRE </h2>
-                    <p> Victorias: </p>
-                    <p> Derrotas: </p>
-                    <p> Facción favorita: </p>
-    
-                    <!-- Contenedor para los gráficos -->
-                    <div class="charts-container">
-                        <!-- Gráfico Circular para Winrate -->
-                        <div class="winrate-chart-container">
-                            <div class="winrate-container">
-                                <svg width="150" height="150" class="winrate-circle">
-                                    <circle cx="50%" cy="50%" r="70" />
-                                </svg>
-                                <div class="winrate-text">
-                                    <p>Winrate:</p>
-                                    <p class="percentage">50%</p>
-                                </div>
+                    <h2>Arthur</h2>
+                    <p>Victorias: 20</p>
+                    <p>Derrotas: 5</p>
+                    <p>Facción favorita: Humanos</p>
+                </div>
+            
+                <!-- Lista de héroes más usados -->
+                <div class="heroes-container">
+                    <h3>Héroes más usados</h3>
+                    <ul>
+                        <li>
+                            <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero">
+                            Caballero
+                        </li>
+                        <li>
+                            <img src="/img/units/humans/5. Mago/white-mage.png" alt="Mago">
+                            Mago
+                        </li>
+                    </ul>
+                </div>
+            
+                <!-- Contenedor para los gráficos -->
+                <div class="charts-container">
+                    <!-- Gráfico Circular para Winrate -->
+                    <div class="winrate-chart-container">
+                        <div class="winrate-container">
+                            <svg width="150" height="150" class="winrate-circle">
+                                <circle cx="50%" cy="50%" r="70" />
+                            </svg>
+                            <div class="winrate-text">
+                                <p>Winrate:</p>
+                                <p class="percentage">80%</p>
                             </div>
                         </div>
+                    </div>
                     <!-- Gráfico de Tarta para Facciones -->
                     <div class="faction-chart-container">
                         <canvas id="factionChart" width="150" height="150"></canvas>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
+            
     <!-- Degradado en la parte inferior -->
     <div class="degradado"></div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
@@ -62,11 +75,11 @@
         var chart = new Chart(ctx, {
             type: 'pie', // Gráfico de tarta
             data: {
-                labels: ['Facción A', 'Facción B', 'Facción C'], // Facciones
+                labels: ['Humanos', 'Dragones', 'No-muertos'], // Facciones
                 datasets: [{
                     label: 'Distribución de Facciones',
-                    data: [40, 35, 25], // Porcentaje de jugadores por facción
-                    backgroundColor: ['red', 'green', 'blue']
+                    data: [60, 25, 15], // Porcentaje de jugadores por facción
+                    backgroundColor: ['blue', 'red', 'gray']
                 }]
             }
         });
