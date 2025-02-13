@@ -22,8 +22,9 @@ LLTactics es un juego web de fantasía medieval donde jugadores deberán luchar 
 - **Vista autores**
   * Muestra los nombres de los miembros del grupo y creadores del juego
 - **Vista inicio de sesión**
-  * Permite iniciar sesión  ça los jugadores
-**NOTA:** Todos los sprites de los personajes pertenecen a [Wesnoth](https://github.com/wesnoth/wesnoth)
+  * Permite iniciar sesión a los jugadores
+
+  **NOTA:** Todos los sprites de los personajes pertenecen a [Wesnoth](https://github.com/wesnoth/wesnoth)
 
 ## Contenido futuro
 - Vista y acciones de los admins
