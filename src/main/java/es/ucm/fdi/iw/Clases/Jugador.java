@@ -1,5 +1,9 @@
 package es.ucm.fdi.iw.Clases;
 
+import java.util.ArrayList;
+import java.util.List;
+import es.ucm.fdi.iw.Clases.Heroe;
+
 public class Jugador {
     private String nombre;
     private String imagen;
@@ -8,8 +12,9 @@ public class Jugador {
     private int partidasGanadas;
     private int partidasPerdidas;
     private int faccionFavorita;
+    private  List<Heroe> masJugados;
 
-    public Jugador(String nombre, String imagen, int indiceRanking, int puntuacion, int partidasGanadas, int partidasPerdidas, int faccionFavorita) {
+    public Jugador(String nombre, String imagen, int indiceRanking, int puntuacion, int partidasGanadas, int partidasPerdidas, int faccionFavorita, List<Heroe> masJugados) {
         this.nombre = nombre;
         this.imagen = imagen;
         this.indiceRanking = indiceRanking;
@@ -17,6 +22,7 @@ public class Jugador {
         this.partidasGanadas = partidasGanadas;
         this.partidasPerdidas = partidasPerdidas;
         this.faccionFavorita = faccionFavorita;
+        this.masJugados=masJugados;
     }
 
     // Getters y Setters corregidos
@@ -74,5 +80,11 @@ public class Jugador {
 
     public void setFaccionFavorita(int faccionFavorita) {
         this.faccionFavorita = faccionFavorita;
+    }
+    public List<Heroe> getMasJugados(){
+        return masJugados;
+    }
+    public void setMasJugados(List<Heroe> jugados) {
+        this.masJugados = jugados;
     }
 }

@@ -17,6 +17,7 @@
   * Galeria.html usa la clase card.html para mostrar a los personajes, con sus estadísticas y su descripción 
 - **Vista perfil**
   * Muestra tu perfil, con tus estadísticas
+  * Por el momento muestra un perfil estático con datos inventados, lo modificaremos en la futura entrega
 - **Vista reglas**
   * Muestra las reglas del juego 
 - **Vista autores**
