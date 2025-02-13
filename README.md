@@ -1,5 +1,5 @@
 # LLTactics, proyecto de IW
-
+LLTactics es un juego web de fantasía medieval donde jugadores deberán luchar por la victoria comprando personajes y objetos.
 ## Contenido del proyecto
 - **Vista principal**
   * Lo primero que se ve al abrir la web y desde donde puedes acceder al resto de vistas
@@ -8,8 +8,8 @@
   * Todavía no jugable, pero ya hay una base bastánte sólida en JavaScript
 - **Vista ranking**
   * Muestra a los mejores jugadores del server, junto a sus estadísticas
-  *Implementada mediante thymeleaf y fragmentos dinámicos
-  *Se ha creado RankingController.Java, que se apoya en la clase Jugador para mandar a ranking.html las listas de jugadores
+  * Implementada mediante thymeleaf y fragmentos dinámicos
+  * Se ha creado RankingController.Java, que se apoya en la clase Jugador para mandar a ranking.html las listas de jugadores
 - **Vista galería**
   * Muestra todos los personajes disponibles en el juego
   * Implementada mediante thymeleaf y fragmentos dinámicos
@@ -22,6 +22,10 @@
   * Muestra las reglas del juego 
 - **Vista autores**
   * Muestra los nombres de los miembros del grupo y creadores del juego
+- **Vista inicio de sesión**
+  * Permite iniciar sesión a los jugadores
+
+  **NOTA:** Todos los sprites de los personajes pertenecen a [Wesnoth](https://github.com/wesnoth/wesnoth)
 
 ## Contenido futuro
 - Vista y acciones de los admins
