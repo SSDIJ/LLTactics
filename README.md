@@ -22,6 +22,8 @@
 - **Vista autores**
   * Muestra los nombres de los miembros del grupo y creadores del juego
 
+**NOTA:** Todos los sprites de los personajes pertenecen a [Wesnoth](https://github.com/wesnoth/wesnoth/blob/master/data/core/images/units/human-loyalists/paladin/paladin-breeze-s-1.png)
+
 ## Contenido futuro
 - Vista y acciones de los admins
 - Plantear el balanceo del juego (estadísticas, economía, objetos)
