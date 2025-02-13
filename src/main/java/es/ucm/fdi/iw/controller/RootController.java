@@ -52,13 +52,13 @@ public class RootController {
         return "galeria";
      }  */
 
-     @GetMapping("/autores")
+    @GetMapping("/autores")
     public String autores(Model model) {
         return "autores";
     }
-    @GetMapping("/prophile")
-    public String prophile(Model model) {
-        return "prophile";
+    @GetMapping("/profile")
+    public String profile(Model model) {
+        return "profile";
     }
 	@GetMapping("/")
     public String index(Model model) {
