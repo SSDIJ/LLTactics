@@ -8,8 +8,8 @@
   * Todavía no jugable, pero ya hay una base bastánte sólida en JavaScript
 - **Vista ranking**
   * Muestra a los mejores jugadores del server, junto a sus estadísticas
-  *Implementada mediante thymeleaf y fragmentos dinámicos
-  *Se ha creado RankingController.Java, que se apoya en la clase Jugador para mandar a ranking.html las listas de jugadores
+  * Implementada mediante thymeleaf y fragmentos dinámicos
+  * Se ha creado RankingController.Java, que se apoya en la clase Jugador para mandar a ranking.html las listas de jugadores
 - **Vista galería**
   * Muestra todos los personajes disponibles en el juego
   * Implementada mediante thymeleaf y fragmentos dinámicos
