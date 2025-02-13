@@ -1,14 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Jacquard+12&display=swap');
 
 :root {
+
+    /* FUENTES */
     --TITLE-FONT-FAMILY: "Jacquard 12", serif;
     --TEXT-FONT-FAMILY: "Times New Roman", Times, serif;
+
+    /* COLORES */
+    --COLOR-DARK-1: rgb(33, 37, 41);
 }
 
 body {
     font-family: var(--TEXT-FONT-FAMILY);
-    /* background-color: #f9f6f1; */
-    color: #2d2b26;
+    color: var(--COLOR-DARK-1);
 }
 
 .title {
@@ -638,8 +642,7 @@ text-align: center;
     width: 200px;
     height: 40px;
 
-    background-color: #1a1a1a;
-    
+    background-color: var(--COLOR-DARK-1);
     color: white;
     border-radius: 0px 0px 10px 10px;
 }
@@ -667,7 +670,7 @@ text-align: center;
     top: 100px;
     left: 0;
 
-    background-color: #1a1a1a;
+    background-color: var(--COLOR-DARK-1);
     border-radius: 0px 10px 10px 0px;
 }
 
@@ -679,7 +682,7 @@ text-align: center;
     top: 100px;
     right: 0;
 
-    background-color: #1a1a1a;
+    background-color: var(--COLOR-DARK-1);
     border-radius: 10px 0px 0px 10px;
 }
 
@@ -690,6 +693,15 @@ text-align: center;
     background-color: transparent;
     border: 1px solid white;
     border-radius: 5px;
+    position: relative;
+}
+
+.object-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
 }
 
 #players-units-container {
@@ -705,15 +717,65 @@ text-align: center;
 }
 
 #players-units-container .object-cell {
-    border-color: #1a1a1a;
+    border-color: var(--COLOR-DARK-1);
+}
+
+.unit-container {
+    text-align: center;
+}
+
+.missing-unit {
+    margin: 0px 5px;
+
+    width: 105px;
+    height: 190px;
+    border: 1px solid var(--COLOR-DARK-1);
+    border-style: dashed;
+    border-radius: 10px;
+    animation: blink 3s linear infinite;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 0.2;
+    }
+    100% {
+        opacity: 0.6;
+    }
+}
+
+.unit-stats {
+    position: relative;
+}
+
+.unit-container .progress {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    width: 70px !important;
+    height: 15px !important;
+    top: 25px;
+
 }
 
 .unit-life {
     width: 80px;
 }
 
+
 .unit-game-img {
     width: 115px;
+}
+
+.shop-unit-game-img {
+    width: 100px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 #opponent-units-container .unit-game-img {
@@ -738,11 +800,21 @@ text-align: center;
     gap: 175px;
 }
 
+#player-profiles-container h3 {
+    font-family: var(--TITLE-FONT-FAMILY);
+}
+
+.section-title {
+    font-family: var(--TITLE-FONT-FAMILY);
+    position: absolute;
+    top: -40px;
+}
+
 #shop-container {
 
     width: 600px;
     height: 200px;
-    background-color: #1a1a1a;
+    background-color: var(--COLOR-DARK-1);
 
     position: fixed;
     bottom: 0px;
@@ -753,42 +825,93 @@ text-align: center;
 
 }
 
+#shop-container .section-title {
+    right: 10px;
+}
+
+#chat-container .section-title {
+    left: 10px;
+}
+
 .shop-unit {
+    position: relative;
     width: 100px;
     height: 150px;
     border: 1px solid white;
     border-radius: 10px;
 }
 
+.shop-value-container {
+    color: whitesmoke;
+    width: 40px;
+    background-color: var(--COLOR-DARK-1);
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    border-radius: 5px;
+    gap: 4px;
+}
+
+#player-stats-container .shop-value-container {
+    border: 1px solid whitesmoke;
+    position: initial;
+}
+
+.light-text {
+    color: whitesmoke;
+    margin: 0;
+}
+
+.value-num {
+    height: 10px;
+}
+
+.value-img {
+    margin: 0 !important;
+}
+
 .object-shop {
+    position: relative;
     width: 50px !important;
     height: 50px !important;
 }
 
-#ready-container {
-    width: 100%;
+#refresh-container {
+    width: 120px;
     height: 50px;
+    position: relative;
+    color: white;
     background-color: #55a961;
     border-radius: 10px;
+
+}
+
+#refresh-container .shop-value-container {
+    top: 50px;
+    bottom: -30px;
+    left: 50%;
+    transform: translate(-50%);
 }
 
 #player-stats-container {
     width: 200px;
     height: 200px;
-    background-color: #2d2b26;
+    background-color: var(--COLOR-DARK-1);
 
     position: fixed;
     left: 50%;
     transform: translate(-50%);
     bottom: 0;
     border-radius: 10px 10px 0 0;
+
+    align-items: end;
 }
 
 #chat-container {
 
     width: 600px;
     height: 200px;
-    background-color: #1a1a1a;
+    background-color: var(--COLOR-DARK-1);
 
     position: fixed;
     bottom: 0;
@@ -815,8 +938,6 @@ text-align: center;
 
 #login-btn:hover {
     color: white;
-    background-color: #1a1a1a;
+    background-color: var(--COLOR-DARK-1);
     transition: 0.5s;
 }
-
-/* --- NAVBAR ---*/
