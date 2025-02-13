@@ -1,5 +1,5 @@
 # LLTactics, proyecto de IW
-
+LLTactics es un juego web de fantasía medieval donde jugadores deberán luchar por la victoria comprando personajes y objetos.
 ## Contenido del proyecto
 - **Vista principal**
   * Lo primero que se ve al abrir la web y desde donde puedes acceder al resto de vistas
