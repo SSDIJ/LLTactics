@@ -24,11 +24,14 @@ LLTactics es un juego web de fantasía medieval donde jugadores deberán luchar 
   * Muestra los nombres de los miembros del grupo y creadores del juego
 - **Vista inicio de sesión**
   * Permite iniciar sesión a los jugadores
+  **Vista de admin**
+  * Muestra 4 secciones: Partidas en curso, partidas terminadas, usuarios reportados y búsqueda de usuarios.
+  * A través de esta vista se podrán visualizar partidas y administrar usuarios.
 
   **NOTA:** Todos los sprites de los personajes pertenecen a [Wesnoth](https://github.com/wesnoth/wesnoth)
 
 ## Contenido futuro
-- Vista y acciones de los admins
+- Implementación de las acciones de los admins
 - Plantear el balanceo del juego (estadísticas, economía, objetos)
 - Añadir dichos objetos a la galería
 - Estructura y accesos a la BD
