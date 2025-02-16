@@ -37,3 +37,10 @@ LLTactics es un juego web de fantasía medieval donde jugadores deberán luchar 
 - Estructura y accesos a la BD
 - Sistema de busqueda de partida con otros usuarios
 - Juego jugable
+
+## Miembros del grupo:
+Samuel Carrillo
+David Cendejas
+Sandra Sanz
+Iván Toribio
+Javier Martín
