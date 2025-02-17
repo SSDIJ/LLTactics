@@ -6,7 +6,6 @@ import es.ucm.fdi.iw.Clases.Heroe;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 public class Jugador {
@@ -17,7 +16,8 @@ public class Jugador {
     private int partidasGanadas;
     private int partidasPerdidas;
     private int faccionFavorita;
-    private  List<Heroe> masJugados;
+    private List<Heroe> masJugados;
+    private boolean baneado;
 
     public Jugador(String nombre, String imagen, int indiceRanking, int puntuacion, int partidasGanadas, int partidasPerdidas, int faccionFavorita, List<Heroe> masJugados) {
         this.nombre = nombre;
@@ -27,8 +27,7 @@ public class Jugador {
         this.partidasGanadas = partidasGanadas;
         this.partidasPerdidas = partidasPerdidas;
         this.faccionFavorita = faccionFavorita;
-        this.masJugados=masJugados;
+        this.masJugados = masJugados;
+        this.baneado = false;
     }
-
-    
 }

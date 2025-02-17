@@ -20,6 +20,7 @@ public class GaleriaController {
         List<Heroe> noMuertos = new ArrayList<>();
         List<Heroe> legendarios = new ArrayList<>();
 
+
         // Humanos
         humanos.add(new Heroe("Tanque", "/img/units/humans/1. Tanque/heavyinfantry.png", 25, 50, 75, 100, "Es la primera línea de defensa.",0));
         humanos.add(new Heroe("General de Guerra", "/img/units/humans/2. General/general.png", 200, 80, 70, 40, "Un estratega nato en el campo de batalla.",0));
