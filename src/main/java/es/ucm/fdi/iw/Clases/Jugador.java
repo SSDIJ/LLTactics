@@ -1,5 +1,6 @@
 package es.ucm.fdi.iw.Clases;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import es.ucm.fdi.iw.Clases.Heroe;
@@ -18,8 +19,10 @@ public class Jugador {
     private int faccionFavorita;
     private List<Heroe> masJugados;
     private boolean baneado;
+    private String razonBaneo;
+    private LocalDateTime fechaBaneo;
 
-    public Jugador(String nombre, String imagen, int indiceRanking, int puntuacion, int partidasGanadas, int partidasPerdidas, int faccionFavorita, List<Heroe> masJugados) {
+    public Jugador(String nombre, String imagen, int indiceRanking, int puntuacion, int partidasGanadas, int partidasPerdidas, int faccionFavorita, List<Heroe> masJugados, boolean baneado, String razon) {
         this.nombre = nombre;
         this.imagen = imagen;
         this.indiceRanking = indiceRanking;
@@ -28,6 +31,8 @@ public class Jugador {
         this.partidasPerdidas = partidasPerdidas;
         this.faccionFavorita = faccionFavorita;
         this.masJugados = masJugados;
-        this.baneado = false;
+        this.baneado = baneado;
+        this.razonBaneo = razon;
+        this.fechaBaneo = LocalDateTime.now();
     }
 }

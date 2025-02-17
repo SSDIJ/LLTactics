@@ -11,41 +11,42 @@
     <header th:replace="~{fragments/nav.html :: nav}"></header>
     <div class="sectionContainer">
 
-        <div id="partidas-actuales" class="section">
+        <div  id="partidas-actuales" class="section">
             <h1 class="adminTitle">Partidas Actuales</h1><br>
             <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action">Partida 1</a>
-                <a href="#" class="list-group-item list-group-item-action">Partida 2</a>
+                <a class="list-group-item list-group-item-action"
+                th:each="partida : ${enCurso}" 
+                th:href="@{'/partida/' + ${partida.id}}" 
+                th:text="'Partida ' + ${partida.id}"
+                data-bs-toggle="modal" 
+                data-bs-target="#partidaModal">
+
+                </a>
             </div>
         </div>
         <div id="partidas-terminadas" class="section">
             <h1 class="adminTitle">Partidas Terminadas</h1><br>
             <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action">Partida 1</a>
-                <a href="#" class="list-group-item list-group-item-action">Partida 2</a>
-                <a href="#" class="list-group-item list-group-item-action">Partida 3</a>
-                <a href="#" class="list-group-item list-group-item-action">Partida 4</a>
+                <a class="list-group-item list-group-item-action"
+                th:each="partida : ${terminadas}" 
+                th:href="@{'/partida/' + ${partida.id}}" 
+                th:text="'Partida ' + ${partida.id}"></span>
+                </a>
             </div>
 
         </div>
         <div id="usuarios-reportados" class="section">
             <h1 class="adminTitle">Uusarios Reportados</h1><br>
             <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action">
+                <a th:each="jugador : ${jugadoresBaneados}" 
+                    href="#" 
+                    class="list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">RofolfooRT</h5>
-                        <small class="text-body-secondary">hace 3 días</small>
+                        <h5 class="mb-1" th:text="${jugador.nombre}"></h5>
+                        <small class="text-body-secondary" th:text="${jugador.fechaBaneo}"></small>
                     </div>
-                    <small class="text-body-secondary">Se fue AFK 2h y media</small>
+                    <small class="text-body-secondary" th:text="${jugador.razonBaneo}"></small>
                 </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">Manolo24</h5>
-                        <small class="text-body-secondary">hace 2 días</small>
-                    </div>
-                    <small class="text-body-secondary">Ser demaisiado bueno</small>
-                </a>
-
             </div>
         </div>
         <div id="busqueda-perfiles" class="section">
@@ -58,6 +59,26 @@
     </div>
 
     <div class="degradado"></div>
+
+    <div class="modal" tabindex="-1" id="partidaModal">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Partida</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>ID:</strong> </p>
+                <p><strong>Duración:</strong>  minutos</p>
+                <p><strong>Jugadores:</strong></p>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 </body>
 
