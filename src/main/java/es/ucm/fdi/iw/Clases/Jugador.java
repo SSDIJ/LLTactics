@@ -3,7 +3,12 @@ package es.ucm.fdi.iw.Clases;
 import java.util.ArrayList;
 import java.util.List;
 import es.ucm.fdi.iw.Clases.Heroe;
+import lombok.Getter;
+import lombok.Setter;
 
+
+@Getter
+@Setter
 public class Jugador {
     private String nombre;
     private String imagen;
@@ -25,66 +30,5 @@ public class Jugador {
         this.masJugados=masJugados;
     }
 
-    // Getters y Setters corregidos
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
-    }
-
-    public int getIndiceRanking() {
-        return indiceRanking;
-    }
-
-    public void setIndiceRanking(int indiceRanking) {
-        this.indiceRanking = indiceRanking;
-    }
-
-    public int getPuntuacion() {
-        return puntuacion;
-    }
-
-    public void setPuntuacion(int puntuacion) {
-        this.puntuacion = puntuacion;
-    }
-
-    public int getPartidasGanadas() {
-        return partidasGanadas;
-    }
-
-    public void setPartidasGanadas(int partidasGanadas) {
-        this.partidasGanadas = partidasGanadas;
-    }
-
-    public int getPartidasPerdidas() {
-        return partidasPerdidas;
-    }
-
-    public void setPartidasPerdidas(int partidasPerdidas) {
-        this.partidasPerdidas = partidasPerdidas;
-    }
-
-    public int getFaccionFavorita() {
-        return faccionFavorita;
-    }
-
-    public void setFaccionFavorita(int faccionFavorita) {
-        this.faccionFavorita = faccionFavorita;
-    }
-    public List<Heroe> getMasJugados(){
-        return masJugados;
-    }
-    public void setMasJugados(List<Heroe> jugados) {
-        this.masJugados = jugados;
-    }
+    
 }

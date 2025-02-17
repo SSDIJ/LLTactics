@@ -5,12 +5,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <th:block th:replace="~{fragments/head :: header}" />
     <title>IW: Admin</title>
-
-
-    
 </head>
 
-<body class= "h-100">
+<body>
     <header th:replace="~{fragments/nav.html :: nav}"></header>
     <div class="sectionContainer">
 
@@ -29,26 +26,26 @@
                 <a href="#" class="list-group-item list-group-item-action">Partida 3</a>
                 <a href="#" class="list-group-item list-group-item-action">Partida 4</a>
             </div>
-    
+
         </div>
         <div id="usuarios-reportados" class="section">
             <h1 class="adminTitle">Uusarios Reportados</h1><br>
             <div class="list-group">
                 <a href="#" class="list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-between">
-                      <h5 class="mb-1">RofolfooRT</h5>
-                      <small class="text-body-secondary">hace 3 días</small>
+                        <h5 class="mb-1">RofolfooRT</h5>
+                        <small class="text-body-secondary">hace 3 días</small>
                     </div>
                     <small class="text-body-secondary">Se fue AFK 2h y media</small>
                 </a>
                 <a href="#" class="list-group-item list-group-item-action">
-                  <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">Manolo24</h5>
-                    <small class="text-body-secondary">hace 2 días</small>
-                  </div>
-                  <small class="text-body-secondary">Ser demaisiado bueno</small>
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">Manolo24</h5>
+                        <small class="text-body-secondary">hace 2 días</small>
+                    </div>
+                    <small class="text-body-secondary">Ser demaisiado bueno</small>
                 </a>
-                
+
             </div>
         </div>
         <div id="busqueda-perfiles" class="section">
@@ -59,7 +56,7 @@
             </form>
         </div>
     </div>
-    
+
     <div class="degradado"></div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 </body>
