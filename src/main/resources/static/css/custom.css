@@ -19,6 +19,8 @@ body {
     font-family: var(--TITLE-FONT-FAMILY);
 }
 
+
+
 .iwthumb {
     height: 32px;
     width: 32px;
@@ -481,9 +483,11 @@ td img.icon {
     color: #55a961;
 }
 
-#rules-container {
+#rules-container, #credits-container {
     max-width: 800px;
 }
+
+
 /*REGLAS FIN*/
 
 .stat {
@@ -1040,3 +1044,10 @@ text-align: center;
 #partidas-terminadas { order: 3; }
 #busqueda-perfiles { order: 4; }
 
+#credits-info-container {
+    justify-content: center;
+    gap: 70px;
+    border: 1px solid var(--COLOR-DARK-1);
+    border-radius: 10px;
+    padding: 20px 40px;
+}

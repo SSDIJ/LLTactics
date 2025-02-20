@@ -8,61 +8,33 @@
 </head>
 <body>
     <header th:replace="~{fragments/nav.html :: nav}"></header>
-    <h1 id="tituloAutores">Créditos</h1>
-    <br>
-    <!-- Contenedor principal -->
-    <div class="content-container d-flex align-items-center justify-content-between">
-        <!-- Espada izquierda -->
-        <img src="/img/homepage/sword.png" alt="Espada" class="sword left-sword">
-    
-        <div class="lista-autores">
-            <!-- Título desarrolladores -->
-            <h2 class="desarrolladores">Desarrolladores</h2>
-            <!-- Desarrolladores -->
-            <div class="autores">
-                <div class="autor-card">
-                    <img src="/img/units/dragons/1. DTanque/enforcer-blade.png" alt="Autor 1" class="autor-img">
-                    <h3 class="autor-nombre">Samuel Carrillo</h3>
-                </div>
-                <div class="autor-card">
-                    <img src="/img/units/dragons/1. DTanque/enforcer-blade.png" alt="Autor 2" class="autor-img">
-                    <h3 class="autor-nombre">David Cendejas</h3>
-                </div>
-                <div class="autor-card">
-                    <img src="/img/units/dragons/1. DTanque/enforcer-blade.png" alt="Autor 3" class="autor-img">
-                    <h3 class="autor-nombre">Sandra Sanz</h3>
-                </div>
-                <div class="autor-card">
-                    <img src="/img/units/dragons/1. DTanque/enforcer-blade.png" alt="Autor 4" class="autor-img">
-                    <h3 class="autor-nombre">Iván Toribio</h3>
-                </div>
-                <div class="autor-card">
-                    <img src="/img/units/dragons/1. DTanque/enforcer-blade.png" alt="Autor 5" class="autor-img">
-                    <h3 class="autor-nombre">Javier Martín</h3>
-                </div>
+
+    <main class="container mt-5 d-flex flex-column justify-content-center align-items-center" id="credits-container">
+
+        <h1 class="display-1 title mt-3">Créditos</h1>
+            
+        <div class="d-flex" id="credits-info-container">
+            <div>
+                <h2 class="title">Desarrolladores</h2>
+                <ul>
+                    <li>Samuel Carrillo</li>
+                    <li>David Cendejas</li>
+                    <li>Sandra Sanz</li>
+                    <li>Iván Toribio</li>
+                    <li>Javier Martín</li>
+                </ul>
             </div>
-            <!-- Título arte -->
-            <h2 class="arte">Arte y Sprites</h2> <!-- En el css incluye margin-top: 40px para separar secciones -->
-            <!-- Arte -->
-            <div class="autores">    
-                <div class="autor-card">
-                    <img src="/img/units/humans/5. Mago/white-mage.png" alt="Artista 1" class="autor-img">
-                    <h3 class="autor-nombre">
-                        <a href="https://github.com/wesnoth/wesnoth/tree/master" target="_blank" class="text-decoration-none">
-                            wesnoth
-                        </a>
-                    </h3>
-                </div>
+            <div>
+                <h2 class="title">Arte</h2>
+                <a href="https://github.com/wesnoth/wesnoth/tree/master" target="_blank" class="text-decoration-none">
+                    wesnoth
+                </a>
             </div>
+            
+            
         </div>
-    
-        <!-- Espada derecha -->
-        <img src="/img/homepage/sword.png" alt="Espada" class="sword right-sword">
-    </div>
-    
-    <div class="autores-buttons d-flex justify-content-center">
-        <a href="/" id="index-button"><button class="btn btn-outline-secondary">Volver</button></a>
-    </div>
+        <img src="/img/credits/icon-hotseat.png" class="mt-4">
+    </main>
     
     <!-- Degradado en la parte inferior -->
     <div class="degradado"></div>
