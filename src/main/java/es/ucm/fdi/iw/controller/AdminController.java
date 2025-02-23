@@ -26,7 +26,7 @@ import jakarta.servlet.http.HttpSession;
  *  Access to this end-point is authenticated - see SecurityConfig
  */
 @Controller
-@RequestMapping("admin")
+ @RequestMapping("admin")
 public class AdminController {
 
     @ModelAttribute
@@ -38,7 +38,7 @@ public class AdminController {
 
     private static final Logger log = LogManager.getLogger(AdminController.class);
 
-@GetMapping("/")
+    @GetMapping("/")
     public String index(Model model) {
         List<Jugador> baneados = new ArrayList<>();
         Jugador j1 = new Jugador("Arthur", "/img/players/arthur.png", 1, 1500, 20, 5, 0, List.of(
@@ -79,6 +79,22 @@ public class AdminController {
 
         model.addAttribute("terminadas", terminadas);
 
-        return "admin";
+        return "index";
     }
+
+    @GetMapping("/gestPartidas")
+    public String showPartidas(Model model) {
+        return "gestPartidas";
+    }
+
+    @GetMapping("/gestHeroes")
+    public String showHeroes(Model model) {
+        return "gestHeroes";
+    }
+
+    @GetMapping("/gestUsuarios")
+    public String showUsuarios(Model model) {
+        return "gestUsuarios";
+    }
+    
 }
