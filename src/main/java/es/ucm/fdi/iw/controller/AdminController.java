@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import es.ucm.fdi.iw.Clases.ChatLog;
 import es.ucm.fdi.iw.Clases.Heroe;
 import es.ucm.fdi.iw.Clases.Jugador;
 import es.ucm.fdi.iw.Clases.Mensaje;
@@ -64,15 +63,15 @@ public class AdminController {
         model.addAttribute("jugadoresBaneados", baneados);
 
         List<Partida> enCurso = new ArrayList<>();
-        ChatLog chat = new ChatLog();
+        List<Mensaje> chat = new ArrayList<>();
         List<Jugador> jugadores = new ArrayList<>();
         jugadores.add(j1);
         jugadores.add(j2);
 
         // Agregar mensajes al chat
-        chat.agregarMensaje(new Mensaje(j1, "Hola, ¿qué tal?"));
-        chat.agregarMensaje(new Mensaje(j2, "¡Hola Juan! Estoy bien, ¿y tú?"));
-        chat.agregarMensaje(new Mensaje(j1, "Todo bien, gracias por preguntar."));
+        chat.add(new Mensaje(j1, "Hola, ¿qué tal?"));
+        chat.add(new Mensaje(j2, "¡Hola Juan! Estoy bien, ¿y tú?"));
+        chat.add(new Mensaje(j1, "Todo bien, gracias por preguntar."));
         enCurso.add(new Partida("1", 30, jugadores, chat));
         model.addAttribute("enCurso", enCurso);
 
