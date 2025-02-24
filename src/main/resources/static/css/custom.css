@@ -992,18 +992,27 @@ body {
     margin: 0;
 }
 .section {
-    border-left: 1px solid #a16209a7;
-    border-right: 1px solid #a16209a7;
-    border-top: 1px solid #a16209a7;
     padding: 20px;
-    box-sizing: border-box;
-    width: 50%;
-    height: 50%;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.section h2 {
+    margin-bottom: 20px;
+}
+
+.divider {
+    margin: 40px 0;
+    border-top: 2px solid #ddd;
 }
 
 .adminTitle{
     font-family: "Uncial Antiqua", serif;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    margin-top:20px;
+    margin-left:50px;
 }
 
 #partidas-actuales { order: 1; }
@@ -1017,4 +1026,16 @@ body {
     border: 1px solid var(--COLOR-DARK-1);
     border-radius: 10px;
     padding: 20px 40px;
+}
+
+#accordionPartidas{
+    margin-left:50px;
+}
+
+.filtrar-container{
+    margin-left:50px;
+    margin-bottom: 20px;
+    display:flex;
+    gap: 20px;
+    
 }

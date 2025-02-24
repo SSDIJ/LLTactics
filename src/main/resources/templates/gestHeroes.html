@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>Gestionar Héroes</title>
+</head>
+
+<body>
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+    <h1 class="adminTitle text-center">Gestión de Héroes</h1><br>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- Apartado para añadir héroes -->
+                <div class="section">
+                    <h2>Añadir Héroe</h2>
+                    <form action="#" method="post" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre del Héroe</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            <div class="invalid-feedback">
+                                Por favor, introduce el nombre del héroe.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="vida" class="form-label">Vida</label>
+                            <input type="number" class="form-control" id="vida" name="vida" step="0.01" min="0" required>
+                            <div class="invalid-feedback">
+                                Por favor, introduce un valor válido para la vida.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="armadura" class="form-label">Armadura</label>
+                            <input type="number" class="form-control" id="armadura" name="armadura" step="0.01" min="0" required>
+                            <div class="invalid-feedback">
+                                Por favor, introduce un valor válido para la armadura.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="velocidadAtaque" class="form-label">Velocidad de Ataque</label>
+                            <input type="number" class="form-control" id="velocidadAtaque" name="velocidadAtaque" step="0.01" min="0" required>
+                            <div class="invalid-feedback">
+                                Por favor, introduce un valor válido para la velocidad de ataque.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="daño" class="form-label">Daño</label>
+                            <input type="number" class="form-control" id="daño" name="daño" step="0.01" min="0" required>
+                            <div class="invalid-feedback">
+                                Por favor, introduce un valor válido para el daño.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="rutaPng" class="form-label">Ruta del PNG</label>
+                            <input type="text" class="form-control" id="rutaPng" name="rutaPng" required>
+                            <div class="invalid-feedback">
+                                Por favor, introduce la ruta del PNG.
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Añadir Héroe</button>
+                    </form>
+                </div>
+
+                <hr class="divider">
+
+                <!-- Apartado para eliminar héroes -->
+                <div class="section">
+                    <h2>Eliminar Héroe</h2>
+                    <form action="#" method="post">
+                        <div class="mb-3">
+                            <label for="faccion" class="form-label">Selecciona la Facción</label>
+                            <select class="form-select" id="faccion" name="faccion" required onchange="actualizarHeroes()">
+                                <option value="">Selecciona una facción</option>
+                                <option value="humanos">Humanos</option>
+                                <option value="dragones">Dragones</option>
+                                <option value="trolls">Trolls</option>
+                                <option value="noMuertos">No Muertos</option>
+                                <option value="legendarios">Legendarios</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, selecciona una facción.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="eliminarHeroe" class="form-label">Selecciona el Héroe a eliminar</label>
+                            <select class="form-select" id="eliminarHeroe" name="eliminarHeroe" required>
+                                <option value="">Selecciona un héroe</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, selecciona un héroe para eliminar.
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-danger">Eliminar Héroe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="degradado"></div>
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+
+</body>
+
+</html>
