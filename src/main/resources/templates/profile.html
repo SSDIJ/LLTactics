@@ -1,98 +1,39 @@
 <!DOCTYPE html>
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <th:block th:replace="~{fragments/head :: header}" />
     <title>LL Tactics</title>
-    <style>
-        body {
-            background-image: url('/img/backgrounds/lol_profile_bg.jpg');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
-        }
-        .profile-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-top: 50px;
-        }
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        .profile-photo img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 3px solid gold;
-        }
-        .profile-stats {
-            text-align: left;
-        }
-        .rank-badge img {
-            width: 100px;
-        }
-        .mastery-score {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .heroes-container img {
-            width: 50px;
-            margin: 5px;
-        }
-        .charts-container {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css"> <!-- Enlazamos el archivo CSS -->
 </head>
-
-<body class="h-100">
+<body>
     <header th:replace="~{fragments/nav.html :: nav}"></header>
     
-    <div class="profile-container">
-        <!-- Sección de cabecera con foto, nombre y rango -->
-        <div class="profile-header">
-            <div class="profile-photo">
-                <img src="/img/players/arthur.png" alt="Foto de perfil">
-            </div>
-            <div class="profile-stats">
-                <h2>Arthur</h2>
-                <p>Victorias: 20 | Derrotas: 5</p>
-                <p>Facción favorita: Humanos</p>
-                <p class="mastery-score">Puntuación de maestría: 410</p>
-            </div>
-            <div class="rank-badge">
-                <img src="/img/ranks/platinum.png" alt="Platino IV">
-                <p>Platino IV - 100 LP</p>
-            </div>
+    <div class="profile-header">
+        <div class="profile-info">
+            <h2>Arthur</h2>
+            <img src="/img/players/arthur.png" alt=""/>
         </div>
-        
-        <!-- Héroes más usados -->
-        <div class="heroes-container">
-            <h3>Héroes más usados</h3>
-            <div>
-                <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero">
-                <img src="/img/units/humans/5. Mago/white-mage.png" alt="Mago">
-            </div>
+        <div class="search-player">
+            <input type="text" placeholder="Buscar jugador..."/>
         </div>
-        
-        <!-- Contenedor de gráficos -->
-        <div class="charts-container">
-            <div class="winrate-chart-container">
-                <canvas id="winrateChart" width="150" height="150"></canvas>
-            </div>
-            <div class="faction-chart-container">
-                <canvas id="factionChart" width="150" height="150"></canvas>
-            </div>
+    </div>
+    
+    <div class="profile-stats">
+        <div class="stat-item">
+            <p>Puntuación de maestría</p>
+            <h3>410</h3>
+        </div>
+        <div class="stat-item">
+            <p>Personaje más jugado</p>
+            <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero"/>
+        </div>
+        <div class="stat-item">
+            <p>Facción favorita</p>
+            <img src="/img/units/banners/humans.png" alt="Escudo de Humanos"/>
+        </div>
+        <div class="stat-item chart-container">
+            <canvas id="winrateChart"></canvas>
         </div>
     </div>
     
@@ -108,18 +49,6 @@
                 datasets: [{
                     data: [20, 5],
                     backgroundColor: ['#4CAF50', '#F44336']
-                }]
-            }
-        });
-
-        var ctx2 = document.getElementById('factionChart').getContext('2d');
-        new Chart(ctx2, {
-            type: 'pie',
-            data: {
-                labels: ['Humanos', 'Dragones', 'No-muertos'],
-                datasets: [{
-                    data: [60, 25, 15],
-                    backgroundColor: ['blue', 'red', 'gray']
                 }]
             }
         });
