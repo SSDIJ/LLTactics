@@ -500,7 +500,7 @@ td img.icon {
 
 /*COMIEZNO PROFILE*/
 /* Estilos generales */
-body {
+body .profile-body{
     background-image: url('/img/homepage/sword.png');
     background-size: cover;
     background-position: center;
