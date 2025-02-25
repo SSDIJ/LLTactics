@@ -1,12 +1,17 @@
 package es.ucm.fdi.iw.Clases;
 
 import java.time.LocalDateTime;
+
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class Mensaje {
+
+    @ManyToOne
+    private Partida partida;
     private Jugador autor;
     private String contenido;
     private LocalDateTime fechaHora;

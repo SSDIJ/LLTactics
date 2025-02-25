@@ -4,12 +4,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import es.ucm.fdi.iw.Clases.Heroe;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class Jugador {
+    @ManyToOne
+    private Partida partida;
     private String nombre;
     private String imagen;
     private int indiceRanking;
