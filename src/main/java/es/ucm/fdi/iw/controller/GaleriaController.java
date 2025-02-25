@@ -1,7 +1,10 @@
 package es.ucm.fdi.iw.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityManager;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import es.ucm.fdi.iw.Clases.Heroe;
@@ -9,9 +12,15 @@ import es.ucm.fdi.iw.Clases.Heroe;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 @Controller
 public class GaleriaController {
     
+    @Autowired
+    private EntityManager entityManager;
+
+    @Transactional
     @GetMapping("/galeria")
     public String mostrarGaleria(Model model) {
         List<Heroe> humanos = new ArrayList<>();
@@ -20,6 +29,12 @@ public class GaleriaController {
         List<Heroe> noMuertos = new ArrayList<>();
         List<Heroe> legendarios = new ArrayList<>();
 
+        /* CODIGO ANTIGUO PARA RELLENAR LAS BASES DE DATOS, COMENTADO PORQUE YA ESTÁ AÑADIDO */
+        Heroe heroe  = new Heroe("Tanque", "/img/units/humans/1. Tanque/heavyinfantry.png", 25, 50, 75, 100, "Es la primera línea de defensa.",0);
+        entityManager.persist(heroe);
+        Heroe heroe1 = new Heroe("General de Guerra", "/img/units/humans/2. General/general.png", 200, 80, 70, 40, "Un estratega nato en el campo de batalla.",0);
+        entityManager.persist(heroe1);
+        entityManager.flush(); // <- implicito al final de la transaccion
 
         // Humanos
         humanos.add(new Heroe("Tanque", "/img/units/humans/1. Tanque/heavyinfantry.png", 25, 50, 75, 100, "Es la primera línea de defensa.",0));
