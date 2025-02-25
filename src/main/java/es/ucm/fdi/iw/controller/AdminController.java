@@ -66,11 +66,12 @@ public class AdminController {
         jugadores.add(j1);
         jugadores.add(j2);
 
+        Long id = (long) 1.0;  //QUITAR, PUESTO SOLO PARA QUE FUNCIONE
         // Agregar mensajes al chat
         chat.add(new Mensaje(j1, "Hola, ¿qué tal?"));
         chat.add(new Mensaje(j2, "¡Hola Juan! Estoy bien, ¿y tú?"));
         chat.add(new Mensaje(j1, "Todo bien, gracias por preguntar."));
-        enCurso.add(new Partida("1", 30, jugadores, chat));
+        //enCurso.add(new Partida(id, 30, jugadores, chat));
         model.addAttribute("enCurso", enCurso);
 
         List<Partida> terminadas = new ArrayList<>();

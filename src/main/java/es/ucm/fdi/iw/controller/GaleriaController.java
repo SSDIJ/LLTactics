@@ -8,6 +8,9 @@ import jakarta.persistence.EntityManager;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import es.ucm.fdi.iw.Clases.Heroe;
+import es.ucm.fdi.iw.Clases.Jugador;
+import es.ucm.fdi.iw.Clases.Mensaje;
+import es.ucm.fdi.iw.Clases.Partida;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +79,23 @@ public class GaleriaController {
         entityManager.flush(); // <- implicito al final de la transaccion
 
         */
+
+        // Crear y persistir una partida
+        Partida partida = new Partida("Partida 1");
+        entityManager.persist(partida);
+
+        // Crear y persistir un héroe
+        Heroe heroe = new Heroe("Tanque", "/img/units/humans/1. Tanque/heavyinfantry.png", 25, 50, 75, 100, "Es la primera línea de defensa.", 0);
+        entityManager.persist(heroe);
+
+        // Crear y persistir un jugador
+        List<Heroe> masJugados = new ArrayList<>();
+        masJugados.add(heroe);
+        Jugador jugador = new Jugador("Jugador 1", "/img/players/player1.png", 1, 1000, 10, 5, 0, masJugados, false, null);
+        jugador.setPartida(partida);
+        entityManager.persist(jugador);
+
+
 
         // Humanos
         humanos.add(new Heroe("Tanque", "/img/units/humans/1. Tanque/heavyinfantry.png", 25, 50, 75, 100, "Es la primera línea de defensa.",0));

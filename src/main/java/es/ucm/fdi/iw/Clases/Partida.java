@@ -1,35 +1,23 @@
 package es.ucm.fdi.iw.Clases;
 
 import java.util.List;
-
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Entity
+@Data
 public class Partida {
-    private String id;
-    private int duracionMin;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String nombre;
 
-    @OneToMany
-    @JoinColumn(name="partida_id")
-    private List<Jugador> jugadores;
-
-    private Jugador ganador;
-
-    @OneToMany
-    @JoinColumn(name="partida_id")
-    private List<Mensaje> chat;
-    
-    private boolean terminada;
-
-    public Partida(String id, int duracionMin, List<Jugador> jugadores, List<Mensaje> chat) {
-        this.id = id;
-        this.duracionMin = duracionMin;
-        this.jugadores = jugadores;
-        this.chat = chat;
-        this.terminada = false;
+    public Partida(String nombre) {
+        this.nombre = nombre;
     }
 }

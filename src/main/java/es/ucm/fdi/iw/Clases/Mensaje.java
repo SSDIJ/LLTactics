@@ -1,17 +1,24 @@
 package es.ucm.fdi.iw.Clases;
 
 import java.time.LocalDateTime;
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Entity
+@Data
 public class Mensaje {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     private Partida partida;
+    
+    @ManyToOne
     private Jugador autor;
     private String contenido;
     private LocalDateTime fechaHora;

@@ -3,14 +3,23 @@ package es.ucm.fdi.iw.Clases;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import es.ucm.fdi.iw.Clases.Heroe;
-import jakarta.persistence.ManyToOne;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
+import es.ucm.fdi.iw.Clases.Heroe;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import lombok.Data;
+
+@Entity
+@Data
 public class Jugador {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne
     private Partida partida;
     private String nombre;
@@ -20,7 +29,10 @@ public class Jugador {
     private int partidasGanadas;
     private int partidasPerdidas;
     private int faccionFavorita;
-    private List<Heroe> masJugados;
+    
+    @OneToMany
+    private List<Heroe> masJugados = new ArrayList<>();
+    
     private boolean baneado;
     private String razonBaneo;
     private LocalDateTime fechaBaneo;

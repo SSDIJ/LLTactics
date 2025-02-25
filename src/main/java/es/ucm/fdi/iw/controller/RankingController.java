@@ -3,8 +3,10 @@ package es.ucm.fdi.iw.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import es.ucm.fdi.iw.Clases.Jugador;
+
 import es.ucm.fdi.iw.Clases.Heroe;
+import es.ucm.fdi.iw.Clases.Jugador;
+
 import java.util.ArrayList;
 import java.util.List;
 
