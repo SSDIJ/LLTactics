@@ -26,33 +26,25 @@
         
         <div id="game-status-container" class="w-100">
 
-            <div id="player-objects-container" class="d-flex flex-column justify-content-center align-items-center gap-4">
-                <div class="object-cell">
-                    <img src="/img/items/book1.png" alt="" class="object-img">
-                </div>
-                <div class="object-cell">
-                    <img src="/img/items/flame-sword.png" alt="" class="object-img">
-                </div>
-                <div class="object-cell"></div>
-                <div class="object-cell"></div>
-                <div class="object-cell"></div>
-                <div class="object-cell"></div>
-                <div class="object-cell"></div>
-            </div>
+            <!-- Inventario jugador -->
+            <div th:replace="fragments/inventory :: inventory(${playerObjects})"></div>
 
+            <!-- Inventario oponente -->
             <div id="opponents-info-container">
-
             </div>
 
+            <!-- Contenedor de unidades de ambos jugadores -->
             <div id="players-units-container" class="d-flex">
 
                 <div id="player-profiles-container" class="d-flex">
 
+                    <!-- Nombre jugador -->
                     <div id="player-profile-container">
                         <img src="" alt="">
                         <h3>Jugador 1</h3>
                     </div>
 
+                    <!-- Nombre oponente -->
                     <div id="opponent-profile-container">
                         <img src="" alt="">
                         <h3>Jugador 2</h3>
@@ -60,257 +52,66 @@
 
                 </div>
 
+                <!-- Unidades del jugador -->
                 <div id="player-units-container" class="d-flex">
-
-                    <div class="unit-container">
-                        <div class="unit-stats d-flex flex-column justify-content-center gap-2">
-                            <div class="unit-name">Mago</div>
-                            <div class="unit-life">
-
-                                <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                    <div class="progress-bar bg-success" style="width: 55%">75</div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <img src="/img/units/humans/5. Mago/white-mage.png" class="unit-game-img">
-                        <div class="unit-object-container d-flex justify-content-center gap-2">
-                            
-                            <div class="object-cell"></div>
-                            <div class="object-cell"></div>
-                        </div>
-                    </div>
-
-                    <div class="unit-container missing-unit"></div>
-
-                    <div class="unit-container">
-                        <div class="unit-stats d-flex flex-column justify-content-center gap-2">
-                            <div class="unit-name">Troll</div>
-                            <div class="unit-life">
-
-                                <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                    <div class="progress-bar bg-success" style="width: 55%">75</div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <img src="/img/units/trolls/3. TOfftanque/warrior.png" class="unit-game-img">
-                        <div class="unit-object-container d-flex justify-content-center gap-2">
-                            <div class="object-cell"></div>
-                            <div class="object-cell"></div>
-                        </div>
-                    </div>
-
-                    <div class="unit-container">
-                        <div class="unit-stats d-flex flex-column justify-content-center gap-2">
-                            <div class="unit-name">General</div>
-                            <div class="unit-life">
-
-                                <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                    <div class="progress-bar bg-success" style="width: 55%">75</div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <img src="/img/units/humans/2. General/general-breeze1.png" class="unit-game-img">
-                        <div class="unit-object-container d-flex justify-content-center gap-2">
-                            <div class="object-cell">
-                                <img src="/img/items/staff-druid.png" alt="" class="object-img">
-                            </div>
-                            <div class="object-cell"></div>
-                        </div>
-                    </div>
-
-                    <div class="unit-container">
-                        <div class="unit-stats d-flex flex-column justify-content-center gap-2">
-                            <div class="unit-name">Paladín</div>
-                            <div class="unit-life">
-
-                                <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                    <div class="progress-bar bg-success" style="width: 55%">75</div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <img src="/img/units/humans/3. Caballero/knight.png" class="unit-game-img">
-                        <div class="unit-object-container d-flex justify-content-center gap-2">
-                            <div class="object-cell"></div>
-                            <div class="object-cell"></div>
-                        </div>
+                    <div th:each="unit : ${unitsP1}">
+                        <th:block th:replace="fragments/unit :: unit(${unit})"></th:block>
                     </div>
                 </div>
 
                 <h1 id="game-versus">VS</h1>
 
+                <!-- Unidades del oponente -->
                 <div id="opponent-units-container" class="d-flex">
-
-                    <div class="unit-container">
-                        <div class="unit-stats d-flex flex-column justify-content-center gap-2">
-                            <div class="unit-name">Espíritu</div>
-                            <div class="unit-life">
-
-                                <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                    <div class="progress-bar bg-success" style="width: 55%">75</div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <img src="/img/units/legendary/fireghost/fireghost.png" class="unit-game-img">
-                        <div class="unit-object-container d-flex justify-content-center gap-2">
-                            <div class="object-cell">
-                                <img src="/img/items/ball-blue.png" alt="" class="object-img">
-                            </div>
-                            <div class="object-cell"></div>
-                        </div>
-                    </div>
-
-                    <div class="unit-container">
-                        <div class="unit-stats d-flex flex-column justify-content-center gap-2">
-                            <div class="unit-name">General</div>
-                            <div class="unit-life">
-
-                                <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                    <div class="progress-bar bg-success" style="width: 55%">75</div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <img src="/img/units/humans/2. General/general-breeze1.png" class="unit-game-img">
-                        <div class="unit-object-container d-flex justify-content-center gap-2">
-                            <div class="object-cell"></div>
-                            <div class="object-cell"></div>
-                        </div>
-                    </div>
-
-                    <div class="unit-container missing-unit"></div>
-                    <div class="unit-container missing-unit"></div>
-
-                    <div class="unit-container">
-                        <div class="unit-stats d-flex flex-column justify-content-center gap-2">
-                            <div class="unit-name">Arquero</div>
-                            <div class="unit-life">
-
-                                <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                    <div class="progress-bar bg-success" style="width: 55%">75</div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <img src="/img/units/humans/4. Arquero/longbowman-bow.png" class="unit-game-img">
-                        <div class="unit-object-container d-flex justify-content-center gap-2">
-                            <div class="object-cell"></div>
-                            <div class="object-cell"></div>
-                        </div>
+                    <div th:each="unit : ${unitsP2}">
+                        <th:block th:replace="fragments/unit :: unit(${unit})"></th:block>
                     </div>
                 </div>
             </div>
 
+            <!-- Panel de control del juego -->
             <div id="player-actions-container">
 
+                <!-- Tienda -->
                 <div id="shop-container" class="d-flex gap-3">
 
                     <h3 class="section-title">Tienda</h3>
 
+                    <!-- Unidades -->
                     <div id="shop-units-container" class="d-flex justify-content-center align-items-center gap-3">
-
-                        <div class="shop-unit d-flex flex-column gap-2">
-                            <!-- Valor -->
-                            <div class="shop-value-container d-flex justify-content-center align-items-center">
-                                 <!-- Icono de estrella -->
-                                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="value-img bi bi-star-fill mb-3" viewBox="0 0 16 16">
-                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                                </svg>
-                                <p class="value-num">5</p>
-                            </div>
-                            
-                            <!-- Imagen de unidad -->
-                            <img src="/img/units/dragons/4. DGris/burner.png" class="shop-unit-game-img">
-                        </div>
-                        
-                        <div class="shop-unit d-flex flex-column gap-2">
-                            <!-- Valor -->
-                            <div class="shop-value-container d-flex justify-content-center align-items-center">
-                                 <!-- Icono de estrella -->
-                                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="value-img bi bi-star-fill mb-3" viewBox="0 0 16 16">
-                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                                </svg>
-                                <p class="value-num">4</p>
-                            </div>
-                            
-                            <!-- Imagen de unidad -->
-                            <img src="/img/units/skeletons/1. STanque/draug.png" class="shop-unit-game-img">
-                        </div>
-
-                        <div class="shop-unit d-flex flex-column gap-2">
-                            <!-- Valor -->
-                            <div class="shop-value-container d-flex justify-content-center align-items-center">
-                                 <!-- Icono de estrella -->
-                                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="value-img bi bi-star-fill mb-3" viewBox="0 0 16 16">
-                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                                </svg>
-                                <p class="value-num">1</p>
-                            </div>
-                            
-                            <!-- Imagen de unidad -->
-                            <img src="/img/units/humans/5. Mago/white-mage.png" class="shop-unit-game-img">
-                        </div>
-
+                        <th:block th:each="unit : ${shopUnits}">
+                            <th:block th:replace="fragments/shop-unit :: heroe(object=${unit})"></th:block>
+                        </th:block>                        
                     </div>
 
                     <div id="shop-right-container" class="w-100 d-flex flex-column gap-3 justify-content-center align-items-center">
+                        
+                         <!-- Objetos -->
                         <div id="shop-objects-container" class="d-flex gap-3 justify-content-center align-items-center">
-
-                            <div class="object-cell object-shop">
-                                <div class="shop-value-container d-flex justify-content-center align-items-center">
-                                    <!-- Icono de estrella -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="value-img bi bi-star-fill mb-3" viewBox="0 0 16 16">
-                                       <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                                   </svg>
-                                   <p class="value-num">2</p>
-                               </div>
-                                <img src="/img/items/axe.png" alt="" class="object-img">
-                            </div>
-
-                            <div class="object-cell object-shop">
-                                <div class="shop-value-container d-flex justify-content-center align-items-center">
-                                    <!-- Icono de estrella -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="value-img bi bi-star-fill mb-3" viewBox="0 0 16 16">
-                                       <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                                   </svg>
-                                   <p class="value-num">1</p>
-                               </div>
-                                <img src="/img/items/potion-red.png" alt="" class="object-img">
-                            </div>
-
+                            <th:block th:each="item : ${shopItems}">
+                                <th:block th:replace="fragments/shop-item :: item(${item})"></th:block>
+                            </th:block>
                         </div>
                         
                         <!-- Botón de refrescar tienda -->
                         <div id="refresh-container" class="d-flex justify-content-center align-items-center">
-                            <div class="shop-value-container d-flex justify-content-center align-items-center">
-                                <!-- Icono de estrella -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="value-img bi bi-star-fill mb-3" viewBox="0 0 16 16">
-                                   <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                               </svg>
-                               <p class="value-num">2</p>
-                           </div>
+
+                            <!-- Valor -->
+                            <div th:replace="~{fragments/stars-value :: stars-value(${2})}"></div>
+
+                            <!-- Icono -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
                                 <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
-                              </svg>
+                            </svg>
+
                         </div>
-
                     </div>
-
-                    
-
-                   
                 </div>
 
+                <!-- Status del jugador -->
                 <div id="player-stats-container" class="d-flex flex-column justify-content-center align-items-center gap-3">
-
-
-                    <div class="container d-flex gap-2 justify-content-center align-items-center">
-                        
+                    <div class="container d-flex gap-2 justify-content-center align-items-center">  
                         <p class="light-text"><strong>Total</strong></p>
                         <div class="shop-value-container d-flex justify-content-center align-items-center">
                             <!-- Icono de estrella -->
@@ -320,34 +121,17 @@
                            <p class="value-num">9</p>
                        </div>
                     </div>
-
-                    
                 </div>
 
+                <!-- Chat -->
                 <div id="chat-container">
-                    <h3 class="section-title">Chat</h3>
-                    <div id="game-messages-container" class="d-flex flex-column overflow-auto">
-                        <div class="message-container d-flex flex-column ">
-                            <div class="info-container d-flex gap-2">
-                                <p class="user-emisor">Jugador 3</p>
-                                <p class="timestamp">18:30</p>
-                            </div>
-                            <p class="message-text">
-                                Mensaje 1
-                            </p>
-                        </div>
 
-                        <div class="message-container d-flex flex-column ">
-                            <div class="info-container d-flex gap-2">
-                                <p class="user-emisor">Jugador 4</p>
-                                <p class="timestamp">18:32</p>
-                            </div>
-                            <p class="message-text">
-                                Mensaje 2
-                            </p>
-                        </div>
-                    
-                     
+                    <h3 class="section-title">Chat</h3>
+
+                    <div id="game-messages-container" class="d-flex flex-column overflow-auto">
+                        <th:block th:each="msg : ${mensajes}">
+                                <th:block th:replace="fragments/chat-message :: chat-message(${msg})"></th:block>
+                            </th:block>
                     </div>
                     <textarea name="message-input-chat" id="message-input-chat"></textarea>
                     

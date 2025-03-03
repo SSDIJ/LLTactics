@@ -22,8 +22,9 @@ public class Heroe {
     private int velocidad;
     private String descripcion;
     private int faccion;  // 0 = humanos, 1 = dragones, 2 = trolls, 3 = no muertos, 4 = criaturas legendarias
+    private int price;
 
-    public Heroe(String nombre, String imagen, int vida, int armadura, int daño, int velocidad, String descripcion, int faccion) {
+    public Heroe(String nombre, String imagen, int vida, int armadura, int daño, int velocidad, String descripcion, int faccion, int price) {
         this.nombre = nombre;
         this.imagen = imagen;
         this.vida = vida;
@@ -32,5 +33,6 @@ public class Heroe {
         this.velocidad = velocidad;
         this.descripcion = descripcion;
         this.faccion = faccion;
+        this.price = price;
     }
 }

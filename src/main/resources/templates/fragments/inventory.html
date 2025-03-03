@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Inventory</title>
+</head>
+<body>
+    <th:block th:fragment="inventory(playerObjects)">
+        <div id="player-objects-container" class="d-flex flex-column justify-content-center align-items-center gap-4">
+            <div th:each="object : ${playerObjects}">
+                <th:block th:replace="fragments/item :: item(${object})"></th:block>
+            </div>
+        </div>
+    </th:block>  
+</body>
+</html>

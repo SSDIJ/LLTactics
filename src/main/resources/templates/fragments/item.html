@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Inventory object</title>
+</head>
+<body>
+    <th:block th:fragment="item(object)">
+    <div class="object-cell position-relative">
+        <img th:if="${object.imageUrl != null}" th:src="@{${object.imageUrl}}" alt="" class="object-img">
+        
+        <!-- Tooltip para mostrar el nombre y descripción al hacer hover -->
+        <div th:if="${object.imageUrl != null}" class="tooltip-box">
+            <h6 th:text="${object.name}"></h6>
+            <p th:text="${object.description}"></p>
+        </div>
+    </div>
+</th:block> 
+</body>
+</html>

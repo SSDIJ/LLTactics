@@ -37,6 +37,10 @@ public class Jugador {
     private String razonBaneo;
     private LocalDateTime fechaBaneo;
 
+    public Jugador(String nombre) {
+        this.nombre = nombre;
+    }
+
     public Jugador(String nombre, String imagen, int indiceRanking, int puntuacion, int partidasGanadas, int partidasPerdidas, int faccionFavorita, List<Heroe> masJugados, boolean baneado, String razon) {
         this.nombre = nombre;
         this.imagen = imagen;

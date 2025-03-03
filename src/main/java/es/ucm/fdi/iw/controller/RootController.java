@@ -42,11 +42,12 @@ public class RootController {
         return "reglas1";
     }
 
+    /*
     @GetMapping("/game")
     public String game(Model model) {
         return "game";
     }
-/* 
+
      @GetMapping("/ranking")
      public String ranking (Model model){
         return "ranking";

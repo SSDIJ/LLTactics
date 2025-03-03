@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Unit</title>
+</head>
+<body>
+
+    <!-- Fragmento unit -->
+    <th:block th:fragment="unit(object)">
+        <div th:if="${object != null}" class="unit-container">
+            <div class="unit-stats d-flex flex-column justify-content-center gap-2">
+                <div class="unit-name" th:text="${object.name}"></div>
+                <div class="unit-life">
+                    <div class="progress" role="progressbar" aria-label="Success example" 
+                        th:attr="aria-valuenow=${object.healthPercentage}, aria-valuemin=0, aria-valuemax=100">
+                        <div class="progress-bar bg-success" th:style="'width: ' + ${object.healthPercentage} + '%'" 
+                            th:text="${object.healthValue}"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Imagen de la unidad -->
+            <img th:if="${object.imagePath != null}" th:src="@{${object.imagePath}}" class="unit-game-img">
+
+            <!-- Contenedor de objetos -->
+            <div class="unit-object-container d-flex justify-content-center gap-2">
+                <div th:each="item : ${object.objects}">
+                    <div th:replace="/fragments/unit-object-cell :: unit-object-cell(${item})"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contenedor para unidad nula -->
+        <div th:if="${object == null}" class="unit-container missing-unit"></div>
+    </th:block>
+</body>
+</html>
