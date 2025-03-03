@@ -5,6 +5,38 @@
     <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <th:block th:replace="~{fragments/head :: header}" />
     <title>Gestionar Héroes</title>
+    <script>
+        // Función para actualizar los héroes cuando se cambia la facción
+        function actualizarHeroes() {
+            const faccion = document.getElementById("faccion").value; // Captura el valor seleccionado
+            const heroSelect = document.getElementById("eliminarHeroe");
+
+            if (faccion) {
+                fetch(`/admin/gestHeroes/${faccion}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Error al obtener héroes para la facción " + faccion);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        heroSelect.innerHTML = "<option value=''>Selecciona un héroe</option>";
+                        data.forEach(hero => {
+                            const option = document.createElement("option");
+                            option.value = hero.id;  // Asigna el ID del héroe
+                            option.textContent = hero.nombre;  // Muestra el nombre del héroe
+                            heroSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error al cargar los héroes:", error);
+                        heroSelect.innerHTML = "<option value=''>No se pudieron cargar los héroes</option>";
+                    });
+            } else {
+                heroSelect.innerHTML = "<option value=''>Selecciona un héroe</option>";
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -27,28 +59,32 @@
                         </div>
                         <div class="mb-3">
                             <label for="vida" class="form-label">Vida</label>
-                            <input type="number" class="form-control" id="vida" name="vida" step="0.01" min="0" required>
+                            <input type="number" class="form-control" id="vida" name="vida" step="0.01" min="0"
+                                required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para la vida.
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="armadura" class="form-label">Armadura</label>
-                            <input type="number" class="form-control" id="armadura" name="armadura" step="0.01" min="0" required>
+                            <input type="number" class="form-control" id="armadura" name="armadura" step="0.01" min="0"
+                                required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para la armadura.
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="velocidadAtaque" class="form-label">Velocidad de Ataque</label>
-                            <input type="number" class="form-control" id="velocidadAtaque" name="velocidadAtaque" step="0.01" min="0" required>
+                            <input type="number" class="form-control" id="velocidadAtaque" name="velocidadAtaque"
+                                step="0.01" min="0" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para la velocidad de ataque.
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="daño" class="form-label">Daño</label>
-                            <input type="number" class="form-control" id="daño" name="daño" step="0.01" min="0" required>
+                            <input type="number" class="form-control" id="daño" name="daño" step="0.01" min="0"
+                                required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para el daño.
                             </div>
@@ -72,7 +108,8 @@
                     <form action="#" method="post">
                         <div class="mb-3">
                             <label for="faccion" class="form-label">Selecciona la Facción</label>
-                            <select class="form-select" id="faccion" name="faccion" required onchange="actualizarHeroes()">
+                            <select class="form-select" id="faccion" name="faccion" required
+                                onchange="actualizarHeroes()">
                                 <option value="">Selecciona una facción</option>
                                 <option value="humanos">Humanos</option>
                                 <option value="dragones">Dragones</option>
@@ -102,6 +139,7 @@
 
     <div class="degradado"></div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
+
 
 </body>
 

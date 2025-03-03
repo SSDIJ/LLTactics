@@ -11,7 +11,7 @@ import es.ucm.fdi.iw.Clases.Heroe;
 import es.ucm.fdi.iw.Clases.Jugador;
 import es.ucm.fdi.iw.Clases.Mensaje;
 import es.ucm.fdi.iw.Clases.Partida;
-import es.ucm.fdi.iw.repository.HeroeRepository;
+import es.ucm.fdi.iw.repositories.HeroeRepository;
 
 import java.util.ArrayList;
 import java.util.List;
