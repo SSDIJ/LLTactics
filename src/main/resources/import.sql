@@ -8,7 +8,6 @@ VALUES (2, TRUE, 'USER', 'b',
  
 INSERT INTO "PUBLIC"."HEROE" (vida, armadura, faccion, daño, velocidad, descripcion, imagen, nombre) VALUES
 (50, 75, 0, 100, 25, U&'Es la primera l\00ednea de defensa.', '/img/units/humans/1. Tanque/heavyinfantry.png', 'Tanque'),
-(50, 75, 0, 100, 25, U&'Es la primera l\00ednea de defensa.', '/img/units/humans/1. Tanque/heavyinfantry.png', 'Tanque'),
 (80, 70, 0, 40, 200, 'Un estratega nato en el campo de batalla.', '/img/units/humans/2. General/general.png', 'General de Guerra'),
 (60, 85, 0, 50, 180, U&'\00c1gil y feroz en combate.', '/img/units/humans/3. Caballero/knight.png', 'Caballero'),
 (30, 95, 0, 70, 120, U&'Con una punter\00eda letal.', '/img/units/humans/4. Arquero/longbowman-bow-attack-1.png', 'Arquero'),

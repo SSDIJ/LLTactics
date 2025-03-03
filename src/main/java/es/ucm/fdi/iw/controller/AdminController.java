@@ -78,8 +78,6 @@ public class AdminController {
 
         model.addAttribute("terminadas", terminadas);
 
-
-
         List<Heroe> humanos = new ArrayList<>();
         List<Heroe> dragones = new ArrayList<>();
         List<Heroe> trolls = new ArrayList<>();
