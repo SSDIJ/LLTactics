@@ -6,15 +6,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import es.ucm.fdi.iw.Clases.Heroe;
 import es.ucm.fdi.iw.Clases.Jugador;
-
+import es.ucm.fdi.iw.repositories.playerRepository;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class RankingController {
-    
+    private playerRepository jugadorRepository;
     @GetMapping("/ranking")
+
+/* CODIGO ANTIGUO PARA MOSTRAR EL RANKING SIN BASE DE DATOS
     public String mostrarRanking(Model model) {
+        
         List<Jugador> jugadores = new ArrayList<>();
 
         // Definimos héroes más jugados
@@ -49,4 +52,18 @@ public class RankingController {
         model.addAttribute("jugadores", jugadores);
         return "ranking";
     }
+  */
+  public String mostrarRanking(Model model) {
+    // Obtener jugadores de la base de datos
+    List<Jugador> jugadores = jugadorRepository.findAll();
+
+    // Ordenar por diferencia entre partidas ganadas y perdidas (descendente)
+    jugadores.sort((j1, j2) -> Integer.compare(
+        j2.getPartidasGanadas() - j2.getPartidasPerdidas(),
+        j1.getPartidasGanadas() - j1.getPartidasPerdidas()
+    ));
+
+    model.addAttribute("jugadores", jugadores);
+    return "ranking"; // Retorna la vista "ranking.html"
+}
 }
