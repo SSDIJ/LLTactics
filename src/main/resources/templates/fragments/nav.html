@@ -52,6 +52,9 @@
                             <li class="nav-item mx-2">
                                 <a class="nav-link" th:href="@{/login}" href="/login">Iniciar sesión</a>
                             </li>
+                            <li class="nav-item mx-2">
+                                <a class="nav-link" th:href="@{/registro}" href="/registro">Crear cuenta</a>
+                            </li>
                         </th:block>
 
                         <th:block th:if="${u}" >
@@ -64,9 +67,6 @@
                             <li class="nav-item mx-3">
                                 <a class="nav-link" th:if="${u.hasRole('ADMIN')}" th:href="@{/admin/gestUsuarios}">Usuarios</a>
                             </li>
-                            <!-- <li class="nav-item mx-3">
-                                <a class="nav-link" th:if="${u.hasRole('ADMIN')}" th:href="@{/admin/}">Administrar</a>
-                            </li> -->
 
                             <li class="nav-item mx-2">
                                 <a class="nav-link" th:href="@{/profile}"> <!--@{/user/{id}(id=${u.id})}-->

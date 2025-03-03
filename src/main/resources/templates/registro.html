@@ -3,7 +3,7 @@
 
 <head>
     <th:block th:replace="~{fragments/head :: header}" />
-    <title>Login</title>
+    <title>Registro</title>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -12,11 +12,8 @@
     <main id="login-container" class="flex-shrink-0">
         <div class="container w-50">
             <img src="/img/login/login-icon.png" alt="">
-            <form class="form-signin" method="post" th:action="@{/login}">
-                <h2 class="form-signin-heading display-4">Bienvenido</h2>
-                <p th:if="${loginError != false}" class="error">
-                    Error en nombre de usuario o contraseña
-                </p>
+            <form class="form-signin" method="post" th:action="@{/registro}">
+                <h2 class="form-signin-heading display-4">Regristro</h2>
                 <p>
                     <label for="username" class="visually-hidden">Username</label>
                     <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" required="required">
@@ -25,7 +22,7 @@
                     <label for="password" class="visually-hidden">Password</label>
                     <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required="required">
                 </p>
-                <button id="login-btn" class="btn" type="submit">Iniciar sesión</button>
+                <button id="login-btn" class="btn" type="submit">Registrar</button>
             </form>
         </div>
     </main>

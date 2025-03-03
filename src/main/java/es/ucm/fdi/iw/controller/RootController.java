@@ -31,6 +31,11 @@ public class RootController {
         model.addAttribute("loginError", error);
         return "login";
     }
+
+    @GetMapping("/registro")
+    public String registro(Model model, HttpServletRequest request) {
+        return "registro";
+    }
     
     @GetMapping("/reglas1")
     public String reglas1(Model model) {
