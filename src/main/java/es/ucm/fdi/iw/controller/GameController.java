@@ -46,7 +46,6 @@ public class GameController {
 
         List<Unit> unitsP1 = new ArrayList<>(Arrays.asList(
             new Unit("Mago", 55, 75, "/img/units/humans/5. Mago/white-mage.png", Arrays.asList(null, null)),
-            null,
             new Unit("Troll", 55, 75, "/img/units/trolls/3. TOfftanque/warrior.png", Arrays.asList(null, null)),
             new Unit("General", 55, 75, "/img/units/humans/2. General/general-breeze1.png", Arrays.asList(new Item("/img/items/staff-druid.png", "", "", 1), null)),
             new Unit("Paladín", 55, 75, "/img/units/humans/3. Caballero/knight.png", Arrays.asList(null, null))
@@ -56,7 +55,6 @@ public class GameController {
         List<Unit> unitsP2 = new ArrayList<>(Arrays.asList(
             new Unit("Espíritu", 55, 75, "/img/units/legendary/fireghost/fireghost.png", Arrays.asList(new Item("/img/items/ball-blue.png","", "", 1), null)),
             new Unit("General", 55, 75, "/img/units/humans/2. General/general-breeze1.png", Arrays.asList(null, null)),
-            null,
             null,
             new Unit("Arquero", 55, 75, "/img/units/humans/4. Arquero/longbowman-bow.png", Arrays.asList(null, null))
         ));

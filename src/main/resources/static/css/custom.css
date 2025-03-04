@@ -718,8 +718,78 @@ body .profile-body{
     width: 1300px;
     height: 200px;
 
-    justify-content: space-between;
+    justify-content: center;
+    gap: 100px;
 }
+
+@media (max-width: 1199px) {
+    
+    #players-units-container {
+        top: 100px;
+        gap: 80px;
+    }
+
+    #player-profiles-container {
+        gap: 300px !important;
+    }
+
+    .unit-object-container {
+        flex-direction: column;
+        position: absolute;
+    }
+
+    #player-units-container .unit-object-container {
+        top: 0px;
+        left: -30px;
+    }
+
+    #opponent-units-container .unit-object-container {
+        top: 0px;
+        right: -30px;
+    }
+
+    .missing-unit {
+        height: 145px !important;
+    }
+
+    #game-versus {
+        top: 215px !important;
+    }
+
+    #player-stats-container {
+        flex-direction: row !important;
+        height: 50px !important;
+    }
+
+}
+
+.media-btn {
+    position: fixed;
+    bottom: 0px;
+    width: 100px;
+    height: 50px;
+    background-color: var(--COLOR-DARK-1);
+    color: white;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.media-btn:hover {
+    background-color: burlywood;
+    transition: 0.3s;
+    color: var(--COLOR-DARK-1);
+}
+
+#shop-media-btn {
+    border-radius: 0 10px 0 0;
+}
+
+#chat-media-btn {
+    right: 0px;
+    border-radius: 10px 0 0 0;
+}
+
 
 #players-units-container .object-cell {
     border-color: var(--COLOR-DARK-1);
@@ -727,6 +797,7 @@ body .profile-body{
 
 .unit-container {
     text-align: center;
+    position: relative;
 }
 
 .missing-unit {
@@ -795,6 +866,12 @@ body .profile-body{
     transform: translate(-50%);
 
     font-size: 4rem;
+}
+
+
+
+#player-units-container {
+    justify-content: flex-end !important;
 }
 
 #player-profiles-container {
@@ -910,6 +987,11 @@ body .profile-body{
     border-radius: 10px 10px 0 0;
 
     align-items: end;
+}
+
+#game-position {
+    color: white;
+    font-weight: bold;
 }
 
 #chat-container {
