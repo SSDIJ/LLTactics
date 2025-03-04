@@ -85,12 +85,12 @@
                 <!-- Offcanvas para la tienda -->
                 <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="shopOffcanvas" aria-labelledby="shopOffcanvasLabel">
                     <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="shopOffcanvasLabel">Tienda</h5>
+                        <h5 class="offcanvas-title title" id="shopOffcanvasLabel">Tienda</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
-                    <div class="offcanvas-body d-flex flex-column gap-3">
+                    <div class="offcanvas-body d-flex flex-column gap-3 align-items-center">
                         <!-- Unidades -->
-                        <div id="shop-units-container" class="d-flex justify-content-center align-items-center gap-3">
+                        <div id="shop-units-container" class="d-flex flex-column justify-content-center align-items-center gap-3">
                             <th:block th:each="unit : ${shopUnits}">
                                 <th:block th:replace="fragments/shop-unit :: heroe(object=${unit})"></th:block>
                             </th:block>
@@ -178,7 +178,7 @@
                 <!-- Offcanvas para el chat -->
                 <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="chatOffcanvas" aria-labelledby="chatOffcanvasLabel">
                     <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="chatOffcanvasLabel">Chat</h5>
+                        <h5 class="offcanvas-title title" id="chatOffcanvasLabel">Chat</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body d-flex flex-column">

@@ -727,6 +727,7 @@ body .profile-body{
     #players-units-container {
         top: 100px;
         gap: 80px;
+        width: 100%;
     }
 
     #player-profiles-container {
@@ -749,17 +750,54 @@ body .profile-body{
     }
 
     .missing-unit {
-        height: 145px !important;
+        height: 105px !important;
+        width: 85px !important;
+        margin: 5px 0px !important;
     }
 
     #game-versus {
         top: 215px !important;
+        font-size: 3rem !important;
     }
 
     #player-stats-container {
         flex-direction: row !important;
         height: 50px !important;
     }
+
+    .unit-game-img {
+        width: 95px !important;
+    }
+
+    .unit-name {
+        font-size: 0.75rem !important;
+    }
+
+    .unit-stats {
+        height: 20px;
+    }
+
+    .unit-container .progress {
+        top: 15px !important;
+        height: 10px !important;
+    }
+
+    #player-profile-container, #opponent-profile-container {
+        width: 110px;
+    }
+
+    .shop-unit {
+        height: 100px !important;
+    }
+    
+    #shopOffcanvas {
+        max-width: 250px;
+    }
+
+    #message-input-chat {
+        width: 300px !important;
+    }
+
 
 }
 
@@ -832,7 +870,7 @@ body .profile-body{
     left: 50%;
     transform: translate(-50%);
     width: 70px !important;
-    height: 15px !important;
+    height: 15px;
     top: 25px;
 
 }
@@ -840,7 +878,6 @@ body .profile-body{
 .unit-life {
     width: 80px;
 }
-
 
 .unit-game-img {
     width: 115px;
@@ -992,6 +1029,7 @@ body .profile-body{
 #game-position {
     color: white;
     font-weight: bold;
+    margin-bottom: 0 !important;
 }
 
 #chat-container {
