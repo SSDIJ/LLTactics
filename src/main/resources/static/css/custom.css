@@ -756,13 +756,14 @@ body .profile-body{
     }
 
     #game-versus {
-        top: 215px !important;
+        top: 160px !important;
         font-size: 3rem !important;
     }
 
     #player-stats-container {
         flex-direction: row !important;
         height: 50px !important;
+        width: 200px !important;
     }
 
     .unit-game-img {
@@ -788,6 +789,7 @@ body .profile-body{
 
     .shop-unit {
         height: 100px !important;
+        width: 120px !important;
     }
     
     #shopOffcanvas {
@@ -960,6 +962,13 @@ body .profile-body{
     border-radius: 10px;
 }
 
+.shop-unit:hover, .object-cell:hover, #refresh-container:hover {
+    transform: scale(1.1);
+    transition: 0.3s;
+    box-shadow: inset 0px 0px 15px 5px rgba(255, 255, 255, 0.8);
+}
+
+
 .shop-value-container {
     color: whitesmoke;
     width: 40px;
@@ -1000,10 +1009,17 @@ body .profile-body{
     height: 50px;
     position: relative;
     color: white;
-    background-color: #55a961;
-    border-radius: 10px;
+    background-color: rgba(0, 10, 191, 0.322);
+    border: 1px solid white;
+    border-radius: 10px;    
 
 }
+
+#refresh-container:hover #refresh-icon {
+    transform: rotate(360deg);
+    transition:0.5s ease-in-out;
+}
+
 
 #refresh-container .shop-value-container {
     top: 50px;
@@ -1013,11 +1029,12 @@ body .profile-body{
 }
 
 #player-stats-container {
-    width: 200px;
+    width: 70px;
     height: 200px;
     background-color: var(--COLOR-DARK-1);
 
     position: fixed;
+    z-index: 20;
     left: 50%;
     transform: translate(-50%);
     bottom: 0;
