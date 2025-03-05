@@ -1,5 +1,6 @@
 package es.ucm.fdi.iw.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +13,10 @@ import java.util.List;
 
 @Controller
 public class RankingController {
+
+    @Autowired
     private playerRepository jugadorRepository;
-    @GetMapping("/ranking")
+    
 
 /* CODIGO ANTIGUO PARA MOSTRAR EL RANKING SIN BASE DE DATOS
     public String mostrarRanking(Model model) {
@@ -53,7 +56,8 @@ public class RankingController {
         return "ranking";
     }
   */
-  public String mostrarRanking(Model model) {
+    @GetMapping("/ranking")
+    public String mostrarRanking(Model model) {
     // Obtener jugadores de la base de datos
     List<Jugador> jugadores = jugadorRepository.findAll();
 
