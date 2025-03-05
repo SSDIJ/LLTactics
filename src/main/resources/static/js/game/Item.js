@@ -1,12 +1,13 @@
 class Item {
-    constructor(name, effect) {
-        this.name = name;
-        this.effect = effect; // Podría ser un incremento en atributos
-    }
 
-    applyEffect(unit) {
-        this.effect(unit);
+    constructor(description, id, imageUrl, name, price) {
+        this.description = description;
+        this.id = id;
+        this.imageUrl = imageUrl;
+        this.name = name;
+        this.price = price;
     }
+    
 }
 
 export default Item;

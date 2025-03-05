@@ -37,35 +37,28 @@ class Shop {
                         unitData.vida
                     );
                 });
-
-                console.log("UNIDADES:");
-                console.log(this.units);  // Muestra las unidades actualizadas
             })
             .catch(error => console.error('Error:', error));
 
         
+        // Actualizar items
         fetch('/api/shopItems?count=2')  
             .then(response => response.json())
             .then(data => {
-                // Mapear la respuesta a objetos Item
+  
 
-                /*
+                console.log(data)
                 this.items = data.map(itemData => {
                     return new Item(
-                        unitData.armadura,
-                        unitData.daño,
-                        unitData.descripcion,
-                        unitData.faccion,
+                        itemData.description,
+                        itemData.id,
+                        itemData.imageUrl,
+                        itemData.name,
+                        itemData.price
                     );
                 });
-
-                */
-                console.log("ITEMS:");
-                console.log(this.items);  // Muestra las unidades actualizadas
             })
             .catch(error => console.error('Error:', error));
-
-        
 
         console.log("Se ha refrescado la tienda");
     }

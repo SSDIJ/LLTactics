@@ -21,6 +21,8 @@ public class ItemService {
     public List<Item> getRandomItems(int count) {
 
         List<Item> items = itemRepository.findAll();
+
+        System.out.println("Items en la base de datos: " + items.size());
         if (items.size() <= count) {
             return items;
         }

@@ -12,6 +12,7 @@ const playerPositionElement = document.getElementById('game-position');
 
 // Tienda
 const shopUnitsContainer = document.getElementById('shop-units-container');
+const shopItemsContainer = document.getElementById('shop-objects-container')
 const refreshShopBtn = document.getElementById("refresh-container")
 
 
@@ -20,8 +21,6 @@ function updateShop() {
     player1.shop.units.forEach((unidad, index) => {
         // Seleccionar la carta correspondiente en el contenedor
         const unidadDiv = shopUnitsContainer.children[index];
-
-        console.log(unidadDiv)
 
         if (unidadDiv) {
             // Seleccionar el contenedor de valor y actualizarlo
@@ -32,6 +31,25 @@ function updateShop() {
             // Seleccionar la imagen de la unidad y actualizarla
             const imagenUnidad = unidadDiv.querySelector('.shop-unit-game-img');
             imagenUnidad.setAttribute('src', unidad.imagen);
+        }
+    });
+
+
+    console.log(player1.shop.items)
+    // Iterar a través de las unidades y actualizar los elementos existentes en el contenedor
+    player1.shop.items.forEach((item, index) => {
+        // Seleccionar la carta correspondiente en el contenedor
+        const itemDiv = shopItemsContainer.children[index];
+
+        if (itemDiv) {
+            // Seleccionar el contenedor de valor y actualizarlo
+            const valorContainer = itemDiv.querySelector('.shop-value-container');
+            const valorP = valorContainer.querySelector('.value-num');
+            valorP.textContent = item.price;
+
+            // Seleccionar la imagen de la unidad y actualizarla
+            const imagenUnidad = itemDiv.querySelector('.object-img');
+            imagenUnidad.setAttribute('src', item.imageUrl);
         }
     });
 }
