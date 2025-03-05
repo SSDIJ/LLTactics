@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor  
 @DiscriminatorValue("unidad")
 public class Unidad extends Heroe{
-    private Long idUnidad;
+    
     private Double vidaAct;
     private Double dañoAct;
     private Double velocidadAct;

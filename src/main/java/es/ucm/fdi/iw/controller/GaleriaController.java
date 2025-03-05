@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import es.ucm.fdi.iw.Clases.Heroe;
+import es.ucm.fdi.iw.Clases.Objeto;
 import es.ucm.fdi.iw.Clases.Jugador;
 import es.ucm.fdi.iw.Clases.Mensaje;
 import es.ucm.fdi.iw.Clases.Partida;
@@ -31,7 +32,8 @@ public class GaleriaController {
     @GetMapping("/galeria")
     public String mostrarGaleria(Model model) {
 
-        /* CODIGO ANTIGUO PARA RELLENAR LAS BASES DE DATOS, COMENTADO PARA EVITAR ERRORES PORQUE YA ESTÁ AÑADIDO */
+        
+        /* CODIGO ANTIGUO PARA RELLENAR LAS BASES DE DATOS, COMENTADO PARA EVITAR ERRORES PORQUE YA ESTÁ AÑADIDO 
         Heroe heroe  = new Heroe("Tanque", "/img/units/humans/1. Tanque/heavyinfantry.png", 25, 50, 75, 100, "Es la primera línea de defensa.",0, 3);
         entityManager.persist(heroe);
         Heroe heroe1 = new Heroe("General de Guerra", "/img/units/humans/2. General/general.png", 200, 80, 70, 40, "Un estratega nato en el campo de batalla.",0,4 );
@@ -77,8 +79,13 @@ public class GaleriaController {
 
         entityManager.flush(); // <- implicito al final de la transaccion
         
+         */
         
-
+         /*
+        Objeto objeto = new Objeto("Espada", "/img/items/sword.png", "Una espada afilada.", 1);
+        entityManager.persist(objeto);
+        entityManager.flush();
+ */
         // // Crear y persistir una partida
         // Partida partida = new Partida("Partida 1");
         // entityManager.persist(partida);

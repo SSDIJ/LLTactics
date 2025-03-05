@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.ucm.fdi.iw.Clases.Heroe;
-import es.ucm.fdi.iw.Clases.Item;
-import es.ucm.fdi.iw.Clases.Unit;
+import es.ucm.fdi.iw.Clases.Objeto;
+import es.ucm.fdi.iw.Clases.Unidad;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +23,8 @@ public class ItemController {
         this.itemService = itemService;
     }
     @GetMapping("/api/shopItems")
-    public List<Item> getRandomItems(@RequestParam int count) {
+    
+    public List<Objeto> getRandomItems(@RequestParam int count) {
         return itemService.getRandomItems(count);
     }
 }
