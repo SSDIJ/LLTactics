@@ -23,7 +23,7 @@
 
             <!-- Contador -->
             <div id="round-timer" class="d-flex justify-content-center align-items-center">
-                0:21
+                1:00
             </div>
             
         </div>
@@ -104,15 +104,13 @@
                         </div>
 
                         <!-- Botón de refrescar tienda -->
-                        <div id="refresh-container" class="d-flex justify-content-center align-items-center">
-                            <!-- Valor -->
+                        <button id="refresh-container" class="d-flex justify-content-center align-items-center">
                             <div th:replace="~{fragments/stars-value :: stars-value(${2})}"></div>
-                            <!-- Icono -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-clockwise" id="refresh-icon" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" id="refresh-icon" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
                                 <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
                             </svg>
-                        </div>
+                        </button>
                     </div>
                 </div>
 
@@ -130,13 +128,14 @@
                                 <th:block th:replace="fragments/shop-item :: item(${item})"></th:block>
                             </th:block>
                         </div>
-                        <div id="refresh-container" class="d-flex justify-content-center align-items-center">
+                        <button id="refresh-container" class="d-flex justify-content-center align-items-center">
                             <div th:replace="~{fragments/stars-value :: stars-value(${2})}"></div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" id="refresh-icon" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
                                 <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
                             </svg>
-                        </div>
+                        </button>
+
                     </div>
                 </div>
 
@@ -150,7 +149,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="value-img bi bi-star-fill mb-3" viewBox="0 0 16 16">
                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
                             </svg>
-                            <p class="value-num">9</p>
+                            <p id="game-player-stars" class="value-num">9</p>
                        </div>
                     </div>
                     
@@ -162,7 +161,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
                             </svg>
-                            <p class="value-num">78</p>
+                            <p id="game-player-life" class="value-num">78</p>
                        </div>
                     </div>
 
@@ -209,7 +208,8 @@
 
     </div>
 
-
+    <script type="module" src="js/game/Controller.js"></script>
+    
     <!-- Degradado en la parte inferior -->
     <div class="degradado"></div>
 

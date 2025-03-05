@@ -3,7 +3,12 @@ package es.ucm.fdi.iw.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.ucm.fdi.iw.Clases.Heroe;
 import es.ucm.fdi.iw.Clases.Item;
@@ -20,7 +25,7 @@ import java.util.List;
 public class GameController {
 
 
-    private final HeroesService heroeService; // Declara HeroeService
+    private final HeroesService heroeService;
 
     // Inyección de dependencias por constructor
     public GameController(HeroesService heroeService) {
@@ -82,4 +87,13 @@ public class GameController {
 
         return "game";
     }
+
+    @GetMapping("/game/refresh-shop")
+    @CrossOrigin
+    @ResponseBody
+    public List<Heroe> refreshShop(@RequestParam int count) {
+        // Llamar al servicio para obtener héroes aleatorios
+        return heroeService.getRandomHeroes(count);
+    }
+
 }

@@ -1,0 +1,11 @@
+package es.ucm.fdi.iw.repositories;
+
+import es.ucm.fdi.iw.Clases.Item;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+
+@Repository
+public interface ItemRepository extends JpaRepository<Item, Long> {
+}

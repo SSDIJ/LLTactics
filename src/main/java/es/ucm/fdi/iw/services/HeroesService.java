@@ -42,14 +42,14 @@ public class HeroesService {
     }
 
     public List<Heroe> getRandomHeroes(int count) {
-        
+
         List<Heroe> heroes = heroeRepository.findAll();
         if (heroes.size() <= count) {
-            return heroes; // Si hay menos de 'count' héroes, devolvemos todos.
+            return heroes;
         }
 
-        Collections.shuffle(heroes, random); // Barajar la lista
-        return heroes.subList(0, count); // Tomar los primeros 'count' héroes
+        Collections.shuffle(heroes, random);
+        return heroes.subList(0, count);
     }
     
 }
