@@ -13,6 +13,7 @@ import es.ucm.fdi.iw.Clases.Jugador;
 import es.ucm.fdi.iw.Clases.Mensaje;
 import es.ucm.fdi.iw.Clases.Partida;
 import es.ucm.fdi.iw.repositories.HeroeRepository;
+import es.ucm.fdi.iw.repositories.ItemRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,9 @@ public class GaleriaController {
     
     @Autowired
     private HeroeRepository heroeRepository;
+
+    @Autowired
+    private ItemRepository itemRepository;
 
     @Autowired
     private EntityManager entityManager;
@@ -140,11 +144,15 @@ public class GaleriaController {
         List<Heroe> noMuertos = heroeRepository.findByFaccion(3);
         List<Heroe> legendarios = heroeRepository.findByFaccion(4);
 
+        List<Objeto> objetos = itemRepository.findAll();
+
         model.addAttribute("humanos", humanos);
         model.addAttribute("trolls", trolls);
         model.addAttribute("dragones", dragones);
         model.addAttribute("noMuertos", noMuertos);
         model.addAttribute("legendarios", legendarios);
+        
+        model.addAttribute("objetos", objetos);
         return "galeria";
     }
 }

@@ -84,6 +84,19 @@
                     ${heroe.descripcion}
                 )}" />
             </div>
+            <!-- Título y objetos -->
+            <h2 class="w-100 text-center">Objetos</h2>
+            <div th:each="objeto : ${objetos}">
+                <th:block th:replace="~{fragments/card :: carta(
+                    ${objeto.nombre}, 
+                    ${objeto.imagen}, 
+                    0, 
+                    0, 
+                    0, 
+                    0, 
+                    ${objeto.descripcion}
+                )}" />
+            </div>
         </div>
         <img src="/img/gallery/rune.png" id="img-gallery-bg">
         <div class="degradado"></div>
