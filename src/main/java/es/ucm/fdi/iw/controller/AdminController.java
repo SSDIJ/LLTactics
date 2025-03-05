@@ -85,7 +85,7 @@ public class AdminController {
         jugadores.add(j1);
         jugadores.add(j2);
 
-        Long id = (long) 1.0; // QUITAR, PUESTO SOLO PARA QUE FUNCIONE
+        Long id = (long) 1.0; // TODO: QUITAR, PUESTO SOLO PARA QUE FUNCIONE
         // Agregar mensajes al chat
         chat.add(new Mensaje(j1, "Hola, ¿qué tal?"));
         chat.add(new Mensaje(j2, "¡Hola Juan! Estoy bien, ¿y tú?"));

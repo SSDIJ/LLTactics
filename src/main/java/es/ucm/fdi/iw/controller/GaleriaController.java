@@ -16,7 +16,7 @@ import es.ucm.fdi.iw.repositories.HeroeRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/* Recibe petición HTTP para mostrar la galería y devuelve la vista "galeria" con toda la información de los héroes agrupados por facción */
 
 @Controller
 public class GaleriaController {
