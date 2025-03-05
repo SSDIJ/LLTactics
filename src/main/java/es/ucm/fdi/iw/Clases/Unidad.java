@@ -16,19 +16,20 @@ import lombok.NoArgsConstructor;
 @DiscriminatorValue("unidad")
 public class Unidad extends Heroe{
     
-    private Double vidaAct;
-    private Double dañoAct;
-    private Double velocidadAct;
-    private Double armaduraAct;
+    private int vidaAct;
+    private int dañoAct;
+    private int velocidadAct;
+    private int armaduraAct;
 
     @OneToMany(mappedBy = "unidad")
     private List<Objeto> objetos;
 
     public Unidad(String nombre, String imagen, int vida, int armadura, int daño, int velocidad, String descripcion, int faccion, int precio, List<Objeto> objetos) {
         super(nombre, imagen, vida, armadura, daño, velocidad, descripcion, faccion, precio);
-        this.dañoAct = Double.valueOf(daño);
-        this.vidaAct = Double.valueOf(vida);
-        this.velocidadAct = Double.valueOf(velocidad);
+        this.dañoAct = daño;
+        this.vidaAct = vida;
+        this.velocidadAct = velocidad;
+        this.armaduraAct = armadura;
         this.objetos = objetos;
     }
 }
