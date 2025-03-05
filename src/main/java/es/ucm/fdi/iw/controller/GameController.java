@@ -1,5 +1,6 @@
 package es.ucm.fdi.iw.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import es.ucm.fdi.iw.Clases.Item;
 import es.ucm.fdi.iw.Clases.Jugador;
 import es.ucm.fdi.iw.Clases.Mensaje;
 import es.ucm.fdi.iw.Clases.Unit;
+import es.ucm.fdi.iw.services.HeroesService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +18,15 @@ import java.util.List;
 
 @Controller
 public class GameController {
+
+
+    private final HeroesService heroeService; // Declara HeroeService
+
+    // Inyección de dependencias por constructor
+    public GameController(HeroesService heroeService) {
+        this.heroeService = heroeService;
+    }
+
 
     @GetMapping("/game")
     public String showGamePage(Model model) {
@@ -37,11 +48,7 @@ public class GameController {
         );
         model.addAttribute("shopItems", shopItems);
 
-        List<Heroe> shopUnits = List.of(
-            new Heroe("Dragón", "/img/units/dragons/4. DGris/burner.png", 0, 0, 0, 0, null, 0, 2),
-            new Heroe("Esqueleto", "/img/units/humans/5. Mago/white-mage.png", 0, 0, 0, 0, null, 0, 4),
-            new Heroe("Mago", "/img/units/humans/5. Mago/white-mage.png", 0, 0, 0, 0, null, 0, 1)
-        );
+        List<Heroe> shopUnits = heroeService.getRandomHeroes(3); // Obtener 3 héroes
         model.addAttribute("shopUnits", shopUnits);
 
         List<Unit> unitsP1 = new ArrayList<>(Arrays.asList(
