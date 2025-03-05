@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+/* Hace uso de la base de datos (a través del repositorio HeroeRepository) para obtener y organizar los datos */
+
 @Service
 public class HeroesService {
 
