@@ -29,7 +29,8 @@
                     ${heroe.armadura}, 
                     ${heroe.daño}, 
                     ${heroe.velocidad}, 
-                    ${heroe.descripcion}
+                    ${heroe.descripcion},
+                    'heroe'
                 )}" />
             </div>
             <!-- Título y héroes trolls -->
@@ -42,7 +43,8 @@
                     ${heroe.armadura}, 
                     ${heroe.daño}, 
                     ${heroe.velocidad}, 
-                    ${heroe.descripcion}
+                    ${heroe.descripcion},
+                    'heroe'
                 )}" />
             </div>
             <!-- Título y héroes dragones -->
@@ -55,7 +57,8 @@
                     ${heroe.armadura}, 
                     ${heroe.daño}, 
                     ${heroe.velocidad}, 
-                    ${heroe.descripcion}
+                    ${heroe.descripcion},
+                    'heroe'
                 )}" />
             </div>
             <!-- Título y héroes no muertos -->
@@ -68,7 +71,8 @@
                     ${heroe.armadura}, 
                     ${heroe.daño}, 
                     ${heroe.velocidad}, 
-                    ${heroe.descripcion}
+                    ${heroe.descripcion},
+                    'heroe'
                 )}" />
             </div>
             <!-- Título y héroes legendarios -->
@@ -81,12 +85,14 @@
                     ${heroe.armadura}, 
                     ${heroe.daño}, 
                     ${heroe.velocidad}, 
-                    ${heroe.descripcion}
+                    ${heroe.descripcion},
+                    'heroe'
                 )}" />
             </div>
             <!-- Título y objetos -->
             <h2 class="w-100 text-center">Objetos</h2>
             <div th:each="objeto : ${objetos}">
+                <!-- EL ÚLTIMO PARÁMETRO ESTÁ PUESTO A MANO, SOLO PARA LA GALERÍA -->
                 <th:block th:replace="~{fragments/card :: carta(
                     ${objeto.nombre}, 
                     ${objeto.imagen}, 
@@ -94,7 +100,8 @@
                     ${objeto.armadura}, 
                     ${objeto.daño}, 
                     ${objeto.velocidad}, 
-                    ${objeto.descripcion}
+                    ${objeto.descripcion}, 
+                    'objeto'
                 )}" />
             </div>
         </div>
