@@ -1,4 +1,5 @@
 import Item from "./Item.js";
+import Unit from "./Unit.js";
 import Shop from "./Shop.js"
 
 class Player {
@@ -10,7 +11,12 @@ class Player {
         this.name = name;
         this.health = 100;
         this.stars = 1000;
-        this.units = [];
+        this.units = [
+            new Unit(0, 0, "", "", 0, "", "", 0, 0, 0, []),
+            new Unit(0, 0, "", "", 0, "", "", 0, 0, 0, []),
+            new Unit(0, 0, "", "", 0, "", "", 0, 0, 0, []),
+            new Unit(0, 0, "", "", 0, "", "", 0, 0, 0, []),
+        ];
         this.inventory = new Set();  // Usamos un Set para el inventario
         this.shop = new Shop();  // Cada jugador tiene su propia tienda
     }
@@ -38,13 +44,27 @@ class Player {
 
     // Comprar una unidad de la tienda
     buyUnit(unit) {
+
+        console.log(this.units);
+
         if (this.stars >= unit.price) {
-            this.units.push(unit);
+            // Busca la primera unidad undefined en el array
+            const index = this.units.findIndex(unit => unit.imagen == "");
+            // Reemplaza la unidad undefined
+            if (index !== -1)
+                this.units[index] = unit; 
+            else {
+                console.log(`${this.name} no puede tener más unidades.`);
+                return false; // No se pudo comprar la unidad
+            }
+
             this.stars -= unit.price;
-            console.log(`${this.name} compró una unidad: ${unit.name}`);
-        } else {
-            console.log(`${this.name} no tiene suficientes monedas.`);
-        }
+            console.log(`${this.name} compró una unidad: ${unit.nombre}`);
+            return true;
+        } 
+
+        console.log(`${this.name} no tiene suficientes monedas.`);
+        return false;
     }
 
     // Comprar un objeto de la tienda

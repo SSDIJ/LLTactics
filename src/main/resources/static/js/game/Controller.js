@@ -65,6 +65,7 @@ function updateShop() {
     shopUnitsContainers.forEach((shopUnitsContainer) => {
         player1.shop.units.forEach((unidad, index) => {
             const unidadDiv = shopUnitsContainer.children[index];
+            unidadDiv.classList.remove("sold")
 
             if (unidadDiv) {
                 const valorContainer = unidadDiv.querySelector('.shop-value-container');
@@ -73,6 +74,17 @@ function updateShop() {
 
                 const imagenUnidad = unidadDiv.querySelector('.shop-unit-game-img');
                 imagenUnidad.setAttribute('src', unidad.imagen);
+            
+                // Añade la opción de compra de las unidades
+                unidadDiv.addEventListener('click', () => {
+                    console.log(`Intentando comprar unidad: ${unidad.nombre}`); // TODO: Borrar
+                    if (player1.buyUnit(unidad)) {
+                        updatePlayerStats();
+                        updateInventory();
+                        unidadDiv.classList.add("sold")
+                    }
+                });
+
             }
         });
     });
@@ -83,6 +95,7 @@ function updateShop() {
         player1.shop.items.forEach((item, index) => {
             const itemDiv = shopItemsContainer.children[index];
             itemDiv.classList.remove("sold")
+
             if (itemDiv) {
                 const valorContainer = itemDiv.querySelector('.shop-value-container');
                 const valorP = valorContainer.querySelector('.value-num');

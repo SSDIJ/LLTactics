@@ -30,15 +30,26 @@ class Shop {
         return false;
     }
 
+    buyUnit(unitId) {
+
+        const index = this.units.findIndex(unit => 
+            unit.id == unitId
+        );
+
+        if (index !== -1 && !this.unitsPurchased[index]) {
+            this.unitsPurchased[index] = true;
+            return true;
+        } 
+        return false;
+    }
+
     resetPurchases() {
         this.itemsPurchased = [false, false]
         this.unitsPurchased = [false, false, false, false]
     }
 
     // Refrescar la tienda con nuevas unidades y objetos
-    async refresh() {
-        this.resetPurchases();
-    
+    async refresh() {    
         const fetchUnits = fetch('/api/shopUnits?count=3')
             .then(response => response.json())
             .then(data => {
@@ -74,7 +85,9 @@ class Shop {
             });
     
         return Promise.all([fetchUnits, fetchItems]).then(() => {
+            this.resetPurchases();
             console.log("Tienda actualizada correctamente");
+            console.log(this.units);
             console.log(this.items);
         });
     }
