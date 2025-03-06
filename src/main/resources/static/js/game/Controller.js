@@ -11,65 +11,59 @@ const playerLifeElement = document.getElementById('game-player-life');
 const playerPositionElement = document.getElementById('game-position');
 
 // Tienda
-const shopUnitsContainer = document.getElementById('shop-units-container');
-const shopItemsContainer = document.getElementById('shop-objects-container')
-const refreshShopBtn = document.getElementById("refresh-container")
-
+const shopUnitsContainers = document.querySelectorAll('.shop-units-container');
+const shopItemsContainers = document.querySelectorAll('.shop-objects-container');
+const refreshShopBtns = document.querySelectorAll(".refresh-btn");
 
 function updateShop() {
-    // Iterar a través de las unidades y actualizar los elementos existentes en el contenedor
-    player1.shop.units.forEach((unidad, index) => {
-        // Seleccionar la carta correspondiente en el contenedor
-        const unidadDiv = shopUnitsContainer.children[index];
+    shopUnitsContainers.forEach((shopUnitsContainer) => {
+        player1.shop.units.forEach((unidad, index) => {
+            const unidadDiv = shopUnitsContainer.children[index];
 
-        if (unidadDiv) {
-            // Seleccionar el contenedor de valor y actualizarlo
-            const valorContainer = unidadDiv.querySelector('.shop-value-container');
-            const valorP = valorContainer.querySelector('.value-num');
-            valorP.textContent = unidad.price;
+            if (unidadDiv) {
+                const valorContainer = unidadDiv.querySelector('.shop-value-container');
+                const valorP = valorContainer.querySelector('.value-num');
+                valorP.textContent = unidad.price;
 
-            // Seleccionar la imagen de la unidad y actualizarla
-            const imagenUnidad = unidadDiv.querySelector('.shop-unit-game-img');
-            imagenUnidad.setAttribute('src', unidad.imagen);
-        }
+                const imagenUnidad = unidadDiv.querySelector('.shop-unit-game-img');
+                imagenUnidad.setAttribute('src', unidad.imagen);
+            }
+        });
     });
 
+    console.log(player1.shop.items);
 
-    console.log(player1.shop.items)
-    // Iterar a través de las unidades y actualizar los elementos existentes en el contenedor
-    player1.shop.items.forEach((item, index) => {
-        // Seleccionar la carta correspondiente en el contenedor
-        const itemDiv = shopItemsContainer.children[index];
+    shopItemsContainers.forEach((shopItemsContainer) => {
+        player1.shop.items.forEach((item, index) => {
+            const itemDiv = shopItemsContainer.children[index];
 
-        if (itemDiv) {
-            // Seleccionar el contenedor de valor y actualizarlo
-            const valorContainer = itemDiv.querySelector('.shop-value-container');
-            const valorP = valorContainer.querySelector('.value-num');
-            valorP.textContent = item.price;
+            if (itemDiv) {
+                const valorContainer = itemDiv.querySelector('.shop-value-container');
+                const valorP = valorContainer.querySelector('.value-num');
+                valorP.textContent = item.price;
 
-            // Seleccionar la imagen de la unidad y actualizarla
-            const imagenUnidad = itemDiv.querySelector('.object-img');
-            imagenUnidad.setAttribute('src', item.imageUrl);
-        }
+                const imagenUnidad = itemDiv.querySelector('.object-img');
+                imagenUnidad.setAttribute('src', item.imageUrl);
+            }
+        });
     });
 }
     
 
-
-refreshShopBtn.addEventListener("click", () => {
-    if (player1.refreshShop()) {
-
-        updatePlayerStats();
-        updateShop();
-        // Animación de destello
-        refreshShopBtn.classList.add('flash-effect');
-        setTimeout(function() {
-            refreshShopBtn.classList.remove('flash-effect');
-        }, 500);
-        
-    }
-    
-})
+refreshShopBtns.forEach((refreshShopBtn) => {
+    refreshShopBtn.addEventListener("click", () => {
+        if (player1.refreshShop()) {
+            updatePlayerStats();
+            updateShop();
+            
+            // Animación de destello
+            refreshShopBtn.classList.add("flash-effect");
+            setTimeout(() => {
+                refreshShopBtn.classList.remove("flash-effect");
+            }, 500);
+        }
+    });
+});
 
 const player1 = new Player("Jugador 1");
 const player2 = new Player("Jugador 2");

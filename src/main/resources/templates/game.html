@@ -90,21 +90,21 @@
                     </div>
                     <div class="offcanvas-body d-flex flex-column gap-3 align-items-center">
                         <!-- Unidades -->
-                        <div id="shop-units-container" class="d-flex flex-column justify-content-center align-items-center gap-3">
+                        <div class="shop-units-container d-flex flex-column justify-content-center align-items-center gap-3">
                             <th:block th:each="unit : ${shopUnits}">
                                 <th:block th:replace="fragments/shop-unit :: heroe(object=${unit})"></th:block>
                             </th:block>
                         </div>
 
                         <!-- Objetos -->
-                        <div id="shop-objects-container" class="d-flex gap-3 justify-content-center align-items-center">
+                        <div class="shop-objects-container d-flex gap-3 justify-content-center align-items-center">
                             <th:block th:each="item : ${shopItems}">
                                 <th:block th:replace="fragments/shop-item :: item(${item})"></th:block>
                             </th:block>
                         </div>
 
                         <!-- Botón de refrescar tienda -->
-                        <button id="refresh-container" class="d-flex justify-content-center align-items-center">
+                        <button class="refresh-btn d-flex justify-content-center align-items-center">
                             <div th:replace="~{fragments/stars-value :: stars-value(${2})}"></div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" id="refresh-icon" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
@@ -117,18 +117,18 @@
                 <!-- Tienda visible en pantallas grandes -->
                 <div id="shop-container" class="d-none d-xl-flex gap-3">
                     <h3 class="section-title">Tienda</h3>
-                    <div id="shop-units-container" class="d-flex justify-content-center align-items-center gap-3">
+                    <div class="shop-units-container d-flex justify-content-center align-items-center gap-3">
                         <th:block th:each="unit : ${shopUnits}">
                             <th:block th:replace="fragments/shop-unit :: heroe(object=${unit})"></th:block>
                         </th:block>
                     </div>
                     <div id="shop-right-container" class="w-100 d-flex flex-column gap-3 justify-content-center align-items-center">
-                        <div id="shop-objects-container" class="d-flex gap-3 justify-content-center align-items-center">
+                        <div class="shop-objects-container d-flex gap-3 justify-content-center align-items-center">
                             <th:block th:each="item : ${shopItems}">
                                 <th:block th:replace="fragments/shop-item :: item(${item})"></th:block>
                             </th:block>
                         </div>
-                        <button id="refresh-container" class="d-flex justify-content-center align-items-center">
+                        <button class="refresh-btn d-flex justify-content-center align-items-center">
                             <div th:replace="~{fragments/stars-value :: stars-value(${2})}"></div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" id="refresh-icon" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
