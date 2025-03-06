@@ -7,8 +7,11 @@
 
     <!-- Fragmento unit -->
     <th:block th:fragment="unit(object)">
-        <div th:if="${object != null}" class="unit-container">
-            <div class="unit-stats d-flex flex-column justify-content-center gap-2">
+        <div class="unit-container">
+            
+            <div th:if="${object.imagen == null}" class="unit-container missing-unit"></div>
+
+            <div th:if="${object.imagen != null}" class="unit-stats d-flex flex-column justify-content-center gap-2">
                 <div class="unit-name" th:text="${object.nombre}"></div>
                 <div class="unit-life">
                     <div class="progress" role="progressbar" aria-label="Success example" 
@@ -22,6 +25,7 @@
             <!-- Imagen de la unidad -->
             <img th:if="${object.imagen != null}" th:src="@{${object.imagen}}" class="unit-game-img">
 
+
             <!-- Contenedor de objetos -->
             <div class="unit-object-container d-flex justify-content-center gap-2">
                 <div th:each="item : ${object.objetos}">
@@ -29,9 +33,6 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Contenedor para unidad nula -->
-        <div th:if="${object == null}" class="unit-container missing-unit"></div>
     </th:block>
 </body>
 </html>

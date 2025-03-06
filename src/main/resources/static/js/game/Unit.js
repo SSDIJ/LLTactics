@@ -10,6 +10,7 @@ class Unit {
         this.price = price;
         this.velocidad = velocidad;
         this.vida = vida;
+        this.items = []
     }
 
 }

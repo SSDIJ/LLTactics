@@ -734,6 +734,14 @@ body .profile-body{
         width: 300px;
     }
 
+    #player-units-container {
+        width: 95px !important;
+    }
+
+    #opponent-units-container {
+        width: 95px !important;
+    }
+
     #player-profiles-container {
         gap: 300px !important;
     }
@@ -755,8 +763,8 @@ body .profile-body{
 
     .missing-unit {
         height: 105px !important;
-        width: 85px !important;
-        margin: 5px 0px !important;
+        width: 70px !important;
+        margin: 0 0 5px 0 !important;
     }
 
     #game-versus {
@@ -782,6 +790,11 @@ body .profile-body{
         height: 20px;
     }
 
+    .unit-container:has(.missing-unit) {
+        display: flex;
+        justify-content: center;
+    }
+
     .unit-container .progress {
         top: 15px !important;
         height: 10px !important;
@@ -805,6 +818,10 @@ body .profile-body{
     }
 
 
+}
+
+.hidden {
+    display: none;
 }
 
 .sold {
@@ -850,13 +867,14 @@ body .profile-body{
 }
 
 .missing-unit {
-    margin: 0px 5px;
+    margin: 0px 5px 12px 0px;
 
     width: 105px;
-    height: 190px;
+    height: 135px;
     border: 1px solid var(--COLOR-DARK-1);
     border-style: dashed;
     border-radius: 10px;
+
     animation: blink 3s linear infinite;
 }
 

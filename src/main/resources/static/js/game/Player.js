@@ -4,6 +4,7 @@ import Shop from "./Shop.js"
 class Player {
 
     MAX_ITEMS = 7;
+    MAX_UNITS = 4;
 
     constructor(name) {
         this.name = name;
@@ -52,7 +53,7 @@ class Player {
             this.stars -= item.price;
             console.log(`${this.name} compró un objeto: ${item.name}`);
 
-            this.inventory.add(item);  // Agregar el objeto al Set
+            this.inventory.add(item); 
             return true;
         }
         return false;
