@@ -98,9 +98,8 @@ function updateShop() {
                     if (player1.buyItem(itemTemp)) {
                         updatePlayerStats();
                         updateInventory();
+                        itemDiv.classList.add("sold")
                     }
-
-                    itemDiv.classList.add("sold")
         
                 });
             }

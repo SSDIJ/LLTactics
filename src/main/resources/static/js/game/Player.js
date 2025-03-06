@@ -2,6 +2,9 @@ import Item from "./Item.js";
 import Shop from "./Shop.js"
 
 class Player {
+
+    MAX_ITEMS = 7;
+
     constructor(name) {
         this.name = name;
         this.health = 100;
@@ -45,7 +48,7 @@ class Player {
 
     // Comprar un objeto de la tienda
     buyItem(item) {
-        if (this.stars >= item.price && this.shop.buyItem(item.id)) {
+        if (this.stars >= item.price && this.inventory.size < this.MAX_ITEMS && this.shop.buyItem(item.id)) {
             this.stars -= item.price;
             console.log(`${this.name} compró un objeto: ${item.name}`);
 
