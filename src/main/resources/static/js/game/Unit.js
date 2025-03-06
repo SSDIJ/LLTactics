@@ -12,18 +12,6 @@ class Unit {
         this.vida = vida;
     }
 
-    mostrarInfo() {
-        console.log(`Unidad: ${this.nombre}`);
-        console.log(`Descripción: ${this.descripcion}`);
-        console.log(`Facción: ${this.faccion}`);
-        console.log(`Vida: ${this.vida}`);
-        console.log(`Daño: ${this.daño}`);
-        console.log(`Armadura: ${this.armadura}`);
-        console.log(`Velocidad: ${this.velocidad}`);
-        console.log(`Precio: ${this.price}`);
-        console.log(`Imagen: ${this.imagen}`);
-    }
-
 }
 
 export default Unit;

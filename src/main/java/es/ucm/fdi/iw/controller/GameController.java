@@ -21,8 +21,8 @@ public class GameController {
     public String showGamePage(Model model) {
 
         List<Objeto> playerObjects = List.of(
-                new Objeto("/img/items/book1.png", "Libro Mágico", 0, 0, 0, 0, "Un libro encantado con hechizos antiguos.", 1),
-                new Objeto("/img/items/flame-sword.png", "Espada Llameante", 0, 0, 0, 0, "Una espada forjada en fuego eterno.", 1),
+                new Objeto(null, "", 0, 0, 0, 0,"", 1),
+                new Objeto(null, "", 0, 0, 0, 0,"", 1),
                 new Objeto(null, "", 0, 0, 0, 0,"", 1),
                 new Objeto(null, "", 0, 0, 0, 0,"", 1),
                 new Objeto(null, "", 0, 0, 0, 0,"", 1),

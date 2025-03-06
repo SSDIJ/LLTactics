@@ -1,3 +1,4 @@
+import Item from "./Item.js";
 import Shop from "./Shop.js"
 
 class Player {
@@ -6,6 +7,7 @@ class Player {
         this.health = 100;
         this.stars = 1000;
         this.units = [];
+        this.inventory = new Set();  // Usamos un Set para el inventario
         this.shop = new Shop();  // Cada jugador tiene su propia tienda
     }
 
@@ -17,10 +19,10 @@ class Player {
         return this.stars;
     }
 
-    refreshShop() {
+    async refreshShop() {
         if (this.stars >= this.shop.getRefreshPrice()) {
             this.stars -= this.shop.getRefreshPrice();
-            this.shop.refresh();
+            await this.shop.refresh();
             return true;
         }
         else {
@@ -43,19 +45,22 @@ class Player {
 
     // Comprar un objeto de la tienda
     buyItem(item) {
-        if (this.stars >= item.price) {
-            item.applyEffect(this);
+        if (this.stars >= item.price && this.shop.buyItem(item.id)) {
             this.stars -= item.price;
             console.log(`${this.name} compró un objeto: ${item.name}`);
-        } else {
-            console.log(`${this.name} no tiene suficientes monedas.`);
+
+            this.inventory.add(item);  // Agregar el objeto al Set
+            return true;
         }
+        return false;
     }
 
-    // Ver las unidades compradas por el jugador
-    showUnits() {
-        console.log(`${this.name}'s unidades:`);
-        this.units.forEach(unit => console.log(unit.name));
+    sellItem(soldItem) {
+        if (this.inventory.has(soldItem)) {
+            this.inventory.delete(soldItem);
+            this.stars += soldItem.price;
+            console.log(`${this.name} vendió un objeto: ${soldItem.name}`);
+        } 
     }
 }
 

@@ -679,6 +679,10 @@ body .profile-body{
     border-radius: 0px 10px 10px 0px;
 }
 
+#opponents-info-container img {
+    pointer-events: none;
+}
+
 #opponents-info-container {
     width: 80px;
     height: 440px;
@@ -727,7 +731,7 @@ body .profile-body{
     #players-units-container {
         top: 100px;
         gap: 80px;
-        width: 100%;
+        width: 300px;
     }
 
     #player-profiles-container {
@@ -801,6 +805,11 @@ body .profile-body{
     }
 
 
+}
+
+.sold {
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 .media-btn {

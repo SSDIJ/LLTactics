@@ -8,6 +8,8 @@ class Shop {
     constructor() {
         this.units = [];  // Unidades disponibles
         this.items = [];  // Objetos disponibles
+        this.itemsPurchased = [];
+        this.unitsPurchased = [];
         this.refresh();
     }
 
@@ -15,59 +17,66 @@ class Shop {
         return this.REFRESH_PRICE;
     }
 
+    buyItem(itemId) {
+
+        const index = this.items.findIndex(item => 
+            item.id == itemId
+        );
+
+        if (index !== -1 && !this.itemsPurchased[index]) {
+            this.itemsPurchased[index] = true;
+            return true;
+        } 
+        return false;
+    }
+
+    resetPurchases() {
+        this.itemsPurchased = [false, false]
+        this.unitsPurchased = [false, false, false, false]
+    }
+
     // Refrescar la tienda con nuevas unidades y objetos
-    refresh() {
-
-        // Actualiza unidades
-        fetch('/api/shopUnits?count=3')  
+    async refresh() {
+        this.resetPurchases();
+    
+        const fetchUnits = fetch('/api/shopUnits?count=3')
             .then(response => response.json())
             .then(data => {
-                // Mapear la respuesta a objetos Unit
-                this.units = data.map(unitData => {
-                    return new Unit(
-                        unitData.armadura,
-                        unitData.daño,
-                        unitData.descripcion,
-                        unitData.faccion,
-                        unitData.id,
-                        unitData.imagen,
-                        unitData.nombre,
-                        unitData.precio,
-                        unitData.velocidad,
-                        unitData.vida
-                    );
-                });
-            })
-            .catch(error => console.error('Error:', error));
-
-        
-        // Actualizar items
-        fetch('/api/shopItems?count=2')  
+                this.units = data.map(unitData => new Unit(
+                    unitData.armadura,
+                    unitData.daño,
+                    unitData.descripcion,
+                    unitData.faccion,
+                    unitData.id,
+                    unitData.imagen,
+                    unitData.nombre,
+                    unitData.precio,
+                    unitData.velocidad,
+                    unitData.vida
+                ));
+            });
+    
+        const fetchItems = fetch('/api/shopItems?count=2')
             .then(response => response.json())
             .then(data => {
-  
-
-                console.log(data)
-                this.items = data.map(itemData => {
-                    return new Item(
-                        itemData.armadura,
-                        itemData.daño,
-                        itemData.descripcion,
-                        itemData.idObjeto,
-                        itemData.imagen,
-                        itemData.nombre,
-                        itemData.precio,
-                        itemData.unidad,
-                        itemData.velocidad,
-                        itemData.vida
-                        
-                    );
-                });
-            })
-            .catch(error => console.error('Error:', error));
-
-        console.log(this.items)
-        console.log("Se ha refrescado la tienda");
+                this.items = data.map(itemData => new Item(
+                    itemData.armadura,
+                    itemData.daño,
+                    itemData.descripcion,
+                    itemData.idObjeto,
+                    itemData.imagen,
+                    itemData.nombre,
+                    itemData.precio,
+                    itemData.unidad,
+                    itemData.velocidad,
+                    itemData.vida
+                ));
+            });
+    
+        return Promise.all([fetchUnits, fetchItems]).then(() => {
+            console.log("Tienda actualizada correctamente");
+            console.log(this.items);
+        });
     }
 }
 

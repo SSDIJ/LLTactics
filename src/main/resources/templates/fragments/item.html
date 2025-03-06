@@ -8,12 +8,6 @@
     <th:block th:fragment="item(object)">
     <div class="object-cell position-relative">
         <img th:if="${object.imagen != null}" th:src="@{${object.imagen}}" alt="" class="object-img">
-        
-        <!-- Tooltip para mostrar el nombre y descripción al hacer hover -->
-        <div th:if="${object.imagen != null}" class="tooltip-box">
-            <h6 th:text="${object.nombre}"></h6>
-            <p th:text="${object.descripcion}"></p>
-        </div>
     </div>
 </th:block> 
 </body>

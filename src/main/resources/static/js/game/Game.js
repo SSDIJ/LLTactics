@@ -18,16 +18,12 @@ class Game {
         if (this.isBattleRound) {
             this.startBattle();
         } else {
-            this.refreshShop();
+            // Hola
         }
     }
 
     startBattle() {
         console.log('Comienza la batalla entre jugadores');
-    }
-
-    refreshShop() {
-        console.log('Refrescar la tienda para la ronda de compra');
     }
 }
 
