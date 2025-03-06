@@ -115,7 +115,7 @@ INSERT INTO "PUBLIC"."HEROE" VALUES
 (50, 90, 3, 4, 50, 200, 18, 'Heroe', U&'El Esqueleto a caballo es r\00e1pido y mortal en combate.', '/img/units/skeletons/3. SCaballero/boneknight-attack.png', 'Esqueleto a caballo'),
 (40, 100, 3, 3, 60, 180, 19, 'Heroe', 'El Esqueleto Arquero es letal a larga distancia con su arco.', '/img/units/skeletons/4. SArquero/banebow-bow.png', 'Esqueleto Arquero'),
 (30, 110, 3, 5, 70, 160, 20, 'Heroe', 'El Esqueleto mago utiliza poderosos hechizos para devastar a sus enemigos.', '/img/units/skeletons/5. SMago/ancient-lich.png', 'Esqueleto mago'),
-(120, 200, 4, 6, 40, 400, 21, 'Heroe', 'Una criatura de leyenda con habilidades extraordinarias.', '/img/units/legendary/1. Legendaria/legendary-creature.png', 'Criatura Legendaria');        
+(120, 200, 4, 6, 40, 400, 21, 'Heroe', 'Una criatura de leyenda con habilidades extraordinarias.', '/img/units/legendary/fireghost/fireghost.png', 'Espíritu');        
 CREATE MEMORY TABLE "PUBLIC"."IWUSER"(
     "ENABLED" BOOLEAN NOT NULL,
     "ID" BIGINT NOT NULL,

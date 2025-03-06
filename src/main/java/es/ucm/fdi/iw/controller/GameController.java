@@ -21,18 +21,18 @@ public class GameController {
     public String showGamePage(Model model) {
 
         List<Objeto> playerObjects = List.of(
-                new Objeto("/img/items/book1.png", "Libro Mágico", "Un libro encantado con hechizos antiguos.", 1),
-                new Objeto("/img/items/flame-sword.png", "Espada Llameante", "Una espada forjada en fuego eterno.", 1),
-                new Objeto(null, "", "", 1),
-                new Objeto(null, "", "", 1),
-                new Objeto(null, "", "", 1),
-                new Objeto(null, "", "", 1),
-                new Objeto(null, "", "", 1));
+                new Objeto("/img/items/book1.png", "Libro Mágico", 0, 0, 0, 0, "Un libro encantado con hechizos antiguos.", 1),
+                new Objeto("/img/items/flame-sword.png", "Espada Llameante", 0, 0, 0, 0, "Una espada forjada en fuego eterno.", 1),
+                new Objeto(null, "", 0, 0, 0, 0,"", 1),
+                new Objeto(null, "", 0, 0, 0, 0,"", 1),
+                new Objeto(null, "", 0, 0, 0, 0,"", 1),
+                new Objeto(null, "", 0, 0, 0, 0,"", 1),
+                new Objeto(null, "", 0, 0, 0, 0,"", 1));
         model.addAttribute("playerObjects", playerObjects);
 
         List<Objeto> shopItems = List.of(
-                new Objeto("/img/items/potion-red.png", "Poción Roja", "", 1),
-                new Objeto("/img/items/flame-sword.png", "Espada de Hierro", "", 5));
+                new Objeto("/img/items/potion-red.png", "Poción Roja", 0, 0, 0, 0,"", 1),
+                new Objeto("/img/items/flame-sword.png", "Espada de Hierro", 0, 0, 0, 0,"", 5));
         model.addAttribute("shopItems", shopItems);
 
         List<Heroe> shopUnits = List.of(
@@ -49,7 +49,7 @@ public class GameController {
                         Arrays.asList(null, null)),
                 new Unidad("Esqueleto General", "/img/units/skeletons/2. SGeneral/deathknight.png", 60, 80, 40, 220,
                         "El Esqueleto General lidera a sus tropas con una presencia intimidante.", 3, 4,
-                        Arrays.asList(new Objeto("/img/items/staff-druid.png", "", "", 1), null)),
+                        Arrays.asList(new Objeto("/img/items/staff-druid.png", "", 0, 0, 0, 0, "", 1), null)),
                 new Unidad("Paladín", "/img/units/humans/3. Caballero/knight.png", 60, 85, 50, 180,
                         "Agil y feroz en combate.", 0, 3, Arrays.asList(null, null))));
 
@@ -61,7 +61,8 @@ public class GameController {
                         Arrays.asList(null, null)),
                 new Unidad("Esqueleto General", "/img/units/skeletons/2. SGeneral/deathknight.png", 60, 80, 40, 220,
                         "El Esqueleto General lidera a sus tropas con una presencia intimidante.", 3, 4,
-                        Arrays.asList(new Objeto("/img/items/staff-druid.png", "", "", 1), null)),
+                        Arrays.asList(new Objeto("/img/items/staff-druid.png", "", 0, 0, 0, 0, "", 1), null)),
+                null,
                 new Unidad("Paladín", "/img/units/humans/3. Caballero/knight.png", 60, 85, 50, 180,
                         "Agil y feroz en combate.", 0, 3, Arrays.asList(null, null))));
         model.addAttribute("unitsP2", unitsP2);

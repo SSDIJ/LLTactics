@@ -42,4 +42,8 @@ public class Heroe {
         this.faccion = faccion;
         this.precio = precio;
     }
+
+    public int getPrecio() {
+        return precio;
+    }
 }

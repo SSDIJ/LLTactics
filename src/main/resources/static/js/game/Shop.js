@@ -32,7 +32,7 @@ class Shop {
                         unitData.id,
                         unitData.imagen,
                         unitData.nombre,
-                        unitData.price,
+                        unitData.precio,
                         unitData.velocidad,
                         unitData.vida
                     );
@@ -50,16 +50,23 @@ class Shop {
                 console.log(data)
                 this.items = data.map(itemData => {
                     return new Item(
-                        itemData.description,
-                        itemData.id,
-                        itemData.imageUrl,
-                        itemData.name,
-                        itemData.price
+                        itemData.armadura,
+                        itemData.daño,
+                        itemData.descripcion,
+                        itemData.idObjeto,
+                        itemData.imagen,
+                        itemData.nombre,
+                        itemData.precio,
+                        itemData.unidad,
+                        itemData.velocidad,
+                        itemData.vida
+                        
                     );
                 });
             })
             .catch(error => console.error('Error:', error));
 
+        console.log(this.items)
         console.log("Se ha refrescado la tienda");
     }
 }

@@ -7,7 +7,7 @@
     <th:block th:fragment="unit-object-cell(object)">
         <div class="object-cell">
             <!-- Si el objeto no es nulo y tiene la URL de la imagen, se muestra la imagen -->
-            <img th:if="${object != null && object.imageUrl != null}" th:src="@{${object.imageUrl}}" alt="" class="object-img">
+            <img th:if="${object != null && object.imagen != null}" th:src="@{${object.imagen}}" alt="" class="object-img">
         </div>
     </th:block>
 </body>

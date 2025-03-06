@@ -9,10 +9,10 @@
         <div class="object-cell object-shop">
 
             <!-- Valor -->
-            <div th:replace="~{fragments/stars-value :: stars-value(${object.price})}"></div>
+            <div th:replace="~{fragments/stars-value :: stars-value(${object.precio})}"></div>
 
             <!--Imagen del objeto -->
-            <img th:if="${object.imageUrl != null}" th:src="@{${object.imageUrl}}" alt="" class="object-img">
+            <img th:if="${object.imagen != null}" th:src="@{${object.imagen}}" alt="" class="object-img">
 
         </div>
     </th:block> 

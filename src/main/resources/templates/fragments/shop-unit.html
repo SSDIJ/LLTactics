@@ -9,10 +9,10 @@
         <div class="shop-unit d-flex flex-column gap-2">
 
             <!-- Valor -->
-            <div th:replace="~{fragments/stars-value :: stars-value(${object.price})}"></div>
+            <div th:replace="~{fragments/stars-value :: stars-value(${object.precio})}"></div>
             
             <!-- Imagen de unidad -->
-            <img th:if="${object.Imagen != null}" th:src="@{${object.imagen}}" class="shop-unit-game-img">
+            <img th:if="${object.imagen != null}" th:src="@{${object.imagen}}" class="shop-unit-game-img">
             
         </div>
     </th:block>

@@ -9,22 +9,22 @@
     <th:block th:fragment="unit(object)">
         <div th:if="${object != null}" class="unit-container">
             <div class="unit-stats d-flex flex-column justify-content-center gap-2">
-                <div class="unit-name" th:text="${object.name}"></div>
+                <div class="unit-name" th:text="${object.nombre}"></div>
                 <div class="unit-life">
                     <div class="progress" role="progressbar" aria-label="Success example" 
-                        th:attr="aria-valuenow=${object.healthPercentage}, aria-valuemin=0, aria-valuemax=100">
-                        <div class="progress-bar bg-success" th:style="'width: ' + ${object.healthPercentage} + '%'" 
-                            th:text="${object.healthValue}"></div>
+                        th:attr="aria-valuenow=${object.vidaAct / object.vida}, aria-valuemin=0, aria-valuemax=100">
+                        <div class="progress-bar bg-success" th:style="'width: ' + ${object.vidaAct / object.vida} + '%'" 
+                            th:text="${object.vidaAct}"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Imagen de la unidad -->
-            <img th:if="${object.imagePath != null}" th:src="@{${object.imagePath}}" class="unit-game-img">
+            <img th:if="${object.imagen != null}" th:src="@{${object.imagen}}" class="unit-game-img">
 
             <!-- Contenedor de objetos -->
             <div class="unit-object-container d-flex justify-content-center gap-2">
-                <div th:each="item : ${object.objects}">
+                <div th:each="item : ${object.objetos}">
                     <div th:replace="/fragments/unit-object-cell :: unit-object-cell(${item})"></div>
                 </div>
             </div>
