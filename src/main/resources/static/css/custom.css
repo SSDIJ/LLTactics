@@ -764,7 +764,7 @@ body .profile-body{
     .missing-unit {
         height: 105px !important;
         width: 70px !important;
-        margin: 0 0 5px 0 !important;
+        margin: 0 0 10px 0 !important;
     }
 
     #game-versus {
