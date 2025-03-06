@@ -57,6 +57,25 @@ refreshShopBtns.forEach((refreshShopBtn) => {
             updateShop();
             
             // Animación de destello
+
+            shopUnitsContainers.forEach((shopItemsContainer) => {
+                Array.from(shopItemsContainer.children).forEach((item) => {
+                    item.classList.add("flash-effect");
+                    setTimeout(() => {
+                        item.classList.remove("flash-effect");
+                    }, 500);
+                });
+            });
+
+            shopItemsContainers.forEach((shopItemsContainer) => {
+                Array.from(shopItemsContainer.children).forEach((item) => {
+                    item.classList.add("flash-effect");
+                    setTimeout(() => {
+                        item.classList.remove("flash-effect");
+                    }, 500);
+                });
+            });
+
             refreshShopBtn.classList.add("flash-effect");
             setTimeout(() => {
                 refreshShopBtn.classList.remove("flash-effect");
