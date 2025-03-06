@@ -18,6 +18,36 @@ const shopUnitsContainers = document.querySelectorAll('.shop-units-container');
 const shopItemsContainers = document.querySelectorAll('.shop-objects-container');
 const refreshShopBtns = document.querySelectorAll(".refresh-btn");
 
+// Actualizar unidades
+function updateUnits() {
+    const unitCells = document.querySelectorAll(".unit-cell");
+
+    // Eliminamos primero todas las imágenes actuales
+    unitCells.forEach(cell => {
+        const imageInCell = cell.querySelector("img");
+        if (imageInCell) {
+            imageInCell.remove();
+        }
+    });
+
+    // Rellenamos los primeros huecos con las imágenes de las unidades
+    [...player1.units].forEach((unit, index) => {
+        if (unitCells[index]) {
+            let img = unitCells[index].querySelector("img");
+            
+            if (!img && unit.imagen) {
+                img = document.createElement("img");
+                img.classList.add("unit-img");
+                unitCells[index].appendChild(img);
+            }
+            
+            if (img) {
+                img.src = unit.imagen || "";
+            }
+        }
+    });
+}
+
 // Actualizar inventario
 function updateInventory() {
 
@@ -205,6 +235,7 @@ function startTimer() {
     }, 1000);
 }
 
+updateUnits();
 updateInventory();
 updateShop();
 updatePlayerStats();
