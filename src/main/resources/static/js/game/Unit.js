@@ -10,7 +10,12 @@ class Unit {
         this.price = price;
         this.velocidad = velocidad;
         this.vida = vida;
+        this.vidaMax = vida;
         this.items = []
+    }
+
+    getLifePercentage() {
+        return this.vida / this.vidaMax * 100;
     }
 
 }

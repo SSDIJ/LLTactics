@@ -8,6 +8,9 @@ const roundElement = document.getElementById('round-name');
 // Inventario del jugador
 const inventoryContainer = document.getElementById("player-objects-container");
 
+// Unidades del jugador
+const playerUnitsContainer = document.getElementById("player-units-container")
+
 // Estadísticas del jugador
 const playerStarsElement = document.getElementById('game-player-stars');
 const playerLifeElement = document.getElementById('game-player-life');
@@ -20,30 +23,60 @@ const refreshShopBtns = document.querySelectorAll(".refresh-btn");
 
 // Actualizar unidades
 function updateUnits() {
-    const unitCells = document.querySelectorAll(".unit-cell");
-
-    // Eliminamos primero todas las imágenes actuales
-    unitCells.forEach(cell => {
-        const imageInCell = cell.querySelector("img");
-        if (imageInCell) {
-            imageInCell.remove();
-        }
-    });
+    
+    const unitCells = playerUnitsContainer.querySelectorAll(".unit-container");
 
     // Rellenamos los primeros huecos con las imágenes de las unidades
-    [...player1.units].forEach((unit, index) => {
-        if (unitCells[index]) {
-            let img = unitCells[index].querySelector("img");
-            
-            if (!img && unit.imagen) {
-                img = document.createElement("img");
-                img.classList.add("unit-img");
-                unitCells[index].appendChild(img);
+    player1.units.forEach((unit, index) => {
+
+        const unitCell = unitCells[index]
+        if (unitCell) {
+
+            const missing = unitCell.querySelector(".missing-unit");
+            const unitStats = unitCell.querySelector(".unit-stats");
+            const unitName = unitStats.querySelector(".unit-name");
+            const unitLife = unitStats.querySelector(".unit-life");
+
+            let img = unitCell.querySelector("img");
+
+            if (missing && unit.imagen)  {
+                missing.classList.add("hidden");
             }
             
-            if (img) {
+            if (unit.imagen) {
+
                 img.src = unit.imagen || "";
+                img.classList.remove("hidden");
+                unitLife.classList.remove("hidden")
+                unitName.textContent = unit.nombre;
+
+                const progressBar = unitCell.querySelector('.progress-bar');
+
+                if (progressBar) {
+                    console.log(unit.getLifePercentage())
+                    progressBar.style.width = unit.getLifePercentage() + "%";
+                    progressBar.textContent = unit.vida;
+    
+                    // Actualizar el atributo aria-valuenow (accesibilidad)
+                    progressBar.parentElement.setAttribute("aria-valuenow", unit.getLifePercentage());
+                }
+
             }
+
+            const unitTemp = unit;
+            // Opción de eliminar el objeto
+            unitCell.addEventListener('dblclick', () => {
+                player1.sellUnit(unitTemp)
+                updatePlayerStats();
+                updateInventory();
+                
+                img.classList.add("hidden")
+                missing.classList.remove("hidden")
+                unitName.textContent = ""
+                unitLife.classList.add("hidden")
+
+            });
+        
         }
     });
 }
@@ -88,62 +121,68 @@ function updateInventory() {
     });
 } 
 
-// Actualizar tienda
+// Actualiza la tienda
 function updateShop() {
-
     // Actualiza las celdas de unidades de la tienda
     shopUnitsContainers.forEach((shopUnitsContainer) => {
         player1.shop.units.forEach((unidad, index) => {
             const unidadDiv = shopUnitsContainer.children[index];
-            unidadDiv.classList.remove("sold")
 
             if (unidadDiv) {
-                const valorContainer = unidadDiv.querySelector('.shop-value-container');
+                // Reemplaza el nodo para eliminar event listeners previos
+                const newUnidadDiv = unidadDiv.cloneNode(true);
+                shopUnitsContainer.replaceChild(newUnidadDiv, unidadDiv);
+
+                newUnidadDiv.classList.remove("sold");
+
+                const valorContainer = newUnidadDiv.querySelector('.shop-value-container');
                 const valorP = valorContainer.querySelector('.value-num');
+    
                 valorP.textContent = unidad.price;
 
-                const imagenUnidad = unidadDiv.querySelector('.shop-unit-game-img');
+                const imagenUnidad = newUnidadDiv.querySelector('.shop-unit-game-img');
                 imagenUnidad.setAttribute('src', unidad.imagen);
-            
+
                 // Añade la opción de compra de las unidades
-                unidadDiv.addEventListener('click', () => {
+                newUnidadDiv.addEventListener('click', () => {
                     console.log(`Intentando comprar unidad: ${unidad.nombre}`); // TODO: Borrar
                     if (player1.buyUnit(unidad)) {
                         updatePlayerStats();
                         updateInventory();
-                        unidadDiv.classList.add("sold")
+                        updateUnits();
+                        newUnidadDiv.classList.add("sold");
                     }
                 });
-
             }
         });
     });
 
     // Actualiza las celdas de objetos de la tienda
     shopItemsContainers.forEach((shopItemsContainer) => {
-
         player1.shop.items.forEach((item, index) => {
             const itemDiv = shopItemsContainer.children[index];
-            itemDiv.classList.remove("sold")
 
             if (itemDiv) {
-                const valorContainer = itemDiv.querySelector('.shop-value-container');
+                // Reemplaza el nodo para eliminar event listeners previos
+                const newItemDiv = itemDiv.cloneNode(true);
+                shopItemsContainer.replaceChild(newItemDiv, itemDiv);
+
+                newItemDiv.classList.remove("sold");
+
+                const valorContainer = newItemDiv.querySelector('.shop-value-container');
                 const valorP = valorContainer.querySelector('.value-num');
                 valorP.textContent = item.price;
 
-                const imagenUnidad = itemDiv.querySelector('.object-img');
+                const imagenUnidad = newItemDiv.querySelector('.object-img');
                 imagenUnidad.setAttribute('src', item.imageUrl);
 
                 // Añade la opción de compra de los objetos
-                itemDiv.addEventListener('click', () => {
-
-                    const itemTemp = item;
-                    if (player1.buyItem(itemTemp)) {
+                newItemDiv.addEventListener('click', () => {
+                    if (player1.buyItem(item)) {
                         updatePlayerStats();
                         updateInventory();
-                        itemDiv.classList.add("sold")
+                        newItemDiv.classList.add("sold");
                     }
-        
                 });
             }
         });
@@ -235,7 +274,7 @@ function startTimer() {
     }, 1000);
 }
 
-updateUnits();
+refreshShopBtns[0].click();
 updateInventory();
 updateShop();
 updatePlayerStats();

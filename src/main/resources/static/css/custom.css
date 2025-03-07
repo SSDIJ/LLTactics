@@ -642,6 +642,10 @@ body .profile-body{
     transform: translate(-50%);
 }
 
+.unit-name {
+    font-size: 0.75rem;
+}
+
 #round-name {
 
     width: 200px;
@@ -727,6 +731,12 @@ body .profile-body{
 }
 
 @media (max-width: 1199px) {
+
+    .unit-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
     
     #players-units-container {
         top: 100px;
@@ -782,17 +792,14 @@ body .profile-body{
         width: 95px !important;
     }
 
-    .unit-name {
-        font-size: 0.75rem !important;
-    }
-
     .unit-stats {
         height: 20px;
     }
 
     .unit-container:has(.missing-unit) {
         display: flex;
-        justify-content: center;
+        align-items: center;
+        height: 115px;
     }
 
     .unit-container .progress {
@@ -870,7 +877,7 @@ body .profile-body{
     margin: 0px 5px 12px 0px;
 
     width: 105px;
-    height: 135px;
+    height: 129px;
     border: 1px solid var(--COLOR-DARK-1);
     border-style: dashed;
     border-radius: 10px;

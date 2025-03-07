@@ -12,10 +12,10 @@ class Player {
         this.health = 100;
         this.stars = 1000;
         this.units = [
-            new Unit(0, 0, "", "", 0, "", "", 0, 0, 0, []),
-            new Unit(0, 0, "", "", 0, "", "", 0, 0, 0, []),
-            new Unit(0, 0, "", "", 0, "", "", 0, 0, 0, []),
-            new Unit(0, 0, "", "", 0, "", "", 0, 0, 0, []),
+            new Unit(0, 0, "", "", 0, "", null, 0, 0, 0, []),
+            new Unit(0, 0, "", "", 0, "", null, 0, 0, 0, []),
+            new Unit(0, 0, "", "", 0, "", null, 0, 0, 0, []),
+            new Unit(0, 0, "", "", 0, "", null, 0, 0, 0, []),
         ];
         this.inventory = new Set();  // Usamos un Set para el inventario
         this.shop = new Shop();  // Cada jugador tiene su propia tienda
@@ -66,6 +66,23 @@ class Player {
         console.log(`${this.name} no tiene suficientes monedas.`);
         return false;
     }
+
+    sellUnit(soldUnit) {
+
+        console.log("Vendiendo unidad")
+        console.log(soldUnit)
+        const index = this.units.findIndex(unit => unit.nombre == soldUnit.nombre);
+            
+        // Reemplaza la unidad undefined
+        if (index !== -1) {
+            this.stars += this.units[index].price;
+            this.units[index] = new Unit(0, 0, "", "", 0, "", null, 0, 0, 0, []); 
+        }
+        
+        console.log(`Se ha vendido la unidad ${soldUnit.nombre}`);
+        console.log("Unidades restantes:")
+        console.log(this.units)
+    }   
 
     // Comprar un objeto de la tienda
     buyItem(item) {

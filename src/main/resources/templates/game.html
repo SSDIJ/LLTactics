@@ -58,9 +58,9 @@
 
                 <!-- Unidades del jugador -->
                 <div id="player-units-container" class="d-flex flex-column-reverse flex-xl-row">
-                    <div th:each="unit : ${unitsP1}">
+                    <th:block th:each="unit : ${unitsP1}">
                         <th:block th:replace="fragments/unit :: unit(${unit})"></th:block>
-                    </div>
+                    </th:block>
                 </div>
 
 
@@ -68,9 +68,9 @@
 
                 <!-- Unidades del oponente -->
                 <div id="opponent-units-container" class="d-flex flex-column flex-xl-row">
-                    <div th:each="unit : ${unitsP2}">
+                    <th:block th:each="unit : ${unitsP2}">
                         <th:block th:replace="fragments/unit :: unit(${unit})"></th:block>
-                    </div>
+                    </th:block>
                 </div>
             </div>
 
