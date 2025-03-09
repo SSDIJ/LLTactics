@@ -30,11 +30,16 @@ LLTactics es un juego web de fantasía medieval donde jugadores deberán luchar 
 
   **NOTA:** Todos los sprites de los personajes pertenecen a [Wesnoth](https://github.com/wesnoth/wesnoth)
 
+## Implementacion BD Actual
+Actualmente la base de datos es funcional para la galeria y el ranking, ademas se añadieron los siguientes archivos para la gestion de 
+la base de datos:
+-HeroeRepositoy: Gestiona el acceso a la base de datos de los Heroes jugables dentro de partida, accesible en HeroeController.java
+-playerRepositoy: Gestiona el acceso a la base de datos de los usuarios registrados, actualmente esta implementado en el rankingController para la visualización ordenada por puntos de los distintos jugadores.
+
 ## Contenido futuro
 - Implementación de las acciones de los admins
 - Plantear el balanceo del juego (estadísticas, economía, objetos)
 - Añadir dichos objetos a la galería
-- Estructura y accesos a la BD
 - Sistema de busqueda de partida con otros usuarios
 - Juego jugable
 

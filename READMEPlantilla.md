@@ -21,6 +21,7 @@ Debes buscar todos los lugares donde aparece la palabra "plantilla" (incluido es
   * **RootController.java** - para usuarios que acaban de llegar al sitio, gestiona `/` y `/login`
   * **AdminController.java** - para administradores, gestionando todo lo que hay bajo `/admin`. No hace casi nada, pero sólo pueden llegar allí los que tengan rol administrador (porque así lo dice en SecurityConfig.config)
   * **UserControlller.java** - para usuarios registrados, gestionando todo lo que hay bajo `/user`. Tiene funcionalidad útil para construir páginas:
+  * **RankingController.java** - Para usuarios registrados, permite visualizar el ranking de jugadores ordenados por puntos
   
     + Un ejemplo de método para gestionar un formulario de cambiar información del usuario (bajo `@PostMapping("/{id}")`)
     + Puede devolver imágenes de avatar, y permite también subirlas. Ver métodos `getPic` (bajo `@GetMapping("{id}/pic")`) y `postPic` (bajo `@PostMapping("{id}/pic")`)
