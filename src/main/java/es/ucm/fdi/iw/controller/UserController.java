@@ -50,7 +50,7 @@ import java.util.stream.Collectors;
  *
  *  Access to this end-point is authenticated.
  */
-@Controller()
+@Controller
 @RequestMapping("user")
 public class UserController {
 
@@ -324,5 +324,33 @@ public class UserController {
 
 		messagingTemplate.convertAndSend("/user/"+u.getUsername()+"/queue/updates", json);
 		return "{\"result\": \"message sent.\"}";
-	}	
+	}
+	
+	@GetMapping("/register")
+	public String registerUser(@RequestParam String username,@RequestParam String firstName,@RequestParam String lastName,@RequestParam String password, HttpSession session) {
+	long count= entityManager.createQuery("SELECT COUNT(u) FROM User u WHERE u.username = :username", Long.class)
+	.setParameter("username", username)
+	.getSingleResult();
+
+	if(count>0){
+		log.warn("El nombre del usuario ya existe");
+	}
+	User newUser = new User();
+    newUser.setUsername(username);
+    newUser.setPassword(passwordEncoder.encode(password)); // Encripta la contraseña
+    newUser.setFirstName(firstName);
+    newUser.setLastName(lastName);
+    newUser.setEnabled(true);
+
+    // Guardar en la base de datos
+    entityManager.persist(newUser);
+
+    log.info("Usuario registrado: {}", username);
+
+    // Iniciar sesión automáticamente después del registro (opcional)
+    session.setAttribute("u", newUser);
+
+    return "redirect:/login"; // Redirige al login
+	}
+	
 }

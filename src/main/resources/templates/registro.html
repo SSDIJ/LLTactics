@@ -11,18 +11,31 @@
 
     <main id="login-container" class="flex-shrink-0">
         <div class="container w-50">
-            <img src="/img/login/login-icon.png" alt="">
-            <form class="form-signin" method="post" th:action="@{/registro}">
-                <h2 class="form-signin-heading display-4">Regristro</h2>
+            <img src="/img/login/login-icon.png" alt="Icono de login">
+            <form class="form-signin" method="post" th:action="@{/user/register}">
+                <h2 class="form-signin-heading display-4">Registro</h2>
+
                 <p>
-                    <label for="username" class="visually-hidden">Username</label>
+                    <label for="firstName" class="visually-hidden"> Nombre </label>
+                    <input type="text" id="firstName" name="firstName" class="form-control" placeholder="Nombre" required="required">
+                </p>
+
+                <p>
+                    <label for="lastName" class="visually-hidden"> Apellido </label>
+                    <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Apellido" required="required">
+                </p>
+
+                <p>
+                    <label for="username" class="visually-hidden">Usuario</label>
                     <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" required="required">
                 </p>
+
                 <p>
-                    <label for="password" class="visually-hidden">Password</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required="required">
+                    <label for="password" class="visually-hidden">Contraseña</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required="required" autocomplete="off">
                 </p>
-                <button id="login-btn" class="btn" type="submit">Registrar</button>
+                <a th:href="@{/register}">
+                <button id="register-btn" class="btn btn-primary" type="submit">Registrar</button>
             </form>
         </div>
     </main>
