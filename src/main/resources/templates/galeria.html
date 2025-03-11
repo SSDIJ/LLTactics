@@ -9,6 +9,8 @@
     <header th:replace="~{fragments/nav.html :: nav}"></header>
     <div class="container">
         <h1 class="mt-5 title display-1">Galería de Héroes</h1>
+        <div th:replace="fragments/navFacciones :: navbar-facciones"></div>
+
         <div id="gallery-description">
             ¡Conoce a los héroes más valientes y a las criaturas más temidas del reino!
         </div>
@@ -20,7 +22,7 @@
 
         <div id="gallery-container" class="d-flex flex-wrap justify-content-center mt-5">
             <!-- Título y héroes humanos -->
-            <h2 class="w-100 text-center">Humanos</h2>
+            <h2 id ="humanos" class="w-100 text-center">Humanos</h2>
             <div th:each="heroe : ${humanos}">
                 <th:block th:replace="~{fragments/card :: carta(
                     ${heroe.nombre}, 
@@ -34,7 +36,7 @@
                 )}" />
             </div>
             <!-- Título y héroes trolls -->
-            <h2 class="w-100 text-center">Trolls</h2>
+            <h2 id="trolls" class="w-100 text-center">Trolls</h2>
             <div th:each="heroe : ${trolls}">
                 <th:block th:replace="~{fragments/card :: carta(
                     ${heroe.nombre}, 
@@ -48,7 +50,7 @@
                 )}" />
             </div>
             <!-- Título y héroes dragones -->
-            <h2 class="w-100 text-center">Dragones</h2>
+            <h2 id="dragones" class="w-100 text-center">Dragones</h2>
             <div th:each="heroe : ${dragones}">
                 <th:block th:replace="~{fragments/card :: carta(
                     ${heroe.nombre}, 
@@ -62,7 +64,7 @@
                 )}" />
             </div>
             <!-- Título y héroes no muertos -->
-            <h2 class="w-100 text-center">No Muertos</h2>
+            <h2 id="noMuertos" class="w-100 text-center">No Muertos</h2>
             <div th:each="heroe : ${noMuertos}">
                 <th:block th:replace="~{fragments/card :: carta(
                     ${heroe.nombre}, 
@@ -76,7 +78,7 @@
                 )}" />
             </div>
             <!-- Título y héroes legendarios -->
-            <h2 class="w-100 text-center">Legendarios</h2>
+            <h2 id="legendarios" class="w-100 text-center">Legendarios</h2>
             <div th:each="heroe : ${legendarios}">
                 <th:block th:replace="~{fragments/card :: carta(
                     ${heroe.nombre}, 
@@ -90,7 +92,7 @@
                 )}" />
             </div>
             <!-- Título y objetos -->
-            <h2 class="w-100 text-center">Objetos</h2>
+            <h2 id="objetos" class="w-100 text-center">Objetos</h2>
             <div th:each="objeto : ${objetos}">
                 <!-- EL ÚLTIMO PARÁMETRO ESTÁ PUESTO A MANO, SOLO PARA LA GALERÍA -->
                 <th:block th:replace="~{fragments/card :: carta(

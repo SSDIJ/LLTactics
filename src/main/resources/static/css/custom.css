@@ -1231,3 +1231,89 @@ body .profile-body{
 .flash-effect {
     animation: flash 0.4s ease-out;
 }
+
+
+.navbar-facciones {
+    background-color: #333;
+    overflow: hidden;
+    padding: 10px 0;
+    text-align: center;
+    margin-top: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.navbar-facciones ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+
+.navbar-facciones ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+.navbar-facciones ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.navbar-facciones ul li a:hover {
+    background-color: #575757;
+}
+
+
+.navbar-facciones {
+    background-color: #333;
+    overflow: hidden;
+    padding: 10px 0;
+    text-align: center;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+.navbar-facciones ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+
+.navbar-facciones ul li {
+    display: inline;
+    margin: 0 15px;
+    position: relative;
+}
+
+.navbar-facciones ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.navbar-facciones ul li a:hover {
+    background-color: #575757;
+}
+
+.navbar-facciones ul li:last-child {
+    margin-left: 30px; 
+}
+
+.navbar-facciones ul li:last-child::before {
+    content: "";
+    position: absolute;
+    left: -15px; 
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #868377; 
+}
