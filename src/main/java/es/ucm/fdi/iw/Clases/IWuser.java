@@ -20,18 +20,18 @@ public class IWuser {
 
     private boolean enabled = true;
 
-    @Column(name = "FIRST_NAME")
+    @Column
     private String firstName;
 
-    @Column(name = "LAST_NAME")
+    @Column
     private String lastName;
 
-    @Column(name = "PASSWORD", nullable = false)
+    @Column(nullable = false)
     private String password;
 
-    @Column(name = "ROLES")
+    @Column
     private String role;
 
-    @Column(name = "USERNAME", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String username;
 }
