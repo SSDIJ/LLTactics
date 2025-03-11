@@ -30,8 +30,9 @@ public class Heroe {
     private String descripcion;
     private int faccion;  // 0 = humanos, 1 = dragones, 2 = trolls, 3 = no muertos, 4 = criaturas legendarias
     private int precio;
+    private double probabilidad;
 
-    public Heroe(String nombre, String imagen, int vida, int armadura, int daño, int velocidad, String descripcion, int faccion, int precio) {
+    public Heroe(String nombre, String imagen, int vida, int armadura, int daño, int velocidad, String descripcion, int faccion, int precio, double probabilidad) {
         this.nombre = nombre;
         this.imagen = imagen;
         this.vida = vida;
@@ -41,6 +42,7 @@ public class Heroe {
         this.descripcion = descripcion;
         this.faccion = faccion;
         this.precio = precio;
+        this.probabilidad = probabilidad;
     }
 
     public int getPrecio() {
