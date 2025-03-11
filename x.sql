@@ -1,7 +1,18 @@
 -- H2 2.3.232;
 ;             
-CREATE USER IF NOT EXISTS "SA" SALT 'dd67880c33cbbdc4' HASH '20c5e54ae685e7dd84b822d883edbea8a589d978f3e3b3ea21b71d6b1e418d3b' ADMIN;         
+CREATE USER IF NOT EXISTS "SA" SALT 'ccb7f449d80cb11a' HASH 'c7f76a289b15a854a87e44f48f49253dd3f4a1011e0ace69961201ce0d24358c' ADMIN;         
 CREATE SEQUENCE "PUBLIC"."GEN" START WITH 1 INCREMENT BY 50;  
+CREATE GLOBAL TEMPORARY TABLE "PUBLIC"."HTE_MESSAGE"(
+    "RN_" INTEGER NOT NULL,
+    "DATE_READ" TIMESTAMP(6),
+    "DATE_SENT" TIMESTAMP(6),
+    "ID" BIGINT,
+    "RECIPIENT_ID" BIGINT,
+    "SENDER_ID" BIGINT,
+    "TEXT" CHARACTER VARYING(255)
+);
+ALTER TABLE "PUBLIC"."HTE_MESSAGE" ADD CONSTRAINT "PUBLIC"."CONSTRAINT_E" PRIMARY KEY("RN_"); 
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC.HTE_MESSAGE;             
 CREATE GLOBAL TEMPORARY TABLE "PUBLIC"."HT_HEROE"(
     "ID_HEROE" BIGINT NOT NULL
 );        
@@ -49,17 +60,6 @@ CREATE GLOBAL TEMPORARY TABLE "PUBLIC"."HTE_UNIDAD"(
 );    
 ALTER TABLE "PUBLIC"."HTE_UNIDAD" ADD CONSTRAINT "PUBLIC"."CONSTRAINT_9" PRIMARY KEY("HTE_IDENTITY");         
 -- 0 +/- SELECT COUNT(*) FROM PUBLIC.HTE_UNIDAD;              
-CREATE GLOBAL TEMPORARY TABLE "PUBLIC"."HTE_MESSAGE"(
-    "RN_" INTEGER NOT NULL,
-    "DATE_READ" TIMESTAMP(6),
-    "DATE_SENT" TIMESTAMP(6),
-    "ID" BIGINT,
-    "RECIPIENT_ID" BIGINT,
-    "SENDER_ID" BIGINT,
-    "TEXT" CHARACTER VARYING(255)
-);
-ALTER TABLE "PUBLIC"."HTE_MESSAGE" ADD CONSTRAINT "PUBLIC"."CONSTRAINT_E" PRIMARY KEY("RN_"); 
--- 0 +/- SELECT COUNT(*) FROM PUBLIC.HTE_MESSAGE;             
 CREATE GLOBAL TEMPORARY TABLE "PUBLIC"."HTE_IWUSER"(
     "ENABLED" BOOLEAN,
     "RN_" INTEGER NOT NULL,
@@ -89,40 +89,42 @@ CREATE MEMORY TABLE "PUBLIC"."HEROE"(
 ALTER TABLE "PUBLIC"."HEROE" ADD CONSTRAINT "PUBLIC"."CONSTRAINT_4" PRIMARY KEY("ID_HEROE");  
 -- 21 +/- SELECT COUNT(*) FROM PUBLIC.HEROE;  
 INSERT INTO "PUBLIC"."HEROE" VALUES
-(50, 75, 0, 3, 0.4, 100, 25, 1, 'Heroe', U&'Es la primera l\00ednea de defensa.', '/img/units/humans/1. Tanque/heavyinfantry.png', 'Tanque'),
-(80, 70, 0, 4, 0.2, 40, 200, 2, 'Heroe', 'Un estratega nato en el campo de batalla.', '/img/units/humans/2. General/general.png', 'General de Guerra'),
-(60, 85, 0, 3, 0.4, 50, 180, 3, 'Heroe', U&'\00c1gil y feroz en combate.', '/img/units/humans/3. Caballero/knight.png', 'Caballero'),
-(30, 95, 0, 2, 0.4, 70, 120, 4, 'Heroe', U&'Con una punter\00eda letal.', '/img/units/humans/4. Arquero/longbowman-bow-attack-1.png', 'Arquero'),
-(20, 110, 0, 5, 0.35, 60, 140, 5, 'Heroe', 'Un maestro de la magia arcana.', '/img/units/humans/5. Mago/white-mage.png', 'Mago'),
-(120, 40, 1, 6, 0.4, 20, 350, 6, 'Heroe', U&'El Drag\00f3n Tanque es una fortaleza viviente con una armadura impenetrable, dise\00f1ado para absorber grandes cantidades de da\00f1o.', '/img/units/dragons/1. DTanque/enforcer-blade.png', U&'Drag\00f3n Tanque'),
-(50, 90, 1, 5, 0.4, 45, 250, 7, 'Heroe', 'El Berserker es una furia desatada en el campo de batalla, con ataques devastadores a costa de una defensa reducida.', '/img/units/dragons/2. DBerserker/clasher-blade.png', 'Berserker'),
-(90, 75, 1, 5, 0.35, 35, 280, 8, 'Heroe', U&'Con su alabarda m\00e1gica, el Guardi\00e1n equilibra ataque y defensa, protegiendo a sus aliados con su imponente presencia.', '/img/units/dragons/3. DAlabarda/warden.png', U&'Guardi\00e1n'),
-(40, 110, 1, 4, 0.35, 50, 200, 9, 'Heroe', U&'El Incinerador es un drag\00f3n de fuego que abrasa todo a su paso con llamas intensas y ataques explosivos.', '/img/units/dragons/4. DGris/burner.png', 'Incinerador'),
-(30, 95, 1, 4, 0.2, 65, 180, 10, 'Heroe', U&'Especializado en la magia y las runas, el Drag\00f3n Morado es un apoyo para su equipo y una amenaza para el contrario.', '/img/units/dragons/5. DMorado/blademaster.png', U&'Drag\00f3n Morado'),
-(60, 50, 2, 3, 0.35, 30, 300, 11, 'Heroe', 'El Troll Gigante es una bestia imponente con una fuerza descomunal.', '/img/units/trolls/1. TTanque/great-troll.png', 'Troll Gigante'),
-(30, 100, 2, 2, 0.35, 70, 150, 12, 'Heroe', U&'El Troll Asesino es r\00e1pido y letal, especializado en ataques furtivos.', '/img/units/trolls/2. TAssasin/whelp.png', 'Troll Asesino'),
-(50, 80, 2, 3, 0.4, 40, 200, 13, 'Heroe', 'El Troll Guerrero es un combatiente feroz con habilidades equilibradas.', '/img/units/trolls/3. TOfftanque/warrior.png', 'Troll Guerrero'),
-(40, 90, 2, 2, 0.4, 60, 180, 14, 'Heroe', U&'El Troll Certero es un experto en ataques a distancia con gran precisi\00f3n.', '/img/units/trolls/4. TRango/lobber.png', 'Troll Certero'),
-(20, 70, 2, 4, 0.2, 80, 160, 15, 'Heroe', U&'El Troll Cham\00e1n utiliza poderes m\00edsticos para apoyar a sus aliados.', '/img/units/trolls/5. TMago/shaman.png', U&'Troll Cham\00e1n'),
-(70, 60, 3, 3, 0.4, 30, 250, 16, 'Heroe', U&'El Esqueleto Corpulento es un guerrero resistente que puede soportar mucho da\00f1o.', '/img/units/skeletons/1. STanque/draug.png', 'Esqueleto Corpulento'),
-(60, 80, 3, 4, 0.35, 40, 220, 17, 'Heroe', 'El Esqueleto General lidera a sus tropas con una presencia intimidante.', '/img/units/skeletons/2. SGeneral/deathknight.png', 'Esqueleto General'),
-(50, 90, 3, 4, 0.2, 50, 200, 18, 'Heroe', U&'El Esqueleto a caballo es r\00e1pido y mortal en combate.', '/img/units/skeletons/3. SCaballero/boneknight-attack.png', 'Esqueleto a caballo'),
-(40, 100, 3, 3, 0.4, 60, 180, 19, 'Heroe', 'El Esqueleto Arquero es letal a larga distancia con su arco.', '/img/units/skeletons/4. SArquero/banebow-bow.png', 'Esqueleto Arquero'),
-(30, 110, 3, 5, 0.35, 70, 160, 20, 'Heroe', 'El Esqueleto mago utiliza poderosos hechizos para devastar a sus enemigos.', '/img/units/skeletons/5. SMago/ancient-lich.png', 'Esqueleto mago'),
-(120, 200, 4, 6, 0.05, 40, 400, 21, 'Heroe', 'Una criatura de leyenda con habilidades extraordinarias.', '/img/units/legendary/fireghost/fireghost.png', 'Criatura Legendaria');    
+(75, 150, 0, 3, 0.4, 75, 300, 1, 'Heroe', U&'Firme como una muralla de acero, el Tanque es la primera l\00ednea de defensa, imparable ante los embates enemigos. Con 300 de vida y una resistencia formidable, se erige como el escudo de sus compa\00f1eros en el fragor de la batalla.', '/img/units/humans/1. Tanque/heavyinfantry.png', 'Tanque'),
+(45, 112, 0, 4, 0.2, 56, 262, 2, 'Heroe', U&'Sabio en las artes de la estrategia, el General no solo combate, sino que gu\00eda a sus tropas con astucia. Con una armadura ligera pero letal en combate, sus t\00e1cticas dan la ventaja en el campo de batalla.', '/img/units/humans/2. General/general.png', 'General de Guerra'),
+(68, 150, 0, 3, 0.4, 45, 225, 3, 'Heroe', U&'\00c1gil y feroz, el Caballero es un guerrero que destaca por su destreza y valor. Con gran habilidad en el combate cuerpo a cuerpo, su espada brilla como un rayo de esperanza para su gente.', '/img/units/humans/3. Caballero/knight.png', 'Caballero'),
+(37, 90, 0, 2, 0.4, 68, 150, 4, 'Heroe', U&'El ojo certero del ej\00e9rcito, el Arquero lanza flechas como estrellas fugaces. Con punter\00eda mortal, su habilidad para atacar desde lejos es esencial para desgastar al enemigo antes de que se acerque.', '/img/units/humans/4. Arquero/longbowman-bow-attack-1.png', 'Arquero'),
+(30, 135, 0, 5, 0.35, 68, 187, 5, 'Heroe', U&'El conjurador de fuerzas arcanas, el Mago domina la magia como un tejedor de destinos. Su poder radica en su habilidad para controlar el fuego, el hielo y otras artes m\00edsticas, arrasando a sus enemigos desde la distancia.', '/img/units/humans/5. Mago/white-mage.png', 'Mago'),
+(80, 145, 1, 6, 0.4, 40, 285, 6, 'Heroe', U&'Un muro viviente, el Drag\00f3n Tanque es una fortaleza de escamas y fuego. Con una armadura impenetrable y un coraz\00f3n de acero, se erige como el centinela m\00e1s temible del campo, capaz de resistir las embestidas m\00e1s feroces.', '/img/units/dragons/1. DTanque/enforcer-blade.png', U&'Drag\00f3n Tanque'),
+(20, 140, 1, 5, 0.4, 90, 190, 7, 'Heroe', U&'La furia hecha carne, el Berserker es un drag\00f3n que se lanza al combate sin medida, arrasando con cada golpe. Aunque su defensa es fr\00e1gil, sus ataques devastadores pueden destruir cualquier enemigo que se cruce en su camino.', '/img/units/dragons/2. DBerserker/clasher-blade.png', 'Berserker'),
+(75, 135, 1, 5, 0.35, 45, 220, 8, 'Heroe', U&'El protector de los suyos, el Guardi\00e1n blande su alabarda m\00e1gica con maestr\00eda, equilibrando su agresi\00f3n con una defensa formidable. Su presencia en la batalla es un escudo que protege a sus aliados de la muerte misma.', '/img/units/dragons/3. DAlabarda/warden.png', U&'Guardi\00e1n'),
+(15, 170, 1, 4, 0.35, 50, 230, 9, 'Heroe', U&'El fuego que arrasa todo a su paso, el Incinerador es un drag\00f3n de llamas intensas que reduce a cenizas a sus enemigos. Sus ataques explosivos convierten el campo de batalla en un infierno, quemando todo lo que toca.', '/img/units/dragons/4. DGris/burner.png', 'Incinerador'),
+(15, 170, 1, 4, 0.2, 50, 315, 10, 'Heroe', U&'El hechicero de las runas, el Drag\00f3n Morado combina magia arcana y poder destructivo en una \00fanica entidad. Su habilidad para manipular las runas lo convierte en un aliado invaluable y una amenaza peligrosa para cualquier adversario.', '/img/units/dragons/5. DMorado/blademaster.png', U&'Drag\00f3n Morado'),
+(85, 120, 2, 3, 0.35, 70, 280, 11, 'Heroe', U&'Una bestia imparable, el Troll Gigante es una masa de m\00fasculo y furia. Su fuerza descomunal lo convierte en un enemigo temido en las l\00edneas de batalla, capaz de aplastar a cualquier rival con un solo golpe.', '/img/units/trolls/1. TTanque/great-troll.png', 'Troll Gigante'),
+(50, 135, 2, 2, 0.35, 60, 250, 12, 'Heroe', U&'La sombra que corta, el Troll Asesino se desliza entre las sombras con agilidad mortal. Sus ataques furtivos y r\00e1pidos dejan a sus enemigos sin aliento, antes de que puedan siquiera reaccionar a su presencia.', '/img/units/trolls/2. TAssasin/whelp.png', 'Troll Asesino'),
+(60, 175, 2, 3, 0.4, 50, 275, 13, 'Heroe', U&'El combatiente equilibrado, el Troll Guerrero es un maestro del combate con habilidades tanto ofensivas como defensivas. Su resistencia y destreza le permiten mantenerse firme, enfrentando a sus adversarios con una feroz determinaci\00f3n.', '/img/units/trolls/3. TOfftanque/warrior.png', 'Troll Guerrero');              
+INSERT INTO "PUBLIC"."HEROE" VALUES
+(30, 110, 2, 2, 0.4, 80, 170, 14, 'Heroe', U&'La mano que nunca falla, el Troll Certero es un experto en el arte de los ataques a distancia. Con gran precisi\00f3n, lanza sus proyectiles como flechas al coraz\00f3n de sus enemigos, eliminando amenazas desde lejos con punter\00eda infalible.', '/img/units/trolls/4. TRango/lobber.png', 'Troll Certero'),
+(25, 160, 2, 4, 0.2, 50, 210, 15, 'Heroe', U&'El invocador de fuerzas oscuras, el Troll Cham\00e1n usa su conexi\00f3n m\00edstica con la naturaleza y los esp\00edritus para invocar poderosos hechizos que apoyan a sus aliados y desestabilizan a sus enemigos. Su magia es tan impredecible como las tormentas.', '/img/units/trolls/5. TMago/shaman.png', U&'Troll Cham\00e1n'),
+(70, 140, 3, 3, 0.4, 60, 295, 16, 'Heroe', U&'El guerrero eterno, el Esqueleto Corpulento resiste las heridas del tiempo y el combate. Su enorme resistencia lo convierte en una fortaleza ambulante, capaz de soportar grandes da\00f1os y seguir luchando con furia implacable.', '/img/units/skeletons/1. STanque/draug.png', 'Esqueleto Corpulento'),
+(55, 125, 3, 4, 0.35, 70, 235, 17, 'Heroe', U&'El l\00edder de los muertos, el Esqueleto General emana una presencia temible que inspira terror y respeto. Su destreza t\00e1ctica y su voluntad inquebrantable lo convierten en el comandante perfecto para las huestes de la no muerte.', '/img/units/skeletons/2. SGeneral/deathknight.png', 'Esqueleto General'),
+(75, 165, 3, 4, 0.2, 45, 260, 18, 'Heroe', U&'La sombra r\00e1pida, el Esqueleto a caballo es un jinete espectral que asola el campo con su destreza y velocidad. Mortal en combate, se mueve con la gracia de una tormenta, causando estragos entre las filas enemigas.', '/img/units/skeletons/3. SCaballero/boneknight-attack.png', 'Esqueleto a caballo'),
+(25, 130, 3, 3, 0.4, 85, 180, 19, 'Heroe', U&'La flecha de la muerte, el Esqueleto Arquero lanza sus proyectiles con una precisi\00f3n mortal. Desde la distancia, derrumba a sus enemigos uno por uno, como un cazador que acecha a su presa.', '/img/units/skeletons/4. SArquero/banebow-bow.png', 'Esqueleto Arquero'),
+(20, 150, 3, 5, 0.35, 55, 220, 20, 'Heroe', 'El hechicero del abismo, el Esqueleto Mago invoca oscuros hechizos que devoran todo a su paso. Su magia arcana es tan poderosa como su cuerpo esqueleto, y arrastra a sus enemigos hacia la oscuridad.', '/img/units/skeletons/5. SMago/ancient-lich.png', 'Esqueleto mago'),
+(120, 200, 4, 6, 0.05, 40, 400, 21, 'Heroe', U&'El espectro de fuego eterno, la Criatura Legendaria es una aparici\00f3n envuelta en llamas ardientes, cuya existencia desaf\00eda la realidad. Con habilidades extraordinarias, su poder es tan vasto como las llamas que consume, arrasando con todo a su paso.', '/img/units/legendary/fireghost/fireghost.png', 'Criatura Legendaria');          
 CREATE MEMORY TABLE "PUBLIC"."IWUSER"(
     "ENABLED" BOOLEAN NOT NULL,
-    "ID" BIGINT GENERATED BY DEFAULT AS IDENTITY(START WITH 1) NOT NULL,
-    "TIPO" CHARACTER VARYING(31) NOT NULL,
+    "ID" BIGINT NOT NULL,
     "FIRST_NAME" CHARACTER VARYING(255),
     "LAST_NAME" CHARACTER VARYING(255),
     "PASSWORD" CHARACTER VARYING(255) NOT NULL,
-    "ROLE" CHARACTER VARYING(255),
     "ROLES" CHARACTER VARYING(255),
     "USERNAME" CHARACTER VARYING(255) NOT NULL
-);
+);               
 ALTER TABLE "PUBLIC"."IWUSER" ADD CONSTRAINT "PUBLIC"."CONSTRAINT_81" PRIMARY KEY("ID");      
--- 0 +/- SELECT COUNT(*) FROM PUBLIC.IWUSER;  
+-- 2 +/- SELECT COUNT(*) FROM PUBLIC.IWUSER;  
+INSERT INTO "PUBLIC"."IWUSER" VALUES
+(TRUE, 1, NULL, NULL, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'ADMIN,USER', 'a'),
+(TRUE, 2, NULL, NULL, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'USER', 'b');          
 CREATE MEMORY TABLE "PUBLIC"."JUGADOR"(
     "BANEADO" BOOLEAN NOT NULL,
     "FACCION_FAVORITA" INTEGER NOT NULL,
