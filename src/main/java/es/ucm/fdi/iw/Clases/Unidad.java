@@ -24,8 +24,8 @@ public class Unidad extends Heroe{
     @OneToMany(mappedBy = "unidad")
     private List<Objeto> objetos;
 
-    public Unidad(String nombre, String imagen, int vida, int armadura, int daño, int velocidad, String descripcion, int faccion, int precio, List<Objeto> objetos) {
-        super(nombre, imagen, vida, armadura, daño, velocidad, descripcion, faccion, precio);
+    public Unidad(String nombre, String imagen, int vida, int armadura, int daño, int velocidad, String descripcion, int faccion, int precio, double probabilidad, List<Objeto> objetos) {
+        super(nombre, imagen, vida, armadura, daño, velocidad, descripcion, faccion, precio, probabilidad);
         this.dañoAct = daño;
         this.vidaAct = vida;
         this.velocidadAct = velocidad;

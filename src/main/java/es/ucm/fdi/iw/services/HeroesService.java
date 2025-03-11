@@ -50,8 +50,26 @@ public class HeroesService {
             return heroes;
         }
 
-        Collections.shuffle(heroes, random);
-        return heroes.subList(0, count);
+        List<Heroe> selectedHeroes = new ArrayList<>();
+        double totalProbabilidad = 0;  
+        for (Heroe heroe : heroes) {  
+            totalProbabilidad += heroe.getProbabilidad();  
+        }
+
+        for(int i = 0; i < count; i++) {
+            double randVal = random.nextDouble() * totalProbabilidad;
+            double cumulProbability = 0;
+
+            for (Heroe heroe : heroes) {
+                cumulProbability += heroe.getProbabilidad();
+                if (randVal <= cumulProbability) {
+                    selectedHeroes.add(heroe);
+                    break;
+                }
+            }
+        }
+
+        return selectedHeroes;
     }
     
 }
