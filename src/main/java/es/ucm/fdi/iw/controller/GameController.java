@@ -4,11 +4,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import es.ucm.fdi.iw.Clases.Heroe;
-import es.ucm.fdi.iw.Clases.Objeto;
-import es.ucm.fdi.iw.Clases.Jugador;
-import es.ucm.fdi.iw.Clases.Mensaje;
-import es.ucm.fdi.iw.Clases.Unidad;
+import es.ucm.fdi.iw.model.Heroe;
+import es.ucm.fdi.iw.model.Jugador;
+import es.ucm.fdi.iw.model.Mensaje;
+import es.ucm.fdi.iw.model.Objeto;
+import es.ucm.fdi.iw.model.Unidad;
 
 import java.util.ArrayList;
 import java.util.Arrays;

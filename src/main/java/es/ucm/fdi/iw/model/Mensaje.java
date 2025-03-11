@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw.Clases;
+package es.ucm.fdi.iw.model;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.Entity;

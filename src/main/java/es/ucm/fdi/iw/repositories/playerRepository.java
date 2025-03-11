@@ -1,7 +1,9 @@
 package es.ucm.fdi.iw.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import es.ucm.fdi.iw.Clases.Jugador;
+
+import es.ucm.fdi.iw.model.Jugador;
+
 import java.util.List;
 
 // JpaRepository<Entidad, Tipo de ID>

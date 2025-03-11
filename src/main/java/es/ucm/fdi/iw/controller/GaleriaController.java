@@ -7,11 +7,11 @@ import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import es.ucm.fdi.iw.Clases.Heroe;
-import es.ucm.fdi.iw.Clases.Objeto;
-import es.ucm.fdi.iw.Clases.Jugador;
-import es.ucm.fdi.iw.Clases.Mensaje;
-import es.ucm.fdi.iw.Clases.Partida;
+import es.ucm.fdi.iw.model.Heroe;
+import es.ucm.fdi.iw.model.Jugador;
+import es.ucm.fdi.iw.model.Mensaje;
+import es.ucm.fdi.iw.model.Objeto;
+import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.repositories.HeroeRepository;
 import es.ucm.fdi.iw.repositories.ItemRepository;
 

@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw.Clases;
+package es.ucm.fdi.iw.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

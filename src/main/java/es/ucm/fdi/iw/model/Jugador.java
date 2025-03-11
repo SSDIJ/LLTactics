@@ -1,10 +1,10 @@
-package es.ucm.fdi.iw.Clases;
+package es.ucm.fdi.iw.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.ucm.fdi.iw.Clases.Heroe;
+import es.ucm.fdi.iw.model.Heroe;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

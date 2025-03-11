@@ -21,10 +21,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import es.ucm.fdi.iw.Clases.Heroe;
-import es.ucm.fdi.iw.Clases.Jugador;
-import es.ucm.fdi.iw.Clases.Mensaje;
-import es.ucm.fdi.iw.Clases.Partida;
+import es.ucm.fdi.iw.model.Heroe;
+import es.ucm.fdi.iw.model.Jugador;
+import es.ucm.fdi.iw.model.Mensaje;
+import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.repositories.HeroeRepository;
 import es.ucm.fdi.iw.services.HeroesService;

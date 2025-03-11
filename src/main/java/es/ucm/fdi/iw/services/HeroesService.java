@@ -3,7 +3,7 @@ package es.ucm.fdi.iw.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import es.ucm.fdi.iw.Clases.Heroe;
+import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.repositories.HeroeRepository;
 
 import java.util.ArrayList;
