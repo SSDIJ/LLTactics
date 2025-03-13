@@ -191,14 +191,14 @@
                 </div>
 
                 <!-- Chat visible en pantallas grandes -->
-                <div id="chat-container" class="d-none d-xl-block">
-                    <h3 class="section-title">Chat</h3>
-                    <div id="game-messages-container" class="d-flex flex-column overflow-auto">
-                        <th:block th:each="msg : ${mensajes}">
-                            <th:block th:replace="fragments/chat-message :: chat-message(${msg})"></th:block>
-                        </th:block>
+                <div id="chat-container">
+                    <div id="chat-box">
+                        <!-- Mensajes van aqui -->
                     </div>
-                    <textarea name="message-input-chat" id="message-input-chat" class="form-control mt-2"></textarea>
+                    <div id="chat-input-container">
+                        <input type="text" id="chat-input" placeholder="Type a message...">
+                        <button id="send-button" class="send-btn">Send</button>
+                    </div>
                 </div>
 
 

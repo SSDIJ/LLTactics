@@ -21,6 +21,9 @@ const shopUnitsContainers = document.querySelectorAll('.shop-units-container');
 const shopItemsContainers = document.querySelectorAll('.shop-objects-container');
 const refreshShopBtns = document.querySelectorAll(".refresh-btn");
 
+// Chat
+const chatContainer = document.getElementById("chat-container")
+
 // Actualizar unidades
 function updateUnits() {
     
@@ -187,6 +190,10 @@ function updateShop() {
             }
         });
     });
+}
+
+function updateChat() {
+
 }
     
 // Efecto del botón de refrescar de la tienda

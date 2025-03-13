@@ -820,10 +820,6 @@ body .profile-body{
         max-width: 250px;
     }
 
-    #message-input-chat {
-        width: 300px !important;
-    }
-
 
 }
 
@@ -996,7 +992,7 @@ body .profile-body{
     border-radius: 10px;
 }
 
-.shop-unit:hover, .object-cell:hover, .refresh-btn:hover {
+.shop-unit:hover, .object-cell:hover, .refresh-btn:hover, .send-btn:hover {
     transform: scale(1.1);
     transition: 0.3s;
     box-shadow: inset 0px 0px 15px 5px rgba(255, 255, 255, 0.8);
@@ -1084,18 +1080,54 @@ body .profile-body{
 }
 
 #chat-container {
-
     width: 600px;
     height: 200px;
     background-color: var(--COLOR-DARK-1);
-
     position: fixed;
     bottom: 0;
     right: 0;
-
     border-radius: 10px 0 0 0;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 
+#chat-box {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+#chat-input-container {
+    display: flex;
+    align-items: center;
+}
+
+#chat-input {
+    flex-grow: 1;
+    height: 35px;
+    color: whitesmoke;
+    background-color: transparent;
+    border: 1px solid whitesmoke;
+    border-radius: 10px;
+    padding: 7px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-right: 10px;
+}
+
+.send-btn {
+    width: 80px;
+    height: 35px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.322);
+    border: 1px solid white;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #game-messages-container {

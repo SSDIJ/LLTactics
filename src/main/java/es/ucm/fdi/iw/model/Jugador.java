@@ -29,8 +29,6 @@ public class Jugador {
     private int partidasGanadas;
     private int partidasPerdidas;
     private int faccionFavorita;
-
-    
     
     @OneToMany
     private List<Heroe> masJugados = new ArrayList<>();
