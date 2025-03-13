@@ -50,7 +50,7 @@ import java.util.stream.Collectors;
  *
  *  Access to this end-point is authenticated.
  */
-@Controller
+@Controller()
 @RequestMapping("user")
 public class UserController {
 
@@ -324,33 +324,60 @@ public class UserController {
 
 		messagingTemplate.convertAndSend("/user/"+u.getUsername()+"/queue/updates", json);
 		return "{\"result\": \"message sent.\"}";
+	}	
+
+	/**
+	 * Registers a new user.
+	 */
+	@PostMapping("/register")
+	@Transactional
+	public String registerUser(
+			HttpServletResponse response,
+			@ModelAttribute User newUser, 
+			@RequestParam(required=false) String pass2,
+			Model model, HttpSession session) throws IOException {
+
+		// Verifica si las contraseñas coinciden
+		if (newUser.getPassword() != null && !newUser.getPassword().equals(pass2)) {
+			log.warn("Passwords do not match - returning to registration form");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			model.addAttribute("error", "Passwords do not match");
+			return "registro";  // Redirige al formulario de registro
+		}
+
+		// Verifica si el nombre de usuario ya existe
+		User existingUser = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+				.setParameter("username", newUser.getUsername())
+				.getResultStream()
+				.findFirst()
+				.orElse(null);
+
+		if (existingUser != null) {
+			log.warn("Username {} is already taken", newUser.getUsername());
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			model.addAttribute("error", "Username is already taken");
+			return "registro";  // Redirige al formulario de registro
+		}
+
+		// Codifica la contraseña antes de guardarla
+		newUser.setPassword(encodePassword(newUser.getPassword()));
+		newUser.setEnabled(true);  // Activa al usuario por defecto
+
+		Long maxId = entityManager.createQuery("SELECT MAX(u.id) FROM User u", Long.class).getSingleResult();
+		Long nextId = maxId != null ? maxId + 1 : 1L;  // Si no hay registros, comienza desde 1
+		newUser.setId(nextId);
+
+		// Guarda el nuevo usuario en la base de datos
+		entityManager.persist(newUser);
+		entityManager.flush();  // Asegura que el usuario se ha guardado y tiene un id válido
+
+		log.info("User {} registered successfully", newUser.getUsername());
+
+		// Inicia sesión automáticamente (si se desea) o redirige al login
+		session.setAttribute("u", newUser);
+
+		return "login";  // Redirige al perfil del nuevo usuario 
 	}
-	
-	@GetMapping("/register")
-	public String registerUser(@RequestParam String username,@RequestParam String firstName,@RequestParam String lastName,@RequestParam String password, HttpSession session) {
-	long count= entityManager.createQuery("SELECT COUNT(u) FROM User u WHERE u.username = :username", Long.class)
-	.setParameter("username", username)
-	.getSingleResult();
 
-	if(count>0){
-		log.warn("El nombre del usuario ya existe");
-	}
-	User newUser = new User();
-    newUser.setUsername(username);
-    newUser.setPassword(passwordEncoder.encode(password)); // Encripta la contraseña
-    newUser.setFirstName(firstName);
-    newUser.setLastName(lastName);
-    newUser.setEnabled(true);
 
-    // Guardar en la base de datos
-    entityManager.persist(newUser);
-
-    log.info("Usuario registrado: {}", username);
-
-    // Iniciar sesión automáticamente después del registro (opcional)
-    session.setAttribute("u", newUser);
-
-    return "redirect:/login"; // Redirige al login
-	}
-	
 }

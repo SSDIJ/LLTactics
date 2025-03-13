@@ -110,7 +110,6 @@ INSERT INTO "PUBLIC"."HEROE" VALUES
 (85, 120, 2, 3, 0.35, 70, 280, 11, 'Heroe', U&'Una bestia imparable, el Troll Gigante es una masa de m\00fasculo y furia. Su fuerza descomunal lo convierte en un enemigo temido en las l\00edneas de batalla, capaz de aplastar a cualquier rival con un solo golpe.', '/img/units/trolls/1. TTanque/great-troll.png', 'Troll Gigante'),
 (50, 135, 2, 2, 0.35, 60, 250, 12, 'Heroe', U&'La sombra que corta, el Troll Asesino se desliza entre las sombras con agilidad mortal. Sus ataques furtivos y r\00e1pidos dejan a sus enemigos sin aliento, antes de que puedan siquiera reaccionar a su presencia.', '/img/units/trolls/2. TAssasin/whelp.png', 'Troll Asesino'),
 (60, 175, 2, 3, 0.4, 50, 275, 13, 'Heroe', U&'El combatiente equilibrado, el Troll Guerrero es un maestro del combate con habilidades tanto ofensivas como defensivas. Su resistencia y destreza le permiten mantenerse firme, enfrentando a sus adversarios con una feroz determinaci\00f3n.', '/img/units/trolls/3. TOfftanque/warrior.png', 'Troll Guerrero');              
-INSERT INTO "PUBLIC"."HEROE" VALUES
 (30, 110, 2, 2, 0.4, 80, 170, 14, 'Heroe', U&'La mano que nunca falla, el Troll Certero es un experto en el arte de los ataques a distancia. Con gran precisi\00f3n, lanza sus proyectiles como flechas al coraz\00f3n de sus enemigos, eliminando amenazas desde lejos con punter\00eda infalible.', '/img/units/trolls/4. TRango/lobber.png', 'Troll Certero'),
 (25, 160, 2, 4, 0.2, 50, 210, 15, 'Heroe', U&'El invocador de fuerzas oscuras, el Troll Cham\00e1n usa su conexi\00f3n m\00edstica con la naturaleza y los esp\00edritus para invocar poderosos hechizos que apoyan a sus aliados y desestabilizan a sus enemigos. Su magia es tan impredecible como las tormentas.', '/img/units/trolls/5. TMago/shaman.png', U&'Troll Cham\00e1n'),
 (70, 140, 3, 3, 0.4, 60, 295, 16, 'Heroe', U&'El guerrero eterno, el Esqueleto Corpulento resiste las heridas del tiempo y el combate. Su enorme resistencia lo convierte en una fortaleza ambulante, capaz de soportar grandes da\00f1os y seguir luchando con furia implacable.', '/img/units/skeletons/1. STanque/draug.png', 'Esqueleto Corpulento'),
@@ -130,9 +129,9 @@ CREATE MEMORY TABLE "PUBLIC"."IWUSER"(
 );               
 ALTER TABLE "PUBLIC"."IWUSER" ADD CONSTRAINT "PUBLIC"."CONSTRAINT_81" PRIMARY KEY("ID");      
 -- 2 +/- SELECT COUNT(*) FROM PUBLIC.IWUSER;  
-INSERT INTO "PUBLIC"."IWUSER" VALUES
-(TRUE, 1, NULL, NULL, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'ADMIN,USER', 'a'),
-(TRUE, 2, NULL, NULL, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'USER', 'b');          
+INSERT INTO "PUBLIC"."IWUSER" VALUES (`ENABLED`, FIRST_NAME, LAST_NAME, PASSWORD, ROLES, USERNAME) VALUES
+(TRUE, NULL, NULL, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'ADMIN,USER', 'a'),
+(TRUE, NULL, NULL, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'USER', 'b');          
 CREATE MEMORY TABLE "PUBLIC"."JUGADOR"(
     "BANEADO" BOOLEAN NOT NULL,
     "FACCION_FAVORITA" INTEGER NOT NULL,

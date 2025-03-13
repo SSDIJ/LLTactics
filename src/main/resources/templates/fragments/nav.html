@@ -57,6 +57,8 @@
                             </li>
                         </th:block>
 
+                    
+
                         <th:block th:if="${u}" >
                             <li class="nav-item mx-3">
                                 <a class="nav-link" th:if="${u.hasRole('ADMIN')}" th:href="@{/admin/gestHeroes}">Héroes</a>
@@ -103,6 +105,7 @@
                                     (ver StartupConfig.java para ver cómo se lee de la configuración
                                     y luego se escribe a ${application.debug})
                             */-->
+                            
                             <li class="nav-item debug align-self-center" th:if="${application.debug}">
                                 <form class="d-flex" th:action="@{/login}" method="post">
                                     <input type="hidden" name="username" value="a">

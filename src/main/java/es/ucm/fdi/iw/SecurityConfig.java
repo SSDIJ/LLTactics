@@ -59,14 +59,16 @@ public class SecurityConfig {
 				.ignoringRequestMatchers("/api/**")
 			)
             .authorizeHttpRequests(authorize -> authorize
-				.requestMatchers("/css/**", "/js/**", "/img/**", "/", "/error", "/registro").permitAll()
+				.requestMatchers("/css/**", "/js/**", "/img/**", "/", "/error", "/registro", "/register").permitAll()
 				.requestMatchers("/api/**", "/ranking").permitAll()            // <-- public api access
 				.requestMatchers("/api/**", "/reglas1").permitAll()            // <-- public api access
 				.requestMatchers("/api/**", "/galeria").permitAll()            // <-- public api access
 				.requestMatchers("/api/**", "/autores").permitAll()            // <-- public api access
 				.requestMatchers("/admin/**").hasRole("ADMIN")	   // <-- administration
-				.requestMatchers("/user/**").hasRole("USER")	   // <-- logged-in users
+				//.requestMatchers("/user/**").hasRole("USER")     LO HE CAMBIADO DE MOMENTO, REVISAR SI ES NECESARIO HACERLO ASI
+				.requestMatchers("/user/**").permitAll()	   
 				.requestMatchers("/game/refreshShop").hasRole("USER") 
+				
 				.anyRequest().authenticated()
             )
             .formLogin(formLogin -> formLogin
