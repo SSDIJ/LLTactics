@@ -11,7 +11,12 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -45,6 +50,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.Authentication;
+
 /**
  *  User management.
  *
@@ -68,6 +78,10 @@ public class UserController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	// Añadido para el inicio de sesion automatico tras registrarse
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {        
         for (String name : new String[] {"u", "url", "ws"}) {
@@ -327,7 +341,7 @@ public class UserController {
 	}	
 
 	/**
-	 * Registers a new user.
+	 * Registra un nuevo usuario e inicia la sesión automáticamente.
 	 */
 	@PostMapping("/register")
 	@Transactional
@@ -362,22 +376,28 @@ public class UserController {
 		// Codifica la contraseña antes de guardarla
 		newUser.setPassword(encodePassword(newUser.getPassword()));
 		newUser.setEnabled(true);  // Activa al usuario por defecto
-
-		/*
-		Long maxId = entityManager.createQuery("SELECT MAX(u.id) FROM User u", Long.class).getSingleResult();
-		Long nextId = maxId != null ? maxId + 1 : 1L;  // Si no hay registros, comienza desde 1
-		newUser.setId(nextId); 
-		*/
+		newUser.setRoles("USER");
+		
 		// Guarda el nuevo usuario en la base de datos
 		entityManager.persist(newUser);
 		entityManager.flush();  // Asegura que el usuario se ha guardado y tiene un id válido
 
 		log.info("User {} registered successfully", newUser.getUsername());
 
-		// Inicia sesión automáticamente (si se desea) o redirige al login
-		//session.setAttribute("u", newUser);
+		//  AUTENTICAR AUTOMÁTICAMENTE AL USUARIO (PAra que inicie sesión automáticamente tras registrarse)
+    	UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(newUser.getUsername(), pass2);
+		Authentication authentication = authenticationManager.authenticate(authToken);
 
-		return "redirect:/login";  // Redirige al perfil del nuevo usuario 
+		//  Asegurar que la autenticación se propague en TODA la aplicación
+		SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+		securityContext.setAuthentication(authentication);
+		SecurityContextHolder.setContext(securityContext);
+		session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+
+		// Guarda el nuevo usuario en la sesión
+		session.setAttribute("u", newUser);
+
+		return "redirect:/";  // Redirige al perfil del nuevo usuario 
 	}
 
 
