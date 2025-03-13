@@ -1,57 +1,82 @@
 <!DOCTYPE html>
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
-
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <th:block th:replace="~{fragments/head :: header}" />
-    <title>IW: Perfil</title>
+    <title>LL Tactics</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Enlazamos el archivo CSS -->
 </head>
-
-<body class="d-flex flex-column h-100">
+<body class="profile-body">
     <header th:replace="~{fragments/nav.html :: nav}"></header>
-
-    <main class="flex-shrink-0">
-        <div id="books" class="border border-2 border-primary rounded">
-            <label for="isbn">ISBN</label><input id="isbn" value="9780140328721" />
-            <button id="fetchBook">Buscar datos online</button>
-            <img class="preview" id="portada" alt="portada del libro" />
-            <form th:action="@{/user/__${user.id}__/pic}">
-                <button id="postPortada" class="perfilable">Usar como foto de perfil</button>
-            </form>
-        </div>
-        <div id="movies" class="border border-2 border-secondary rounded">
-            <label for="imdb">IMDB</label><input id="imdb" value="tt11286314" />
-            <button id="fetchMovie">Buscar datos online</button>
-            <img class="preview" id="poster" alt="poster de la pelicula" />
-            <form th:action="@{/user/__${user.id}__/pic}">
-                <button id="postPoster" class="perfilable">Usar como foto de perfil</button>
-            </form>
-        </div>
-        <div id="profile" class="border border-2 border-tertiary rounded">
-            <input type="file" id="f_avatar" accept="image/jpeg,image/png">
-            <img class="preview" id="avatar" alt="careto a subir" />
-            <form th:action="@{/user/__${user.id}__/pic}">
-                <button id="postAvatar">Usar como foto de perfil</button>
-            </form>
-        </div>
-
-        <div class="container">
+    <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
+    <h1 class="mt-5">Perfil de <span th:text="${user.username}">Paco</span></h1>
+    <div class="profile-header">
+        <div class="profile-info">
             <h1 class="mt-5">Perfil de <span th:text="${user.username}">Paco</span></h1>
-            <!-- recepción de mensajes -->
-            <div class="py-5 row" id="mensajes">
-            </div>
-            <!-- envío de mensajes -->
-            <div class="py-5 row ">
-                <form th:action="@{/user/__${user.id}__/msg}" method="POST">
-                    <input type="text" id="message" placeholder="escribe a este usuario" />
-                    <button id="sendmsg" class="btn btn-secondary" type="submit">Enviar</button>
-                </form>
-            </div>
+            <img src="/img/profile_pics/default_profile.png" alt=""/>    <!-- ESTATICA DE MOMENTO -->
+            <!--<img th:src="@{/img/profile_pics/{filename}(filename=${user.profilePic})}" alt="Foto de perfil"/>  Imagen de perfil dinámica -->
         </div>
-    </main>
+        <div class="search-player">
+            <input type="text" placeholder="Buscar jugador..."/>
+        </div>
+    </div>
+    
+    <div id="profile" class="border border-2 border-tertiary rounded">
+        <input type="file" id="f_avatar" accept="image/jpeg,image/png">
+        <img class="preview" id="avatar" alt="careto a subir" />
+        <form th:action="@{/user/__${user.id}__/pic}">
+            <button id="postAvatar">Usar como foto de perfil</button>
+        </form>
+    </div>
 
+     <!-- recepción de mensajes -->
+     <div class="py-5 row" id="mensajes">
+    </div>
+    <!-- envío de mensajes -->
+    <div class="py-5 row ">
+        <form th:action="@{/user/__${user.id}__/msg}" method="POST">
+            <input type="text" id="message" placeholder="escribe a este usuario" />
+            <button id="sendmsg" class="btn btn-secondary" type="submit">Enviar</button>
+        </form>
+    </div>
+
+    <div class="profile-stats">
+        <div class="stat-item">
+            <p>Puntuación de maestría</p>
+            <h3>410</h3> <!-- ESTATICO DE MOMENTO -->
+            <!-- <h3 th:text="${user.masteryScore}">410</h3>  Puntuación de maestría dinámica -->
+        </div>
+        <div class="stat-item">
+            <p>Personaje más jugado</p>
+            <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero"/>  <!-- ESTATICO DE MOMENTO -->
+            <!--<img th:src="@{/img/units/{unitCategory}/{unitName}/{unitName}.png(unitCategory=${user.mostPlayedCharacter.category}, unitName=${user.mostPlayedCharacter.name})}" alt="Personaje más jugado"/>  Personaje más jugado dinámico -->
+        
+        </div>
+        <div class="stat-item">
+            <p>Facción favorita</p>
+            <img src="/img/units/banners/humans.png" alt="Escudo de Humanos"/>  <!-- ESTATICO DE MOMENTO -->
+            <!--<img th:src="@{/img/units/banners/{faction}.png(faction=${user.favoriteFaction})}" alt="Escudo de Facción"/>  Facción favorita dinámica -->
+        </div>
+        <div class="stat-item chart-container">
+            <canvas id="winrateChart"></canvas>
+        </div>
+    </div>
+    
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 
-    <script th:src="@{/js/ajax-demo.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx1 = document.getElementById('winrateChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+                labels: ['Victorias', 'Derrotas'],
+                datasets: [{
+                    data: [20, 5],  /* INSERTAR AQUI las estadísticas dinámicas de victorias/derrotas */
+                    backgroundColor: ['#4CAF50', '#F44336']
+                }]
+            }
+        });
+    </script>
 </body>
-
 </html>
