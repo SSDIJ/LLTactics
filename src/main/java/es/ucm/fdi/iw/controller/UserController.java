@@ -363,10 +363,11 @@ public class UserController {
 		newUser.setPassword(encodePassword(newUser.getPassword()));
 		newUser.setEnabled(true);  // Activa al usuario por defecto
 
+		/*
 		Long maxId = entityManager.createQuery("SELECT MAX(u.id) FROM User u", Long.class).getSingleResult();
 		Long nextId = maxId != null ? maxId + 1 : 1L;  // Si no hay registros, comienza desde 1
-		newUser.setId(nextId);
-
+		newUser.setId(nextId); 
+		*/
 		// Guarda el nuevo usuario en la base de datos
 		entityManager.persist(newUser);
 		entityManager.flush();  // Asegura que el usuario se ha guardado y tiene un id válido
@@ -374,9 +375,9 @@ public class UserController {
 		log.info("User {} registered successfully", newUser.getUsername());
 
 		// Inicia sesión automáticamente (si se desea) o redirige al login
-		session.setAttribute("u", newUser);
+		//session.setAttribute("u", newUser);
 
-		return "login";  // Redirige al perfil del nuevo usuario 
+		return "redirect:/login";  // Redirige al perfil del nuevo usuario 
 	}
 
 
