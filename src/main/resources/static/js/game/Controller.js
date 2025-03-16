@@ -112,7 +112,7 @@ function updateUnits() {
 
 // Actualiza el inventario
 function updateInventory() {
-    const objectCells = inventoryContainer.querySelectorAll(".object-cell");
+    let objectCells = inventoryContainer.querySelectorAll(".object-cell");
 
     // Eliminamos primero todas las imágenes
     objectCells.forEach(cell => {
@@ -151,11 +151,14 @@ function updateInventory() {
             });
 
             newCell.addEventListener('click', () => {
+
+                objectCells = inventoryContainer.querySelectorAll(".object-cell");
                 // Eliminar selección previa
                 objectCells.forEach(cell => cell.classList.remove("selected"));
                 newCell.classList.add("selected");
 
                 const selectedItem = itemTemp;
+                let assigned = false;
 
                 // Habilitar la selección de unidades
                 const unitObjects = playerUnitsContainer.querySelectorAll(".unit-object-container");
@@ -177,9 +180,14 @@ function updateInventory() {
                         objContainer.replaceWith(newObjContainer);
 
                         newObjContainer.addEventListener('click', function assignItem() {
+
+                            if (assigned)
+                                return;
+
                             // Asignar el objeto a la unidad
                             const unitIndex = Array.from(unitObjects).indexOf(container);
                             player1.units[unitIndex].addItem(selectedItem);
+                            assigned = true;
                             player1.removeFromInventory(selectedItem)
 
                             // Limpiar selección
@@ -187,7 +195,6 @@ function updateInventory() {
                             unitObjects.forEach(unit => {
                                 unit.querySelectorAll(".object-cell").forEach(cell => cell.classList.remove("selectable"));
                             });
-                            newCell.classList.remove("selected");
 
                             // Eliminar el event listener después de ejecutarse
                             newObjContainer.removeEventListener('click', assignItem);
