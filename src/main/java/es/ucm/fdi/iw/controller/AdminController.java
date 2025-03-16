@@ -10,9 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,6 +33,7 @@ import es.ucm.fdi.iw.repositories.HeroeRepository;
 import es.ucm.fdi.iw.services.HeroesService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 
 /**
  * Site administration.
@@ -138,14 +142,51 @@ public class AdminController {
 
     @GetMapping("/gestHeroes/{faccion}")
     public ResponseEntity<List<Heroe>> obtenerHeroesPorFaccion(@PathVariable String faccion) {
-        Map<String, List<Heroe>> heroesPorFaccion = heroesService.obtenerHeroesPorFaccion();
-    
-        // Verificar si la facción existe en el mapa
-        if (!heroesPorFaccion.containsKey(faccion)) {
-            return ResponseEntity.badRequest().build(); // Devuelve un error si la facción no existe
+        List<Heroe> heroes = null;
+        switch (faccion) {
+            case "humanos":
+                heroes = heroeRepository.findByFaccion(0);
+                break;
+            case "dragones":
+                heroes = heroeRepository.findByFaccion(1);
+                break;
+            case "trolls":
+                heroes = heroeRepository.findByFaccion(2);
+                break;
+            case "noMuertos":
+                heroes = heroeRepository.findByFaccion(3);
+                break;
+            case "legendarios":
+                heroes = heroeRepository.findByFaccion(4);
+                break;
+
+            default:
+                break;
         }
-    
-        List<Heroe> heroes = heroesPorFaccion.get(faccion);
         return ResponseEntity.ok(heroes);
+    }
+
+    @PostMapping("/gestHeroes/add")
+    @ResponseBody
+    @Transactional
+    public ResponseEntity<String> addHeroe(@RequestBody Heroe heroe) {
+        try {
+            heroeRepository.save(heroe);
+            return ResponseEntity.ok("Héroe añadido correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al añadir el héroe: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/gestHeroes/delete/{id}")
+    @ResponseBody
+    @Transactional
+    public ResponseEntity<String> deleteHeroe(@PathVariable Long id) {
+        try {
+            heroeRepository.deleteById(id);
+            return ResponseEntity.ok("Héroe eliminado correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al eliminar el héroe: " + e.getMessage());
+        }
     }
 }

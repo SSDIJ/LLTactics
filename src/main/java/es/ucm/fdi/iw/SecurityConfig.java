@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -65,6 +66,7 @@ public class SecurityConfig {
 				.requestMatchers("/api/**", "/galeria").permitAll()            // <-- public api access
 				.requestMatchers("/api/**", "/autores").permitAll()            // <-- public api access
 				.requestMatchers("/admin/**").hasRole("ADMIN")	   // <-- administration
+				.requestMatchers(HttpMethod.DELETE, "/admin/gestHeroes/delete/**").hasRole("ADMIN")
 				//.requestMatchers("/user/**").hasRole("USER")     LO HE CAMBIADO DE MOMENTO, REVISAR SI ES NECESARIO HACERLO ASI
 				.requestMatchers("/user/**").permitAll()	   
 				.requestMatchers("/game/refreshShop").hasRole("USER") 
@@ -84,7 +86,7 @@ public class SecurityConfig {
 	 * Declares a PasswordEncoder bean.
 	 * 
 	 * This allows you to write, in any part of Spring-managed code, 
-	 * `@Autowired PasswordEncoder passwordEncoder`, and have it initialized
+	 * @Autowired PasswordEncoder passwordEncoder, and have it initialized
 	 * with the result of this method. 
 	 */
 	@Bean
