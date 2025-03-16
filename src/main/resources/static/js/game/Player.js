@@ -76,6 +76,10 @@ class Player {
         // Reemplaza la unidad undefined
         if (index !== -1) {
             this.stars += this.units[index].price;
+            this.units[index].items.forEach(item => {
+                if (item)
+                    this.stars += item.price;
+            })
             this.units[index] = new Unit(0, 0, "", "", 0, "", null, 0, 0, 0, []); 
         }
         
@@ -102,6 +106,11 @@ class Player {
             this.stars += soldItem.price;
             console.log(`${this.name} vendió un objeto: ${soldItem.name}`);
         } 
+    }
+
+    removeFromInventory(item) {
+        if (this.inventory.has(item))
+            this.inventory.delete(item);
     }
 }
 

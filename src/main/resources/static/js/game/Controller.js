@@ -39,6 +39,8 @@ function updateUnits() {
             const unitStats = unitCell.querySelector(".unit-stats");
             const unitName = unitStats.querySelector(".unit-name");
             const unitLife = unitStats.querySelector(".unit-life");
+            const unitObjectsContainer = unitCell.querySelector(".unit-object-container");
+            const unitItemCells = unitObjectsContainer.querySelectorAll(".object-cell");
 
             let img = unitCell.querySelector("img");
 
@@ -55,8 +57,9 @@ function updateUnits() {
 
                 const progressBar = unitCell.querySelector('.progress-bar');
 
+                // Vida
                 if (progressBar) {
-                    console.log(unit.getLifePercentage())
+        
                     progressBar.style.width = unit.getLifePercentage() + "%";
                     progressBar.textContent = unit.vida;
     
@@ -64,11 +67,26 @@ function updateUnits() {
                     progressBar.parentElement.setAttribute("aria-valuenow", unit.getLifePercentage());
                 }
 
+                // Mostramos los objetos
+                unit.items.forEach((item, index) => {
+                    const imgObj = unitItemCells[index].querySelector("img");
+                    if (item) { 
+                        imgObj.src = item.imageUrl;
+                        imgObj.classList.remove("hidden")
+                    }
+                    else {
+                        imgObj.src = "";
+                        imgObj.classList.add("hidden")
+                    }
+                })
+
             }
 
             const unitTemp = unit;
+
             // Opción de eliminar el objeto
-            unitCell.addEventListener('dblclick', () => {
+            img.addEventListener('dblclick', () => {
+
                 player1.sellUnit(unitTemp)
                 updatePlayerStats();
                 updateInventory();
@@ -78,15 +96,22 @@ function updateUnits() {
                 unitName.textContent = ""
                 unitLife.classList.add("hidden")
 
+                unitItemCells.forEach(cell => {
+                    const objImg = cell.querySelector("img");
+                    objImg.src = "";
+                    objImg.classList.add("hidden")
+                })
+                
             });
+
+            
         
         }
     });
 }
 
-// Actualizar inventario
+// Actualiza el inventario
 function updateInventory() {
-
     const objectCells = inventoryContainer.querySelectorAll(".object-cell");
 
     // Eliminamos primero todas las imágenes
@@ -96,33 +121,81 @@ function updateInventory() {
             imageInCell.remove();
         }
     });
-    
+
     // Rellenamos los primeros huecos con las imágenes de los objetos
     [...player1.inventory].forEach((item, index) => {
         if (objectCells[index]) {
             let img = objectCells[index].querySelector("img");
-            
+
             if (!img && item.imageUrl) {
                 img = document.createElement("img");
                 img.classList.add("object-img");
                 objectCells[index].appendChild(img);
             }
-            
+
             if (img) {
                 img.src = item.imageUrl || "";
             }
 
             const itemTemp = item;
-            // Opción de eliminar el objeto
-            objectCells[index].addEventListener('dblclick', () => {
-                player1.sellItem(itemTemp)
+
+            // Limpiar y volver a agregar event listeners
+            let newCell = objectCells[index].cloneNode(true);
+            objectCells[index].replaceWith(newCell);
+
+            newCell.addEventListener('dblclick', () => {
+                player1.sellItem(itemTemp);
                 updatePlayerStats();
                 updateInventory();
                 img.remove();
             });
+
+            newCell.addEventListener('click', () => {
+                // Eliminar selección previa
+                objectCells.forEach(cell => cell.classList.remove("selected"));
+                newCell.classList.add("selected");
+
+                let selectedItem = itemTemp;
+
+                // Habilitar la selección de unidades
+                const unitObjects = playerUnitsContainer.querySelectorAll(".unit-object-container");
+
+                unitObjects.forEach(container => {
+                    const objContainers = container.querySelectorAll(".object-cell");
+
+                    objContainers.forEach(objContainer => {
+                        objContainer.classList.add("selectable");
+
+                        // **Reemplazar el nodo para limpiar event listeners previos**
+                        let newObjContainer = objContainer.cloneNode(true);
+                        objContainer.replaceWith(newObjContainer);
+
+                        newObjContainer.addEventListener('click', function assignItem() {
+                            // Asignar el objeto a la unidad
+                            const unitIndex = Array.from(unitObjects).indexOf(container);
+                            player1.units[unitIndex].addItem(selectedItem);
+                            player1.removeFromInventory(selectedItem)
+
+                            // Limpiar selección
+                            objectCells.forEach(cell => cell.classList.remove("selected"));
+                            unitObjects.forEach(unit => {
+                                unit.querySelectorAll(".object-cell").forEach(cell => cell.classList.remove("selectable"));
+                            });
+                            newCell.classList.remove("selected");
+
+                            // Eliminar el event listener después de ejecutarse
+                            newObjContainer.removeEventListener('click', assignItem);
+
+                            updateUnits();
+                            updateInventory();
+                        }, { once: true });
+                    });
+                });
+            });
         }
     });
-} 
+}
+
 
 // Actualiza la tienda
 function updateShop() {
@@ -232,10 +305,6 @@ refreshShopBtns.forEach((refreshShopBtn) => {
     });
 });
 
-
-function updatePlayerInventory() {
-    
-}
 
 const player1 = new Player("Jugador 1");
 const player2 = new Player("Jugador 2");
