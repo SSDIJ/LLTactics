@@ -513,7 +513,7 @@ body .profile-body{
     flex-direction: column;
     justify-content: space-between;
     height: 100vh;
-    font-family: 'Uncial Antiqua', serif;
+    font-family: var(--TITLE-FONT-FAMILY);
 }
 
 /* Encabezado del perfil */
@@ -528,12 +528,11 @@ body .profile-body{
 }
 
 /* Información del perfil (nombre e imagen) */
-.profile-info {
+.mid-user{
     background-image: url('image/ranking/banner.png');  /* Ruta de la imagen */
     background-size: cover; /* Asegura que la imagen cubra todo el contenedor */
     background-position: center; /* Centra la imagen */
     background-repeat: no-repeat; /* Evita que la imagen se repita si es más pequeña que el contenedor */
-    padding-top: 20vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -541,49 +540,42 @@ body .profile-body{
     margin-left: 20px;
     flex-direction: column; /* Disposición de arriba a abajo */
     align-items: center;
+    font-family: var(--TITLE-FONT-FAMILY);
 }
 
-.profile-info h2 {
+.mid-user h2 {
     font-size: 1 em;
     margin-bottom: 10px;
 }
 
-.profile-info img {
+.mid-user img {
     width: 200px;
     height: 200px;
-    border: 20px solid transparent; /* Define un borde de 10px, necesario para usar border-image */
-    border-image: url('/img/ranking/border.png') 30 stretch; /* Aquí aplicas la imagen como borde */
+    padding: 10px;
+    border: 20px solid gold; /* Define un borde de 10px, necesario para usar border-image */
+
+    border-radius:100px;
     display: block;
 }
 
 
-/* Barra de búsqueda de jugador */
-.search-player {
+.top-user {
     display: flex;
-    align-items: flex-start;  /* Alinea el contenido verticalmente al inicio (arriba) */
-    justify-content: flex-start;  /* Alinea el contenido horizontalmente al inicio (izquierda) */
-    margin-right: 20px;  /* Agrega un margen derecho */
-    color: black;
-    position: absolute;  /* Lo saca del flujo normal y lo coloca en una posición específica */
-    top: 0;  /* Lo coloca en la parte superior de la página */
-    left: 0;  /* Lo coloca a la izquierda de la página */
-    margin: 10vh;  /* Opcional: agrega algo de espacio alrededor de la barra */
-    border:2px solid #ccc;
-    border-radius: 10px;
+    justify-content: space-between;
+    padding: 5vh;
+  
+
 }
 
-
-.search-player input {
-    padding: 10px;
-    font-size: 1.2rem;
-    border-radius: 1;
+.top-user #sendmsg{
+    color:black;
+    background-color: gold;
     border: none;
-    width: 250px;
-    color: grey;
+    font-size: 1.1em;
 }
 
 /* Contenedor de estadísticas del perfil */
-.profile-stats {
+.bot-user {
     display: flex;
     justify-content: space-around;
     color: white;
@@ -598,10 +590,13 @@ body .profile-body{
 
 /* Elementos de estadísticas */
 .stat-item {
+    font-family: var(--TITLE-FONT-FAMILY);
+    font-size: 2em;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: 20vh; /* Ajusta este valor según necesites */
 }
 
 .stat-item img {
@@ -614,6 +609,7 @@ body .profile-body{
     width: 180px;
     height: 180px;
 }
+
 /* Estilo solo para los elementos dentro de .py-5.row */
 .py-5.row form {
     display: flex;
@@ -626,32 +622,7 @@ body .profile-body{
     margin-top: 10vh;  /* Agrega un margen solo en la parte superior */           /* Espacio entre el input y el botón */
 }
 
-.py-5.row #message {
-    padding: 10px;
-    font-size: 1rem;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    width: 300px;
-    box-sizing: border-box;   /* Asegura que el padding y borde no afecten al tamaño */
-}
 
-.py-5.row #sendmsg {
-    padding: 10px 20px;
-    margin-left: 1vw;
-    font-size: 1em;
-    background-color: gold;
-    color: black;
-    border: 2px solid gold;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-/* Hover del botón */
-.py-5.row #sendmsg:hover {
-    background-color: transparent;
-    color:black;
-}
 
 /*FINAL PROFILE*/
 
