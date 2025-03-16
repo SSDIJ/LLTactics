@@ -113,6 +113,7 @@ function updateUnits() {
 // Actualiza el inventario
 function updateInventory() {
     let objectCells = inventoryContainer.querySelectorAll(".object-cell");
+    const unitObjects = playerUnitsContainer.querySelectorAll(".unit-object-container");
 
     // Eliminamos primero todas las imágenes
     objectCells.forEach(cell => {
@@ -144,10 +145,16 @@ function updateInventory() {
             objectCells[index].replaceWith(newCell);
 
             newCell.addEventListener('dblclick', () => {
+                newCell.classList.remove("selected");
+                img.remove();
                 player1.sellItem(itemTemp);
+                unitObjects.forEach(unit => {
+                    unit.querySelectorAll(".object-cell").forEach(cell => cell.classList.remove("selectable"));
+                });
                 updatePlayerStats();
                 updateInventory();
-                img.remove();
+                
+                
             });
 
             newCell.addEventListener('click', () => {
@@ -161,7 +168,7 @@ function updateInventory() {
                 let assigned = false;
 
                 // Habilitar la selección de unidades
-                const unitObjects = playerUnitsContainer.querySelectorAll(".unit-object-container");
+                
 
                 unitObjects.forEach(container => {
                     const objContainers = container.querySelectorAll(".object-cell");
@@ -181,7 +188,9 @@ function updateInventory() {
 
                         newObjContainer.addEventListener('click', function assignItem() {
 
-                            if (assigned)
+                            const noc = newObjContainer;
+
+                            if (assigned || !noc.classList.contains("selectable"))
                                 return;
 
                             // Asignar el objeto a la unidad
