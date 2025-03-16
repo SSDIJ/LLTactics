@@ -155,7 +155,7 @@ function updateInventory() {
                 objectCells.forEach(cell => cell.classList.remove("selected"));
                 newCell.classList.add("selected");
 
-                let selectedItem = itemTemp;
+                const selectedItem = itemTemp;
 
                 // Habilitar la selección de unidades
                 const unitObjects = playerUnitsContainer.querySelectorAll(".unit-object-container");
