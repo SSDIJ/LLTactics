@@ -8,6 +8,7 @@
         <div class="object-cell">
             <!-- Si el objeto no es nulo y tiene la URL de la imagen, se muestra la imagen -->
             <img th:if="${object != null && object.imagen != null}" th:src="@{${object.imagen}}" alt="" class="object-img">
+            <img th:if="${object == null}" th:src="@{''}" class="object-img hidden">
         </div>
     </th:block>
 </body>

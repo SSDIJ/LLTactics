@@ -1039,6 +1039,14 @@ body .profile-body{
     left: 10px;
 }
 
+.selected {
+    background-color: blue;
+}
+
+.selectable {
+    background-color: #1a1a1a;
+}
+
 .shop-unit {
     position: relative;
     width: 100px;
