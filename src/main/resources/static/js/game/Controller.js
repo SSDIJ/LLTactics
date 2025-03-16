@@ -155,15 +155,21 @@ function updateInventory() {
                 objectCells.forEach(cell => cell.classList.remove("selected"));
                 newCell.classList.add("selected");
 
-                let selectedItem = itemTemp;
+                const selectedItem = itemTemp;
 
                 // Habilitar la selección de unidades
                 const unitObjects = playerUnitsContainer.querySelectorAll(".unit-object-container");
 
                 unitObjects.forEach(container => {
                     const objContainers = container.querySelectorAll(".object-cell");
-
+                    const unitImage = container.parentElement.querySelector(".unit-game-img")
                     objContainers.forEach(objContainer => {
+
+                        
+                        if (unitImage.classList.contains("hidden") || !objContainer.querySelector(".hidden")) {
+                            return;
+                        }
+
                         objContainer.classList.add("selectable");
 
                         // **Reemplazar el nodo para limpiar event listeners previos**

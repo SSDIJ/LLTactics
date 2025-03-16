@@ -1040,12 +1040,16 @@ body .profile-body{
 }
 
 .selected {
-    background-color: blue;
+    background-color: rgba(0, 10, 191, 0.322);
+    animation: blink 1.5s infinite;
 }
 
 .selectable {
     background-color: #1a1a1a;
+    animation: blink 1.5s infinite;;
 }
+
+
 
 .shop-unit {
     position: relative;
