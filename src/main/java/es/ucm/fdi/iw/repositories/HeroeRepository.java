@@ -13,4 +13,6 @@ import java.util.Map;
 @Repository
 public interface HeroeRepository extends JpaRepository<Heroe, Long> {
     List<Heroe> findByFaccion(int faccion);
+
+    void deleteById(long id);
 }
