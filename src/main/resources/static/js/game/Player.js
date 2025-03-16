@@ -78,7 +78,7 @@ class Player {
             this.stars += this.units[index].price;
             this.units[index].items.forEach(item => {
                 if (item)
-                    this.stars += item.price;
+                    this.inventory.add(item);
             })
             this.units[index] = new Unit(0, 0, "", "", 0, "", null, 0, 0, 0, []); 
         }
@@ -107,6 +107,7 @@ class Player {
             console.log(`${this.name} vendió un objeto: ${soldItem.name}`);
         } 
     }
+
 
     removeFromInventory(item) {
         if (this.inventory.has(item))

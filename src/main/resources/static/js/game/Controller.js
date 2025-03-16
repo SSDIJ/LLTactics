@@ -162,8 +162,14 @@ function updateInventory() {
 
                 unitObjects.forEach(container => {
                     const objContainers = container.querySelectorAll(".object-cell");
-
+                    const unitImage = container.parentElement.querySelector(".unit-game-img")
                     objContainers.forEach(objContainer => {
+
+                        
+                        if (unitImage.classList.contains("hidden") || !objContainer.querySelector(".hidden")) {
+                            return;
+                        }
+
                         objContainer.classList.add("selectable");
 
                         // **Reemplazar el nodo para limpiar event listeners previos**
