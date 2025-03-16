@@ -8,19 +8,25 @@
 </head>
 <body class="profile-body">
     <header th:replace="~{fragments/nav.html :: nav}"></header>
-    <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
-    <h1 class="mt-5">Perfil de <span th:text="${user.username}">Paco</span></h1>
-    <div class="profile-header">
-        <div class="profile-info">
-            <h1 class="mt-5">Perfil de <span th:text="${user.username}">Paco</span></h1>
-            <img src="/img/profile_pics/default_profile.png" alt=""/>    <!-- ESTATICA DE MOMENTO -->
-            <!--<img th:src="@{/img/profile_pics/{filename}(filename=${user.profilePic})}" alt="Foto de perfil"/>  Imagen de perfil dinámica -->
-        </div>
-        <div class="search-player">
-            <input type="text" placeholder="Buscar jugador..."/>
-        </div>
-    </div>
     
+    <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
+
+    <!-- IMAGEN DE PERFIL -->
+    <div class="profile-info">
+        <h1 class="mt-5">Perfil de <span th:text="${user.username}"></span></h1>
+        <div class="profile-pic">
+        <img src="/img/profile_pics/default_profile.png" alt=""/> <!-- ESTATICA DE MOMENTO -->
+        </div>
+        <!--<img th:src="@{/img/profile_pics/{filename}(filename=${user.profilePic})}" alt="Foto de perfil"/>  Imagen de perfil dinámica -->
+    </div>
+
+    <!-- BARRA DE BUSQUEDA DE JUGADOR -->
+    <div class="search-player">
+        <input type="text" placeholder="Buscar jugador..."/>
+    </div>
+
+    <!-- Comentado de momento -->
+    <!-- 
     <div id="profile" class="border border-2 border-tertiary rounded">
         <input type="file" id="f_avatar" accept="image/jpeg,image/png">
         <img class="preview" id="avatar" alt="careto a subir" />
@@ -28,40 +34,43 @@
             <button id="postAvatar">Usar como foto de perfil</button>
         </form>
     </div>
+    -->
 
-     <!-- recepción de mensajes -->
-     <div class="py-5 row" id="mensajes">
-    </div>
-    <!-- envío de mensajes -->
-    <div class="py-5 row ">
-        <form th:action="@{/user/__${user.id}__/msg}" method="POST">
-            <input type="text" id="message" placeholder="escribe a este usuario" />
-            <button id="sendmsg" class="btn btn-secondary" type="submit">Enviar</button>
-        </form>
+    <!-- RECEPCIÓN DE MENSAJES -->
+    <div class="py-5 row" id="mensajes">
     </div>
 
+<!-- ENVÍO DE MENSAJES -->
+<div class="py-5 row">
+    <form th:action="@{/user/__${user.id}__/msg}" method="POST">
+        <input type="text" id="message" placeholder="escribe a este usuario" />
+        <button id="sendmsg" class="btn btn-secondary" type="submit">Enviar</button>
+    </form>
+</div>
+
+
+    <!-- ESTADÍSTICAS DEL PERFIL -->
     <div class="profile-stats">
         <div class="stat-item">
             <p>Puntuación de maestría</p>
-            <h3>410</h3> <!-- ESTATICO DE MOMENTO -->
+            <h3>410</h3> <!-- ESTÁTICO DE MOMENTO -->
             <!-- <h3 th:text="${user.masteryScore}">410</h3>  Puntuación de maestría dinámica -->
         </div>
         <div class="stat-item">
             <p>Personaje más jugado</p>
-            <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero"/>  <!-- ESTATICO DE MOMENTO -->
+            <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero"/> <!-- ESTÁTICO DE MOMENTO -->
             <!--<img th:src="@{/img/units/{unitCategory}/{unitName}/{unitName}.png(unitCategory=${user.mostPlayedCharacter.category}, unitName=${user.mostPlayedCharacter.name})}" alt="Personaje más jugado"/>  Personaje más jugado dinámico -->
-        
         </div>
         <div class="stat-item">
             <p>Facción favorita</p>
-            <img src="/img/units/banners/humans.png" alt="Escudo de Humanos"/>  <!-- ESTATICO DE MOMENTO -->
+            <img src="/img/units/banners/humans.png" alt="Escudo de Humanos"/> <!-- ESTÁTICO DE MOMENTO -->
             <!--<img th:src="@{/img/units/banners/{faction}.png(faction=${user.favoriteFaction})}" alt="Escudo de Facción"/>  Facción favorita dinámica -->
         </div>
         <div class="stat-item chart-container">
             <canvas id="winrateChart"></canvas>
         </div>
     </div>
-    
+
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -72,7 +81,7 @@
             data: {
                 labels: ['Victorias', 'Derrotas'],
                 datasets: [{
-                    data: [20, 5],  /* INSERTAR AQUI las estadísticas dinámicas de victorias/derrotas */
+                    data: [20, 5],  /* INSERTAR AQUÍ las estadísticas dinámicas de victorias/derrotas */
                     backgroundColor: ['#4CAF50', '#F44336']
                 }]
             }
