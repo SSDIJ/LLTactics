@@ -1,0 +1,10 @@
+# Ignorar archivos de logs
+logs/
+logs/app.log
+
+# Ignorar archivos de configuración local
+.env
+
+# Ignorar dependencias (Ejemplo: Node.js o Java)
+node_modules/
+target/
