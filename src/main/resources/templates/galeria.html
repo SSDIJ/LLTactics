@@ -5,7 +5,7 @@
     <th:block th:replace="~{fragments/head :: header}" />
     <title>LL Tactics - Galería de Héroes</title>
 </head>
-<body class="h-100">
+<body class="h-100" id ="galeria">
     <header th:replace="~{fragments/nav.html :: nav}"></header>
     <div class="container">
         <h1 class="mt-5 title display-1">Galería de Héroes</h1>
@@ -23,7 +23,7 @@
         <div id="gallery-container" class="d-flex flex-wrap justify-content-center mt-5">
             <!-- Título y héroes humanos -->
             <h2 id ="humanos" class="w-100 text-center">Humanos</h2>
-            <div th:each="heroe : ${humanos}">
+            <div id ="div-humanos" th:each="heroe : ${humanos}">
                 <th:block th:replace="~{fragments/card :: carta(
                     ${heroe.nombre}, 
                     ${heroe.imagen}, 

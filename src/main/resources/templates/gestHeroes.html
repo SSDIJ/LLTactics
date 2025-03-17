@@ -29,28 +29,32 @@
                         </div>
                         <div class="mb-3">
                             <label for="vida" class="form-label">Vida</label>
-                            <input type="number" class="form-control" id="vida" name="vida" step="0.01" min="0" required>
+                            <input type="number" class="form-control" id="vida" name="vida" step="0.01" min="0"
+                                required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para la vida.
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="armadura" class="form-label">Armadura</label>
-                            <input type="number" class="form-control" id="armadura" name="armadura" step="0.01" min="0" required>
+                            <input type="number" class="form-control" id="armadura" name="armadura" step="0.01" min="0"
+                                required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para la armadura.
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="velocidadAtaque" class="form-label">Velocidad de Ataque</label>
-                            <input type="number" class="form-control" id="velocidadAtaque" name="velocidadAtaque" step="0.01" min="0" required>
+                            <input type="number" class="form-control" id="velocidadAtaque" name="velocidadAtaque"
+                                step="0.01" min="0" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para la velocidad de ataque.
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="daño" class="form-label">Daño</label>
-                            <input type="number" class="form-control" id="daño" name="daño" step="0.01" min="0" required>
+                            <input type="number" class="form-control" id="daño" name="daño" step="0.01" min="0"
+                                required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para el daño.
                             </div>
@@ -92,7 +96,8 @@
                     <form action="#" method="post" id="formEliminarHeroe">
                         <div class="mb-3">
                             <label for="faccion" class="form-label">Selecciona la Facción</label>
-                            <select class="form-select" id="faccion" name="faccion" required onchange="actualizarHeroes()">
+                            <select class="form-select" id="faccion" name="faccion" required
+                                onchange="actualizarHeroes()">
                                 <option value="">Selecciona una facción</option>
                                 <option value="humanos">Humanos</option>
                                 <option value="dragones">Dragones</option>
@@ -121,6 +126,25 @@
     </div>
 
     <div class="degradado"></div>
+
+    <!-- Modal de confirmación -->
+    <div class="modal fade" id="confirmacionModal" tabindex="-1" aria-labelledby="confirmacionModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmacionModalLabel">Confirmación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Héroe eliminado correctamente.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 </body>
 
@@ -142,8 +166,8 @@
                     heroSelect.innerHTML = "<option value=''>Selecciona un héroe</option>";
                     data.forEach(hero => {
                         const option = document.createElement("option");
-                        option.value = hero.idHeroe;  
-                        option.textContent = hero.nombre; 
+                        option.value = hero.idHeroe;
+                        option.textContent = hero.nombre;
                         heroSelect.appendChild(option);
                     });
                 })
@@ -185,7 +209,7 @@
             })
                 .then(response => response.text())
                 .then(data => {
-                    alert(data); 
+                    alert(data);
                     document.getElementById("formAnadirHeroe").reset(); // Limpiar formulario
                 })
                 .catch(error => console.error("Error al añadir el héroe:", error));
@@ -199,7 +223,7 @@
         const heroSelect = document.getElementById("eliminarHeroe");
         const idHeroe = heroSelect.value;  // Obtiene el valor del select
 
-        console.log("ID del héroe a eliminar:", idHeroe); 
+        console.log("ID del héroe a eliminar:", idHeroe);
 
         if (!idHeroe || idHeroe === "undefined") {
             alert("Error: No se ha seleccionado un héroe válido.");
@@ -217,11 +241,16 @@
         })
             .then(response => response.text())
             .then(data => {
-                alert(data);
                 actualizarHeroes(); // Recargar la lista de héroes sin recargar la página
+                var confirmacionModal = new bootstrap.Modal(document.getElementById('confirmacionModal'));
+                confirmacionModal.show();
             })
             .catch(error => console.error("Error al eliminar el héroe:", error));
     });
+
+    function closeModal() {
+        document.getElementById("confirmacionModal").style.display = "none";
+    }
 </script>
 
 </html>
