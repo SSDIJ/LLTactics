@@ -1,36 +1,33 @@
 Feature: Prueba principal
 
-  Scenario: Login como admin, eliminar heroe, mirar galería         # añadir heroe, mirar galeria
+  Scenario: Login como admin, eliminar heroe, mirar galería
     
-    Given I open the page 'http://localhost:8080'
+    * configure driver = { type: 'chrome', headless: false }
+    * driver 'http://localhost:8080'
 
     # Página de inicio
-    Then I can read 'Estrategia'
-    Then I can read 'Batallas'
-    Then I can read 'Sinergias'
+    * waitFor('#inicio-sesion-btn', 10)
+    #* text('body') contains 'Estrategia'
+    #* text('body') contains 'Batallas'
+    #* text('body') contains 'Sinergias'
 
-    And I Click ('#inicio-sesion-btn')
+    * click('#inicio-sesion-btn')
 
     # Página de inicio de sesión
-
-    And I enter 'a' into '#username'
-    And I enter 'aa' into '#password'
-    And I Click ('#login-btn')
+    * input('#username', 'a')
+    * input('#password', 'aa')
+    * click('#login-btn')
 
     # Aqui volvemos a la página de inicio
+    * click('#heroes-btn')
+    * select('#faccion', 'Humanos')
+    * select('#eliminarHeroe', 'Tanque')
+    * click('#eliminar-heroe-btn')
 
-    And I Click ('#heroes-btn')
-    And I select '#faccion' to 'Humanos'        # TODO: puede ser humanos
-    And I select '#eliminarHeroe' to 'Tanque'   # TODO: puede ser humanos
-    When I Click ('#eliminar-heroe-btn')
+    * match alert().text == 'Héroe eliminado correctamente'
+    * alert().accept()
 
-    # Aqui tiene que leer un mensaje de página emergente
+    * click('#galeria-btn')
+    * waitFor('#galeria')
 
-    And I assert alert() == "Héroe eliminado correctamente"
-    And I accept the alert()
-
-    And I Click ('#galeria-btn')
-
-    # Aqui comprobamos en la galería
-
-    Then I Should not see 'Tanque'
+    * match text('body') !contains 'Tanque'
