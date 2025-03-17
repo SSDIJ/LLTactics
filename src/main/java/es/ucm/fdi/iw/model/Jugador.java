@@ -37,6 +37,10 @@ public class Jugador {
     private String razonBaneo;
     private LocalDateTime fechaBaneo;
 
+    public Jugador(){
+
+    }
+    
     public Jugador(String nombre) {
         this.nombre = nombre;
     }

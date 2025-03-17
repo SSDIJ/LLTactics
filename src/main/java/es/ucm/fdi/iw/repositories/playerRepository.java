@@ -14,4 +14,6 @@ public interface playerRepository extends JpaRepository<Jugador, Long> {
 
     // Encuentra todos los jugadores ordenados por partidas ganadas
     List<Jugador> findAllByOrderByPartidasGanadasDesc();
+
+
 }

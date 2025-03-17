@@ -2478,3 +2478,20 @@ ALTER TABLE "PUBLIC"."MENSAJE" ADD CONSTRAINT "PUBLIC"."FK1SFG2XG3G85PJP17EE6JK8
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
 	at es.ucm.fdi.iw.IwApplication.main(IwApplication.java:10)
+2025-03-17 18:17:20.597798+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "INSERT INTO JUGADOR VALUES (\000d\000a    FALSE,    -- BANEADO\000d\000a    1,        -- FACCION_FAVORITA\000d\000a    1500,     -- INDICE_RANKING\000d\000a    10,       -- PARTIDAS_GANADAS\000d\000a    5,        -- PARTIDAS_PERDIDAS\000d\000a    2500,     -- PUNTUACION\000d\000a    NULL,     -- FECHA_BANEO\000d\000a    1001,     -- ID\000d\000a    NULL,     -- PARTIDA_ID_PARTIDA\000d\000a    NULL,     -- IMAGEN\000d\000a    'Jugador1', -- NOMBRE\000d\000a    NULL,     -- RAZON_BANEO\000d\000a[*])"; se esperaba "DEFAULT, INTERSECTS (, NOT, EXISTS, UNIQUE, INTERSECTS"
+Syntax error in SQL statement "INSERT INTO JUGADOR VALUES (\000d\000a    FALSE,    -- BANEADO\000d\000a    1,        -- FACCION_FAVORITA\000d\000a    1500,     -- INDICE_RANKING\000d\000a    10,       -- PARTIDAS_GANADAS\000d\000a    5,        -- PARTIDAS_PERDIDAS\000d\000a    2500,     -- PUNTUACION\000d\000a    NULL,     -- FECHA_BANEO\000d\000a    1001,     -- ID\000d\000a    NULL,     -- PARTIDA_ID_PARTIDA\000d\000a    NULL,     -- IMAGEN\000d\000a    'Jugador1', -- NOMBRE\000d\000a    NULL,     -- RAZON_BANEO\000d\000a[*])"; expected "DEFAULT, INTERSECTS (, NOT, EXISTS, UNIQUE, INTERSECTS"; SQL statement:
+INSERT INTO JUGADOR VALUES (
+    FALSE,    -- BANEADO
+    1,        -- FACCION_FAVORITA
+    1500,     -- INDICE_RANKING
+    10,       -- PARTIDAS_GANADAS
+    5,        -- PARTIDAS_PERDIDAS
+    2500,     -- PUNTUACION
+    NULL,     -- FECHA_BANEO
+    1001,     -- ID
+    NULL,     -- PARTIDA_ID_PARTIDA
+    NULL,     -- IMAGEN
+    'Jugador1', -- NOMBRE
+    NULL,     -- RAZON_BANEO
+) [42001-232]
