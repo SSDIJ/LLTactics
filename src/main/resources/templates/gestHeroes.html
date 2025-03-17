@@ -29,32 +29,28 @@
                         </div>
                         <div class="mb-3">
                             <label for="vida" class="form-label">Vida</label>
-                            <input type="number" class="form-control" id="vida" name="vida" step="0.01" min="0"
-                                required>
+                            <input type="number" class="form-control" id="vida" name="vida" step="0.01" min="0" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para la vida.
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="armadura" class="form-label">Armadura</label>
-                            <input type="number" class="form-control" id="armadura" name="armadura" step="0.01" min="0"
-                                required>
+                            <input type="number" class="form-control" id="armadura" name="armadura" step="0.01" min="0" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para la armadura.
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="velocidadAtaque" class="form-label">Velocidad de Ataque</label>
-                            <input type="number" class="form-control" id="velocidadAtaque" name="velocidadAtaque"
-                                step="0.01" min="0" required>
+                            <input type="number" class="form-control" id="velocidadAtaque" name="velocidadAtaque" step="0.01" min="0" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para la velocidad de ataque.
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="daño" class="form-label">Daño</label>
-                            <input type="number" class="form-control" id="daño" name="daño" step="0.01" min="0"
-                                required>
+                            <input type="number" class="form-control" id="daño" name="daño" step="0.01" min="0" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para el daño.
                             </div>
@@ -65,10 +61,15 @@
                             <div class="invalid-feedback">
                                 Por favor, introduce la ruta del PNG.
                             </div>
+                            <label for="descripcion" class="form-label">Descripcion</label>
+                            <input type="text" class="form-control" id="descripcion" name="descripcion" required>
+                            <div class="invalid-feedback">
+                                Por favor, introduce la descripcion.
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="faccionAnadir" class="form-label">Facción</label>
-                            <select class="form-select" id="faccionAnadir" required>
+                            <select class="form-select" id="faccionAnadir" name="faccionAnadir" required>
                                 <option value="0">Humanos</option>
                                 <option value="1">Dragones</option>
                                 <option value="2">Trolls</option>
@@ -76,7 +77,7 @@
                                 <option value="4">Legendarios</option>
                             </select>
                             <div class="invalid-feedback">
-                                Por favor, selecciona una faccion.
+                                Por favor, selecciona una facción.
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Añadir Héroe</button>
@@ -91,8 +92,7 @@
                     <form action="#" method="post" id="formEliminarHeroe">
                         <div class="mb-3">
                             <label for="faccion" class="form-label">Selecciona la Facción</label>
-                            <select class="form-select" id="faccion" name="faccion" required
-                                onchange="actualizarHeroes()">
+                            <select class="form-select" id="faccion" name="faccion" required onchange="actualizarHeroes()">
                                 <option value="">Selecciona una facción</option>
                                 <option value="humanos">Humanos</option>
                                 <option value="dragones">Dragones</option>
@@ -122,9 +122,8 @@
 
     <div class="degradado"></div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
-
-
 </body>
+
 <script>
     // Función para actualizar los héroes cuando se cambia la facción
     function actualizarHeroes() {
@@ -157,7 +156,6 @@
         }
     }
 
-
     //AÑADIR HEROES
     document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("formAnadirHeroe").addEventListener("submit", function (event) {
@@ -171,12 +169,17 @@
                 daño: parseFloat(document.getElementById("daño").value),
                 imagen: document.getElementById("rutaPng").value,
                 faccion: parseInt(document.getElementById("faccionAnadir").value),
+                descripcion: document.getElementById("descripcion").value
             };
+
+            const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
 
             fetch(`/admin/gestHeroes/add`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    [csrfHeader]: csrfToken
                 },
                 body: JSON.stringify(heroe)
             })
@@ -204,8 +207,6 @@
         }
         const csrfToken = document.querySelector('meta[name="_csrf"]').content;
         const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
-
-
 
         fetch(`/admin/gestHeroes/delete/${idHeroe}`, {
             method: "DELETE",
