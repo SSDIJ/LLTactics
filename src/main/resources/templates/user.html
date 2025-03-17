@@ -11,19 +11,25 @@
     
     <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
 
+       <!-- TOP: BARRA DE BUSQUEDA DE JUGADOR Y ENVIAR MENSAJES -->
+       <div class="top-user">
+        <input type="text" placeholder="Buscar jugador..."/>
+        <form th:action="@{/user/__${user.id}__/msg}" method="POST">
+            <input type="text" id="message" placeholder="escribe a este usuario" />
+            <button id="sendmsg" class="btn btn-secondary" type="submit">Enviar</button>
+        </form>
+    </div>
+
     <!-- IMAGEN DE PERFIL -->
-    <div class="profile-info">
+    <div class="mid-user">
         <h1 class="mt-5">Perfil de <span th:text="${user.username}"></span></h1>
         <div class="profile-pic">
-        <img src="/img/profile_pics/default_profile.png" alt=""/> <!-- ESTATICA DE MOMENTO -->
+        <img src="/img/profile_pics/knight-pic.jpg" alt=""/> <!-- ESTATICA DE MOMENTO -->
         </div>
         <!--<img th:src="@{/img/profile_pics/{filename}(filename=${user.profilePic})}" alt="Foto de perfil"/>  Imagen de perfil dinámica -->
     </div>
 
-    <!-- BARRA DE BUSQUEDA DE JUGADOR -->
-    <div class="search-player">
-        <input type="text" placeholder="Buscar jugador..."/>
-    </div>
+ 
 
     <!-- Comentado de momento -->
     <!-- 
@@ -40,17 +46,11 @@
     <div class="py-5 row" id="mensajes">
     </div>
 
-<!-- ENVÍO DE MENSAJES -->
-<div class="py-5 row">
-    <form th:action="@{/user/__${user.id}__/msg}" method="POST">
-        <input type="text" id="message" placeholder="escribe a este usuario" />
-        <button id="sendmsg" class="btn btn-secondary" type="submit">Enviar</button>
-    </form>
-</div>
+
 
 
     <!-- ESTADÍSTICAS DEL PERFIL -->
-    <div class="profile-stats">
+    <div class="bot-user">
         <div class="stat-item">
             <p>Puntuación de maestría</p>
             <h3>410</h3> <!-- ESTÁTICO DE MOMENTO -->
@@ -84,8 +84,18 @@
                     data: [20, 5],  /* INSERTAR AQUÍ las estadísticas dinámicas de victorias/derrotas */
                     backgroundColor: ['#4CAF50', '#F44336']
                 }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white' // Color del texto de la leyenda
+                        }
+                    }
+                }
             }
         });
     </script>
+    
 </body>
 </html>
