@@ -12,7 +12,6 @@
 <body>
     <header th:replace="~{fragments/nav.html :: nav}"></header>
     <h1 class="adminTitle text-center">Gestión de Héroes</h1><br>
-
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -29,8 +28,8 @@
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="faccionAnadir" class="form-label">Facción</label>
-                                <select class="form-select" id="faccionAnadir" name="faccionAnadir" required>
+                                <label for="faccion" class="form-label">Facción</label>
+                                <select class="form-select" id="faccion" name="faccion" required>
                                     <option value="0">Humanos</option>
                                     <option value="1">Dragones</option>
                                     <option value="2">Trolls</option>
@@ -46,14 +45,15 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="vida" class="form-label">Vida</label>
-                                <input type="number" class="form-control" id="vida" name="vida" step="0.01" min="0" required>
+                                <input type="number" class="form-control" id="vida" name="vida" min="0"
+                                    required>
                                 <div class="invalid-feedback">
                                     Por favor, introduce un valor válido para la vida.
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="armadura" class="form-label">Armadura</label>
-                                <input type="number" class="form-control" id="armadura" name="armadura" step="0.01" min="0" required>
+                                <input type="number" class="form-control" id="armadura" name="armadura" min="0" required>
                                 <div class="invalid-feedback">
                                     Por favor, introduce un valor válido para la armadura.
                                 </div>
@@ -61,15 +61,16 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="velocidadAtaque" class="form-label">Velocidad de Ataque</label>
-                                <input type="number" class="form-control" id="velocidadAtaque" name="velocidadAtaque" step="0.01" min="0" required>
+                                <label for="velocidad" class="form-label">Velocidad de Ataque</label>
+                                <input type="number" class="form-control" id="velocidad" name="velocidad" min="0" required>
                                 <div class="invalid-feedback">
                                     Por favor, introduce un valor válido para la velocidad de ataque.
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="daño" class="form-label">Daño</label>
-                                <input type="number" class="form-control" id="daño" name="daño" step="0.01" min="0" required>
+                                <input type="number" class="form-control" id="daño" name="daño" min="0"
+                                    required>
                                 <div class="invalid-feedback">
                                     Por favor, introduce un valor válido para el daño.
                                 </div>
@@ -78,22 +79,23 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="precio" class="form-label">Precio</label>
-                                <input type="number" class="form-control" id="precio" name="precio" min="0"required>
+                                <input type="number" class="form-control" id="precio" name="precio" min="0" required>
                                 <div class="invalid-feedback">
                                     Por favor, introduce el precio.
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="probabilidad" class="form-label">Probabilidad</label>
-                                <input type="number" class="form-control" id="probabilidad" name="probabilidad" step="0.01" min="0" required>
+                                <input type="number" class="form-control" id="probabilidad" name="probabilidad"
+                                    step="0.01" min="0" required>
                                 <div class="invalid-feedback">
                                     Por favor, introduce la probabilidad.
                                 </div>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="rutaPng" class="form-label">Ruta del PNG</label>
-                            <input type="text" class="form-control" id="rutaPng" name="rutaPng" required>
+                            <label for="imagen" class="form-label">Ruta del PNG</label>
+                            <input type="text" class="form-control" id="imagen" name="imagen" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce la ruta del PNG.
                             </div>
@@ -113,29 +115,33 @@
                 <div class="section">
                     <h2>Eliminar Héroe</h2>
                     <form action="#" method="post" id="formEliminarHeroe">
-                        <div class="mb-3">
-                            <label for="faccion" class="form-label">Selecciona la Facción</label>
-                            <select class="form-select" id="faccion" name="faccion" required onchange="actualizarHeroes()">
-                                <option value="">Selecciona una facción</option>
-                                <option value="humanos">Humanos</option>
-                                <option value="dragones">Dragones</option>
-                                <option value="trolls">Trolls</option>
-                                <option value="noMuertos">No Muertos</option>
-                                <option value="legendarios">Legendarios</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Por favor, selecciona una facción.
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="faccionEliminar" class="form-label">Selecciona la Facción</label>
+                                <select class="form-select" id="faccionEliminar" name="faccionEliminar" required
+                                    onchange="actualizarHeroes()">
+                                    <option value="">Selecciona una facción</option>
+                                    <option value="humanos">Humanos</option>
+                                    <option value="dragones">Dragones</option>
+                                    <option value="trolls">Trolls</option>
+                                    <option value="noMuertos">No Muertos</option>
+                                    <option value="legendarios">Legendarios</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor, selecciona una facción.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="eliminarHeroe" class="form-label">Selecciona el Héroe a eliminar</label>
+                                <select class="form-select" id="eliminarHeroe" name="eliminarHeroe" required>
+                                    <option value="">Selecciona un héroe</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor, selecciona un héroe para eliminar.
+                                </div>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="eliminarHeroe" class="form-label">Selecciona el Héroe a eliminar</label>
-                            <select class="form-select" id="eliminarHeroe" name="eliminarHeroe" required>
-                                <option value="">Selecciona un héroe</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Por favor, selecciona un héroe para eliminar.
-                            </div>
-                        </div>
+
                         <button type="submit" id="eliminar-heroe-btn" class="btn btn-danger">Eliminar Héroe</button>
                     </form>
                 </div>
@@ -144,22 +150,8 @@
     </div>
 
     <div class="degradado"></div>
-
-    <div class="modal fade" id="confirmacionModal" tabindex="-1" aria-labelledby="confirmacionModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmacionModalLabel">Confirmación</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Héroe eliminado correctamente.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
+    <div th:replace="~{fragments/modal :: modal('modalAnadir','Confirmación', 'Héroe añadido correctamente.')}"></div>
+    <div th:replace="~{fragments/modal :: modal('modalEliminar','Confirmación', 'Héroe eliminado correctamente.')}">
     </div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 </body>
@@ -167,7 +159,7 @@
 <script>
     // Función para actualizar los héroes cuando se cambia la facción
     function actualizarHeroes() {
-        const faccion = document.getElementById("faccion").value; // Captura el valor seleccionado
+        const faccion = document.getElementById("faccionEliminar").value; // Captura el valor seleccionado
         const heroSelect = document.getElementById("eliminarHeroe");
 
         if (faccion) {
@@ -196,39 +188,42 @@
         }
     }
 
+    function fieldsToObject(fields) {
+    const o = {};
+    for (let id of fields) {
+        const element = document.getElementById(id);
+        const value = element.value;
+
+        if (element.type === "number")
+            o[id] = parseFloat(value);
+        else
+            o[id] = value; 
+    }
+    return o;
+}
+
     //AÑADIR HEROES
     document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("formAnadirHeroe").addEventListener("submit", function (event) {
             event.preventDefault();
 
-            const heroe = {
-                nombre: document.getElementById("nombre").value,
-                vida: parseInt(document.getElementById("vida").value),
-                armadura: parseInt(document.getElementById("armadura").value),
-                velocidad: parseInt(document.getElementById("velocidadAtaque").value),
-                daño: parseInt(document.getElementById("daño").value),
-                imagen: document.getElementById("rutaPng").value,
-                faccion: parseInt(document.getElementById("faccionAnadir").value),
-                descripcion: document.getElementById("descripcion").value,
-                probabilidad: parseFloat(document.getElementById("probabilidad").value),
-                precio: parseInt(document.getElementById("precio").value)
-            };
-
-            const csrfToken = document.querySelector('meta[name="_csrf"]').content;
-            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+            const fields = ["nombre", "imagen", "vida", "armadura", "daño", "velocidad", "descripcion", "faccion", "precio", "probabilidad"];
+            const heroe = fieldsToObject(fields);
 
             fetch(`/admin/gestHeroes/add`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    [csrfHeader]: csrfToken
+                    "X-CSRF-TOKEN": iwconfig.csrf.value
                 },
                 body: JSON.stringify(heroe)
             })
                 .then(response => response.text())
                 .then(data => {
-                    alert(data);
-                    document.getElementById("formAnadirHeroe").reset(); // Limpiar formulario
+                    document.getElementById("formAnadirHeroe").reset();
+                    var confirmacionModal = new bootstrap.Modal(document.getElementById('modalAnadir'));
+                    confirmacionModal.show();
+                    actualizarHeroes();
                 })
                 .catch(error => console.error("Error al añadir el héroe:", error));
         });
@@ -247,20 +242,18 @@
             alert("Error: No se ha seleccionado un héroe válido.");
             return;
         }
-        const csrfToken = document.querySelector('meta[name="_csrf"]').content;
-        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
 
         fetch(`/admin/gestHeroes/delete/${idHeroe}`, {
             method: "DELETE",
             headers: {
-                [csrfHeader]: csrfToken,
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": iwconfig.csrf.value
             }
         })
             .then(response => response.text())
             .then(data => {
-                actualizarHeroes(); // Recargar la lista de héroes sin recargar la página
-                var confirmacionModal = new bootstrap.Modal(document.getElementById('confirmacionModal'));
+                actualizarHeroes();
+                var confirmacionModal = new bootstrap.Modal(document.getElementById('modalEliminar'));
                 confirmacionModal.show();
             })
             .catch(error => console.error("Error al eliminar el héroe:", error));
@@ -269,7 +262,7 @@
     function closeModal() {
         document.getElementById("confirmacionModal").style.display = "none";
     }
-    
+
 </script>
 
 </html>

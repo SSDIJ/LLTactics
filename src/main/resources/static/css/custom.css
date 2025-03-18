@@ -286,7 +286,7 @@ td img.icon {
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
-    display: none; /* Oculto por defecto */
+    display: none;
 }
 
 #scrollToTopBtn:hover {
