@@ -29,6 +29,7 @@ public class Jugador {
     private int partidasGanadas;
     private int partidasPerdidas;
     private int faccionFavorita;
+    private Long id_user;
     
     @OneToMany
     private List<Heroe> masJugados = new ArrayList<>();
@@ -37,11 +38,14 @@ public class Jugador {
     private String razonBaneo;
     private LocalDateTime fechaBaneo;
 
-    public Jugador(String nombre) {
-        this.nombre = nombre;
+    public Jugador(){
     }
 
-    public Jugador(String nombre, String imagen, int indiceRanking, int puntuacion, int partidasGanadas, int partidasPerdidas, int faccionFavorita, List<Heroe> masJugados, boolean baneado, String razon) {
+    public Jugador(String nombre) {
+        this.nombre = nombre;
+    }  
+
+    public Jugador(String nombre, String imagen, int indiceRanking, int puntuacion, int partidasGanadas, int partidasPerdidas, int faccionFavorita, List<Heroe> masJugados, boolean baneado, String razon, Long id_user) {
         this.nombre = nombre;
         this.imagen = imagen;
         this.indiceRanking = indiceRanking;
@@ -53,5 +57,6 @@ public class Jugador {
         this.baneado = baneado;
         this.razonBaneo = razon;
         this.fechaBaneo = LocalDateTime.now();
+        this.id_user=id_user;
     }
 }

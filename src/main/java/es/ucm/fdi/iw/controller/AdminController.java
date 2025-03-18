@@ -64,19 +64,19 @@ public class AdminController {
                         "Ágil y feroz en combate.", 0, 2, 0),
                 new Heroe("Mago", "/img/units/humans/5. Mago/white-mage.png", 140, 20, 110, 60,
                         "Un maestro de la magia arcana.", 0, 2, 0)),
-                true, "Ser demasiado bueno");
+                true, "Ser demasiado bueno", 3L);
 
         Jugador j2 = new Jugador("Lancelot", "/img/players/lancelot.png", 2, 1400, 18, 7, 0, List.of(
                 new Heroe("Dragón Morado", "/img/units/dragons/5. DMorado/blademaster.png", 180, 30, 95, 65,
                         "Especializado en la magia y las runas.", 1, 2, 0),
                 new Heroe("Berserker", "/img/units/dragons/2. DBerserker/clasher-blade.png", 250, 50, 90, 45,
                         "El Berserker es una furia desatada en el campo de batalla.", 1, 3, 0)),
-                true, "Se fue AFK 20 minutos");
+                true, "Se fue AFK 20 minutos",1L);
 
         Jugador j3 = new Jugador("Morgana", "/img/players/morgana.png", 3, 1350, 17, 8, 1, List.of(
                 new Heroe("Esqueleto mago", "/img/units/skeletons/5. SMago/ancient-lich.png", 160, 30, 110, 70,
                         "Utiliza poderosos hechizos para devastar a sus enemigos.", 3, 4, 0)),
-                true, "Insultó a otro jugador");
+                true, "Insultó a otro jugador", 1L);
 
         baneados.add(j1);
         baneados.add(j3);
