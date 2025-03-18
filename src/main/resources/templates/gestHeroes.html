@@ -20,43 +20,75 @@
                 <div class="section">
                     <h2>Añadir Héroe</h2>
                     <form action="#" method="post" class="needs-validation" id="formAnadirHeroe" novalidate>
-                        <div class="mb-3">
-                            <label for="nombre" class="form-label">Nombre del Héroe</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" required>
-                            <div class="invalid-feedback">
-                                Por favor, introduce el nombre del héroe.
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="nombre" class="form-label">Nombre del Héroe</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                                <div class="invalid-feedback">
+                                    Por favor, introduce el nombre del héroe.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="faccionAnadir" class="form-label">Facción</label>
+                                <select class="form-select" id="faccionAnadir" name="faccionAnadir" required>
+                                    <option value="0">Humanos</option>
+                                    <option value="1">Dragones</option>
+                                    <option value="2">Trolls</option>
+                                    <option value="3">No Muertos</option>
+                                    <option value="4">Legendarios</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor, selecciona una facción.
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="vida" class="form-label">Vida</label>
+                                <input type="number" class="form-control" id="vida" name="vida" step="0.01" min="0" required>
+                                <div class="invalid-feedback">
+                                    Por favor, introduce un valor válido para la vida.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="armadura" class="form-label">Armadura</label>
+                                <input type="number" class="form-control" id="armadura" name="armadura" step="0.01" min="0" required>
+                                <div class="invalid-feedback">
+                                    Por favor, introduce un valor válido para la armadura.
+                                </div>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="vida" class="form-label">Vida</label>
-                            <input type="number" class="form-control" id="vida" name="vida" step="0.01" min="0"
-                                required>
-                            <div class="invalid-feedback">
-                                Por favor, introduce un valor válido para la vida.
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="velocidadAtaque" class="form-label">Velocidad de Ataque</label>
+                                <input type="number" class="form-control" id="velocidadAtaque" name="velocidadAtaque" step="0.01" min="0" required>
+                                <div class="invalid-feedback">
+                                    Por favor, introduce un valor válido para la velocidad de ataque.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="daño" class="form-label">Daño</label>
+                                <input type="number" class="form-control" id="daño" name="daño" step="0.01" min="0" required>
+                                <div class="invalid-feedback">
+                                    Por favor, introduce un valor válido para el daño.
+                                </div>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="armadura" class="form-label">Armadura</label>
-                            <input type="number" class="form-control" id="armadura" name="armadura" step="0.01" min="0"
-                                required>
-                            <div class="invalid-feedback">
-                                Por favor, introduce un valor válido para la armadura.
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="precio" class="form-label">Precio</label>
+                                <input type="number" class="form-control" id="precio" name="precio" min="0"required>
+                                <div class="invalid-feedback">
+                                    Por favor, introduce el precio.
+                                </div>
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="velocidadAtaque" class="form-label">Velocidad de Ataque</label>
-                            <input type="number" class="form-control" id="velocidadAtaque" name="velocidadAtaque"
-                                step="0.01" min="0" required>
-                            <div class="invalid-feedback">
-                                Por favor, introduce un valor válido para la velocidad de ataque.
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="daño" class="form-label">Daño</label>
-                            <input type="number" class="form-control" id="daño" name="daño" step="0.01" min="0"
-                                required>
-                            <div class="invalid-feedback">
-                                Por favor, introduce un valor válido para el daño.
+                            <div class="col-md-6 mb-3">
+                                <label for="probabilidad" class="form-label">Probabilidad</label>
+                                <input type="number" class="form-control" id="probabilidad" name="probabilidad" step="0.01" min="0" required>
+                                <div class="invalid-feedback">
+                                    Por favor, introduce la probabilidad.
+                                </div>
                             </div>
                         </div>
                         <div class="mb-3">
@@ -71,19 +103,6 @@
                                 Por favor, introduce la descripcion.
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="faccionAnadir" class="form-label">Facción</label>
-                            <select class="form-select" id="faccionAnadir" name="faccionAnadir" required>
-                                <option value="0">Humanos</option>
-                                <option value="1">Dragones</option>
-                                <option value="2">Trolls</option>
-                                <option value="3">No Muertos</option>
-                                <option value="4">Legendarios</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Por favor, selecciona una facción.
-                            </div>
-                        </div>
                         <button type="submit" class="btn btn-primary">Añadir Héroe</button>
                     </form>
                 </div>
@@ -96,8 +115,7 @@
                     <form action="#" method="post" id="formEliminarHeroe">
                         <div class="mb-3">
                             <label for="faccion" class="form-label">Selecciona la Facción</label>
-                            <select class="form-select" id="faccion" name="faccion" required
-                                onchange="actualizarHeroes()">
+                            <select class="form-select" id="faccion" name="faccion" required onchange="actualizarHeroes()">
                                 <option value="">Selecciona una facción</option>
                                 <option value="humanos">Humanos</option>
                                 <option value="dragones">Dragones</option>
@@ -127,8 +145,7 @@
 
     <div class="degradado"></div>
 
-    <div class="modal fade" id="confirmacionModal" tabindex="-1" aria-labelledby="confirmacionModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="confirmacionModal" tabindex="-1" aria-labelledby="confirmacionModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -186,13 +203,15 @@
 
             const heroe = {
                 nombre: document.getElementById("nombre").value,
-                vida: parseFloat(document.getElementById("vida").value),
-                armadura: parseFloat(document.getElementById("armadura").value),
-                velocidad: parseFloat(document.getElementById("velocidadAtaque").value),
-                daño: parseFloat(document.getElementById("daño").value),
+                vida: parseInt(document.getElementById("vida").value),
+                armadura: parseInt(document.getElementById("armadura").value),
+                velocidad: parseInt(document.getElementById("velocidadAtaque").value),
+                daño: parseInt(document.getElementById("daño").value),
                 imagen: document.getElementById("rutaPng").value,
                 faccion: parseInt(document.getElementById("faccionAnadir").value),
-                descripcion: document.getElementById("descripcion").value
+                descripcion: document.getElementById("descripcion").value,
+                probabilidad: parseFloat(document.getElementById("probabilidad").value),
+                precio: parseInt(document.getElementById("precio").value)
             };
 
             const csrfToken = document.querySelector('meta[name="_csrf"]').content;

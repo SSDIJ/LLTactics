@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <th:block th:replace="~{fragments/head :: header}" />
     <title>LL Tactics - Galería de Héroes</title>
 </head>
-<body class="h-100" id ="galeria">
+
+<body class="h-100" id="galeria">
     <header th:replace="~{fragments/nav.html :: nav}"></header>
     <div class="container">
         <h1 class="mt-5 title display-1">Galería de Héroes</h1>
@@ -14,16 +16,18 @@
         <div id="gallery-description">
             ¡Conoce a los héroes más valientes y a las criaturas más temidas del reino!
         </div>
-        
+
         <!-- Mostrar mensaje si la lista está vacía -->
-        <p th:if="${#lists.isEmpty(humanos) && #lists.isEmpty(trolls) && #lists.isEmpty(dragones) && #lists.isEmpty(noMuertos) && #lists.isEmpty(legendarios)}">No hay héroes disponibles.</p>
+        <p
+            th:if="${#lists.isEmpty(humanos) && #lists.isEmpty(trolls) && #lists.isEmpty(dragones) && #lists.isEmpty(noMuertos) && #lists.isEmpty(legendarios)}">
+            No hay héroes disponibles.</p>
 
         <!-- IMPLEMENTADOS POR SEPARADO POR SI QUEREMOS HACER UNA VISTA PARA CADA FACCION -->
 
         <div id="gallery-container" class="d-flex flex-wrap justify-content-center mt-5">
             <!-- Título y héroes humanos -->
-            <h2 id ="humanos" class="w-100 text-center">Humanos</h2>
-            <div id ="div-humanos" th:each="heroe : ${humanos}">
+            <h2 id="humanos" class="w-100 text-center">Humanos</h2>
+            <div id="div-humanos" th:each="heroe : ${humanos}">
                 <th:block th:replace="~{fragments/card :: carta(
                     ${heroe.nombre}, 
                     ${heroe.imagen}, 
@@ -109,8 +113,28 @@
         </div>
         <img src="/img/gallery/rune.png" id="img-gallery-bg">
         <div class="degradado"></div>
+        <button id="scrollToTopBtn" onclick="scrollToTop()">Volver Arriba</button>
         <th:block th:replace="~{fragments/footer.html :: footer}" />
     </div>
-    <script type="module" src="/js/homepage-animations.js"></script>
+    <script type="module" src="/js/homepage-animations.js">
+    </script>
+    <script>
+        // Mostrar el botón cuando se hace scroll hacia abajo
+        window.onscroll = function () {
+            var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollToTopBtn.style.display = "block";
+            } else {
+                scrollToTopBtn.style.display = "none";
+            }
+        };
+
+        // Función para subir al inicio de la página
+        function scrollToTop() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+    </script>
 </body>
+
 </html>
