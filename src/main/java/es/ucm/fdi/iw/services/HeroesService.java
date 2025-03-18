@@ -71,5 +71,29 @@ public class HeroesService {
 
         return selectedHeroes;
     }
+
+    public List<Heroe> obtenerHeroesDeFaccion(String faccion) {
+        int idFaccion = -1;
+        switch (faccion) {
+            case "humanos":
+                idFaccion = 0;
+                break;
+            case "dragones":
+                idFaccion = 1;
+                break;
+            case "trolls":
+                idFaccion = 2;
+                break;
+            case "noMuertos":
+                idFaccion = 3;
+                break;
+            case "legendarios":
+                idFaccion = 4;
+                break;
+            default:
+                return Collections.emptyList();
+        }
+        return heroeRepository.findByFaccion(idFaccion);
+    }
     
 }

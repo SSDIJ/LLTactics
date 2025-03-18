@@ -1253,22 +1253,36 @@ body .profile-body{
 
 
 /*ADMIN*/
-.sectionContainer {
+.containerAdmin {
     display: flex;
     flex-wrap: wrap;
     height: 100vh;
-    margin: 0;
+    width: 100%;
+    margin: 0 auto;
 }
-.section {
+
+.sectionAnadir {
     padding: 20px;
     margin-bottom: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #f9f9f9;
+    width: 75%;
+    margin: 50px auto;
 }
 
 .section h2 {
     margin-bottom: 20px;
+}
+
+.sectionEliminar{
+    width: 75%;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin: 50px auto;
 }
 
 .divider {
@@ -1407,4 +1421,105 @@ body .profile-body{
     bottom: 0;
     width: 2px;
     background-color: #868377; 
+}
+
+
+/* General */
+/* Contenedor de cartas */
+#heroesContainer {
+    display: flex;
+    gap: 1rem;
+    justify-content: center; 
+}
+
+.cardAdmin {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: calc(50% - 2rem); 
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* Imagen */
+.cardAdmin img {
+    max-height: 150px;
+    object-fit: cover;
+    align-self: center;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 1rem;
+}
+
+/* Título */
+.cardAdmin-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* Formulario */
+.cardAdmin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.cardAdmin-form .form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.cardAdmin-form .form-row .form-group {
+    flex: 1;
+}
+
+.cardAdmin-form .form-label {
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.cardAdmin-form .form-control {
+    font-size: 0.85rem;
+    padding: 0.4rem;
+    height: auto;
+}
+
+/* Descripción */
+.cardAdmin-description {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-top: 1rem;
+    text-align: justify;
+}
+
+/* Botones */
+.cardAdmin .btn {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+}
+
+.cardAdmin .btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #212529;
+}
+
+.cardAdmin .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Adaptación para pantallas pequeñas */
+@media (max-width: 768px) {
+    .cardAdmin {
+        width: 100%; /* Una carta por fila en pantallas pequeñas */
+    }
 }

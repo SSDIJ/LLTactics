@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-5.3.3.css}" href="css/bootstrap-5.3.3.css" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/custom.css}" href="css/custom.css" type="text/css" />
+</head>
+
+<body>
+    <div id="heroesContainer">
+        <div th:fragment="cartaAdmin(heroe)" class="cardAdmin">
+            <!-- Imagen y nombre -->
+            <img th:src="${heroe.imagen}" class="card-img-top" th:alt="${heroe.nombre}">
+            <h5 class="cardAdmin-title" th:text="${heroe.nombre}"></h5>
+
+            <!-- Formulario -->
+            <form class="cardAdmin-form" th:action="@{/admin/gestHeroes/update/{idHeroe}(idHeroe=${heroe.idHeroe})}" method="post">
+                <input type="hidden" name="idHeroe" th:value="${heroe.idHeroe}" />
+
+                <!-- Nombre -->
+                <label class="form-label">Nombre</label>
+                <input type="text" class="form-control" name="nombre" th:value="${heroe.nombre}" required />
+
+                <!-- Ruta Imagen -->
+                <label class="form-label">Ruta Imagen</label>
+                <input type="text" class="form-control" name="imagen" th:value="${heroe.imagen}" required />
+
+                <!-- Vida y Armadura -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Vida</label>
+                        <input type="number" class="form-control" name="vida" th:value="${heroe.vida}" min="0"
+                            required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Armadura</label>
+                        <input type="number" class="form-control" name="armadura" th:value="${heroe.armadura}" min="0"
+                            required />
+                    </div>
+                </div>
+
+                <!-- Daño y Velocidad -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Daño</label>
+                        <input type="number" class="form-control" name="daño" th:value="${heroe.daño}" min="0"
+                            required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Velocidad</label>
+                        <input type="number" class="form-control" name="velocidad" th:value="${heroe.velocidad}" min="0"
+                            required />
+                    </div>
+                </div>
+
+                <!-- Precio y Probabilidad -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Precio</label>
+                        <input type="number" class="form-control" name="precio" th:value="${heroe.precio}" min="0"
+                            required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Probabilidad</label>
+                        <input type="number" class="form-control" name="probabilidad" th:value="${heroe.probabilidad}"
+                            step ="0.01" min="0" required />
+                    </div>
+                </div>
+
+                <!-- Descripción -->
+                <label class="form-label">Descripción</label>
+                <input type="text" class="form-control" name="descripcion" th:value="${heroe.descripcion}" required />
+
+                <!-- Botón para guardar cambios -->
+                <button type="submit" class="btn btn-warning w-100 mt-2">Modificar</button>
+            </form>
+
+            <!-- Botón para eliminar -->
+            <form th:action="@{/admin/gestHeroes/delete/{idHeroe}(idHeroe=${heroe.idHeroe})}" method="post"
+                class="mt-2">
+                <button type="submit" class="btn btn-danger w-100">Eliminar</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

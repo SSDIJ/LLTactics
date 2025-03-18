@@ -71,7 +71,7 @@ public class AdminController {
                         "Especializado en la magia y las runas.", 1, 2, 0),
                 new Heroe("Berserker", "/img/units/dragons/2. DBerserker/clasher-blade.png", 250, 50, 90, 45,
                         "El Berserker es una furia desatada en el campo de batalla.", 1, 3, 0)),
-                true, "Se fue AFK 20 minutos",1L);
+                true, "Se fue AFK 20 minutos", 1L);
 
         Jugador j3 = new Jugador("Morgana", "/img/players/morgana.png", 3, 1350, 17, 8, 1, List.of(
                 new Heroe("Esqueleto mago", "/img/units/skeletons/5. SMago/ancient-lich.png", 160, 30, 110, 70,
@@ -128,10 +128,20 @@ public class AdminController {
         return "gestPartidas";
     }
 
+    // @GetMapping("/gestHeroes")
+    // public String showHeroes(Model model) throws JsonProcessingException {
+    // Map<String, List<Heroe>> heroesPorFaccion =
+    // heroesService.obtenerHeroesPorFaccion();
+    // model.addAttribute("heroesPorFaccion", heroesPorFaccion);
+    // return "gestHeroes";
+    // }
+
     @GetMapping("/gestHeroes")
-    public String showHeroes(Model model) throws JsonProcessingException {
-        Map<String, List<Heroe>> heroesPorFaccion = heroesService.obtenerHeroesPorFaccion();
-        model.addAttribute("heroesPorFaccion", heroesPorFaccion);
+    public String mostrarHeroes(@RequestParam(required = false) String faccion, Model model) {
+        if (faccion != null) {
+            List<Heroe> heroes = heroesService.obtenerHeroesDeFaccion(faccion);
+            model.addAttribute("heroes", heroes);
+        }
         return "gestHeroes";
     }
 
@@ -178,15 +188,48 @@ public class AdminController {
         }
     }
 
-    @DeleteMapping("/gestHeroes/delete/{id}")
-    @ResponseBody
+    @PostMapping("/gestHeroes/delete/{idHeroe}")
     @Transactional
-    public ResponseEntity<String> deleteHeroe(@PathVariable Long id) {
+    public String deleteHeroe(@PathVariable("idHeroe") Long idHeroe, Model model) {
         try {
-            heroeRepository.deleteById(id);
-            return ResponseEntity.ok("Héroe eliminado correctamente");
+            heroeRepository.deleteById(idHeroe);
+            return "redirect:/admin/gestHeroes";
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al eliminar el héroe: " + e.getMessage());
+            model.addAttribute("error", "Error al eliminar el héroe: " + e.getMessage());
+            return "gestHeroes";
         }
     }
+
+    @PostMapping("/gestHeroes/update/{idHeroe}")
+    @Transactional
+    public String updateHeroe(
+            @PathVariable("idHeroe") Long idHeroe,
+            @RequestParam("nombre") String nombre,
+            @RequestParam("imagen") String imagen,
+            @RequestParam("vida") int vida,
+            @RequestParam("armadura") int armadura,
+            @RequestParam("daño") int daño,
+            @RequestParam("velocidad") int velocidad,
+            @RequestParam("probabilidad") double probabilidad,
+            @RequestParam("precio") int precio,
+            Model model) {
+
+        Heroe heroe = heroeRepository.findById(idHeroe)
+                .orElseThrow(() -> new IllegalArgumentException("Héroe no encontrado"));
+
+        // Si se encuentra, actualizamos cada campo con los datos recibidos
+        heroe.setNombre(nombre);
+        heroe.setImagen(imagen);
+        heroe.setVida(vida);
+        heroe.setArmadura(armadura);
+        heroe.setDaño(daño);
+        heroe.setVelocidad(velocidad);
+        heroe.setProbabilidad(probabilidad);
+        heroe.setPrecio(precio);
+
+        heroeRepository.save(heroe);
+
+        return "gestHeroes";
+    }
+
 }

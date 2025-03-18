@@ -12,195 +12,152 @@
 <body>
     <header th:replace="~{fragments/nav.html :: nav}"></header>
     <h1 class="adminTitle text-center">Gestión de Héroes</h1><br>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <!-- Apartado para añadir héroes -->
-                <div class="section">
-                    <h2>Añadir Héroe</h2>
-                    <form action="#" method="post" class="needs-validation" id="formAnadirHeroe" novalidate>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="nombre" class="form-label">Nombre del Héroe</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" required>
-                                <div class="invalid-feedback">
-                                    Por favor, introduce el nombre del héroe.
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="faccion" class="form-label">Facción</label>
-                                <select class="form-select" id="faccion" name="faccion" required>
-                                    <option value="0">Humanos</option>
-                                    <option value="1">Dragones</option>
-                                    <option value="2">Trolls</option>
-                                    <option value="3">No Muertos</option>
-                                    <option value="4">Legendarios</option>
-                                </select>
-                                <div class="invalid-feedback">
-                                    Por favor, selecciona una facción.
-                                </div>
-                            </div>
+    <div class="containerAdmin">
+        <!-- Apartado para añadir héroes -->
+        <div class="sectionAnadir">
+            <h2>Añadir Héroe</h2>
+            <form action="#" method="post" class="needs-validation" id="formAnadirHeroe" novalidate>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="nombre" class="form-label">Nombre del Héroe</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                        <div class="invalid-feedback">
+                            Por favor, introduce el nombre del héroe.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="faccion" class="form-label">Facción</label>
+                        <select class="form-select" id="faccion" name="faccion" required>
+                            <option value="0">Humanos</option>
+                            <option value="1">Dragones</option>
+                            <option value="2">Trolls</option>
+                            <option value="3">No Muertos</option>
+                            <option value="4">Legendarios</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Por favor, selecciona una facción.
+                        </div>
+                    </div>
 
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="vida" class="form-label">Vida</label>
-                                <input type="number" class="form-control" id="vida" name="vida" min="0"
-                                    required>
-                                <div class="invalid-feedback">
-                                    Por favor, introduce un valor válido para la vida.
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="armadura" class="form-label">Armadura</label>
-                                <input type="number" class="form-control" id="armadura" name="armadura" min="0" required>
-                                <div class="invalid-feedback">
-                                    Por favor, introduce un valor válido para la armadura.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="velocidad" class="form-label">Velocidad de Ataque</label>
-                                <input type="number" class="form-control" id="velocidad" name="velocidad" min="0" required>
-                                <div class="invalid-feedback">
-                                    Por favor, introduce un valor válido para la velocidad de ataque.
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="daño" class="form-label">Daño</label>
-                                <input type="number" class="form-control" id="daño" name="daño" min="0"
-                                    required>
-                                <div class="invalid-feedback">
-                                    Por favor, introduce un valor válido para el daño.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="precio" class="form-label">Precio</label>
-                                <input type="number" class="form-control" id="precio" name="precio" min="0" required>
-                                <div class="invalid-feedback">
-                                    Por favor, introduce el precio.
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="probabilidad" class="form-label">Probabilidad</label>
-                                <input type="number" class="form-control" id="probabilidad" name="probabilidad"
-                                    step="0.01" min="0" required>
-                                <div class="invalid-feedback">
-                                    Por favor, introduce la probabilidad.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="imagen" class="form-label">Ruta del PNG</label>
-                            <input type="text" class="form-control" id="imagen" name="imagen" required>
-                            <div class="invalid-feedback">
-                                Por favor, introduce la ruta del PNG.
-                            </div>
-                            <label for="descripcion" class="form-label">Descripcion</label>
-                            <input type="text" class="form-control" id="descripcion" name="descripcion" required>
-                            <div class="invalid-feedback">
-                                Por favor, introduce la descripcion.
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Añadir Héroe</button>
-                    </form>
                 </div>
-
-                <hr class="divider">
-
-                <!-- Apartado para eliminar héroes -->
-                <div class="section">
-                    <h2>Eliminar Héroe</h2>
-                    <form action="#" method="post" id="formEliminarHeroe">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="faccionEliminar" class="form-label">Selecciona la Facción</label>
-                                <select class="form-select" id="faccionEliminar" name="faccionEliminar" required
-                                    onchange="actualizarHeroes()">
-                                    <option value="">Selecciona una facción</option>
-                                    <option value="humanos">Humanos</option>
-                                    <option value="dragones">Dragones</option>
-                                    <option value="trolls">Trolls</option>
-                                    <option value="noMuertos">No Muertos</option>
-                                    <option value="legendarios">Legendarios</option>
-                                </select>
-                                <div class="invalid-feedback">
-                                    Por favor, selecciona una facción.
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="eliminarHeroe" class="form-label">Selecciona el Héroe a eliminar</label>
-                                <select class="form-select" id="eliminarHeroe" name="eliminarHeroe" required>
-                                    <option value="">Selecciona un héroe</option>
-                                </select>
-                                <div class="invalid-feedback">
-                                    Por favor, selecciona un héroe para eliminar.
-                                </div>
-                            </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="vida" class="form-label">Vida</label>
+                        <input type="number" class="form-control" id="vida" name="vida" min="0" required>
+                        <div class="invalid-feedback">
+                            Por favor, introduce un valor válido para la vida.
                         </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="armadura" class="form-label">Armadura</label>
+                        <input type="number" class="form-control" id="armadura" name="armadura" min="0" required>
+                        <div class="invalid-feedback">
+                            Por favor, introduce un valor válido para la armadura.
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="velocidad" class="form-label">Velocidad de Ataque</label>
+                        <input type="number" class="form-control" id="velocidad" name="velocidad" min="0" required>
+                        <div class="invalid-feedback">
+                            Por favor, introduce un valor válido para la velocidad de ataque.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="daño" class="form-label">Daño</label>
+                        <input type="number" class="form-control" id="daño" name="daño" min="0" required>
+                        <div class="invalid-feedback">
+                            Por favor, introduce un valor válido para el daño.
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="precio" class="form-label">Precio</label>
+                        <input type="number" class="form-control" id="precio" name="precio" min="0" required>
+                        <div class="invalid-feedback">
+                            Por favor, introduce el precio.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="probabilidad" class="form-label">Probabilidad</label>
+                        <input type="number" class="form-control" id="probabilidad" name="probabilidad" step="0.01"
+                            min="0" required>
+                        <div class="invalid-feedback">
+                            Por favor, introduce la probabilidad.
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="imagen" class="form-label">Ruta del PNG</label>
+                    <input type="text" class="form-control" id="imagen" name="imagen" required>
+                    <div class="invalid-feedback">
+                        Por favor, introduce la ruta del PNG.
+                    </div>
+                    <label for="descripcion" class="form-label">Descripcion</label>
+                    <input type="text" class="form-control" id="descripcion" name="descripcion" required>
+                    <div class="invalid-feedback">
+                        Por favor, introduce la descripcion.
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Añadir Héroe</button>
+            </form>
+        </div>
 
-                        <button type="submit" id="eliminar-heroe-btn" class="btn btn-danger">Eliminar Héroe</button>
-                    </form>
+        <hr class="divider">
+
+        <!-- Apartado para eliminar héroes -->
+        <div class="sectionEliminar">
+            <h2>Eliminar Héroe</h2>
+            <div class="col-md-6 mb-3">
+                <form th:action="@{/admin/gestHeroes}" method="get" class="mb-3">
+                    <label for="faccionSelect" class="form-label">Selecciona la Facción:</label>
+                    <select id="faccionSelect" name="faccion" class="form-select" onchange="this.form.submit()">
+                        <option value="">-- Elige una facción --</option>
+                        <option value="humanos" th:selected="${faccion=='humanos'}">Humanos</option>
+                        <option value="dragones" th:selected="${faccion=='dragones'}">Dragones</option>
+                        <option value="trolls" th:selected="${faccion=='trolls'}">Trolls</option>
+                        <option value="noMuertos" th:selected="${faccion=='noMuertos'}">No Muertos</option>
+                        <option value="legendarios" th:selected="${faccion=='legendarios'}">Legendarios
+                        </option>
+                    </select>
+                </form>
+            </div>
+            <div class="row" id="heroesContainer">
+                <div th:if="${heroes != null}">
+                    <div th:each="heroe : ${heroes}">
+                        <div th:replace="fragments/cardAdmin :: cartaAdmin(${heroe})"></div>
+                    </div>
+                </div>
+                <div th:if="${heroes == null}">
+                    <p class="text-muted">Selecciona una facción para ver los héroes.</p>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="degradado"></div>
-    <div th:replace="~{fragments/modal :: modal('modalAnadir','Confirmación', 'Héroe añadido correctamente.')}"></div>
-    <div th:replace="~{fragments/modal :: modal('modalEliminar','Confirmación', 'Héroe eliminado correctamente.')}">
-    </div>
-    <th:block th:replace="~{fragments/footer.html :: footer}" />
+        <div class="degradado"></div>
+        <div th:replace="~{fragments/modal :: modal('modalAnadir','Confirmación', 'Héroe añadido correctamente.')}">
+        </div>
+        <div th:replace="~{fragments/modal :: modal('modalEliminar','Confirmación', 'Héroe eliminado correctamente.')}">
+        </div>
+        <th:block th:replace="~{fragments/footer.html :: footer}" />
 </body>
 
 <script>
-    // Función para actualizar los héroes cuando se cambia la facción
-    function actualizarHeroes() {
-        const faccion = document.getElementById("faccionEliminar").value; // Captura el valor seleccionado
-        const heroSelect = document.getElementById("eliminarHeroe");
-
-        if (faccion) {
-            fetch(`/admin/gestHeroes/${faccion}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Error al obtener héroes para la facción " + faccion);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    heroSelect.innerHTML = "<option value=''>Selecciona un héroe</option>";
-                    data.forEach(hero => {
-                        const option = document.createElement("option");
-                        option.value = hero.idHeroe;
-                        option.textContent = hero.nombre;
-                        heroSelect.appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    console.error("Error al cargar los héroes:", error);
-                    heroSelect.innerHTML = "<option value=''>No se pudieron cargar los héroes</option>";
-                });
-        } else {
-            heroSelect.innerHTML = "<option value=''>Selecciona un héroe</option>";
-        }
-    }
-
     function fieldsToObject(fields) {
-    const o = {};
-    for (let id of fields) {
-        const element = document.getElementById(id);
-        const value = element.value;
+        const o = {};
+        for (let id of fields) {
+            const element = document.getElementById(id);
+            const value = element.value;
 
-        if (element.type === "number")
-            o[id] = parseFloat(value);
-        else
-            o[id] = value; 
+            if (element.type === "number")
+                o[id] = parseFloat(value);
+            else
+                o[id] = value;
+        }
+        return o;
     }
-    return o;
-}
 
     //AÑADIR HEROES
     document.addEventListener("DOMContentLoaded", () => {
@@ -227,36 +184,6 @@
                 })
                 .catch(error => console.error("Error al añadir el héroe:", error));
         });
-    });
-
-    //ELIMINAR HEROES
-    document.getElementById("formEliminarHeroe").addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        const heroSelect = document.getElementById("eliminarHeroe");
-        const idHeroe = heroSelect.value;  // Obtiene el valor del select
-
-        console.log("ID del héroe a eliminar:", idHeroe);
-
-        if (!idHeroe || idHeroe === "undefined") {
-            alert("Error: No se ha seleccionado un héroe válido.");
-            return;
-        }
-
-        fetch(`/admin/gestHeroes/delete/${idHeroe}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": iwconfig.csrf.value
-            }
-        })
-            .then(response => response.text())
-            .then(data => {
-                actualizarHeroes();
-                var confirmacionModal = new bootstrap.Modal(document.getElementById('modalEliminar'));
-                confirmacionModal.show();
-            })
-            .catch(error => console.error("Error al eliminar el héroe:", error));
     });
 
     function closeModal() {
