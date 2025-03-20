@@ -193,7 +193,7 @@ public class AdminController {
     public String deleteHeroe(@PathVariable("idHeroe") Long idHeroe, Model model) {
         try {
             heroeRepository.deleteById(idHeroe);
-            return "redirect:/admin/gestHeroes";
+            return "gestHeroes";
         } catch (Exception e) {
             model.addAttribute("error", "Error al eliminar el héroe: " + e.getMessage());
             return "gestHeroes";

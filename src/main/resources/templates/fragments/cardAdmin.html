@@ -77,7 +77,7 @@
 
         <!-- Botón para eliminar -->
         <form th:action="@{/admin/gestHeroes/delete/{idHeroe}(idHeroe=${heroe.idHeroe})}" method="post" class="mt-2">
-            <button type="submit" class="btn btn-danger w-100">Eliminar</button>
+            <button type="submit" class="btn btn-danger w-100 mt-2" th:id="'eliminar-' + ${heroe.idHeroe}">Eliminar</button>        
         </form>
     </div>
 </body>

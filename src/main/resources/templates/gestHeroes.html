@@ -124,7 +124,7 @@
                     </select>
                 </form>
             </div>
-            
+
             <div id="heroesContainer">
                 <div th:if="${heroes != null}" th:each="heroe : ${heroes}">
                     <div th:replace="fragments/cardAdmin :: cartaAdmin(heroe=${heroe})"></div>
@@ -183,8 +183,11 @@
         });
     });
 
+
+
     function closeModal() {
-        document.getElementById("confirmacionModal").style.display = "none";
+        document.getElementById("modalEliminar").style.display = "none";
+        document.getElementById("modalAnadir").style.display = "none";
     }
 
 </script>
