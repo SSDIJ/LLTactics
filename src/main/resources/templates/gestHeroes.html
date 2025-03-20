@@ -124,23 +124,20 @@
                     </select>
                 </form>
             </div>
-            <div class="row" id="heroesContainer">
-                <div th:if="${heroes != null}">
-                    <div th:each="heroe : ${heroes}">
-                        <div th:replace="fragments/cardAdmin :: cartaAdmin(${heroe})"></div>
-                    </div>
+            
+            <div id="heroesContainer">
+                <div th:if="${heroes != null}" th:each="heroe : ${heroes}">
+                    <div th:replace="fragments/cardAdmin :: cartaAdmin(heroe=${heroe})"></div>
                 </div>
-                <div th:if="${heroes == null}">
-                    <p class="text-muted">Selecciona una facción para ver los héroes.</p>
-                </div>
+                <p th:if="${heroes == null}" class="text-muted">Selecciona una facción para ver los héroes.</p>
             </div>
         </div>
 
         <div class="degradado"></div>
-        <div th:replace="~{fragments/modal :: modal('modalAnadir','Confirmación', 'Héroe añadido correctamente.')}">
-        </div>
-        <div th:replace="~{fragments/modal :: modal('modalEliminar','Confirmación', 'Héroe eliminado correctamente.')}">
-        </div>
+        <!-- <div th:replace="~{fragments/modal :: modal('modalAnadir','Confirmación', 'Héroe añadido correctamente.')}">
+        </div> -->
+        <!-- <div th:replace="~{fragments/modal :: modal('modalEliminar','Confirmación', 'Héroe eliminado correctamente.')}">
+        </div> -->
         <th:block th:replace="~{fragments/footer.html :: footer}" />
 </body>
 
