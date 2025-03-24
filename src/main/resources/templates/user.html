@@ -79,9 +79,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        var partidasGanadas = $[[{user.partidasGanadas}]];
-        var partidasPerdidas = $[[{user.partidasPerdidas}]];
-       
+        var partidasGanadas = [[${user.partidasGanadas}]];
+        var partidasPerdidas = [[${user.partidasPerdidas}]];
     
         var ctx1 = document.getElementById('winrateChart').getContext('2d');
         new Chart(ctx1, {

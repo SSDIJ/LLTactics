@@ -561,7 +561,6 @@ body .profile-body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 5%;
     width: 100%;
 }
 
@@ -571,8 +570,8 @@ body .profile-body {
 }
 
 .mid-user img {
-    width: min(20vw, 150px); /* Nunca más grande de 150px pero usa 20vw en pantallas grandes */
-    height: auto;
+   width: 10vw;
+   height: 10vw;
     border: 0.5vw solid gold;
     border-radius: 50%;
     display: block;
@@ -614,6 +613,7 @@ body .profile-body {
     padding: 2rem 5vw; /* Agrega padding en los lados sin afectar el ancho */
     background: rgba(0, 0, 0, 0.7);
     color: white;
+    margin: 0px !important;
 }
 
 /* ELEMENTOS DE ESTADÍSTICAS */
