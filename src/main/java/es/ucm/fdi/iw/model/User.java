@@ -62,7 +62,7 @@ public class User implements Transferable<User.Transfer> {
     @Column(nullable = true)
     private int partidasPerdidas;
     @Column(nullable = true)
-    private int faccionFavorita;
+    private int faccionFavorita;  // 0 = humanos, 1 = dragones, 2 = trolls, 3 = no muertos, 4 = criaturas legendarias
     
 
 	@OneToMany

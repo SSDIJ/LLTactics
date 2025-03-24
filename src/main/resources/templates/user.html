@@ -47,14 +47,11 @@
     </div>
 
 
-
-
     <!-- ESTADÍSTICAS DEL PERFIL -->
     <div class="bot-user">
         <div class="stat-item">
             <p>Puntuación de maestría</p>
-            <h3>410</h3> <!-- ESTÁTICO DE MOMENTO -->
-            <!-- <h3 th:text="${user.masteryScore}">410</h3>  Puntuación de maestría dinámica -->
+            <h3 th:text="${user.puntuacion}">410</h3>  
         </div>
         <div class="stat-item">
             <p>Personaje más jugado</p>
@@ -63,8 +60,15 @@
         </div>
         <div class="stat-item">
             <p>Facción favorita</p>
-            <img src="/img/units/banners/humans.png" alt="Escudo de Humanos"/> <!-- ESTÁTICO DE MOMENTO -->
-            <!--<img th:src="@{/img/units/banners/{faction}.png(faction=${user.favoriteFaction})}" alt="Escudo de Facción"/>  Facción favorita dinámica -->
+        <!--0 = humanos, 1 = dragones, 2 = trolls, 3 = no muertos, 4 = criaturas legendarias-->
+        
+           <img th:if="${user.faccionFavorita==0}" src="/img/units/banners/humans.png">
+           <img th:if="${user.faccionFavorita==1}" src="/img/units/banners/dragons.png">
+           <img th:if="${user.faccionFavorita==2}" src="/img/units/banners/trolls.png">
+           <img th:if="${user.faccionFavorita==3}" src="/img/units/banners/undead.png">
+           <img th:if="${user.faccionFavorita==4}" src="/img/units/banners/legendaries.png">
+           <img th:if="${user.faccionFavorita>4}" src="/img/units/banners/humans.png">
+        
         </div>
         <div class="stat-item chart-container">
             <canvas id="winrateChart"></canvas>
@@ -75,13 +79,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        var partidasGanadas = $[[{user.partidasGanadas}]];
+        var partidasPerdidas = $[[{user.partidasPerdidas}]];
+       
+    
         var ctx1 = document.getElementById('winrateChart').getContext('2d');
         new Chart(ctx1, {
             type: 'doughnut',
             data: {
                 labels: ['Victorias', 'Derrotas'],
                 datasets: [{
-                    data: [20, 5],  /* INSERTAR AQUÍ las estadísticas dinámicas de victorias/derrotas */
+                    data: [partidasGanadas, partidasPerdidas],
                     backgroundColor: ['#4CAF50', '#F44336']
                 }]
             },
@@ -89,13 +97,14 @@
                 plugins: {
                     legend: {
                         labels: {
-                            color: 'white' // Color del texto de la leyenda
+                            color: 'white'
                         }
                     }
                 }
             }
         });
     </script>
+    
     
 </body>
 </html>
