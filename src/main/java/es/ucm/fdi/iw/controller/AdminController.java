@@ -51,69 +51,8 @@ public class AdminController {
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
-        for (String name : new String[] { "u", "url", "ws" }) {
+        for (String name : new String[] { "u", "url", "ws" })
             model.addAttribute(name, session.getAttribute(name));
-        }
-        cargarDatos(model);
-    }
-
-    private void cargarDatos(Model model) {
-        List<Jugador> baneados = new ArrayList<>();
-        Jugador j1 = new Jugador("Arthur", "/img/players/arthur.png", 1, 1500, 20, 5, 0, List.of(
-                new Heroe("Caballero", "/img/units/humans/3. Caballero/knight.png", 180, 60, 85, 50,
-                        "Ágil y feroz en combate.", 0, 2, 0),
-                new Heroe("Mago", "/img/units/humans/5. Mago/white-mage.png", 140, 20, 110, 60,
-                        "Un maestro de la magia arcana.", 0, 2, 0)),
-                true, "Ser demasiado bueno", 3L);
-
-        Jugador j2 = new Jugador("Lancelot", "/img/players/lancelot.png", 2, 1400, 18, 7, 0, List.of(
-                new Heroe("Dragón Morado", "/img/units/dragons/5. DMorado/blademaster.png", 180, 30, 95, 65,
-                        "Especializado en la magia y las runas.", 1, 2, 0),
-                new Heroe("Berserker", "/img/units/dragons/2. DBerserker/clasher-blade.png", 250, 50, 90, 45,
-                        "El Berserker es una furia desatada en el campo de batalla.", 1, 3, 0)),
-                true, "Se fue AFK 20 minutos", 1L);
-
-        Jugador j3 = new Jugador("Morgana", "/img/players/morgana.png", 3, 1350, 17, 8, 1, List.of(
-                new Heroe("Esqueleto mago", "/img/units/skeletons/5. SMago/ancient-lich.png", 160, 30, 110, 70,
-                        "Utiliza poderosos hechizos para devastar a sus enemigos.", 3, 4, 0)),
-                true, "Insultó a otro jugador", 1L);
-
-        baneados.add(j1);
-        baneados.add(j3);
-        baneados.add(j2);
-        model.addAttribute("jugadoresBaneados", baneados);
-
-        List<Partida> enCurso = new ArrayList<>();
-        List<Mensaje> chat = new ArrayList<>();
-        List<Jugador> jugadores = new ArrayList<>();
-        jugadores.add(j1);
-        jugadores.add(j2);
-
-        Long id = (long) 1.0; // TODO: QUITAR, PUESTO SOLO PARA QUE FUNCIONE
-        // Agregar mensajes al chat
-        chat.add(new Mensaje(j1, "Hola, ¿qué tal?"));
-        chat.add(new Mensaje(j2, "¡Hola Juan! Estoy bien, ¿y tú?"));
-        chat.add(new Mensaje(j1, "Todo bien, gracias por preguntar."));
-        // enCurso.add(new Partida(id, 30, jugadores, chat));
-        model.addAttribute("enCurso", enCurso);
-
-        List<Partida> terminadas = new ArrayList<>();
-
-        model.addAttribute("terminadas", terminadas);
-
-        List<Heroe> humanos = heroeRepository.findByFaccion(0);
-        List<Heroe> dragones = heroeRepository.findByFaccion(1);
-        List<Heroe> trolls = heroeRepository.findByFaccion(2);
-        List<Heroe> noMuertos = heroeRepository.findByFaccion(3);
-        List<Heroe> legendarios = heroeRepository.findByFaccion(4);
-
-        System.out.println("Humanos: " + humanos); // Esto lo puedes revisar en el terminal
-
-        model.addAttribute("humanos", humanos);
-        model.addAttribute("trolls", trolls);
-        model.addAttribute("dragones", dragones);
-        model.addAttribute("noMuertos", noMuertos);
-        model.addAttribute("legendarios", legendarios);
     }
 
     private static final Logger log = LogManager.getLogger(AdminController.class);
@@ -193,7 +132,7 @@ public class AdminController {
     public String deleteHeroe(@PathVariable("idHeroe") Long idHeroe, Model model) {
         try {
             heroeRepository.deleteById(idHeroe);
-            return "redirect:/admin/gestHeroes";
+            return "gestHeroes";
         } catch (Exception e) {
             model.addAttribute("error", "Error al eliminar el héroe: " + e.getMessage());
             return "gestHeroes";

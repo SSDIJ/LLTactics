@@ -20,21 +20,15 @@ Feature: Prueba principal
     * click('#heroes-btn')
 
     # Esperar a que la sección de facción esté disponible
-    * waitFor('#faccion')
-    * select('#faccion', 'humanos')
+    * waitFor('#faccionSelect')
+    * select('#faccionSelect', 'humanos')
     * delay(5000)
 
     # Eliminar héroe
-    * click('#eliminarHeroe')
-    * waitFor('#eliminarHeroe')
-    * waitFor('#eliminarHeroe option')
-    * select('#eliminarHeroe', '4')
-    * delay(2000)
-    * click('#eliminar-heroe-btn')
-    * delay(2000)
-    * waitFor('#confirmacionModal')
-    * delay(2000)
-    * script("closeModal()")
+    * waitFor('#eliminar-4')  
+    * click('#eliminar-4')   
+    * delay(2000)         
+
     # Esperamos que el botón de la galería esté disponible
     * waitFor('#galeria-btn')
     * click('#galeria-btn')
