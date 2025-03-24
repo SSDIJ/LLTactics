@@ -39,13 +39,18 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     private EntityManager entityManager;    
     
 	private static Logger log = LogManager.getLogger(LoginSuccessHandler.class);
-	
+
+	@Override
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+	Authentication authentication) throws IOException, ServletException {
+		onAuthenticationSuccess(request, response, authentication, true);
+	}
+
     /**
      * Called whenever a user authenticates correctly.
      */
-    @Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-			Authentication authentication) throws IOException, ServletException {
+			Authentication authentication, boolean redirect) throws IOException, ServletException {
 	   
 		/* 
 		  Avoids following warning: 
@@ -91,7 +96,9 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			u.getUsername(), u.getId(), session.getId(), ws, nextUrl);
 
 		// note that this is a 302, and will result in a new request
-		response.sendRedirect(nextUrl);
+		if (redirect) {
+			response.sendRedirect(nextUrl);
+		}
 	}
 
 	/**

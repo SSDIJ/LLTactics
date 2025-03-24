@@ -24,11 +24,12 @@ public class Jugador {
     private Partida partida;
     private String nombre;
     private String imagen;
+    /*
     private int indiceRanking;
     private int puntuacion;
     private int partidasGanadas;
     private int partidasPerdidas;
-    private int faccionFavorita;
+    private int faccionFavorita;  */
     private Long id_user;
     
     @OneToMany
@@ -48,11 +49,12 @@ public class Jugador {
     public Jugador(String nombre, String imagen, int indiceRanking, int puntuacion, int partidasGanadas, int partidasPerdidas, int faccionFavorita, List<Heroe> masJugados, boolean baneado, String razon, Long id_user) {
         this.nombre = nombre;
         this.imagen = imagen;
+        /*
         this.indiceRanking = indiceRanking;
         this.puntuacion = puntuacion;
         this.partidasGanadas = partidasGanadas;
         this.partidasPerdidas = partidasPerdidas;
-        this.faccionFavorita = faccionFavorita;
+        this.faccionFavorita = faccionFavorita;  */
         this.masJugados = masJugados;
         this.baneado = baneado;
         this.razonBaneo = razon;

@@ -19,6 +19,17 @@ public class UserService {
         user.setLastName(userDTO.getLastName());
         user.setUsername(userDTO.getUsername());
         user.setPassword(userDTO.getPassword()); //  Debe encriptarse antes de guardar
+        user.setEnabled(userDTO.isEnabled());
+        user.setRoles(userDTO.getRoles());
+
+        
+        user.setIndiceRanking(userDTO.getIndiceRanking());  
+        user.setPuntuacion(userDTO.getPuntuacion());
+        user.setPartidasGanadas(userDTO.getPartidasGanadas());
+        user.setPartidasPerdidas(userDTO.getPartidasPerdidas());
+        user.setFaccionFavorita(userDTO.getFaccionFavorita());
+        
+        
         userRepository.save(user);
     }
 }

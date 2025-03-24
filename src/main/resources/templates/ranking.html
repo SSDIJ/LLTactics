@@ -24,7 +24,7 @@
 
     <!-- Tabla del ranking -->
     <div id="ranking-container">
-        <p th:if="${#lists.isEmpty(jugadores)}">No hay jugadores disponibles</p>
+        <p th:if="${#lists.isEmpty(usuarios)}">No hay usuarios disponibles</p>
         <h1>🏆 Ranking de Guerreros 🏆</h1>
         
         <!-- Contenedor adicional para centrar la tabla -->
@@ -41,14 +41,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="jugador, stat : ${jugadores}">
+                    
+                    <tr th:each="user, stat : ${usuarios}">
                         <td th:text="${stat.index + 1}"></td>
-                        <td th:text="${jugador.nombre}"></td>
-                        <td th:text="${jugador.puntuacion}"></td>
-                        <td th:text="${jugador.partidasGanadas + jugador.partidasPerdidas}"></td>
-                        <td th:text="${jugador.partidasGanadas}"></td>
-                        <td th:text="${jugador.partidasPerdidas}"></td>
+                        <td th:text="${user.firstName}"></td>
+                        <td th:text="${user.puntuacion}"></td>
+                        <td th:text="${user.partidasGanadas + user.partidasPerdidas}"></td>
+                        <td th:text="${user.partidasGanadas}"></td>
+                        <td th:text="${user.partidasPerdidas}"></td>
                     </tr>
+                    
                 </tbody>
             </table>
         </div>

@@ -12,6 +12,7 @@ public interface playerRepository extends JpaRepository<Jugador, Long> {
     // Encuentra jugadores por nombre (ignorando mayúsculas y minúsculas)
     List<Jugador> findByNombreContainingIgnoreCase(String nombre);
 
+
     // Encuentra todos los jugadores ordenados por partidas ganadas
-    List<Jugador> findAllByOrderByPartidasGanadasDesc();
+    //List<Jugador> findAllByOrderByPartidasGanadasDesc();
 }

@@ -44,11 +44,26 @@ public class User implements Transferable<User.Transfer> {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = true)
     private String firstName;
+    @Column(nullable = true)
     private String lastName;
 
     private boolean enabled;
     private String roles; // split by ',' to separate roles
+    
+    
+    @Column(nullable = true)
+    private int indiceRanking;
+    @Column(nullable = true)
+    private int puntuacion;
+    @Column(nullable = true)
+    private int partidasGanadas;
+    @Column(nullable = true)
+    private int partidasPerdidas;
+    @Column(nullable = true)
+    private int faccionFavorita;
+    
 
 	@OneToMany
 	@JoinColumn(name = "sender_id")

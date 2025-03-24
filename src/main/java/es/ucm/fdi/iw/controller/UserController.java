@@ -1,6 +1,7 @@
 package es.ucm.fdi.iw.controller;
 
 import es.ucm.fdi.iw.LocalData;
+import es.ucm.fdi.iw.LoginSuccessHandler;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Transferable;
 import es.ucm.fdi.iw.model.User;
@@ -340,6 +341,9 @@ public class UserController {
 		return "{\"result\": \"message sent.\"}";
 	}	
 
+	@Autowired
+	private LoginSuccessHandler handler;
+
 	/**
 	 * Registra un nuevo usuario e inicia la sesión automáticamente.
 	 */
@@ -349,7 +353,7 @@ public class UserController {
 			HttpServletResponse response,
 			@ModelAttribute User newUser, 
 			@RequestParam(required=false) String pass2,
-			Model model, HttpSession session) throws IOException {
+			Model model, HttpSession session, HttpServletRequest request) throws IOException {
 
 		// Verifica si las contraseñas coinciden
 		if (newUser.getPassword() != null && !newUser.getPassword().equals(pass2)) {
@@ -377,7 +381,15 @@ public class UserController {
 		newUser.setPassword(encodePassword(newUser.getPassword()));
 		newUser.setEnabled(true);  // Activa al usuario por defecto
 		newUser.setRoles("USER");
+
 		
+		newUser.setFaccionFavorita(0);
+		newUser.setPartidasGanadas(0);
+		newUser.setPartidasPerdidas(0);
+		newUser.setPuntuacion(0);
+		newUser.setIndiceRanking(0);
+		
+
 		// Guarda el nuevo usuario en la base de datos
 		entityManager.persist(newUser);
 		entityManager.flush();  // Asegura que el usuario se ha guardado y tiene un id válido
@@ -394,10 +406,13 @@ public class UserController {
 		SecurityContextHolder.setContext(securityContext);
 		session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
 
-		// Guarda el nuevo usuario en la sesión
-		session.setAttribute("u", newUser);
-
-		return "redirect:/";  // Redirige al perfil del nuevo usuario 
+		// Llama al método onAuthenticationSuccess
+		try {
+			handler.onAuthenticationSuccess(request, response, authentication, false);
+		} catch (Exception e) {
+			log.error("Error handling authentication success", e);
+		}
+		return "redirect:/";  // Redirige a la página principal
 	}
 
 
