@@ -1296,6 +1296,33 @@ body .profile-body{
     margin-left:50px;
 }
 
+.sectionBuscarUsuarios{
+    width: 75%;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin: 50px auto;
+}
+
+.sectionFiltrarUsuarios{
+    width: 75%;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin: 50px auto;
+}
+
+.filtrosUsuarios{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem; 
+    width: 100%; 
+}
+
 #partidas-actuales { order: 1; }
 #usuarios-reportados { order: 2; }
 #partidas-terminadas { order: 3; }

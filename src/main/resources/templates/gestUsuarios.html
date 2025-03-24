@@ -9,7 +9,38 @@
 
 <body>
     <header th:replace="~{fragments/nav.html :: nav}"></header>
-    <h1 class="adminTitle">Gestión de Usuarios</h1><br>
+    <h1 class="adminTitle text-center">Gestión de Usuarios</h1><br>
+    <div class="containerAdmin">
+        <div class="sectionBuscarUsuarios">
+            <h2>Buscar Usuarios</h2>
+
+        </div>
+        <hr class="divider">
+        <div class="sectionFiltrarUsuarios">
+            <h2>Filtrar Usuarios</h2>
+            <div class="filtrosUsuarios">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Filtrar Baneados
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#" onclick="filtrarUsuarios('enCurso')">No Baneados</a></li>
+                      <li><a class="dropdown-item" href="#" onclick="filtrarUsuarios('terminadas')">Baneados</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Filtrar Admins
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#" onclick="filtrarUsuarios('enCurso')">Usuarios</a></li>
+                      <li><a class="dropdown-item" href="#" onclick="filtrarUsuarios('terminadas')">Admins</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="degradado"></div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 </body>
