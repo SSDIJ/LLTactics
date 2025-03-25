@@ -71,7 +71,7 @@ class Player {
 
         console.log("Vendiendo unidad")
         console.log(soldUnit)
-        const index = this.units.findIndex(unit => unit.nombre == soldUnit.nombre);
+        const index = this.units.findIndex(unit => unit.unitID == soldUnit.unitID);
             
         // Reemplaza la unidad undefined
         if (index !== -1) {
