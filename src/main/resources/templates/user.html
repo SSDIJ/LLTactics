@@ -107,41 +107,13 @@
         });
     </script>
     <script>
-        document.getElementById("searchBtn").addEventListener("click", async function() {
-            var playerName = document.getElementById("searchPlayer").value.trim(); // Obtener el nombre
-    
-            if (!playerName) {
-                alert("Por favor, ingresa un nombre válido.");
-                return;
-            }
-    
-            try {
-                // Llamar a la función que busca el ID por nombre
-                let userId = await buscarUsuarioPorNombre(playerName);
-    
-                if (userId) {
-                    window.location.href = "/user/" + userId; // Redirigir al perfil
-                } else {
-                    alert("Jugador no encontrado.");
+        
+            document.getElementById('searchBtn').addEventListener('click', function () {
+                const username = document.getElementById('searchPlayer').value.trim();
+                if (username) {
+                    window.location.href = `/viewProfile?nombre=${encodeURIComponent(username)}`;
                 }
-            } catch (error) {
-                console.error("Error al buscar el jugador:", error);
-            }
-        });
-    
-        // Función que llama al backend para obtener el ID del usuario
-        async function buscarUsuarioPorNombre(nombre) {
-            try {
-                let response = await fetch(`/api/user/search?name=${encodeURIComponent(nombre)}`);
-                if (!response.ok) throw new Error("Usuario no encontrado");
-    
-                let data = await response.json();
-                return data.id; // Retornar el ID del usuario
-            } catch (error) {
-                console.error(error);
-                return null;
-            }
-        }
+            });
     </script>
     
     

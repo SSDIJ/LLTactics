@@ -6,6 +6,7 @@ import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Transferable;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
+import es.ucm.fdi.iw.repositories.userRepository;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
@@ -79,6 +81,8 @@ public class UserController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@Autowired
+    private userRepository userRepository;
 	// Añadido para el inicio de sesion automatico tras registrarse
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -415,5 +419,13 @@ public class UserController {
 		return "redirect:/";  // Redirige a la página principal
 	}
 
-
+	@GetMapping("/viewProfile")
+	public String viewProfile(@RequestParam String nombre, RedirectAttributes redirectAttributes){
+		System.out.println("Se ha llamado a la funcion de ver Profile, nice");
+		User user= userRepository.findByUsernameContainingIgnoreCase(nombre);
+		if(user != null){
+			return "error";
+		}
+		return "user";
+	}
 }

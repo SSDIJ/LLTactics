@@ -15,6 +15,7 @@ class Unit {
         this.velocidad = velocidad;
         this.vida = vida;
         this.vidaMax = vida;
+        this.unitID = Unit.nextId++;
         this.items = new Array(this.MAX_ITEMS).fill(null);
     }
 

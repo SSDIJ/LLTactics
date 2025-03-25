@@ -14,7 +14,7 @@ public interface userRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
     // Encuentra jugadores por nombre (ignorando mayúsculas y minúsculas)
-    List<User> findByUsernameContainingIgnoreCase(String username);
+    User findByUsernameContainingIgnoreCase(String username);
 
     // Encuentra todos los jugadores ordenados por partidas ganadas
     //List<User> findAllByOrderByPartidasGanadasDesc();
