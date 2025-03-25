@@ -1,5 +1,6 @@
 class Unit {
 
+    static nextId = 1;
     MAX_ITEMS = 2;
 
     constructor(armadura, daño, descripcion, faccion, id, imagen, nombre, price, velocidad, vida) {
@@ -30,11 +31,28 @@ class Unit {
             for (let i = 0; i < this.MAX_ITEMS; i++) {
                 if (this.items[i] === null) {
                     this.items[i] = item;
+                    this.upgradeStats(item);
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    upgradeStats(item) {
+        this.vida += item.life;
+        this.vidaMax += item.life;
+        this.daño += item.damage;
+        this.velocidad += item.velocidad;
+        this.armadura += item.armadura;
+    }
+
+    degradeStats(item) {
+        this.vida -= item.life;
+        this.vidaMax -= item.life;
+        this.daño -= item.damage;
+        this.velocidad -= item.velocidad;
+        this.armadura -= item.armadura;
     }
 
 

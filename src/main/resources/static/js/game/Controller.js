@@ -70,13 +70,16 @@ function updateUnits() {
                 // Mostramos los objetos
                 unit.items.forEach((item, index) => {
                     const imgObj = unitItemCells[index].querySelector("img");
+
+
                     if (item) { 
+
                         imgObj.src = item.imageUrl;
-                        imgObj.classList.remove("hidden")
+                        imgObj.classList.remove("hidden");
                     }
                     else {
                         imgObj.src = "";
-                        imgObj.classList.add("hidden")
+                        imgObj.classList.add("hidden");
                     }
                 })
 
@@ -84,7 +87,7 @@ function updateUnits() {
 
             const unitTemp = unit;
 
-            // Opción de eliminar el objeto
+            // Opción de eliminar la unidad
             img.addEventListener('dblclick', () => {
 
                 player1.sellUnit(unitTemp)
@@ -144,6 +147,7 @@ function updateInventory() {
             let newCell = objectCells[index].cloneNode(true);
             objectCells[index].replaceWith(newCell);
 
+            // Venta del item
             newCell.addEventListener('dblclick', () => {
                 newCell.classList.remove("selected");
                 img.remove();
