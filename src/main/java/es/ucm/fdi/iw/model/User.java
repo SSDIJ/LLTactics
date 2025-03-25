@@ -70,7 +70,9 @@ public class User implements Transferable<User.Transfer> {
 	private List<Message> sent = new ArrayList<>();
 	@OneToMany
 	@JoinColumn(name = "recipient_id")	
-	private List<Message> received = new ArrayList<>();		
+	private List<Message> received = new ArrayList<>();
+    @ManyToMany(mappedBy = "members")
+    private List<Topic> topics = new ArrayList<>();		
 
     /**
      * Checks whether this user has a given role.
@@ -89,11 +91,18 @@ public class User implements Transferable<User.Transfer> {
         private String username;
 		private int totalReceived;
 		private int totalSent;
+        private String topics;
     }
 
+    // Convierte el usuario en un objeto Transfer con info básica
 	@Override
     public Transfer toTransfer() {
-		return new Transfer(id,	username, received.size(), sent.size());
+        StringBuilder gs = new StringBuilder();
+        for (Topic t : topics) {
+            gs.append(t.getName());
+            gs.append(", ");
+        }
+		return new Transfer(id,	username, received.size(), sent.size(), gs.toString());
 	}
 	
 	@Override

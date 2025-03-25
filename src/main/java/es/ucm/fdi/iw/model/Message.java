@@ -42,6 +42,8 @@ public class Message implements Transferable<Message.Transfer> {
 	private User sender;
 	@ManyToOne
 	private User recipient;
+	@ManyToOne
+	private Topic topic;
 	private String text;
 	
 	private LocalDateTime dateSent;
@@ -59,7 +61,9 @@ public class Message implements Transferable<Message.Transfer> {
 		private String sent;
 		private String received;
 		private String text;
+		private String topic;
 		long id;
+
 		public Transfer(Message m) {
 			this.from = m.getSender().getUsername();
 			this.to = m.getRecipient().getUsername();
@@ -67,16 +71,23 @@ public class Message implements Transferable<Message.Transfer> {
 			this.received = m.getDateRead() == null ?
 					null : DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(m.getDateRead());
 			this.text = m.getText();
+			this.topic = m.getTopic() != null ? m.getTopic().getName() : "null";
 			this.id = m.getId();
 		}
 	}
 
+	
 	@Override
 	public Transfer toTransfer() {
-		return new Transfer(sender.getUsername(), recipient.getUsername(), 
+		// TODO: esto tendria que ser return new Transfer(this); no?
+		return new Transfer(
+			sender.getUsername(), 
+			recipient.getUsername(), 
 			DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(dateSent),
-			dateRead == null ? null : DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(dateRead),
-			text, id
+			dateRead != null ? DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(dateRead) : null,
+			text,
+			topic.getTopicName(),
+			id
         );
     }
 }
