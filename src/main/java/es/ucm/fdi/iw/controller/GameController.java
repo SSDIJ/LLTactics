@@ -26,7 +26,6 @@ public class GameController {
                 new Objeto(null, "", 0, 0, 0, 0,"", 1),
                 new Objeto(null, "", 0, 0, 0, 0,"", 1),
                 new Objeto(null, "", 0, 0, 0, 0,"", 1),
-                new Objeto(null, "", 0, 0, 0, 0,"", 1),
                 new Objeto(null, "", 0, 0, 0, 0,"", 1));
         model.addAttribute("playerObjects", playerObjects);
 
@@ -50,15 +49,10 @@ public class GameController {
         model.addAttribute("unitsP1", unitsP1);
 
         List<Unidad> unitsP2 = new ArrayList<>(Arrays.asList(
-                new Unidad("Troll Gigante", "/img/units/trolls/1. TTanque/great-troll.png", 60, 50, 30, 300,
-                        "El Troll Gigante es una bestia imponente con una fuerza descomunal.", 2, 3, 0,
-                        Arrays.asList(null, null)),
-                new Unidad("Esqueleto General", "/img/units/skeletons/2. SGeneral/deathknight.png", 60, 80, 40, 220,
-                        "El Esqueleto General lidera a sus tropas con una presencia intimidante.", 3, 4, 0,
-                        Arrays.asList(new Objeto("/img/items/staff-druid.png", "", 0, 0, 0, 0, "", 1), null)),
                 new Unidad("", null, 1, 0, 0, 0, "", 0, 0, 0, Arrays.asList(null, null)),
-                new Unidad("Paladín", "/img/units/humans/3. Caballero/knight.png", 60, 85, 50, 180,
-                        "Agil y feroz en combate.", 0, 3, 0, Arrays.asList(null, null))));
+                new Unidad("", null, 1, 0, 0, 0, "", 0, 0, 0, Arrays.asList(null, null)),
+                new Unidad("", null, 1, 0, 0, 0, "", 0, 0, 0, Arrays.asList(null, null)),
+                new Unidad("", null, 1, 0, 0, 0, "", 0, 0, 0, Arrays.asList(null, null))));
         model.addAttribute("unitsP2", unitsP2);
 
         Jugador j1 = new Jugador("Jugador 1");

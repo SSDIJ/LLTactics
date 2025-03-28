@@ -4,21 +4,33 @@ import Shop from "./Shop.js"
 
 class Player {
 
-    MAX_ITEMS = 7;
+    MAX_ITEMS = 6;
     MAX_UNITS = 4;
 
     constructor(name) {
         this.name = name;
         this.health = 100;
         this.stars = 1000;
-        this.units = [
-            new Unit(0, 0, "", "", 0, "", null, 0, 0, 0, []),
-            new Unit(0, 0, "", "", 0, "", null, 0, 0, 0, []),
-            new Unit(0, 0, "", "", 0, "", null, 0, 0, 0, []),
-            new Unit(0, 0, "", "", 0, "", null, 0, 0, 0, []),
-        ];
         this.inventory = new Set();  // Usamos un Set para el inventario
         this.shop = new Shop();  // Cada jugador tiene su propia tienda
+        this.resetUnits();
+    }
+
+    getNullUnit(){
+        return new Unit(0, 0, "", "", null, "", null, 0, 0, 0, []);
+    } 
+
+    getDefaultUnit() {
+        return new Unit(30, 20, "Defiende sus tierras.", 0, 0, "/img/units/humans/0. Campesino/peasant.png", 'Campesino', 0, 10, 150);
+    }
+
+    resetUnits() {
+        this.units = [
+            this.getNullUnit(),
+            this.getNullUnit(),
+            this.getNullUnit(),
+            this.getNullUnit()
+        ];
     }
 
     getHealth() {
@@ -43,16 +55,22 @@ class Player {
     }
 
     // Comprar una unidad de la tienda
-    buyUnit(unit) {
+    buyUnit(unit, toEnd = true) {
 
         console.log(this.units);
 
         if (this.stars >= unit.price) {
             // Busca la primera unidad undefined en el array
-            const index = this.units.findIndex(unit => unit.imagen == "");
+            let index;
+            if (toEnd) index = this.units.slice().reverse().findIndex(unit => unit.imagen == "");
+            else index = this.units.findIndex(unit => unit.imagen == "");
             // Reemplaza la unidad undefined
-            if (index !== -1)
+            if (index !== -1) {
+
+                index = toEnd ? this.MAX_UNITS - index - 1 : index;
+
                 this.units[index] = unit; 
+            }
             else {
                 console.log(`${this.name} no puede tener más unidades.`);
                 return false; // No se pudo comprar la unidad
@@ -64,6 +82,7 @@ class Player {
         } 
 
         console.log(`${this.name} no tiene suficientes monedas.`);
+
         return false;
     }
 
@@ -108,11 +127,15 @@ class Player {
         } 
     }
 
-
     removeFromInventory(item) {
         if (this.inventory.has(item))
             this.inventory.delete(item);
     }
+
+    resetUnitHealth() {
+        this.units.forEach((u) => u.vida = u.vidaMax)
+    }
+    
 }
 
 export default Player;

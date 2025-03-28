@@ -13,18 +13,19 @@
     <!-- Contenedor de la partida -->
     <div id="game-container" class="w-100 position-absolute">
 
+
         <!-- Información relativa a la ronda -->
         <div id="round-info-container">
-
+            
             <!-- Número de ronda -->
             <div id="round-name" class="d-flex justify-content-center align-items-center">
                 Ronda 5
             </div>
 
             <!-- Contador -->
-            <div id="round-timer" class="d-flex justify-content-center align-items-center">
-                1:00
-            </div>
+            <div id="round-timer" class="d-flex justify-content-center align-items-center"></div>
+
+            <div id="round-panel">Compra</div>
             
         </div>
         
@@ -170,37 +171,38 @@
 
                 <!-- CHAT -->
                
-                <button class="btn d-xl-none media-btn" id="chat-media-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatOffcanvas" aria-controls="chatOffcanvas">
-                    <h3 class="title">Chat</h3>
-                </button>
+                <!--
+                    <button class="btn d-xl-none media-btn" id="chat-media-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatOffcanvas" aria-controls="chatOffcanvas">
+                        <h3 class="title">Chat</h3>
+                    </button>
 
-                <!-- Offcanvas para el chat -->
-                <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="chatOffcanvas" aria-labelledby="chatOffcanvasLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title title" id="chatOffcanvasLabel">Chat</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body d-flex flex-column">
-                        <div id="game-messages-container" class="d-flex flex-column overflow-auto flex-grow-1">
-                            <th:block th:each="msg : ${mensajes}">
-                                <th:block th:replace="fragments/chat-message :: chat-message(${msg})"></th:block>
-                            </th:block>
+                    <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="chatOffcanvas" aria-labelledby="chatOffcanvasLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title title" id="chatOffcanvasLabel">Chat</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                         </div>
-                        <textarea name="message-input-chat" id="message-input-chat" class="form-control mt-2"></textarea>
+                        <div class="offcanvas-body d-flex flex-column">
+                            <div id="game-messages-container" class="d-flex flex-column overflow-auto flex-grow-1">
+                                <th:block th:each="msg : ${mensajes}">
+                                    <th:block th:replace="fragments/chat-message :: chat-message(${msg})"></th:block>
+                                </th:block>
+                            </div>
+                            <textarea name="message-input-chat" id="message-input-chat" class="form-control mt-2"></textarea>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Chat visible en pantallas grandes -->
-                <div id="chat-container">
-                    <div id="chat-box">
-                        <!-- Mensajes van aqui -->
+                    <div id="chat-container">
+                        <div id="chat-box">
+                            MENSAJES VAN AQUÍ
+                        </div>
+                        <div id="chat-input-container">
+                            <input type="text" id="chat-input" placeholder="Type a message...">
+                            <button id="send-button" class="send-btn">Send</button>
+                        </div>
                     </div>
-                    <div id="chat-input-container">
-                        <input type="text" id="chat-input" placeholder="Type a message...">
-                        <button id="send-button" class="send-btn">Send</button>
-                    </div>
-                </div>
-
+                -->
+                
+            
 
             </div>
         </div>
