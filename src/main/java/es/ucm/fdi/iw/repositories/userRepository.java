@@ -11,8 +11,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
-
-    // Encuentra jugadores por nombre (ignorando mayúsculas y minúsculas)
+    
     User findByUsernameContainingIgnoreCase(String username);
 
     List<User> findByRoles(String roles);

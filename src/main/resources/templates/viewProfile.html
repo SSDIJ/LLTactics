@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>LL Tactics</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Enlazamos el archivo CSS -->
+</head>
+<body class="profile-body">
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+    
+    <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
+
+       <!-- TOP: BARRA DE BUSQUEDA DE JUGADOR Y ENVIAR MENSAJES -->
+       <div class="top-user">
+        <form th:action="@{/user/__${user.id}__/msg}" method="POST">
+            <input type="text" id="message" placeholder="escribe a este usuario" />
+            <button id="sendmsg" class="btn btn-secondary" type="submit">Enviar</button>
+        </form>
+    </div>
+
+    <!-- IMAGEN DE PERFIL -->
+    <div class="mid-user">
+        <h1 class="mt-5">Perfil de <span th:text="${usuarioBuscado.username}"></span></h1>
+        <div class="profile-pic">
+        <img src="/img/profile_pics/knight-pic.jpg" alt=""/> <!-- ESTATICA DE MOMENTO -->
+        </div>
+        <!--<img th:src="@{/img/profile_pics/{filename}(filename=${user.profilePic})}" alt="Foto de perfil"/>  Imagen de perfil dinámica -->
+    </div>
+
+ 
+
+    <!-- Comentado de momento -->
+    <!-- 
+    <div id="profile" class="border border-2 border-tertiary rounded">
+        <input type="file" id="f_avatar" accept="image/jpeg,image/png">
+        <img class="preview" id="avatar" alt="careto a subir" />
+        <form th:action="@{/user/__${user.id}__/pic}">
+            <button id="postAvatar">Usar como foto de perfil</button>
+        </form>
+    </div>
+    -->
+
+    <!-- RECEPCIÓN DE MENSAJES -->
+    <div class="py-5 row" id="mensajes">
+    </div>
+
+
+    <!-- ESTADÍSTICAS DEL PERFIL -->
+    <div class="bot-user">
+        <div class="stat-item">
+            <p>Puntuación de maestría</p>
+            <h3 th:text="${usuarioBuscado.puntuacion}">410</h3>  
+        </div>
+        <div class="stat-item">
+            <p>Personaje más jugado</p>
+            <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero"/> <!-- ESTÁTICO DE MOMENTO -->
+            <!--<img th:src="@{/img/units/{unitCategory}/{unitName}/{unitName}.png(unitCategory=${user.mostPlayedCharacter.category}, unitName=${user.mostPlayedCharacter.name})}" alt="Personaje más jugado"/>  Personaje más jugado dinámico -->
+        </div>
+        <div class="stat-item">
+            <p>Facción favorita</p>
+        <!--0 = humanos, 1 = dragones, 2 = trolls, 3 = no muertos, 4 = criaturas legendarias-->
+        
+           <img th:if="${usuarioBuscado.faccionFavorita==0}" src="/img/units/banners/humans.png">
+           <img th:if="${usuarioBuscado.faccionFavorita==1}" src="/img/units/banners/dragons.png">
+           <img th:if="${usuarioBuscado.faccionFavorita==2}" src="/img/units/banners/trolls.png">
+           <img th:if="${usuarioBuscado.faccionFavorita==3}" src="/img/units/banners/undead.png">
+           <img th:if="${usuarioBuscado.faccionFavorita==4}" src="/img/units/banners/legendaries.png">
+           <img th:if="${usuarioBuscado.faccionFavorita>4}" src="/img/units/banners/humans.png">
+        
+        </div>
+        <div class="stat-item chart-container">
+            <canvas id="winrateChart"></canvas>
+        </div>
+    </div>
+
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var partidasGanadas = [[${usuarioBuscado.partidasGanadas}]];
+        var partidasPerdidas = [[${usuarioBuscado.partidasPerdidas}]];
+    
+        var ctx1 = document.getElementById('winrateChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+                labels: ['Victorias', 'Derrotas'],
+                datasets: [{
+                    data: [partidasGanadas, partidasPerdidas],
+                    backgroundColor: ['#4CAF50', '#F44336']
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    
+</body>
+</html>

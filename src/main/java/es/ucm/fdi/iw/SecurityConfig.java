@@ -60,7 +60,7 @@ public class SecurityConfig {
 				.ignoringRequestMatchers("/api/**")
 			)
             .authorizeHttpRequests(authorize -> authorize
-				.requestMatchers("/css/**", "/js/**", "/img/**", "/", "/error", "/registro", "/register").permitAll()
+				.requestMatchers("/css/**", "/js/**", "/img/**", "/", "/error", "/registro", "/register", "/viewProfile").permitAll()
 				.requestMatchers("/api/**", "/ranking").permitAll()            // <-- public api access
 				.requestMatchers("/api/**", "/reglas1").permitAll()            // <-- public api access
 				.requestMatchers("/api/**", "/galeria").permitAll()            // <-- public api access
