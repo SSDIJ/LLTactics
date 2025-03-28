@@ -420,12 +420,11 @@ public class UserController {
 	}
 
 	@GetMapping("/viewProfile")
-	public String viewProfile(@RequestParam String nombre, RedirectAttributes redirectAttributes){
+	public String viewProfile(@RequestParam String nombre, RedirectAttributes redirectAttributes, Model model){
 		System.out.println("Se ha llamado a la funcion de ver Profile, nice");
 		User user= userRepository.findByUsernameContainingIgnoreCase(nombre);
-		if(user != null){
-			return "error";
-		}
-		return "user";
+	
+		model.addAttribute("usuarioBuscado", user);
+		return "viewProfile";
 	}
 }
