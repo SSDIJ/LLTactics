@@ -1,6 +1,6 @@
 package es.ucm.fdi.iw.services;
 
-import es.ucm.fdi.iw.repositories.userRepository;
+import es.ucm.fdi.iw.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import es.ucm.fdi.iw.model.User.Role;
 public class UserService {
 
     @Autowired
-    private userRepository userRepository;
+    private UserRepository userRepository;
 
     public void saveUser(User userDTO) {
         User user = new User();
