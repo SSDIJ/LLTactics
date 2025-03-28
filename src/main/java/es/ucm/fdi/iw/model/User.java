@@ -10,6 +10,8 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.time.LocalDateTime;
+
 
 /**
  * An authorized user of the system.
@@ -62,7 +64,14 @@ public class User implements Transferable<User.Transfer> {
     @Column(nullable = true)
     private int partidasPerdidas;
     @Column(nullable = true)
-    private int faccionFavorita;  // 0 = humanos, 1 = dragones, 2 = trolls, 3 = no muertos, 4 = criaturas legendarias
+    private int faccionFavorita;  // 0 = humanos, 1 = dragones, 2 = trolls, 3 = no muertos, 4 = criaturas 
+    @Column(nullable = true)
+    private boolean baneado;
+    @Column(nullable = true)
+   private String razonBaneo;
+   @Column(nullable = true)
+   private LocalDateTime fechaBaneo;
+
     
 
 	@OneToMany
