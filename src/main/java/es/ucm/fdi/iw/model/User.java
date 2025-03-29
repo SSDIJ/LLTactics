@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
 
+import es.ucm.fdi.iw.model.Heroe;
+
 
 /**
  * An authorized user of the system.
@@ -50,6 +52,8 @@ public class User implements Transferable<User.Transfer> {
     private String firstName;
     @Column(nullable = true)
     private String lastName;
+    @Column(nullable = true)
+    private String fotoPerfil;
 
     private boolean enabled;
     private String roles; // split by ',' to separate roles
@@ -71,6 +75,10 @@ public class User implements Transferable<User.Transfer> {
    private String razonBaneo;
    @Column(nullable = true)
    private LocalDateTime fechaBaneo;
+   //Sin el oneToMany peta (relacion entre 2 clases distintas.)
+   @OneToMany
+   @Column(nullable = true)
+   private List<Heroe> masJugados = new ArrayList<>();
 
     
 

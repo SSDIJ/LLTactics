@@ -11,66 +11,68 @@
     
     <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
 
-       <!-- TOP: BARRA DE BUSQUEDA DE JUGADOR Y ENVIAR MENSAJES -->
-       <div class="top-user">
-        <form th:action="@{/user/__${user.id}__/msg}" method="POST">
-            <input type="text" id="message" placeholder="escribe a este usuario" />
+    <!-- TOP: BARRA DE BUSQUEDA DE JUGADOR Y ENVIAR MENSAJES -->
+    <div class="top-user">
+        <form th:action="@{/user/__${usuarioBuscado.id}__/msg}" method="POST">
+            <input type="text" id="message" placeholder="Escribe a este usuario" />
             <button id="sendmsg" class="btn btn-secondary" type="submit">Enviar</button>
         </form>
     </div>
 
     <!-- IMAGEN DE PERFIL -->
     <div class="mid-user">
-        <h1 class="mt-5">Perfil de <span th:text="${usuarioBuscado.username}"></span></h1>
+        
         <div class="profile-pic">
-        <img src="/img/profile_pics/knight-pic.jpg" alt=""/> <!-- ESTATICA DE MOMENTO -->
+          <!---  <img th:src="@{/img/profile_pics/{filename}(filename=${usuarioBuscado.profilePic != null ? usuarioBuscado.profilePic : 'default_pic.jpg'})}" -->
+        
         </div>
-        <!--<img th:src="@{/img/profile_pics/{filename}(filename=${user.profilePic})}" alt="Foto de perfil"/>  Imagen de perfil dinámica -->
     </div>
-
- 
-
-    <!-- Comentado de momento -->
-    <!-- 
-    <div id="profile" class="border border-2 border-tertiary rounded">
-        <input type="file" id="f_avatar" accept="image/jpeg,image/png">
-        <img class="preview" id="avatar" alt="careto a subir" />
-        <form th:action="@{/user/__${user.id}__/pic}">
-            <button id="postAvatar">Usar como foto de perfil</button>
-        </form>
-    </div>
-    -->
 
     <!-- RECEPCIÓN DE MENSAJES -->
     <div class="py-5 row" id="mensajes">
+        <!-- Los mensajes se cargarán aquí -->
     </div>
-
 
     <!-- ESTADÍSTICAS DEL PERFIL -->
     <div class="bot-user">
         <div class="stat-item">
             <p>Puntuación de maestría</p>
-            <h3 th:text="${usuarioBuscado.puntuacion}">410</h3>  
+            <h3 th:text="${usuarioBuscado.puntuacion}">410</h3> 
         </div>
         <div class="stat-item">
+        
             <p>Personaje más jugado</p>
-            <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero"/> <!-- ESTÁTICO DE MOMENTO -->
-            <!--<img th:src="@{/img/units/{unitCategory}/{unitName}/{unitName}.png(unitCategory=${user.mostPlayedCharacter.category}, unitName=${user.mostPlayedCharacter.name})}" alt="Personaje más jugado"/>  Personaje más jugado dinámico -->
+
+            <!-- Mostrar imagen si hay datos -->
+            <div th:if="${usuarioBuscado.masJugados != null and !usuarioBuscado.masJugados.isEmpty()}">
+                <img th:src="@{/img/units/{unitCategory}/{unitName}/{unitName}.png(unitCategory=${usuarioBuscado.masJugados[0].category}, unitName=${usuarioBuscado.masJugados[0].name})}" 
+                     alt="Personaje más jugado"/>
+            </div>
+            
+            <!-- Mostrar mensaje si NO hay datos -->
+            <p th:unless="${usuarioBuscado.masJugados != null and !usuarioBuscado.masJugados.isEmpty()}">
+                No hay datos aún
+            </p>
+         
         </div>
         <div class="stat-item">
             <p>Facción favorita</p>
-        <!--0 = humanos, 1 = dragones, 2 = trolls, 3 = no muertos, 4 = criaturas legendarias-->
-        
-           <img th:if="${usuarioBuscado.faccionFavorita==0}" src="/img/units/banners/humans.png">
-           <img th:if="${usuarioBuscado.faccionFavorita==1}" src="/img/units/banners/dragons.png">
-           <img th:if="${usuarioBuscado.faccionFavorita==2}" src="/img/units/banners/trolls.png">
-           <img th:if="${usuarioBuscado.faccionFavorita==3}" src="/img/units/banners/undead.png">
-           <img th:if="${usuarioBuscado.faccionFavorita==4}" src="/img/units/banners/legendaries.png">
-           <img th:if="${usuarioBuscado.faccionFavorita>4}" src="/img/units/banners/humans.png">
-        
+            <!-- 0 = humanos, 1 = dragones, 2 = trolls, 3 = no muertos, 4 = criaturas legendarias -->
+            <img th:if="${usuarioBuscado.faccionFavorita == 0}" src="/img/units/banners/humans.png" alt="Humanos">
+            <img th:if="${usuarioBuscado.faccionFavorita == 1}" src="/img/units/banners/dragons.png" alt="Dragones">
+            <img th:if="${usuarioBuscado.faccionFavorita == 2}" src="/img/units/banners/trolls.png" alt="Trolls">
+            <img th:if="${usuarioBuscado.faccionFavorita == 3}" src="/img/units/banners/undead.png" alt="No Muertos">
+            <img th:if="${usuarioBuscado.faccionFavorita == 4}" src="/img/units/banners/legendaries.png" alt="Legendarios">
+            <img th:if="${usuarioBuscado.faccionFavorita > 4}" src="/img/units/banners/humans.png" alt="Humanos">
         </div>
         <div class="stat-item chart-container">
+            <p> Victorias-Derrotas
+            <div th:if="${usuarioBuscado.partidasGanadas == 0 and usuarioBuscado.partidasPerdidas == 0}">
+                <p>No hay datos aún</p>
+            </div>
+            <div th:unless="${usuarioBuscado.partidasGanadas == 0 and usuarioBuscado.partidasPerdidas == 0}">
             <canvas id="winrateChart"></canvas>
+            </div>
         </div>
     </div>
 
@@ -80,7 +82,7 @@
     <script>
         var partidasGanadas = [[${usuarioBuscado.partidasGanadas}]];
         var partidasPerdidas = [[${usuarioBuscado.partidasPerdidas}]];
-    
+
         var ctx1 = document.getElementById('winrateChart').getContext('2d');
         new Chart(ctx1, {
             type: 'doughnut',

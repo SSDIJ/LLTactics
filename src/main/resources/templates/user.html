@@ -14,8 +14,12 @@
        <!-- TOP: BARRA DE BUSQUEDA DE JUGADOR Y ENVIAR MENSAJES -->
        <div class="top-user">
         <div class="busqueda">
-        <input type="text" id="searchPlayer" placeholder="Buscar jugador..."/>
-        <button id="searchBtn" class="btn btn-primary">Buscar</button>
+    <form action="/user/viewProfile" method="GET">
+        <input type="text" id="searchPlayer" name="nombre" placeholder="Buscar jugador..."/>
+        <button type="submit" id="searchBtn" class="btn btn-primary">Buscar</button>
+    </form>
+</div>
+
         </div>
         <form th:action="@{/user/__${user.id}__/msg}" method="POST">
             <input type="text" id="message" placeholder="escribe a este usuario" />
@@ -23,27 +27,31 @@
         </form>
     </div>
 
-    <!-- IMAGEN DE PERFIL -->
-    <div class="mid-user">
-        <h1 class="mt-5">Perfil de <span th:text="${user.username}"></span></h1>
-        <div class="profile-pic">
-        <img src="/img/profile_pics/knight-pic.jpg" alt=""/> <!-- ESTATICA DE MOMENTO -->
+<!-- IMAGEN DE PERFIL -->
+<div class="mid-user">
+    <h1 class="mt-5">Perfil de <span th:text="${user.username}"></span></h1>
+    <div class="profile-pic">
+        <!-- Si la foto de perfil es null, mostramos la imagen por defecto -->
+        <div th:if="${user.fotoPerfil == null}">
+            <img th:src="@{/img/profile_pics/default_profile.png}" alt="Foto de perfil"/>
         </div>
-        <!--<img th:src="@{/img/profile_pics/{filename}(filename=${user.profilePic})}" alt="Foto de perfil"/>  Imagen de perfil dinámica -->
+        <!-- Si hay una foto de perfil, la mostramos -->
+        <div th:unless="${user.fotoPerfil == null}">
+            <img th:src="@{/img/profile_pics/{filename}(filename=${user.fotoPerfil})}" alt="Foto de perfil"/>
+        </div>
     </div>
-
+    <!-- Selector para cambiar la foto de perfil -->
+    <form th:action="@{/user/updateFoto}" method="post">
+        <label for="selectedPic">Selecciona una foto:</label>
+        <select name="selectedPic" id="selectedPic">
+            <!-- Aquí se insertarán las imágenes disponibles en la carpeta profile/pics -->
+            <option th:each="pic : ${availablePics}" th:value="${pic}" th:text="${pic}"></option>
+        </select>
+        <button type="submit">Actualizar Foto</button>
+    </form>
+</div>
+</div>
  
-
-    <!-- Comentado de momento -->
-    <!-- 
-    <div id="profile" class="border border-2 border-tertiary rounded">
-        <input type="file" id="f_avatar" accept="image/jpeg,image/png">
-        <img class="preview" id="avatar" alt="careto a subir" />
-        <form th:action="@{/user/__${user.id}__/pic}">
-            <button id="postAvatar">Usar como foto de perfil</button>
-        </form>
-    </div>
-    -->
 
     <!-- RECEPCIÓN DE MENSAJES -->
     <div class="py-5 row" id="mensajes">
@@ -106,16 +114,7 @@
             }
         });
     </script>
-    <script>
-        
-            document.getElementById('searchBtn').addEventListener('click', function () {
-                const username = document.getElementById('searchPlayer').value.trim();
-                if (username) {
-                    window.location.href = `/viewProfile?nombre=${encodeURIComponent(username)}`;
-                }
-            });
-    </script>
-    
+
     
 </body>
 </html>
