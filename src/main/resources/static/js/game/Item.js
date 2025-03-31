@@ -2,16 +2,16 @@ class Item {
 
     constructor(armor, damage, description, id, imageUrl, name, price, unit, velocity, life) {
 
-        this.armor = armor;
-        this.damage = damage;
+        this.armor = parseInt(armor, 10) || 0;
+        this.damage = parseInt(damage, 10) || 0;;
         this.description = description;
         this.id = id;
         this.imageUrl = imageUrl;
         this.name = name;
         this.price = price;
         this.unit = unit;
-        this.velocity = velocity;
-        this.life = life;
+        this.velocity = parseInt(velocity, 10) || 0;;
+        this.life = parseInt(life, 10) || 0;;
     }
     
 }

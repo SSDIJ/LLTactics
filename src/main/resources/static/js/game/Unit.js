@@ -15,10 +15,10 @@ class Unit {
         this.velocidad = velocidad;
         this.vida = vida;
         this.vidaMax = vida;
-        this.unitID = Unit.nextId++;
+        this.unitID = nombre ? Unit.nextId++ : null;
         this.items = new Array(this.MAX_ITEMS).fill(null);
     }
-
+  
     getLifePercentage() {
         return this.vida / this.vidaMax * 100;
     }
@@ -28,6 +28,7 @@ class Unit {
     }
 
     addItem(item) {
+       
         if (!this.hasFullInventory()) {
             for (let i = 0; i < this.MAX_ITEMS; i++) {
                 if (this.items[i] === null) {
@@ -44,16 +45,16 @@ class Unit {
         this.vida += item.life;
         this.vidaMax += item.life;
         this.daño += item.damage;
-        this.velocidad += item.velocidad;
-        this.armadura += item.armadura;
+        this.velocidad += item.velocity;
+        this.armadura += item.armor;
     }
 
     degradeStats(item) {
         this.vida -= item.life;
         this.vidaMax -= item.life;
         this.daño -= item.damage;
-        this.velocidad -= item.velocidad;
-        this.armadura -= item.armadura;
+        this.velocidad -= item.velocity;
+        this.armadura -= item.armor;
     }
 
 

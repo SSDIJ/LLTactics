@@ -85,7 +85,8 @@ public class UserController {
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
-    private UserRepository userRepository;
+    private userRepository userRepository;
+	
 	// Añadido para el inicio de sesion automatico tras registrarse
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -191,6 +192,15 @@ public class UserController {
 		target.setUsername(edited.getUsername());
 		target.setFirstName(edited.getFirstName());
 		target.setLastName(edited.getLastName());
+	    target.setFotoPerfil(edited.getFotoPerfil());
+		target.setFaccionFavorita(edited.getFaccionFavorita());
+		target.setPartidasGanadas(edited.getPartidasGanadas());
+		target.setPartidasPerdidas(edited.getPartidasPerdidas());
+		target.setPuntuacion(edited.getPuntuacion());
+		target.setIndiceRanking(edited.getIndiceRanking());
+		target.setRoles(edited.getRoles());
+		target.setEnabled(edited.isEnabled());
+		target.setFotoPerfil(edited.getFotoPerfil());
 
 		// update user session so that changes are persisted in the session, too
 		if (requester.getId() == target.getId()) {
@@ -359,6 +369,7 @@ public class UserController {
 			HttpServletResponse response,
 			@ModelAttribute User newUser,
 			@RequestParam(required = false) String pass2,
+			@RequestParam(required = false) String profilePic, // Captura la foto de perfil seleccionada
 			Model model, HttpSession session, HttpServletRequest request) throws IOException {
 
 		// Verifica si las contraseñas coinciden
@@ -393,6 +404,9 @@ public class UserController {
 		newUser.setPartidasPerdidas(0);
 		newUser.setPuntuacion(0);
 		newUser.setIndiceRanking(0);
+	
+		newUser.setFotoPerfil(profilePic);
+		
 
 		// Guarda el nuevo usuario en la base de datos
 		entityManager.persist(newUser);

@@ -80,7 +80,7 @@ public class User implements Transferable<User.Transfer> {
    @Column(nullable = true)
    private List<Heroe> masJugados = new ArrayList<>();
 
-    
+
 
 	@OneToMany
 	@JoinColumn(name = "sender_id")

@@ -25,6 +25,37 @@
                         </ul>
                     </div>
                 </div>
+                <!-- Botón para generar una partida de prueba -->
+                <form th:action="@{/creaPartida}" method="post" style="margin-bottom: 20px;">
+                    <input type="hidden" name="idJugador1" value="1" />
+                    <input type="hidden" name="idJugador2" value="2" />
+                    <input type="hidden" name="duracionMin" value="30" />
+                    <button type="submit" class="btn btn-primary">Generar Partida de Prueba</button>
+                </form>
+
+                <!-- Acordeón para mostrar todas las partidas -->
+                <div class="accordion accordion-flush" id="accordionPartidas">
+                    <div th:if="${partidas.isEmpty()}">
+                        <p class="text-center">No hay partidas disponibles.</p>
+                    </div>
+                    <div th:each="partida : ${partidas}" class="accordion-item">
+                        <h2 class="accordion-header" id="heading-${partida.idPartida}">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${partida.idPartida}" aria-expanded="true" aria-controls="collapse-${partida.idPartida}">
+                                <span th:text="'Partida ' + ${partida.idPartida}"></span>
+                            </button>
+                        </h2>
+                        <div id="collapse-${partida.idPartida}" class="accordion-collapse collapse" aria-labelledby="heading-${partida.idPartida}" data-bs-parent="#accordionPartidas">
+                            <div class="accordion-body">
+                                <p><strong>ID:</strong> <span th:text="${partida.idPartida}"></span></p>
+                                <p><strong>Duración:</strong> <span th:text="${partida.duracionMin}"></span> minutos</p>
+                                <p><strong>Jugador 1:</strong> <span th:text="${partida.jugador1.username}"></span></p>
+                                <p><strong>Jugador 2:</strong> <span th:text="${partida.jugador2.username}"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--
                 <div class="accordion accordion-flush" id="accordionPartidas">
                     <div th:each="partida : ${enCurso}" class="accordion-item enCurso">
                         <h2 class="accordion-header" id="heading-${partida.id}">
@@ -60,7 +91,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

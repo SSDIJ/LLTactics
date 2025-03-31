@@ -40,6 +40,23 @@
                     <input type="password" id="pass2" name="pass2" class="form-control" placeholder="Confirmar Contraseña" required="required" autocomplete="off">
                 </p>
             
+                <!-- Selector de fotos de perfil -->
+                <p>Selecciona tu foto de perfil:</p>
+                <div class="form-group d-flex justify-content-between">
+                    <label>
+                        <input type="radio" name="profilePic" value="/img/profile_pics/caballero.png" required>
+                        <img src="/img/profile_pics/caballero.png" alt="Caballero" class="img-thumbnail" style="width: 100px;">
+                    </label>
+                    <label>
+                        <input type="radio" name="profilePic" value="/img/profile_pics/princesa.png" required>
+                        <img src="/img/profile_pics/princesa.png" alt="Princesa" class="img-thumbnail" style="width: 100px;">
+                    </label>
+                    <label>
+                        <input type="radio" name="profilePic" value="/img/profile_pics/rey.png" required>
+                        <img src="/img/profile_pics/rey.png" alt="Rey" class="img-thumbnail" style="width: 100px;">
+                    </label>
+                </div>
+
                 <button id="register-btn" class="btn btn-primary" type="submit">Registrar</button>
             </form>
             

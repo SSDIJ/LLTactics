@@ -12,8 +12,13 @@
     <h1 class="adminTitle text-center">Gestión de Usuarios</h1><br>
     <div class="containerAdmin">
         <div class="sectionBuscarUsuarios">
-            <h2>Buscar Usuarios</h2>
-
+            <h2>Usuarios</h2>
+            <li th:each="usuario : ${usuarios}">
+              <strong th:text="${usuario.username}"></strong> - 
+              <span th:text="${usuario.firstName}"></span> 
+              <span th:text="${usuario.lastName}"></span> - 
+              <em th:text="${usuario.roles}"></em>
+          </li>
         </div>
         <hr class="divider">
         <div class="sectionFiltrarUsuarios">

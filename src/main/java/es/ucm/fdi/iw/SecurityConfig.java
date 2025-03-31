@@ -65,6 +65,8 @@ public class SecurityConfig {
 				.requestMatchers("/api/**", "/reglas1").permitAll()            // <-- public api access
 				.requestMatchers("/api/**", "/galeria").permitAll()            // <-- public api access
 				.requestMatchers("/api/**", "/autores").permitAll()            // <-- public api access
+				.requestMatchers("/api/**", "/creaPartida").permitAll()            // <-- public api access
+
 				.requestMatchers("/admin/**").hasRole("ADMIN")	   // <-- administration
 				.requestMatchers(HttpMethod.DELETE, "/admin/gestHeroes/delete/**").hasRole("ADMIN")
 				.requestMatchers(HttpMethod.POST, "/admin/gestHeroes/add").hasRole("ADMIN")

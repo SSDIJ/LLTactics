@@ -4,10 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.repositories.UserRepository;
+import jakarta.servlet.http.HttpSession;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +20,11 @@ public class RankingController {
     @Autowired
     private UserRepository userRepository;
     
+    @ModelAttribute
+    public void populateModel(HttpSession session, Model model) {
+        for (String name : new String[] { "u", "url", "ws" })
+            model.addAttribute(name, session.getAttribute(name));
+    }
 
     @GetMapping("/ranking")
     public String mostrarRanking(Model model) {

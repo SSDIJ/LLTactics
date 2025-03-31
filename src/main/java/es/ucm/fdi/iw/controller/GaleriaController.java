@@ -5,11 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.Jugador;
-import es.ucm.fdi.iw.model.Mensaje;
+import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Objeto;
 import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.repositories.HeroeRepository;
@@ -31,6 +34,12 @@ public class GaleriaController {
 
     @Autowired
     private EntityManager entityManager;
+
+    @ModelAttribute
+    public void populateModel(HttpSession session, Model model) {
+        for (String name : new String[] { "u", "url", "ws" })
+            model.addAttribute(name, session.getAttribute(name));
+    }
 
     @Transactional
     @GetMapping("/galeria")

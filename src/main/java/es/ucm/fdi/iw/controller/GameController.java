@@ -3,25 +3,60 @@ package es.ucm.fdi.iw.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.Jugador;
-import es.ucm.fdi.iw.model.Mensaje;
+import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Objeto;
+import es.ucm.fdi.iw.model.Topic;
 import es.ucm.fdi.iw.model.Unidad;
+import es.ucm.fdi.iw.model.User.Role;
+import jakarta.servlet.http.HttpSession;
+import es.ucm.fdi.iw.model.User;
+import jakarta.persistence.EntityManager;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class GameController {
+
+    @Autowired
+    private EntityManager entityManager;
+
+    private static final Logger log = LogManager.getLogger(GameController.class);
+
+    @ModelAttribute
+    public void populateModel(HttpSession session, Model model) {
+        for (String name : new String[] { "u", "url", "ws" })
+            model.addAttribute(name, session.getAttribute(name));
+    }
 
     @GetMapping("/game")
     public String showGamePage(Model model) {
 
         List<Objeto> playerObjects = List.of(
-                new Objeto(null, "", 0, 0, 0, 0,"", 1),
                 new Objeto(null, "", 0, 0, 0, 0,"", 1),
                 new Objeto(null, "", 0, 0, 0, 0,"", 1),
                 new Objeto(null, "", 0, 0, 0, 0,"", 1),
@@ -50,30 +85,77 @@ public class GameController {
         model.addAttribute("unitsP1", unitsP1);
 
         List<Unidad> unitsP2 = new ArrayList<>(Arrays.asList(
-                new Unidad("Troll Gigante", "/img/units/trolls/1. TTanque/great-troll.png", 60, 50, 30, 300,
-                        "El Troll Gigante es una bestia imponente con una fuerza descomunal.", 2, 3, 0,
-                        Arrays.asList(null, null)),
-                new Unidad("Esqueleto General", "/img/units/skeletons/2. SGeneral/deathknight.png", 60, 80, 40, 220,
-                        "El Esqueleto General lidera a sus tropas con una presencia intimidante.", 3, 4, 0,
-                        Arrays.asList(new Objeto("/img/items/staff-druid.png", "", 0, 0, 0, 0, "", 1), null)),
                 new Unidad("", null, 1, 0, 0, 0, "", 0, 0, 0, Arrays.asList(null, null)),
-                new Unidad("Paladín", "/img/units/humans/3. Caballero/knight.png", 60, 85, 50, 180,
-                        "Agil y feroz en combate.", 0, 3, 0, Arrays.asList(null, null))));
+                new Unidad("", null, 1, 0, 0, 0, "", 0, 0, 0, Arrays.asList(null, null)),
+                new Unidad("", null, 1, 0, 0, 0, "", 0, 0, 0, Arrays.asList(null, null)),
+                new Unidad("", null, 1, 0, 0, 0, "", 0, 0, 0, Arrays.asList(null, null))));
         model.addAttribute("unitsP2", unitsP2);
 
         Jugador j1 = new Jugador("Jugador 1");
         Jugador j2 = new Jugador("Jugador 2");
 
-        List<Mensaje> mensajes = new ArrayList<>();
-        mensajes.add(new Mensaje(j1, "¡Hola! ¿Cómo están todos?"));
-        mensajes.add(new Mensaje(j2, "Todo bien, ¡listos para jugar!"));
-        mensajes.add(new Mensaje(j1, "Perfecto, ¡empecemos!"));
-        mensajes.add(new Mensaje(j2, "¡Vamos allá!"));
-        mensajes.add(new Mensaje(j1, "¡Buena partida!"));
-
+        List<Message> mensajes = new ArrayList<>();
+        /*  TE LOS BORRO DE MOMENTO POR QUE MENSAJE.JAVA LO VAMOS A BORRAR
+        mensajes.add(new Message(j1, "¡Hola! ¿Cómo están todos?"));
+        mensajes.add(new Message(j2, "Todo bien, ¡listos para jugar!"));
+        mensajes.add(new Message(j1, "Perfecto, ¡empecemos!"));
+        mensajes.add(new Message(j2, "¡Vamos allá!"));
+        mensajes.add(new Message(j1, "¡Buena partida!"));
+        */
         // Agregar los mensajes al modelo
         model.addAttribute("mensajes", mensajes);
 
         return "game";
     }
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
+    @PostMapping("/topic/{name}")
+    @ResponseBody
+    @Transactional
+    public Map<String, String> postMessage(@PathVariable String name, @RequestBody JsonNode o, Model model, HttpSession session, HttpServletResponse response) throws JsonProcessingException {
+        String text = o.get("message").asText();
+        User sender = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
+        Topic target = entityManager.createNamedQuery("Topic.byKey", Topic.class).setParameter("key", name).getSingleResult();
+
+        if(!sender.hasRole(Role.ADMIN) && !target.getMembers().contains(sender)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            return Map.of("error", "user not in group");
+        }
+
+        // Guardado de mensaje en la base de datos
+        Message m = new Message();
+        m.setRecipient(null);
+        m.setSender(sender);
+        m.setTopic(target);
+        m.setDateSent(LocalDateTime.now());
+        m.setText(text);
+        entityManager.persist(m); // save it to the database
+        entityManager.flush(); // force the database to update    
+    
+        // Envio de mensaje a los usuarios en el grupo
+        String json = new ObjectMapper().writeValueAsString(m.toTransfer());
+        log.info("Sending a message to group {} with contents {}", target.getName(), json);
+        messagingTemplate.convertAndSend("/topic/" + name, json);
+        
+        return Map.of("result", "message sent");
+    }
+
+    @GetMapping("/topic/{name}")
+    @ResponseBody
+    @Transactional
+    public Map<String, String> getMessages(@PathVariable String name, HttpSession session, HttpServletResponse response) throws JsonProcessingException {
+        
+        User requester = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
+        Topic target = entityManager.createNamedQuery("Topic.byKey", Topic.class).setParameter("key", name).getSingleResult();
+
+        if(!requester.hasRole(Role.ADMIN) && !target.getMembers().contains(requester)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            return Map.of("error", "user not in group");
+        }
+
+        return Map.of("messages", new ObjectMapper().writeValueAsString(target.getMessages().stream().map(Message::toTransfer).toArray()));
 }
+}
+

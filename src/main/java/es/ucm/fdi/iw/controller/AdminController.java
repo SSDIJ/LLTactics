@@ -26,10 +26,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.Jugador;
-import es.ucm.fdi.iw.model.Mensaje;
+import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.repositories.HeroeRepository;
+import es.ucm.fdi.iw.repositories.partidasRepository;
 import es.ucm.fdi.iw.repositories.UserRepository;
 import es.ucm.fdi.iw.services.HeroesService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,10 +49,15 @@ public class AdminController {
     private HeroeRepository heroeRepository;
 
     @Autowired
-    private HeroesService heroesService; // Inyectamos el servicio de héroes
+    private partidasRepository partidaRepository;
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private HeroesService heroesService; // Inyectamos el servicio de héroes
+
+ 
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
@@ -68,6 +74,8 @@ public class AdminController {
 
     @GetMapping("/gestPartidas")
     public String showPartidas(Model model) {
+        List<Partida> partidas = partidaRepository.findAll();
+        model.addAttribute("partidas", partidas);
         return "gestPartidas";
     }
 
@@ -90,6 +98,8 @@ public class AdminController {
 
     @GetMapping("/gestUsuarios")
     public String showUsuarios(Model model) {
+        List<User> usuarios = userRepository.findAll();
+        model.addAttribute("usuarios", usuarios);
         return "gestUsuarios";
     }
 

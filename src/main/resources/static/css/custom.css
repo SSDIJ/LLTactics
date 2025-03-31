@@ -84,16 +84,6 @@ img.preview {
     width: 600px;
 }
 
-/*
-#homepage-castle {
-    width: 200px;
-    pointer-events: none;
-    position: absolute;
-    top: -80px;
-    right: 50px;
-}
-*/
-
 #homepage-character-container {
     border-radius: 15px;
     width: 80px;
@@ -733,9 +723,53 @@ body .profile-body {
     border-radius: 0px 0px 10px 10px;
 }
 
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        box-shadow: 0px 0px 100px rgb(13, 0, 161);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    }
+}
+
+
+#round-panel {
+    position: fixed;
+    top: 150px;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    
+    width: 300px;
+    height: 50px;
+
+    background-color: var(--COLOR-DARK-1);
+    color: white;
+
+    border-radius: 10px;
+    z-index: 9999 !important;
+
+    font-family: var(--TITLE-FONT-FAMILY);
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: none;
+
+    opacity: 0;
+    animation: fadeOut 2.5s ease-out;
+}
+
+
+
 #player-objects-container {
     width: 80px;
-    height: 440px;
+    height: 390px;
 
     position: absolute;
     top: 100px;
@@ -751,7 +785,7 @@ body .profile-body {
 
 #opponents-info-container {
     width: 80px;
-    height: 440px;
+    height: 390px;
 
     position: absolute;
     top: 100px;
@@ -889,8 +923,12 @@ body .profile-body {
     display: none;
 }
 
-.sold {
+.sold, .closed {
     opacity: 0.5;
+    pointer-events: none;
+}
+
+.no-click {
     pointer-events: none;
 }
 
@@ -966,6 +1004,7 @@ body .profile-body {
     width: 70px !important;
     height: 15px;
     top: 25px;
+    z-index: 1;
 
 }
 
@@ -975,6 +1014,7 @@ body .profile-body {
 
 .unit-game-img {
     width: 115px;
+    z-index: -1;
 }
 
 .shop-unit-game-img {
@@ -999,6 +1039,18 @@ body .profile-body {
     font-size: 4rem;
 }
 
+.win-effect {
+    animation: win 1s ease-in-out;
+}
+
+@keyframes win {
+    0% {
+        filter: brightness(3);
+        transform: scale(1.4);
+    }
+    100% {
+    }
+}
 
 
 #player-units-container {
@@ -1072,6 +1124,10 @@ body .profile-body {
     box-shadow: inset 0px 0px 15px 5px rgba(255, 255, 255, 0.8);
 }
 
+.attack-move {
+    transition: transform 0.2s ease-in-out;
+    transform: translateX(10px);
+}
 
 .shop-value-container {
     color: whitesmoke;
