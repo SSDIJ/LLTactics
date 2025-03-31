@@ -421,7 +421,7 @@ public class UserController {
 		return "redirect:/"; // Redirige a la página principal
 	}
 
-	@GetMapping("/user")
+	@GetMapping("/user/{id}")	
 	public String getProfilePics(Model model) {
 		log.info("Entrando en el método getProfilePics"); // Aquí se agrega el log
 		// Ruta relativa en la carpeta static

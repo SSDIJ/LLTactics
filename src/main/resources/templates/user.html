@@ -53,15 +53,16 @@
     </div>
 </div>
 
-        <!-- Selector para cambiar la foto de perfil -->
-        <form th:action="@{/user/updateFoto}" method="post">
-            <label for="selectedPic">Selecciona una foto:</label>
-            <select name="selectedPic" id="selectedPic">
-                <option th:each="pic : ${availablePics}" th:value="${pic}" th:text="${pic}"></option>
-            </select>
-            <button type="submit">Actualizar Foto</button>
-        </form>
-    </div>
+<form th:action="@{/user/updateFoto}" method="post">
+    <label for="selectedPic">Selecciona una foto:</label>
+    <select name="selectedPic" id="selectedPic">
+        <option th:each="pic : ${availablePics}" th:value="${pic}" th:text="${pic}">
+            <img th:src="@{/img/profile_pics/{filename}(filename=${pic})}" alt="Foto de perfil" class="img-thumbnail" />
+        </option>
+    </select>
+    <button type="submit">Actualizar Foto</button>
+</form>
+
 
     <!-- ESTADÍSTICAS DEL PERFIL -->
     <div class="bot-user">
