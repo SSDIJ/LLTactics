@@ -27,9 +27,8 @@
     <div class="mid-user">
         <h1 class="mt-5">Perfil de <span th:text="${user.username}"></span></h1>
         <div class="profile-pic">
-        <img src="/img/profile_pics/knight-pic.jpg" alt=""/> <!-- ESTATICA DE MOMENTO -->
+        <img th:src="${user.fotoPerfil}" alt=""/>  
         </div>
-        <!--<img th:src="@{/img/profile_pics/{filename}(filename=${user.profilePic})}" alt="Foto de perfil"/>  Imagen de perfil dinámica -->
     </div>
 
  
