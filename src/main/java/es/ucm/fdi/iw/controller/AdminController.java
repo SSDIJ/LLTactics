@@ -31,6 +31,7 @@ import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.repositories.HeroeRepository;
 import es.ucm.fdi.iw.repositories.partidasRepository;
+import es.ucm.fdi.iw.repositories.userRepository;
 import es.ucm.fdi.iw.services.HeroesService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -49,6 +50,9 @@ public class AdminController {
 
     @Autowired
     private partidasRepository partidaRepository;
+
+    @Autowired
+    private userRepository userRepository;
 
     @Autowired
     private HeroesService heroesService; // Inyectamos el servicio de héroes
@@ -92,6 +96,8 @@ public class AdminController {
 
     @GetMapping("/gestUsuarios")
     public String showUsuarios(Model model) {
+        List<User> usuarios = userRepository.findAll();
+        model.addAttribute("usuarios", usuarios);
         return "gestUsuarios";
     }
 

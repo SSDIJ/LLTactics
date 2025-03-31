@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.repositories.userRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.servlet.http.HttpSession;
 import es.ucm.fdi.iw.repositories.partidasRepository;
 import jakarta.transaction.Transactional;
 import es.ucm.fdi.iw.model.User;
@@ -23,6 +25,12 @@ public class PartidasController {
 
     @Autowired
     private partidasRepository partidasRepository;
+
+    @ModelAttribute
+    public void populateModel(HttpSession session, Model model) {
+        for (String name : new String[] { "u", "url", "ws" })
+            model.addAttribute(name, session.getAttribute(name));
+    }
 
     @PostMapping("/creaPartida")
     @Transactional
