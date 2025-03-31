@@ -25,7 +25,9 @@ const shopItemsContainers = document.querySelectorAll('.shop-objects-container')
 const refreshShopBtns = document.querySelectorAll(".refresh-btn");
 
 // Chat
-const chatContainer = document.getElementById("chat-container")
+const chatBox = document.getElementById("chat-box");
+const chatInput = document.getElementById("chat-input");
+const chatSendBtn = document.getElementById("chat-send-btn");
 
 function toggleUnitsContainer() {
     if (playerUnitsContainer.classList.contains("no-click"))
@@ -537,6 +539,67 @@ function winAnimation(isOpponent) {
         
     });
 }
+
+// Lógica de chat
+document.addEventListener("DOMContentLoaded", function() {
+    topicName = "general"; // TODO: si queremos añadir susurros hay que cambiar esto
+
+    function loadMessages() {
+        fetch(`/topic/${topicName}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al cargar los mensajes');
+                }
+                return response.json();
+            })
+            .then(data => {
+                chatBox.innerHTML = ""; // Limpia el chat antes de cargar nuevos mensajes
+                const messages = JSON.parse(data.messages);
+                messages.forEach(message => {
+                    const messageElement = document.createElement("div");
+                    messageElement.textContent = `${message.from}: ${message.text}`;
+                    chatBox.appendChild(messageElement);
+            });
+            chatBox.scrollTop = chatBox.scrollHeight; // Desplazar hacia abajo
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function sendMessage() {
+        const message = chatInput.value.trim();
+        if (message === "") return; // No enviar mensajes vacíos{
+
+        fetch(`/topic/${topicName}`, {
+            method: "POST", 
+            headers: { "Content-Type": "application/json" }, 
+            body: JSON.stringify({ text: message })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al enviar el mensaje');
+                }
+                return response.json();
+            })
+            .then(() => {
+                
+            })
+            .catch(error => console.error('Error:', error));
+    }
+    
+    loadMessages();
+
+    chatSendBtn.addEventListener("click", sendMessage);
+    chatInput.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    });
+    
+    // TODO: muy seguro de que esto no es lo que quiere el profesor
+    // Recargar mensajes cada 5 segundos
+    setInterval(loadMessages, 5000);
+
+});
 
 
 // Iniciar temporizador
