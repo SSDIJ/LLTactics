@@ -42,7 +42,7 @@
                 </thead>
                 <tbody>
                     
-                    <tr th:each="user, stat : ${usuarios}">
+                    <tr th:each="user, stat : ${usuarios}" class="clickable-row" th:attr="data-href=@{'/user/viewProfile'(nombre=${user.firstName})}">
                         <td th:text="${stat.index + 1}"></td>
                         <td th:text="${user.firstName}"></td>
                         <td th:text="${user.puntuacion}"></td>
@@ -61,5 +61,19 @@
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 
     <script type="module" src="/js/homepage-animations.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          document.querySelectorAll(".clickable-row").forEach(row => {
+            row.addEventListener("click", () => {
+              const href = row.getAttribute("data-href");
+              if (href) {
+                window.location.href = href;
+              }
+            });
+          });
+        });
+      </script>
+
+     
 </body>
 </html>

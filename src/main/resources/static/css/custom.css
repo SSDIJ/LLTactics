@@ -146,6 +146,15 @@ img.preview {
 }
 
 /* RANKING */
+.clickable-row {
+    cursor: pointer;
+  }
+
+  .clickable-row:hover {
+    background-color: gold;
+    opacity:0.5;
+  }
+
 #ranking-main-container {
     width: 100%;
     height: auto;
