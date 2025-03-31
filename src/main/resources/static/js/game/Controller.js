@@ -540,66 +540,48 @@ function winAnimation(isOpponent) {
     });
 }
 
-// Lógica de chat
-document.addEventListener("DOMContentLoaded", function() {
-    topicName = "general"; // TODO: si queremos añadir susurros hay que cambiar esto
+// Inicializa y declara funciones del chat
+function initializeChatWebSocket(topicName) {
 
-    function loadMessages() {
-        fetch(`/topic/${topicName}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al cargar los mensajes');
-                }
-                return response.json();
-            })
-            .then(data => {
-                chatBox.innerHTML = ""; // Limpia el chat antes de cargar nuevos mensajes
-                const messages = JSON.parse(data.messages);
-                messages.forEach(message => {
-                    const messageElement = document.createElement("div");
-                    messageElement.textContent = `${message.from}: ${message.text}`;
-                    chatBox.appendChild(messageElement);
-            });
-            chatBox.scrollTop = chatBox.scrollHeight; // Desplazar hacia abajo
-        })
-        .catch(error => console.error('Error:', error));
+    // Websocket
+    const socket = new SockJS("/ws");
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function() {
+        console.log("Conexion con WebSocket para el chat");
+
+        // Suscribe al topic del chat
+        stompClient.subscribe(`/topic/${topicName}`, function(message) {
+            const mensaje = JSON.parse(message.body);
+            displayMessage(mensaje);
+        });
+    });
+
+    // Muestra mensajes en el chat
+    function displayMessage(mensaje) {
+        const messageElement = document.createElement("div");
+        messageElement.textContent = `${mensaje.from}: ${mensaje.text}`;
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
 
     function sendMessage() {
-        const message = chatInput.value.trim();
-        if (message === "") return; // No enviar mensajes vacíos{
+        const mensaje = chatInput.value.trim();
+        if (mensaje === "") return;
 
-        fetch(`/topic/${topicName}`, {
-            method: "POST", 
-            headers: { "Content-Type": "application/json" }, 
-            body: JSON.stringify({ text: message })
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al enviar el mensaje');
-                }
-                return response.json();
-            })
-            .then(() => {
-                
-            })
-            .catch(error => console.error('Error:', error));
+        stompClient.send(`/app/topic/${topicName}`, {}, JSON.stringify({ mensaje: mensaje}));
+        chatInput.value = ""; // Limpiar el campo de entrada
     }
-    
-    loadMessages();
 
+    // Envía un mensaje al servidor
     chatSendBtn.addEventListener("click", sendMessage);
     chatInput.addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
             sendMessage();
         }
     });
-    
-    // TODO: muy seguro de que esto no es lo que quiere el profesor
-    // Recargar mensajes cada 5 segundos
-    setInterval(loadMessages, 5000);
 
-});
+}
 
 
 // Iniciar temporizador
@@ -654,6 +636,10 @@ async function startTimer() {
         }
     }, 1000);
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    initializeChatWebSocket("general");
+});
 
 refreshShopBtns[0].click();
 

@@ -120,8 +120,8 @@ public class GameController {
         Topic target = entityManager.createNamedQuery("Topic.byKey", Topic.class).setParameter("key", name).getSingleResult();
 
         if(!sender.hasRole(Role.ADMIN) && !target.getMembers().contains(sender)) {
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                return Map.of("error", "user not in group");
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            return Map.of("error", "user not in group");
         }
 
         // Guardado de mensaje en la base de datos
@@ -138,6 +138,7 @@ public class GameController {
         String json = new ObjectMapper().writeValueAsString(m.toTransfer());
         log.info("Sending a message to group {} with contents {}", target.getName(), json);
         messagingTemplate.convertAndSend("/topic/" + name, json);
+        
         return Map.of("result", "message sent");
     }
 
