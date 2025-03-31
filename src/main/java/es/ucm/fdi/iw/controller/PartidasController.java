@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 import es.ucm.fdi.iw.model.Partida;
-import es.ucm.fdi.iw.repositories.userRepository;
+import es.ucm.fdi.iw.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
 import es.ucm.fdi.iw.repositories.partidasRepository;

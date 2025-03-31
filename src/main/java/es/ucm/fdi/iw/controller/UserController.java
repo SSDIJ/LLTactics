@@ -85,7 +85,7 @@ public class UserController {
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
-    private userRepository userRepository;
+    private UserRepository userRepository;
 	
 	// Añadido para el inicio de sesion automatico tras registrarse
 	@Autowired
