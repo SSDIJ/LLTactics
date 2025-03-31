@@ -82,12 +82,8 @@ public class UserController {
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
-<<<<<<< Updated upstream
     private userRepository userRepository;
 	
-=======
-	private UserRepository userRepository;
->>>>>>> Stashed changes
 	// Añadido para el inicio de sesion automatico tras registrarse
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -424,7 +420,6 @@ public class UserController {
 	}
 
 	@GetMapping("/viewProfile")
-<<<<<<< Updated upstream
 	public String viewProfile(@RequestParam String nombre, RedirectAttributes redirectAttributes){
 		System.out.println("Se ha llamado a la funcion de ver Profile, nice");
 		User user= userRepository.findByUsernameContainingIgnoreCase(nombre);
@@ -432,17 +427,5 @@ public class UserController {
 			return "error";
 		}
 		return "user";
-=======
-	public String viewProfile(@RequestParam String nombre, RedirectAttributes redirectAttributes, Model model) {
-		// Busca al usuario por nombre
-		User usuarioBuscado = userRepository.findByUsername(nombre)
-				.orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
-
-		// Agrega el usuario al modelo
-		model.addAttribute("usuarioBuscado", usuarioBuscado);
-
-		// Devuelve la vista
-		return "viewProfile";
->>>>>>> Stashed changes
 	}
 }

@@ -35,6 +35,9 @@
 
                 <!-- Acordeón para mostrar todas las partidas -->
                 <div class="accordion accordion-flush" id="accordionPartidas">
+                    <div th:if="${partidas.isEmpty()}">
+                        <p class="text-center">No hay partidas disponibles.</p>
+                    </div>
                     <div th:each="partida : ${partidas}" class="accordion-item">
                         <h2 class="accordion-header" id="heading-${partida.idPartida}">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${partida.idPartida}" aria-expanded="true" aria-controls="collapse-${partida.idPartida}">

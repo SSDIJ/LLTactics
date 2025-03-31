@@ -52,7 +52,7 @@ public class PartidasController {
         model.addAttribute("success", "Partida creada exitosamente.");
 
         // Redirige a la página principal
-        return "redirect:/";
+        return "redirect:/admin/gestPartidas";
     }
     
 }
