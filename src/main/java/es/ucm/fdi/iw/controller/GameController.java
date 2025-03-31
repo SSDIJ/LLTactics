@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.Jugador;
-import es.ucm.fdi.iw.model.Mensaje;
+import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Objeto;
 import es.ucm.fdi.iw.model.Unidad;
 
@@ -58,13 +58,14 @@ public class GameController {
         Jugador j1 = new Jugador("Jugador 1");
         Jugador j2 = new Jugador("Jugador 2");
 
-        List<Mensaje> mensajes = new ArrayList<>();
-        mensajes.add(new Mensaje(j1, "¡Hola! ¿Cómo están todos?"));
-        mensajes.add(new Mensaje(j2, "Todo bien, ¡listos para jugar!"));
-        mensajes.add(new Mensaje(j1, "Perfecto, ¡empecemos!"));
-        mensajes.add(new Mensaje(j2, "¡Vamos allá!"));
-        mensajes.add(new Mensaje(j1, "¡Buena partida!"));
-
+        List<Message> mensajes = new ArrayList<>();
+        /*  TE LOS BORRO DE MOMENTO POR QUE MENSAJE.JAVA LO VAMOS A BORRAR
+        mensajes.add(new Message(j1, "¡Hola! ¿Cómo están todos?"));
+        mensajes.add(new Message(j2, "Todo bien, ¡listos para jugar!"));
+        mensajes.add(new Message(j1, "Perfecto, ¡empecemos!"));
+        mensajes.add(new Message(j2, "¡Vamos allá!"));
+        mensajes.add(new Message(j1, "¡Buena partida!"));
+        */
         // Agregar los mensajes al modelo
         model.addAttribute("mensajes", mensajes);
 

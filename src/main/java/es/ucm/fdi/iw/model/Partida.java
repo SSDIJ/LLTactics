@@ -27,8 +27,7 @@ public class Partida {
     @JoinColumn(name = "jid2", referencedColumnName = "id", nullable = false)
     private User jugador2;
 
-    @OneToMany(mappedBy = "partida")
-    private ArrayList<Mensaje> mensajes;
+    private ArrayList<Message> mensajes = new ArrayList<>();
 
     private int duracionMin;
 

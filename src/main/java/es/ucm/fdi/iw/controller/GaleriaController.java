@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.Jugador;
-import es.ucm.fdi.iw.model.Mensaje;
+import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Objeto;
 import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.repositories.HeroeRepository;

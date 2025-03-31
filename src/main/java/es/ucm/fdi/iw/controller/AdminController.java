@@ -26,10 +26,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.Jugador;
-import es.ucm.fdi.iw.model.Mensaje;
+import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.repositories.HeroeRepository;
+import es.ucm.fdi.iw.repositories.partidasRepository;
 import es.ucm.fdi.iw.services.HeroesService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -45,6 +46,9 @@ import jakarta.transaction.Transactional;
 public class AdminController {
     @Autowired
     private HeroeRepository heroeRepository;
+
+    @Autowired
+    private partidasRepository partidaRepository;
 
     @Autowired
     private HeroesService heroesService; // Inyectamos el servicio de héroes
@@ -64,6 +68,8 @@ public class AdminController {
 
     @GetMapping("/gestPartidas")
     public String showPartidas(Model model) {
+        List<Partida> partidas = partidaRepository.findAll();
+        model.addAttribute("partidas", partidas);
         return "gestPartidas";
     }
 
