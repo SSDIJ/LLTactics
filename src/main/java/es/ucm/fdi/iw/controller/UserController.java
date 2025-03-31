@@ -6,7 +6,7 @@ import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Transferable;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
-import es.ucm.fdi.iw.repositories.userRepository;
+import es.ucm.fdi.iw.repositories.UserRepository;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -85,7 +85,7 @@ public class UserController {
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
-	private userRepository userRepository;
+    private UserRepository userRepository;
 	// Añadido para el inicio de sesion automatico tras registrarse
 	@Autowired
 	private AuthenticationManager authenticationManager;

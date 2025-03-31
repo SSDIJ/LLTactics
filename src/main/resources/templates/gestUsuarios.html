@@ -45,4 +45,38 @@
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 </body>
 
+<script>
+  function filtrarUsuarios() {
+      // Obtén los valores de los filtros
+      const role = document.getElementById("filtroRole").value;
+      const baneado = document.getElementById("filtroBaneado").value;
+
+      // Construye la URL con los parámetros de filtrado
+      const url = `/admin/gestUsuarios/filtrar?role=${role}&baneado=${baneado}`;
+
+      // Realiza la solicitud al backend
+      fetch(url)
+          .then(response => response.json())
+          .then(data => {
+              // Actualiza la tabla de usuarios
+              const usuariosContainer = document.getElementById("usuariosContainer");
+              usuariosContainer.innerHTML = ""; // Limpia la tabla
+
+              data.forEach(usuario => {
+                  const row = `
+                      <tr>
+                          <td>${usuario.id}</td>
+                          <td>${usuario.nombre}</td>
+                          <td>${usuario.email}</td>
+                          <td>${usuario.role}</td>
+                          <td>${usuario.baneado ? "Sí" : "No"}</td>
+                      </tr>
+                  `;
+                  usuariosContainer.innerHTML += row;
+              });
+          })
+          .catch(error => console.error("Error al filtrar usuarios:", error));
+  }
+</script>
+
 </html>

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.User;
-import es.ucm.fdi.iw.repositories.userRepository;
+import es.ucm.fdi.iw.repositories.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class RankingController {
 
     @Autowired
-    private userRepository userRepository;
+    private UserRepository userRepository;
     
 
     @GetMapping("/ranking")

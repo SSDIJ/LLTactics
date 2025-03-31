@@ -30,6 +30,7 @@ import es.ucm.fdi.iw.model.Mensaje;
 import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.repositories.HeroeRepository;
+import es.ucm.fdi.iw.repositories.UserRepository;
 import es.ucm.fdi.iw.services.HeroesService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -48,6 +49,9 @@ public class AdminController {
 
     @Autowired
     private HeroesService heroesService; // Inyectamos el servicio de héroes
+
+    @Autowired
+    private UserRepository userRepository;
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
@@ -170,5 +174,21 @@ public class AdminController {
 
         return "gestHeroes";
     }
+    @GetMapping("/filtrar")
+    public List<User> filtrarUsuarios(
+            @RequestParam(required = false) String role,
+            @RequestParam(required = false) Boolean baneado) {
+
+        if (role != null && baneado != null) {
+            return userRepository.findByRolesAndBaneado(role, baneado);
+        } else if (role != null) {
+            return userRepository.findByRoles(role);
+        } else if (baneado != null) {
+            return userRepository.findByBaneado(baneado);
+        } else {
+            return userRepository.findAll();
+        }
+    }
+    
 
 }
