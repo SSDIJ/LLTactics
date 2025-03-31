@@ -197,6 +197,7 @@ public class UserController {
 		target.setIndiceRanking(edited.getIndiceRanking());
 		target.setRoles(edited.getRoles());
 		target.setEnabled(edited.isEnabled());
+		target.setFotoPerfil(edited.getFotoPerfil());
 
 		// update user session so that changes are persisted in the session, too
 		if (requester.getId() == target.getId()) {
