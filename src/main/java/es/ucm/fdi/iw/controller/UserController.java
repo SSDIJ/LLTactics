@@ -83,6 +83,7 @@ public class UserController {
 
 	@Autowired
     private userRepository userRepository;
+	
 	// Añadido para el inicio de sesion automatico tras registrarse
 	@Autowired
 	private AuthenticationManager authenticationManager;

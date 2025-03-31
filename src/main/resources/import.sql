@@ -1,7 +1,10 @@
 -- insert admin (username a, password aa)
 INSERT INTO "PUBLIC"."IWUSER" VALUES
 (TRUE, 0, 0, 0, 0, 0, 1, 'Admin', 'Administrez', '{bcrypt}$2a$10$GU4mO.Uxc.tRP3.DsrBIvO3543uERYAvJwkuplrpFTAYdXoteTFOm', 'ADMIN,USER', 'a'),
-(TRUE, 0, 0, 0, 0, 0, 2, 'Usuario', 'Usuariez', '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'USER', 'b'),
+(TRUE, 0, 0, 0, 0, 0, 2, 'Usuario', 'Usuariez', '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'USER', 'b');
+
+INSERT INTO "PUBLIC"."PARTIDA" VALUES
+(0, 1, 1, 2);
 
 -- start id numbering from a value that is larger than any assigned above
 ALTER SEQUENCE "PUBLIC"."GEN" RESTART WITH 1024;
