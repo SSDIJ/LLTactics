@@ -5,21 +5,49 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.Jugador;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Objeto;
+import es.ucm.fdi.iw.model.Topic;
 import es.ucm.fdi.iw.model.Unidad;
+import es.ucm.fdi.iw.model.User.Role;
 import jakarta.servlet.http.HttpSession;
+import es.ucm.fdi.iw.model.User;
+import jakarta.persistence.EntityManager;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class GameController {
 
-        @ModelAttribute
+    @Autowired
+    private EntityManager entityManager;
+
+    private static final Logger log = LogManager.getLogger(GameController.class);
+
+    @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
         for (String name : new String[] { "u", "url", "ws" })
             model.addAttribute(name, session.getAttribute(name));
@@ -79,4 +107,54 @@ public class GameController {
 
         return "game";
     }
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
+    @PostMapping("/topic/{name}")
+    @ResponseBody
+    @Transactional
+    public Map<String, String> postMessage(@PathVariable String name, @RequestBody JsonNode o, Model model, HttpSession session, HttpServletResponse response) throws JsonProcessingException {
+        String text = o.get("message").asText();
+        User sender = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
+        Topic target = entityManager.createNamedQuery("Topic.byKey", Topic.class).setParameter("key", name).getSingleResult();
+
+        if(!sender.hasRole(Role.ADMIN) && !target.getMembers().contains(sender)) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                return Map.of("error", "user not in group");
+        }
+
+        // Guardado de mensaje en la base de datos
+        Message m = new Message();
+        m.setRecipient(null);
+        m.setSender(sender);
+        m.setTopic(target);
+        m.setDateSent(LocalDateTime.now());
+        m.setText(text);
+        entityManager.persist(m); // save it to the database
+        entityManager.flush(); // force the database to update    
+    
+        // Envio de mensaje a los usuarios en el grupo
+        String json = new ObjectMapper().writeValueAsString(m.toTransfer());
+        log.info("Sending a message to group {} with contents {}", target.getName(), json);
+        messagingTemplate.convertAndSend("/topic/" + name, json);
+        return Map.of("result", "message sent");
+    }
+
+    @GetMapping("/topic/{name}")
+    @ResponseBody
+    @Transactional
+    public Map<String, String> getMessages(@PathVariable String name, HttpSession session, HttpServletResponse response) throws JsonProcessingException {
+        
+        User requester = entityManager.find(User.class, ((User) session.getAttribute("u")).getId());
+        Topic target = entityManager.createNamedQuery("Topic.byKey", Topic.class).setParameter("key", name).getSingleResult();
+
+        if(!requester.hasRole(Role.ADMIN) && !target.getMembers().contains(requester)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            return Map.of("error", "user not in group");
+        }
+
+        return Map.of("messages", new ObjectMapper().writeValueAsString(target.getMessages().stream().map(Message::toTransfer).toArray()));
 }
+}
+

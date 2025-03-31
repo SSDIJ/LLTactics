@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -38,6 +39,10 @@ public class Message implements Transferable<Message.Transfer> {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen")
     @SequenceGenerator(name = "gen", sequenceName = "gen")
 	private long id;
+	
+	@ManyToOne
+    @JoinColumn(name = "idPartida")
+	private Partida partida;
 	@ManyToOne
 	private User sender;
 	@ManyToOne
@@ -89,5 +94,10 @@ public class Message implements Transferable<Message.Transfer> {
 			topic.getTopicName(),
 			id
         );
+    }
+
+	@Override
+    public String toString() {
+        return "[" + dateSent + "] " + sender + ": " + text;
     }
 }
