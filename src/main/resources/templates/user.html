@@ -1,93 +1,115 @@
 <!DOCTYPE html>
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
-    <th:block th:replace="~{fragments/head :: header}" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LL Tactics</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Enlazamos el archivo CSS -->
+
+    <!-- Estilos de Bootstrap y Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    
+    <!-- Fragmentos de Thymeleaf -->
+    <th:block th:replace="~{fragments/head :: header}" />
+    
+    <link rel="stylesheet" href="styles.css"> <!-- Archivo CSS propio -->
 </head>
 <body class="profile-body">
     <header th:replace="~{fragments/nav.html :: nav}"></header>
     
     <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
-
-       <!-- TOP: BARRA DE BUSQUEDA DE JUGADOR Y ENVIAR MENSAJES -->
-       <div class="top-user">
-        <div class="busqueda">
-    <form action="/user/viewProfile" method="GET">
-        <input type="text" id="searchPlayer" name="nombre" placeholder="Buscar jugador..."/>
-        <button type="submit" id="searchBtn" class="btn btn-primary">Buscar</button>
-    </form>
-</div>
-
-        </div>
-        <form th:action="@{/user/__${user.id}__/msg}" method="POST">
-            <input type="text" id="message" placeholder="escribe a este usuario" />
-            <button id="sendmsg" class="btn btn-secondary" type="submit">Enviar</button>
+<div class="user">
+    <!-- TOP: BARRA DE BÚSQUEDA DE JUGADOR -->
+    <div class="top-user">
+      
+        <!-- BARRA DE BÚSQUEDA USANDO BOOTSTRAP -->
+        <form action="/user/viewProfile" method="GET">
+            <div class="input-group" style="max-width: 300px;">
+                <span class="input-group-text bg-white border-end-0">
+                    <button type="submit" class="btn btn-light border-0" id="searchBtn2">
+                        <i class="fas fa-search text-muted"></i>
+                    </button>
+                </span>
+                <input type="text" id="searchPlayer2" name="nombre" class="form-control border-start-0 border-end-0" placeholder="Buscar">
+            </div>
         </form>
     </div>
 
-<!-- IMAGEN DE PERFIL -->
-<div class="mid-user">
-    <h1 class="mt-5">Perfil de <span th:text="${user.username}"></span></h1>
+        </div>
+
+   <!-- IMAGEN DE PERFIL -->
+<div class="mid-user text-center">
+    <h1 class="mt-5"><span th:text="${user.username}"></span></h1>
     <div class="profile-pic">
         <!-- Si la foto de perfil es null, mostramos la imagen por defecto -->
         <div th:if="${user.fotoPerfil == null}">
-            <img th:src="@{/img/profile_pics/default_profile.png}" alt="Foto de perfil"/>
+            <img th:src="@{/img/profile_pics/default_profile.png}" alt="Foto de perfil"   class="rounded-circle border border-3 border-dark shadow"/>
         </div>
         <!-- Si hay una foto de perfil, la mostramos -->
         <div th:unless="${user.fotoPerfil == null}">
-            <img th:src="@{/img/profile_pics/{filename}(filename=${user.fotoPerfil})}" alt="Foto de perfil"/>
+            <img th:src="@{/img/profile_pics/{filename}(filename=${user.fotoPerfil})}" alt="Foto de perfil" class="rounded-circle border border-3 border-dark shadow"/>
         </div>
     </div>
-    <!-- Selector para cambiar la foto de perfil -->
-    <form th:action="@{/user/updateFoto}" method="post">
-        <label for="selectedPic">Selecciona una foto:</label>
-        <select name="selectedPic" id="selectedPic">
-            <!-- Aquí se insertarán las imágenes disponibles en la carpeta profile/pics -->
-            <option th:each="pic : ${availablePics}" th:value="${pic}" th:text="${pic}"></option>
-        </select>
-        <button type="submit">Actualizar Foto</button>
-    </form>
 </div>
-</div>
- 
 
-    <!-- RECEPCIÓN DE MENSAJES -->
-    <div class="py-5 row" id="mensajes">
+        <!-- Selector para cambiar la foto de perfil -->
+        <form th:action="@{/user/updateFoto}" method="post">
+            <label for="selectedPic">Selecciona una foto:</label>
+            <select name="selectedPic" id="selectedPic">
+                <option th:each="pic : ${availablePics}" th:value="${pic}" th:text="${pic}"></option>
+            </select>
+            <button type="submit">Actualizar Foto</button>
+        </form>
     </div>
-
 
     <!-- ESTADÍSTICAS DEL PERFIL -->
     <div class="bot-user">
-        <div class="stat-item">
-            <p>Puntuación de maestría</p>
-            <h3 th:text="${user.puntuacion}">410</h3>  
+        <!-- Sección de Estadísticas -->
+<div class="container mt-5">
+    <div class="row">
+        <!-- Puntuación de Maestría -->
+        <div class="col-md-4">
+            <div class="card text-center p-3 mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Puntuación de Maestría</h5>
+                    <h3 class="text-primary" th:text="${user.puntuacion}">410</h3>
+                </div>
+            </div>
         </div>
-        <div class="stat-item">
-            <p>Personaje más jugado</p>
-            <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero"/> <!-- ESTÁTICO DE MOMENTO -->
-            <!--<img th:src="@{/img/units/{unitCategory}/{unitName}/{unitName}.png(unitCategory=${user.mostPlayedCharacter.category}, unitName=${user.mostPlayedCharacter.name})}" alt="Personaje más jugado"/>  Personaje más jugado dinámico -->
+
+        <!-- Personaje más Jugado -->
+        <div class="col-md-4">
+            <div class="card text-center p-3 mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Personaje más Jugado</h5>
+                    <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero" class="img-fluid rounded-circle">
+                </div>
+            </div>
         </div>
-        <div class="stat-item">
-            <p>Facción favorita</p>
-        <!--0 = humanos, 1 = dragones, 2 = trolls, 3 = no muertos, 4 = criaturas legendarias-->
-        
-           <img th:if="${user.faccionFavorita==0}" src="/img/units/banners/humans.png">
-           <img th:if="${user.faccionFavorita==1}" src="/img/units/banners/dragons.png">
-           <img th:if="${user.faccionFavorita==2}" src="/img/units/banners/trolls.png">
-           <img th:if="${user.faccionFavorita==3}" src="/img/units/banners/undead.png">
-           <img th:if="${user.faccionFavorita==4}" src="/img/units/banners/legendaries.png">
-           <img th:if="${user.faccionFavorita>4}" src="/img/units/banners/humans.png">
-        
+
+        <!-- Facción Favorita -->
+        <div class="col-md-4">
+            <div class="card text-center p-3 mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Facción Favorita</h5>
+                    <img th:if="${user.faccionFavorita == 0}" src="/img/units/banners/humans.png" class="img-fluid">
+                    <img th:if="${user.faccionFavorita == 1}" src="/img/units/banners/dragons.png" class="img-fluid">
+                    <img th:if="${user.faccionFavorita == 2}" src="/img/units/banners/trolls.png" class="img-fluid">
+                    <img th:if="${user.faccionFavorita == 3}" src="/img/units/banners/undead.png" class="img-fluid">
+                    <img th:if="${user.faccionFavorita == 4}" src="/img/units/banners/legendaries.png" class="img-fluid">
+                    <img th:if="${user.faccionFavorita > 4}" src="/img/units/banners/humans.png" class="img-fluid">
+                </div>
+            </div>
         </div>
-        <div class="stat-item chart-container">
-            <canvas id="winrateChart"></canvas>
-        </div>
+    </div>
+</div>
+
     </div>
 
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         var partidasGanadas = [[${user.partidasGanadas}]];
@@ -114,7 +136,6 @@
             }
         });
     </script>
-
-    
+</div>
 </body>
 </html>

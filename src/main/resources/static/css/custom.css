@@ -146,15 +146,6 @@ img.preview {
 }
 
 /* RANKING */
-.clickable-row {
-    cursor: pointer;
-  }
-
-  .clickable-row:hover {
-    background-color: gold;
-    opacity:0.5;
-  }
-
 #ranking-main-container {
     width: 100%;
     height: auto;
@@ -535,6 +526,10 @@ td img.icon {
 
 /*COMIEZNO PROFILE*/
 /* GENERAL */
+body .user{
+    display:flex;
+    flex-direction:row;
+}
 body .profile-body {
     background-image: url('/img/homepage/sword.png');
     background-size: cover;
@@ -542,11 +537,10 @@ body .profile-body {
     color: white;
     text-align: center;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-between;
-    min-height: 100vh; /* Evita que en móviles haya problemas de scroll */
     font-family: var(--TITLE-FONT-FAMILY);
-    padding: 2vh 2vw;
+    padding: 15%;
 }
 
 /* ENCABEZADO */
