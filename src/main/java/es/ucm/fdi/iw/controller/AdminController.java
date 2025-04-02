@@ -30,7 +30,7 @@ import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.repositories.HeroeRepository;
-import es.ucm.fdi.iw.repositories.partidasRepository;
+import es.ucm.fdi.iw.repositories.PartidasRepository;
 import es.ucm.fdi.iw.repositories.UserRepository;
 import es.ucm.fdi.iw.services.HeroesService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,7 +49,7 @@ public class AdminController {
     private HeroeRepository heroeRepository;
 
     @Autowired
-    private partidasRepository partidaRepository;
+    private PartidasRepository partidaRepository;
 
     @Autowired
     private UserRepository userRepository;
