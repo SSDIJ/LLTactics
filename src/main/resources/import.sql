@@ -1,7 +1,7 @@
 -- insert admin (username a, password aa)
 INSERT INTO "PUBLIC"."IWUSER" VALUES
-(TRUE, 0, 0, 0, 0, 0, 1, 'Admin', '/img/profile_pics/caballero.png', 'Administrez', '{bcrypt}$2a$10$GU4mO.Uxc.tRP3.DsrBIvO3543uERYAvJwkuplrpFTAYdXoteTFOm', 'ADMIN,USER', 'pruebaAdmin123', FALSE),
-(TRUE, 0, 0, 0, 0, 0, 2, 'Usuario','/img/profile_pics/princesa.png', 'Usuariez', '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'USER', 'usuarioMolon77', FALSE);
+(FALSE, TRUE, 0, 0, 0, 0, 0, null, 1, 'Admin', '/img/profile_pics/caballero.png', 'Administrez', '{bcrypt}$2a$10$GU4mO.Uxc.tRP3.DsrBIvO3543uERYAvJwkuplrpFTAYdXoteTFOm', null, 'ADMIN,USER', 'pruebaAdmin123'),
+(FALSE, TRUE, 0, 0, 0, 0, 0, null,  2, 'Usuario','/img/profile_pics/princesa.png', 'Usuariez', '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', null,  'USER', 'usuarioMolon77');
 
 
 

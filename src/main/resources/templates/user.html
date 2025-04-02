@@ -48,7 +48,7 @@
         </div>
         <!-- Si hay una foto de perfil, la mostramos -->
         <div th:unless="${user.fotoPerfil == null}">
-            <img th:src="@{/img/profile_pics/{filename}(filename=${user.fotoPerfil})}" alt="Foto de perfil" class="rounded-circle border border-3 border-dark shadow"/>
+            <img th:src="${user.fotoPerfil}" alt="Foto de perfil" class="rounded-circle border border-3 border-dark shadow"/>
         </div>
     </div>
 </div>
