@@ -13,8 +13,13 @@
     <div class="containerAdmin">
         <div class="sectionBuscarUsuarios">
             <h2>Usuarios</h2>
+            <p class="text-muted">
+                <strong> Username | Nombre completo | Roles </strong>
+            </p>
             <li th:each="usuario : ${usuarios}">
-              <strong th:text="${usuario.username}"></strong> - 
+                <a th:href="@{/user/viewProfile(username=${usuario.username})}">
+                    <strong th:text="${usuario.username}"></strong>
+                </a> - 
               <span th:text="${usuario.firstName}"></span> 
               <span th:text="${usuario.lastName}"></span> - 
               <em th:text="${usuario.roles}"></em>

@@ -464,7 +464,7 @@ public class UserController {
 
 // Funcion que sirve para cargar las fotos de la carpeta al abrir el user.html
 	@GetMapping("/viewProfile")
-	public String searchUser(@RequestParam("nombre") String nombre, Model model) {
+	public String searchUser(@RequestParam("username") String nombre, Model model) {
 
 		log.info("Entrando en el método viewProfile"); // Aquí se agrega el lo
 		User user = userRepository.findByUsernameContainingIgnoreCase(nombre);
