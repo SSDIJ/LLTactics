@@ -3,6 +3,7 @@ package es.ucm.fdi.iw.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -56,8 +57,6 @@ public class AdminController {
 
     @Autowired
     private HeroesService heroesService; // Inyectamos el servicio de héroes
-
- 
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
@@ -184,21 +183,55 @@ public class AdminController {
 
         return "gestHeroes";
     }
-    @GetMapping("/filtrar")
-    public List<User> filtrarUsuarios(
+    // @GetMapping("/filtrar")
+    // public List<User> filtrarUsuarios(
+    // @RequestParam(required = false) String role,
+    // @RequestParam(required = false) Boolean baneado) {
+
+    // if (role != null && baneado != null) {
+    // return userRepository.findByRolesAndBaneado(role, baneado);
+    // } else if (role != null) {
+    // return userRepository.findByRoles(role);
+    // } else if (baneado != null) {
+    // return userRepository.findByBaneado(baneado);
+    // } else {
+    // return userRepository.findAll();
+    // }
+    // }
+
+    @GetMapping("/filtrarUsuarios")
+    public String filtrarUsuarios(
             @RequestParam(required = false) String role,
-            @RequestParam(required = false) Boolean baneado) {
+            @RequestParam(required = false) Boolean baneado,
+            Model model) {
 
-        if (role != null && baneado != null) {
-            return userRepository.findByRolesAndBaneado(role, baneado);
-        } else if (role != null) {
-            return userRepository.findByRoles(role);
-        } else if (baneado != null) {
-            return userRepository.findByBaneado(baneado);
-        } else {
-            return userRepository.findAll();
-        }
+        List<User> usuarios;
+
+        if ("ADMIN".equals(role))   // Mostramos solo admins (ignoramos el checkbox baneado)
+            usuarios = userRepository.findByRolesContaining("ADMIN");
+
+        else if ("USER".equals(role)) {
+            if (baneado != null) {
+                // Filtrar usuarios que sean no admin (o que no tengan el rol ADMIN) y con el
+                // estado baneado indicado
+                usuarios = userRepository.findByBaneado(baneado)
+                        .stream()
+                        .filter(u -> !u.getRoles().contains("ADMIN"))
+                        .collect(Collectors.toList());
+            } else {
+                // Mostrar todos los usuarios que no sean admin
+                usuarios = userRepository.findAll()
+                        .stream()
+                        .filter(u -> !u.getRoles().contains("ADMIN"))
+                        .collect(Collectors.toList());
+            }
+        } else    // Si no se selecciona nada, mostramos todos
+            usuarios = userRepository.findAll();
+
+        boolean mostrarBaneo = (baneado != null);
+
+        model.addAttribute("mostrarBaneo", mostrarBaneo);
+        model.addAttribute("usuarios", usuarios);
+        return "gestUsuarios";
     }
-    
-
 }
