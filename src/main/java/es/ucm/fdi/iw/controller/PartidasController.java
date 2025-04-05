@@ -13,7 +13,7 @@ import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
-import es.ucm.fdi.iw.repositories.partidasRepository;
+import es.ucm.fdi.iw.repositories.PartidasRepository;
 import jakarta.transaction.Transactional;
 import es.ucm.fdi.iw.model.User;
 
@@ -24,7 +24,7 @@ public class PartidasController {
 	private EntityManager entityManager;
 
     @Autowired
-    private partidasRepository partidasRepository;
+    private PartidasRepository partidasRepository;
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {

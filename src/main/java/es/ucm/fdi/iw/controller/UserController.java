@@ -139,11 +139,35 @@ public class UserController {
 	 * Landing page for a user profile
 	 */
 	@GetMapping("{id}")
-	public String index(@PathVariable long id, Model model, HttpSession session) {
-		User target = entityManager.find(User.class, id);
-		model.addAttribute("user", target);
-		return "user";
-	}
+public String index(@PathVariable long id, Model model, HttpSession session) {
+    User target = entityManager.find(User.class, id);
+    model.addAttribute("user", target);
+
+    // Ruta relativa en la carpeta static
+    String rutaImgs = "/img/profile_pics";  // Sin "src/main/resources/static", ya que Spring Boot maneja los recursos estáticos
+
+    // Carpeta donde se encuentran las imágenes
+    File folder = new File("src/main/resources/static/" + rutaImgs);
+    File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".png") || name.endsWith(".jpg"));
+
+    // Crear una lista con los nombres de las imágenes 
+    List<String> availablePics = new ArrayList<>();
+
+    // Asegurarse de agregar las imágenes disponibles
+    if (listOfFiles != null && listOfFiles.length > 0) {
+        for (File file : listOfFiles) {
+            availablePics.add(rutaImgs + "/" + file.getName());  // Ruta relativa
+        }
+    } else {
+        availablePics.add("pepe"); // Imagen por defecto si no hay imágenes
+    }
+
+    // Agregar la lista de imágenes al modelo
+    model.addAttribute("availablePics", availablePics);
+
+    return "user";  // Retornar la vista
+}
+
 
 	/**
 	 * Alter or create a user
@@ -435,33 +459,6 @@ public class UserController {
 		return "redirect:/"; // Redirige a la página principal
 	}
 
-	@GetMapping("/user/{id}")	
-	public String getProfilePics(Model model) {
-		System.out.println("patata");
-		log.info("Entrando en el método getProfilePics"); // Aquí se agrega el log
-		// Ruta relativa en la carpeta static
-		String rutaImgs = "img/profile_pics"; // Sin "src/main/resources/static", ya que Spring Boot maneja estáticos
-		File folder = new File("src/main/resources/static/" + rutaImgs);
-		File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".png") || name.endsWith(".jpg"));
-
-		// Crear una lista con los nombres de las imágenes 
-		List<String> availablePics = new ArrayList<>();
-
-		if (listOfFiles != null && listOfFiles.length > 0) {
-			availablePics.add("pepe");
-			for (File file : listOfFiles) {
-				availablePics.add(rutaImgs + "/" + file.getName()); // Ruta relativa de la imagen
-			}
-		}
-		else{
-			availablePics.add("pepe");
-		}
-
-		// Agregar la lista de imágenes al modelo
-		model.addAttribute("availablePics", availablePics);
-
-		return "user"; // El nombre de la vista, que será user.html en Thymeleaf
-	}
 
 // Funcion que sirve para cargar las fotos de la carpeta al abrir el user.html
 	@GetMapping("/viewProfile")
@@ -480,5 +477,11 @@ public class UserController {
 		
 		return "viewProfile";
 	}
+
+	@GetMapping("/updatePhoto")
+	public String updateProfilePicture(@PathVariable Long userId, String newProfilePic, Model model) {
+       return "user";
+    }
+	
 }
 	

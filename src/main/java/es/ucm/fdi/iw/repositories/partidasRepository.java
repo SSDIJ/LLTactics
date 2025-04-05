@@ -6,7 +6,7 @@ import es.ucm.fdi.iw.model.Partida;
 import java.util.Optional;
 
 @Repository
-public interface partidasRepository extends JpaRepository<Partida, Long> {
+public interface PartidasRepository extends JpaRepository<Partida, Long> {
     Optional<Partida> findByIdPartida(Long id);
 
 
