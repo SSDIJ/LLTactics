@@ -548,7 +548,9 @@ td img.icon {
     flex-wrap: wrap;  /* Permite que los elementos se envuelvan si no caben en una sola fila */
     gap: 10px;  /* Separación de 10px entre los elementos */
 }
-
+.profile-body .col-md-4 .card-body{
+    
+}
 .profile-body .col-md-4 .card-body .card-title{
     color:white;
 }
