@@ -41,102 +41,128 @@
    <!-- IMAGEN DE PERFIL -->
 <div class="mid-user text-center">
     <h1 class="mt-5"><span th:text="${user.username}"></span></h1>
+   
     <div class="profile-pic">
         <!-- Si la foto de perfil es null, mostramos la imagen por defecto -->
         <div th:if="${user.fotoPerfil == null}">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#editarFotoModal">
             <img th:src="@{/img/profile_pics/default_profile.png}" alt="Foto de perfil"   class="rounded-circle border border-3 border-dark shadow"/>
+            </a>
         </div>
         <!-- Si hay una foto de perfil, la mostramos -->
         <div th:unless="${user.fotoPerfil == null}">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#editarFotoModal">
             <img th:src="${user.fotoPerfil}" alt="Foto de perfil" class="rounded-circle border border-3 border-dark shadow"/>
+            </a>
         </div>
     </div>
+</a>
 </div>
+<!-- MODAL PARA CAMBIAR FOTO DE PERFIL -->
+<div class="modal fade" id="editarFotoModal" tabindex="-1" aria-labelledby="editarFotoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-white">
+  
+        <div class="modal-header">
+          <h5 class="modal-title" id="editarFotoLabel">Selecciona tu nueva foto de perfil</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+  
+        <div class="modal-body">
+          <form th:action="@{/user/updateFoto}" method="post">
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+              <label th:each="pic : ${availablePics}">
+                <input type="radio" name="selectedPic" th:value="${pic}" class="btn-check" required>
+                <img th:src="@{/img/profile_pics/{filename}(filename=${pic})}" class="img-thumbnail rounded-circle border border-white" style="width: 100px; cursor: pointer;" />
+              </label>
+            </div>
+  
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-success">Guardar Cambios</button>
+            </div>
+          </form>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
 
-<form th:action="@{/user/updateFoto}" method="post">
-    <label for="selectedPic">Selecciona una foto:</label>
-    <select name="selectedPic" id="selectedPic">
-        <option th:each="pic : ${availablePics}" th:value="${pic}" th:text="${pic}">
-            <img th:src="@{/img/profile_pics/{filename}(filename=${pic})}" alt="Foto de perfil" class="img-thumbnail" />
-        </option>
-    </select>
-    <button type="submit">Actualizar Foto</button>
-</form>
-
-
-    <!-- ESTADÍSTICAS DEL PERFIL -->
-    <div class="bot-user">
-        <!-- Sección de Estadísticas -->
-<div class="container mt-5">
-    <div class="row">
-        <!-- Puntuación de Maestría -->
-        <div class="col-md-4">
-            <div class="card text-center p-3 mb-3">
+   <!-- ESTADÍSTICAS DEL PERFIL -->
+<div class="bot-user">
+    <!-- Sección de Estadísticas -->
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-between" style="flex-wrap: wrap;">
+            <!-- Puntuación de Maestría -->
+            <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 250px;">
                 <div class="card-body">
                     <h5 class="card-title">Puntuación de Maestría</h5>
-                    <h3 class="text-primary" th:text="${user.puntuacion}">410</h3>
+                    <h3 class="text-primary">410</h3>
                 </div>
             </div>
-        </div>
 
-        <!-- Personaje más Jugado -->
-        <div class="col-md-4">
-            <div class="card text-center p-3 mb-3">
+            <!-- Personaje más Jugado -->
+            <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 250px;">
                 <div class="card-body">
                     <h5 class="card-title">Personaje más Jugado</h5>
                     <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero" class="img-fluid rounded-circle">
                 </div>
             </div>
-        </div>
 
-        <!-- Facción Favorita -->
-        <div class="col-md-4">
-            <div class="card text-center p-3 mb-3">
+            <!-- Facción Favorita -->
+            <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 250px;">
                 <div class="card-body">
                     <h5 class="card-title">Facción Favorita</h5>
-                    <img th:if="${user.faccionFavorita == 0}" src="/img/units/banners/humans.png" class="img-fluid">
-                    <img th:if="${user.faccionFavorita == 1}" src="/img/units/banners/dragons.png" class="img-fluid">
-                    <img th:if="${user.faccionFavorita == 2}" src="/img/units/banners/trolls.png" class="img-fluid">
-                    <img th:if="${user.faccionFavorita == 3}" src="/img/units/banners/undead.png" class="img-fluid">
-                    <img th:if="${user.faccionFavorita == 4}" src="/img/units/banners/legendaries.png" class="img-fluid">
-                    <img th:if="${user.faccionFavorita > 4}" src="/img/units/banners/humans.png" class="img-fluid">
+                    <img src="/img/units/banners/humans.png" class="img-fluid">
+                </div>
+            </div>
+
+            <!-- GRÁFICA DE VICTORIAS Y DERROTAS -->
+            <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 250px;">
+                <div class="card-body bg-dark text-white">
+                    <h5 class="card-title">Ratio de Victorias</h5>
+                    <canvas id="winrateChart" width="200" height="200"></canvas>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-    </div>
+   <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const partidasGanadas = [[${user.partidasGanadas}]];
+        const partidasPerdidas = [[${user.partidasPerdidas}]];
 
-    <th:block th:replace="~{fragments/footer.html :: footer}" />
+        const canvas = document.getElementById("winrateChart");
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var partidasGanadas = [[${user.partidasGanadas}]];
-        var partidasPerdidas = [[${user.partidasPerdidas}]];
-    
-        var ctx1 = document.getElementById('winrateChart').getContext('2d');
-        new Chart(ctx1, {
-            type: 'doughnut',
-            data: {
-                labels: ['Victorias', 'Derrotas'],
-                datasets: [{
-                    data: [partidasGanadas, partidasPerdidas],
-                    backgroundColor: ['#4CAF50', '#F44336']
-                }]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white'
+        if (canvas) {
+            const ctx = canvas.getContext("2d");
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Victorias', 'Derrotas'],
+                    datasets: [{
+                        data: [partidasGanadas, partidasPerdidas],
+                        backgroundColor: ['#4CAF50', '#F44336']
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
                         }
                     }
                 }
-            }
-        });
-    </script>
+            });
+        } else {
+            console.warn("⚠️ No se encontró el canvas con id 'winrateChart'");
+        }
+    });
+</script>
+
 </div>
 </body>
 </html>

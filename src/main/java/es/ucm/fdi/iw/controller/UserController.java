@@ -437,6 +437,7 @@ public class UserController {
 
 	@GetMapping("/user/{id}")	
 	public String getProfilePics(Model model) {
+		System.out.println("patata");
 		log.info("Entrando en el método getProfilePics"); // Aquí se agrega el log
 		// Ruta relativa en la carpeta static
 		String rutaImgs = "img/profile_pics"; // Sin "src/main/resources/static", ya que Spring Boot maneja estáticos
