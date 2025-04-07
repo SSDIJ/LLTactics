@@ -11,6 +11,9 @@ import java.util.Optional;
 //El repositorio se conecta con la tabla de User porque es su primer argumento.
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
+    Optional<User>  findById(long id);
+
     Optional<User> findByUsername(String username);
     
     User findByUsernameContainingIgnoreCase(String username);

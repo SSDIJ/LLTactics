@@ -19,124 +19,180 @@
     <header th:replace="~{fragments/nav.html :: nav}"></header>
     
     <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
-<div class="user">
-    <!-- TOP: BARRA DE BÚSQUEDA DE JUGADOR -->
-    <div class="top-user">
-      
-        <!-- BARRA DE BÚSQUEDA USANDO BOOTSTRAP -->
-        <form action="/user/viewProfile" method="GET">
-            <div class="input-group" style="max-width: 300px;">
-                <span class="input-group-text bg-white border-end-0">
-                    <button type="submit" class="btn btn-light border-0" id="searchBtn2">
-                        <i class="fas fa-search text-muted"></i>
-                    </button>
-                </span>
-                <input type="text" id="searchPlayer2" name="nombre" class="form-control border-start-0 border-end-0" placeholder="Buscar">
-            </div>
-        </form>
+    <div class="user">
+        <!-- TOP: BARRA DE BÚSQUEDA DE JUGADOR -->
+        <div class="top-user">
+            <!-- BARRA DE BÚSQUEDA USANDO BOOTSTRAP -->
+            <form action="/user/viewProfile" method="GET">
+                <div class="input-group" style="max-width: 300px;">
+                    <span class="input-group-text bg-white border-end-0">
+                        <button type="submit" class="btn btn-light border-0" id="searchBtn2">
+                            <i class="fas fa-search text-muted"></i>
+                        </button>
+                    </span>
+                    <input type="text" id="searchPlayer2" name="nombre" class="form-control border-start-0 border-end-0" placeholder="Buscar">
+                </div>
+            </form>
+        </div>
     </div>
 
+    <!-- IMAGEN DE PERFIL -->
+    <div class="mid-user text-center">
+        <h1 class="mt-5"><span th:text="${user.username}"></span></h1>
+        
+        <div class="profile-pic">
+            <!-- Si la foto de perfil es null, mostramos la imagen por defecto -->
+            <div th:if="${user.fotoPerfil == null}">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#editarFotoModal">
+                    <img th:src="@{/img/profile_pics/default_profile.png}" alt="Foto de perfil" class="rounded-circle border border-3 border-dark shadow"/>
+                </a>
+            </div>
+            <!-- Si hay una foto de perfil, la mostramos -->
+            <div th:unless="${user.fotoPerfil == null}">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#editarFotoModal">
+                    <img th:src="${user.fotoPerfil}" alt="Foto de perfil" class="rounded-circle border border-3 border-dark shadow"/>
+                </a>
+            </div>
         </div>
 
-   <!-- IMAGEN DE PERFIL -->
-<div class="mid-user text-center">
-    <h1 class="mt-5"><span th:text="${user.username}"></span></h1>
-    <div class="profile-pic">
-        <!-- Si la foto de perfil es null, mostramos la imagen por defecto -->
-        <div th:if="${user.fotoPerfil == null}">
-            <img th:src="@{/img/profile_pics/default_profile.png}" alt="Foto de perfil"   class="rounded-circle border border-3 border-dark shadow"/>
-        </div>
-        <!-- Si hay una foto de perfil, la mostramos -->
-        <div th:unless="${user.fotoPerfil == null}">
-            <img th:src="${user.fotoPerfil}" alt="Foto de perfil" class="rounded-circle border border-3 border-dark shadow"/>
+   <!-- MODAL PARA CAMBIAR FOTO DE PERFIL -->
+<div class="modal fade" id="editarFotoModal" tabindex="-1" aria-labelledby="editarFotoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Cabecera del modal -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarFotoModalLabel">Cambiar Foto de Perfil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <!-- Cuerpo del modal -->
+            <div class="modal-body">
+               <form th:action="@{/user/updateFoto/{id}(id=${user.id})}" method="post" enctype="multipart/form-data">
+
+            
+                    <!-- 🔹 Previsualización centrada y separada -->
+                    <div class="text-center mb-4 border-bottom pb-3">
+                        <h6 class="mb-3">Previsualización</h6>
+                        <img id="preview-img"
+                             th:src="${user.fotoPerfil != null} ? ${user.fotoPerfil} : @{/img/profile_pics/default_profile.png}"
+                             alt="Previsualización"
+                             class="img-thumbnail rounded-circle border border-white shadow"
+                             style="width: 150px;">
+                    </div>
+
+                    <!-- 🔹 Miniaturas dentro de un flex-container aparte -->
+                    <div class="d-flex justify-content-center gap-3 flex-wrap mb-4">
+                        <label th:each="pic : ${availablePics}">
+                            <input type="radio" name="selectedPic" th:value="${pic}" class="btn-check" required>
+                            <img th:src="@{${pic}}"
+                                 class="img-thumbnail rounded-circle border border-white"
+                                 style="width: 100px; cursor: pointer;" />
+                        </label>
+                    </div>
+
+                    <!-- 🔹 Botón guardar -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+
         </div>
     </div>
 </div>
 
-<form th:action="@{/user/updateFoto}" method="post">
-    <label for="selectedPic">Selecciona una foto:</label>
-    <select name="selectedPic" id="selectedPic">
-        <option th:each="pic : ${availablePics}" th:value="${pic}" th:text="${pic}">
-            <img th:src="@{/img/profile_pics/{filename}(filename=${pic})}" alt="Foto de perfil" class="img-thumbnail" />
-        </option>
-    </select>
-    <button type="submit">Actualizar Foto</button>
-</form>
-
-
+            
     <!-- ESTADÍSTICAS DEL PERFIL -->
     <div class="bot-user">
-        <!-- Sección de Estadísticas -->
-<div class="container mt-5">
-    <div class="row">
-        <!-- Puntuación de Maestría -->
-        <div class="col-md-4">
-            <div class="card text-center p-3 mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Puntuación de Maestría</h5>
-                    <h3 class="text-primary" th:text="${user.puntuacion}">410</h3>
+        <div class="container mt-5">
+            <div class="row d-flex justify-content-between" style="flex-wrap: wrap;">
+                <!-- Puntuación de Maestría -->
+                <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 250px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Puntuación de Maestría</h5>
+                        <h3 class="text-primary">410</h3>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Personaje más Jugado -->
-        <div class="col-md-4">
-            <div class="card text-center p-3 mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Personaje más Jugado</h5>
-                    <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero" class="img-fluid rounded-circle">
+                <!-- Personaje más Jugado -->
+                <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 250px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Personaje más Jugado</h5>
+                        <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero" class="img-fluid rounded-circle">
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Facción Favorita -->
-        <div class="col-md-4">
-            <div class="card text-center p-3 mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Facción Favorita</h5>
-                    <img th:if="${user.faccionFavorita == 0}" src="/img/units/banners/humans.png" class="img-fluid">
-                    <img th:if="${user.faccionFavorita == 1}" src="/img/units/banners/dragons.png" class="img-fluid">
-                    <img th:if="${user.faccionFavorita == 2}" src="/img/units/banners/trolls.png" class="img-fluid">
-                    <img th:if="${user.faccionFavorita == 3}" src="/img/units/banners/undead.png" class="img-fluid">
-                    <img th:if="${user.faccionFavorita == 4}" src="/img/units/banners/legendaries.png" class="img-fluid">
-                    <img th:if="${user.faccionFavorita > 4}" src="/img/units/banners/humans.png" class="img-fluid">
+                <!-- Facción Favorita -->
+                <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 250px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Facción Favorita</h5>
+                        <img src="/img/units/banners/humans.png" class="img-fluid">
+                    </div>
+                </div>
+
+                <!-- GRÁFICA DE VICTORIAS Y DERROTAS -->
+                <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 250px;">
+                    <div class="card-body bg-dark text-white">
+                        <h5 class="card-title">Ratio de Victorias</h5>
+                        <canvas id="winrateChart" width="200" height="200"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-    </div>
-
-    <th:block th:replace="~{fragments/footer.html :: footer}" />
-
+    <!-- Scripts de Bootstrap, incluye el bundle que tiene Popper.js y Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
-        var partidasGanadas = [[${user.partidasGanadas}]];
-        var partidasPerdidas = [[${user.partidasPerdidas}]];
-    
-        var ctx1 = document.getElementById('winrateChart').getContext('2d');
-        new Chart(ctx1, {
-            type: 'doughnut',
-            data: {
-                labels: ['Victorias', 'Derrotas'],
-                datasets: [{
-                    data: [partidasGanadas, partidasPerdidas],
-                    backgroundColor: ['#4CAF50', '#F44336']
-                }]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white'
+        document.addEventListener("DOMContentLoaded", function () {
+            const partidasGanadas = [[${user.partidasGanadas}]];
+            const partidasPerdidas = [[${user.partidasPerdidas}]];
+
+            const canvas = document.getElementById("winrateChart");
+
+            if (canvas) {
+                const ctx = canvas.getContext("2d");
+
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Victorias', 'Derrotas'],
+                        datasets: [{
+                            data: [partidasGanadas, partidasPerdidas],
+                            backgroundColor: ['#4CAF50', '#F44336']
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: 'white'
+                                }
+                            }
                         }
                     }
-                }
+                });
+            } else {
+                console.warn("⚠️ No se encontró el canvas con id 'winrateChart'");
             }
         });
     </script>
-</div>
+    <script>
+        
+    document.addEventListener("DOMContentLoaded", function () {
+        const previewImg = document.getElementById("preview-img");
+        const radioButtons = document.querySelectorAll('input[name="selectedPic"]');
+
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function () {
+                const imgElement = this.nextElementSibling; // imagen al lado del input
+                previewImg.src = imgElement.src;
+            });
+        });
+    });
+</script>
+
 </body>
 </html>

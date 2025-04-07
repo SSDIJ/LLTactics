@@ -30,7 +30,7 @@ public class RankingController {
     public String mostrarRanking(Model model) {
     // Obtener jugadores de la base de datos
     List<User> usuarios = userRepository.findAll();
-
+        System.out.println("Mondongo\n");
     /*
     // Ordenar por diferencia entre partidas ganadas y perdidas (descendente)
     usuarios.sort((j1, j2) -> Integer.compare(

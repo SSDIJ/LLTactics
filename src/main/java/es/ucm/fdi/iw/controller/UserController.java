@@ -139,11 +139,35 @@ public class UserController {
 	 * Landing page for a user profile
 	 */
 	@GetMapping("{id}")
-	public String index(@PathVariable long id, Model model, HttpSession session) {
-		User target = entityManager.find(User.class, id);
-		model.addAttribute("user", target);
-		return "user";
-	}
+public String index(@PathVariable long id, Model model, HttpSession session) {
+    User target = entityManager.find(User.class, id);
+    model.addAttribute("user", target);
+
+    // Ruta relativa en la carpeta static
+    String rutaImgs = "/img/profile_pics";  // Sin "src/main/resources/static", ya que Spring Boot maneja los recursos estáticos
+
+    // Carpeta donde se encuentran las imágenes
+    File folder = new File("src/main/resources/static/" + rutaImgs);
+    File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".png") || name.endsWith(".jpg"));
+
+    // Crear una lista con los nombres de las imágenes 
+    List<String> availablePics = new ArrayList<>();
+
+    // Asegurarse de agregar las imágenes disponibles
+    if (listOfFiles != null && listOfFiles.length > 0) {
+        for (File file : listOfFiles) {
+            availablePics.add(rutaImgs + "/" + file.getName());  // Ruta relativa
+        }
+    } else {
+        availablePics.add("pepe"); // Imagen por defecto si no hay imágenes
+    }
+
+    // Agregar la lista de imágenes al modelo
+    model.addAttribute("availablePics", availablePics);
+
+    return "user";  // Retornar la vista
+}
+
 
 	/**
 	 * Alter or create a user
@@ -435,32 +459,6 @@ public class UserController {
 		return "redirect:/"; // Redirige a la página principal
 	}
 
-	@GetMapping("/user/{id}")	
-	public String getProfilePics(Model model) {
-		log.info("Entrando en el método getProfilePics"); // Aquí se agrega el log
-		// Ruta relativa en la carpeta static
-		String rutaImgs = "img/profile_pics"; // Sin "src/main/resources/static", ya que Spring Boot maneja estáticos
-		File folder = new File("src/main/resources/static/" + rutaImgs);
-		File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".png") || name.endsWith(".jpg"));
-
-		// Crear una lista con los nombres de las imágenes 
-		List<String> availablePics = new ArrayList<>();
-
-		if (listOfFiles != null && listOfFiles.length > 0) {
-			availablePics.add("pepe");
-			for (File file : listOfFiles) {
-				availablePics.add(rutaImgs + "/" + file.getName()); // Ruta relativa de la imagen
-			}
-		}
-		else{
-			availablePics.add("pepe");
-		}
-
-		// Agregar la lista de imágenes al modelo
-		model.addAttribute("availablePics", availablePics);
-
-		return "user"; // El nombre de la vista, que será user.html en Thymeleaf
-	}
 
 // Funcion que sirve para cargar las fotos de la carpeta al abrir el user.html
 	@GetMapping("/viewProfile")
@@ -479,5 +477,44 @@ public class UserController {
 		
 		return "viewProfile";
 	}
+
+	@PostMapping("/updateFoto/{id}")
+public String updateProfilePicture(@PathVariable Long id, @RequestParam(required = true) String selectedPic, Model model, RedirectAttributes redirectAttributes) {
+	// Buscar al usuario por su id
+	System.out.println("Buenaaas");
+	System.out.println("Cambiando foto por: "+selectedPic);
+    User user = userRepository.findById(id).orElse(null);
+
+    if (user == null) {
+        // Si no se encuentra el usuario, devolver un mensaje de error
+        model.addAttribute("error", "Usuario no encontrado.");
+        return "error"; // Puedes redirigir a una página de error o mostrar un mensaje adecuado
+    }
+
+    // Mostrar por consola el ID y la nueva foto
+    System.out.println("ID del usuario: " + id);
+    System.out.println("Nueva imagen: " + selectedPic);
+
+    // Verificar que la nueva foto de perfil no sea nula o vacía
+    if (selectedPic != null && !selectedPic.isEmpty()) {
+        // Actualizar la foto de perfil
+        user.setFotoPerfil(selectedPic);
+        // Guardar el usuario con la nueva foto de perfil en la base de datos
+        userRepository.save(user);
+        model.addAttribute("success", "Foto de perfil actualizada correctamente.");
+    } else {
+        model.addAttribute("error", "La foto de perfil no puede estar vacía.");
+    }
+
+    // Retornar a la vista del usuario con el modelo actualizado
+	
+	redirectAttributes.addAttribute("id", id);
+    return "redirect:/user/{id}";
+	
+}
+
+	
+	
 }
 	
+

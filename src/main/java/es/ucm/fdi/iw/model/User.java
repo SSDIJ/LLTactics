@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import lombok.Setter;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -52,8 +52,10 @@ public class User implements Transferable<User.Transfer> {
     private String firstName;
     @Column(nullable = true)
     private String lastName;
-    @Column(nullable = true)
-    private String fotoPerfil;
+  @Setter
+@Column(nullable = true)
+private String fotoPerfil;
+
 
     private boolean enabled;
     private String roles; // split by ',' to separate roles
