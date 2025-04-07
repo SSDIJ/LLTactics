@@ -552,6 +552,7 @@ function initializeChatWebSocket(topicName) {
 
         // Suscribe al topic del chat
         stompClient.subscribe(`/topic/${topicName}`, function(message) {
+            console.log("Mensaje recibido desde el servidor:", message.body);
             const mensaje = JSON.parse(message.body);
             displayMessage(mensaje);
         });
@@ -560,14 +561,17 @@ function initializeChatWebSocket(topicName) {
     // Muestra mensajes en el chat
     function displayMessage(mensaje) {
         const messageElement = document.createElement("div");
+        messageElement.classList.add("chat-message"); // Para estilos en el css, por si acaso
         messageElement.textContent = `${mensaje.from}: ${mensaje.text}`;
-        chatBox.appendChild(messageElement);
+        chatBox.appendChild(messageElement); // Añade mensaje en el contenedor chat
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
     function sendMessage() {
         const mensaje = chatInput.value.trim();
         if (mensaje === "") return;
+
+        console.log("Se manda mensaje:", mensaje);
 
         stompClient.send(`/app/topic/${topicName}`, {}, JSON.stringify({ mensaje: mensaje}));
         chatInput.value = ""; // Limpiar el campo de entrada
