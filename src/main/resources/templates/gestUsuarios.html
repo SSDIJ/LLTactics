@@ -13,36 +13,69 @@
     <div class="containerAdmin">
         <div class="sectionBuscarUsuarios">
             <h2>Usuarios</h2>
+            <p class="text-muted">
+                <strong> Username | Nombre completo | Roles </strong>
+            </p>
             <li th:each="usuario : ${usuarios}">
-              <strong th:text="${usuario.username}"></strong> - 
-              <span th:text="${usuario.firstName}"></span> 
-              <span th:text="${usuario.lastName}"></span> - 
-              <em th:text="${usuario.roles}"></em>
-          </li>
+                <a th:href="@{/user/viewProfile(username=${usuario.username})}">
+                    <strong th:text="${usuario.username}"></strong>
+                </a> -
+                <span th:text="${usuario.firstName}"></span>
+                <span th:text="${usuario.lastName}"></span> -
+                <em th:text="${usuario.roles}"></em>
+            </li>
         </div>
         <hr class="divider">
         <div class="sectionFiltrarUsuarios">
             <h2>Filtrar Usuarios</h2>
-            <div class="filtrosUsuarios">
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Filtrar Baneados
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#" onclick="filtrarUsuarios('enCurso')">No Baneados</a></li>
-                      <li><a class="dropdown-item" href="#" onclick="filtrarUsuarios('terminadas')">Baneados</a></li>
-                    </ul>
+            <!-- Formulario de filtrado -->
+            <form class="row g-3 mt-3" method="get" action="/admin/filtrarUsuarios">
+
+                <!-- Dropdown para elegir tipo de usuario -->
+                <div class="col-md-4">
+                    <label for="roleSelect" class="form-label">Tipo de usuario</label>
+                    <select id="roleSelect" name="role" class="form-select">
+                        <option value="USER">Usuario</option>
+                        <option value="ADMIN">Admin</option>
+                    </select>
                 </div>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Filtrar Admins
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#" onclick="filtrarUsuarios('enCurso')">Usuarios</a></li>
-                      <li><a class="dropdown-item" href="#" onclick="filtrarUsuarios('terminadas')">Admins</a></li>
-                    </ul>
+
+                <!-- Checkbox de baneado (solo habilitado para Usuario) -->
+                <div class="col-md-4">
+                    <div class="form-check mt-4">
+                        <input class="form-check-input" type="checkbox" name="baneado" value="true" id="baneadoCheck">
+                        <label class="form-check-label" for="baneadoCheck">Baneado</label>
+                    </div>
                 </div>
-            </div>
+
+                <div class="col-md-4 align-self-end">
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                </div>
+            </form>
+
+            <table class="table table-striped mt-4">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Roles</th>
+                        <th>Baneado</th>
+                        <th th:if="${mostrarBaneo}">Fecha Baneo</th>
+                        <th th:if="${mostrarBaneo}">Razón Baneo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="usuario : ${usuarios}">
+                        <td th:text="${usuario.id}"></td>
+                        <td th:text="${usuario.username}"></td>
+                        <td th:text="${usuario.roles}"></td>
+                        <td th:text="${usuario.baneado}"></td>
+                        <!-- Solo se muestra para baneados -->
+                        <td th:if="${mostrarBaneo}" th:text="${usuario.fechaBaneo}"></td>
+                        <td th:if="${mostrarBaneo}" th:text="${usuario.razonBaneo}"></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -51,37 +84,24 @@
 </body>
 
 <script>
-  function filtrarUsuarios() {
-      // Obtén los valores de los filtros
-      const role = document.getElementById("filtroRole").value;
-      const baneado = document.getElementById("filtroBaneado").value;
 
-      // Construye la URL con los parámetros de filtrado
-      const url = `/admin/gestUsuarios/filtrar?role=${role}&baneado=${baneado}`;
+    document.addEventListener("DOMContentLoaded", function () {
+        const roleSelect = document.getElementById("roleSelect");
+        const baneadoCheck = document.getElementById("baneadoCheck");
 
-      // Realiza la solicitud al backend
-      fetch(url)
-          .then(response => response.json())
-          .then(data => {
-              // Actualiza la tabla de usuarios
-              const usuariosContainer = document.getElementById("usuariosContainer");
-              usuariosContainer.innerHTML = ""; // Limpia la tabla
+        function toggleBaneado() {
+            // Si se selecciona ADMIN, deshabilitamos el checkbox y lo desmarcamos
+            if (roleSelect.value === "ADMIN") {
+                baneadoCheck.checked = false;
+                baneadoCheck.disabled = true;
+            } else
+                baneadoCheck.disabled = false;
+        }
 
-              data.forEach(usuario => {
-                  const row = `
-                      <tr>
-                          <td>${usuario.id}</td>
-                          <td>${usuario.nombre}</td>
-                          <td>${usuario.email}</td>
-                          <td>${usuario.role}</td>
-                          <td>${usuario.baneado ? "Sí" : "No"}</td>
-                      </tr>
-                  `;
-                  usuariosContainer.innerHTML += row;
-              });
-          })
-          .catch(error => console.error("Error al filtrar usuarios:", error));
-  }
+        // Ejecutamos la función al cargar la página y al cambiar el dropdown
+        toggleBaneado();
+        roleSelect.addEventListener("change", toggleBaneado);
+    });
 </script>
 
 </html>

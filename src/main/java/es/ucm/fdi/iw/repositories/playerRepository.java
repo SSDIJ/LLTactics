@@ -7,7 +7,7 @@ import es.ucm.fdi.iw.model.Jugador;
 import java.util.List;
 
 // JpaRepository<Entidad, Tipo de ID>
-public interface playerRepository extends JpaRepository<Jugador, Long> {
+public interface PlayerRepository extends JpaRepository<Jugador, Long> {
 
     // Encuentra jugadores por nombre (ignorando mayúsculas y minúsculas)
     List<Jugador> findByNombreContainingIgnoreCase(String nombre);
