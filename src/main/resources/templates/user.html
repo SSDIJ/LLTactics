@@ -55,34 +55,54 @@
             </div>
         </div>
 
-             <!-- MODAL PARA CAMBIAR FOTO DE PERFIL -->
-             <div class="modal fade" id="editarFotoModal" tabindex="-1" aria-labelledby="editarFotoLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content bg-dark text-white">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editarFotoLabel">Selecciona tu nueva foto de perfil</h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                        </div>
+   <!-- MODAL PARA CAMBIAR FOTO DE PERFIL -->
+<div class="modal fade" id="editarFotoModal" tabindex="-1" aria-labelledby="editarFotoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
 
-                        <div class="modal-body">
-                            <form th:action="@{/user/updateFoto}" method="post">
-                                <div class="d-flex justify-content-center gap-3 flex-wrap">
-                                    <label th:each="pic : ${availablePics}">
-                                        <input type="radio" name="selectedPic" th:value="${pic}" class="btn-check" required>
-                                        <img th:src="@{${pic}}" class="img-thumbnail rounded-circle border border-white" style="width: 100px; cursor: pointer;" />
-                                    </label>
-                                </div>
-
-                            <div class="text-center mt-4">
-                                <button type="submit" class="btn btn-success">Guardar Cambios</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+            <!-- Cabecera del modal -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarFotoModalLabel">Cambiar Foto de Perfil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
+
+            <!-- Cuerpo del modal -->
+            <div class="modal-body">
+               <form th:action="@{/user/updateFoto/{id}(id=${user.id})}" method="post" enctype="multipart/form-data">
+
+            
+                    <!-- 🔹 Previsualización centrada y separada -->
+                    <div class="text-center mb-4 border-bottom pb-3">
+                        <h6 class="mb-3">Previsualización</h6>
+                        <img id="preview-img"
+                             th:src="${user.fotoPerfil != null} ? ${user.fotoPerfil} : @{/img/profile_pics/default_profile.png}"
+                             alt="Previsualización"
+                             class="img-thumbnail rounded-circle border border-white shadow"
+                             style="width: 150px;">
+                    </div>
+
+                    <!-- 🔹 Miniaturas dentro de un flex-container aparte -->
+                    <div class="d-flex justify-content-center gap-3 flex-wrap mb-4">
+                        <label th:each="pic : ${availablePics}">
+                            <input type="radio" name="selectedPic" th:value="${pic}" class="btn-check" required>
+                            <img th:src="@{${pic}}"
+                                 class="img-thumbnail rounded-circle border border-white"
+                                 style="width: 100px; cursor: pointer;" />
+                        </label>
+                    </div>
+
+                    <!-- 🔹 Botón guardar -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+
         </div>
     </div>
+</div>
 
+            
     <!-- ESTADÍSTICAS DEL PERFIL -->
     <div class="bot-user">
         <div class="container mt-5">
@@ -159,5 +179,20 @@
             }
         });
     </script>
+    <script>
+        
+    document.addEventListener("DOMContentLoaded", function () {
+        const previewImg = document.getElementById("preview-img");
+        const radioButtons = document.querySelectorAll('input[name="selectedPic"]');
+
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function () {
+                const imgElement = this.nextElementSibling; // imagen al lado del input
+                previewImg.src = imgElement.src;
+            });
+        });
+    });
+</script>
+
 </body>
 </html>

@@ -478,10 +478,43 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		return "viewProfile";
 	}
 
-	@GetMapping("/updatePhoto")
-	public String updateProfilePicture(@PathVariable Long userId, String newProfilePic, Model model) {
-       return "user";
+	@PostMapping("/updateFoto/{id}")
+public String updateProfilePicture(@PathVariable Long id, @RequestParam(required = true) String selectedPic, Model model, RedirectAttributes redirectAttributes) {
+	// Buscar al usuario por su id
+	System.out.println("Buenaaas");
+	System.out.println("Cambiando foto por: "+selectedPic);
+    User user = userRepository.findById(id).orElse(null);
+
+    if (user == null) {
+        // Si no se encuentra el usuario, devolver un mensaje de error
+        model.addAttribute("error", "Usuario no encontrado.");
+        return "error"; // Puedes redirigir a una página de error o mostrar un mensaje adecuado
     }
+
+    // Mostrar por consola el ID y la nueva foto
+    System.out.println("ID del usuario: " + id);
+    System.out.println("Nueva imagen: " + selectedPic);
+
+    // Verificar que la nueva foto de perfil no sea nula o vacía
+    if (selectedPic != null && !selectedPic.isEmpty()) {
+        // Actualizar la foto de perfil
+        user.setFotoPerfil(selectedPic);
+        // Guardar el usuario con la nueva foto de perfil en la base de datos
+        userRepository.save(user);
+        model.addAttribute("success", "Foto de perfil actualizada correctamente.");
+    } else {
+        model.addAttribute("error", "La foto de perfil no puede estar vacía.");
+    }
+
+    // Retornar a la vista del usuario con el modelo actualizado
+	
+	redirectAttributes.addAttribute("id", id);
+    return "redirect:/user/{id}";
+	
+}
+
+	
 	
 }
 	
+
