@@ -471,9 +471,7 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		} else {
 			model.addAttribute("usuarioBuscado", user);
 		}
-		long id = user.getId();
 
-		model.addAttribute("usuarioBuscado", user);
 		
 		return "viewProfile";
 	}

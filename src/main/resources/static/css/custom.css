@@ -517,7 +517,9 @@ td img.icon {
     background-color: #f4f6f9; /* Un gris suave de fondo */
     font-family: 'Uncial Antiqua', sans-serif;
     color: #333;
-
+    padding-bottom: 0% !important;
+    max-height: 100% !important;
+    height: 100%  !important;
 }
 
 .profile-body .user{
@@ -548,6 +550,7 @@ td img.icon {
     align-items: center;  /* Alinea los elementos verticalmente en el centro */
     flex-wrap: wrap;  /* Permite que los elementos se envuelvan si no caben en una sola fila */
     gap: 10px;  /* Separación de 10px entre los elementos */
+    padding:2.5% !important;
     
 }
 .profile-body .img-fluid{
