@@ -590,7 +590,20 @@ function initializeChatHttp(topicName) {
     function displayMessage(message) {
         const messageElement = document.createElement("div");
         messageElement.classList.add("chat-message"); // Para estilos en el CSS
-        messageElement.textContent = `${message.from}: ${message.text}`;
+
+        // Nombre de usuario
+        const userElement = document.createElement("span");
+        userElement.classList.add("chat-username"); // Para estilos en el CSS
+        userElement.textContent = `${message.from}: `;
+
+        // Texto
+        const textElement = document.createElement("span");
+        textElement.classList.add("chat-text"); // Para estilos en el CSS
+        textElement.textContent = message.text;
+        
+        messageElement.appendChild(userElement);
+        messageElement.appendChild(textElement);
+
         chatBox.appendChild(messageElement); // Añade el mensaje al contenedor del chat
         chatBox.scrollTop = chatBox.scrollHeight; // Desplaza el chat hacia abajo
     }
@@ -604,7 +617,7 @@ function initializeChatHttp(topicName) {
     });
 
     // Llamar periódicamente a fetchMessages para actualizar el chat
-    setInterval(fetchMessages, 3000); // Cada 3 segundos    
+    setInterval(fetchMessages, 5); // Cada 1 segundo    
 
 }
 

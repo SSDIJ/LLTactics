@@ -1160,6 +1160,7 @@ td img.icon {
     margin-bottom: 0 !important;
 }
 
+/* Estilo para el contenedor del chat */
 #chat-container {
     width: 600px;
     height: 200px;
@@ -1172,6 +1173,21 @@ td img.icon {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.chat-message {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    line-height: 1.2;
+}
+
+.chat-username {
+    color: #feb47b;
+    font-weight: bold;
+}
+
+.chat-text {
+    color: #ffff;
 }
 
 #chat-box {
