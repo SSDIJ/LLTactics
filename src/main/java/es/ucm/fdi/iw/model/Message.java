@@ -84,10 +84,9 @@ public class Message implements Transferable<Message.Transfer> {
 	
 	@Override
 	public Transfer toTransfer() {
-		// TODO: esto tendria que ser return new Transfer(this); no?
 		return new Transfer(
 			sender.getUsername(), 
-			recipient.getUsername(), 
+			recipient == null ? "?" : recipient.getUsername(), 
 			DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(dateSent),
 			dateRead != null ? DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(dateRead) : null,
 			text,

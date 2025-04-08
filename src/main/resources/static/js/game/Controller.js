@@ -541,49 +541,70 @@ function winAnimation(isOpponent) {
 }
 
 // Inicializa y declara funciones del chat
-function initializeChatWebSocket(topicName) {
+function initializeChatHttp(topicName) {
 
-    // Websocket
-    const socket = new SockJS("/ws");
-    const stompClient = Stomp.over(socket);
+    // Función para obtener mensajes del servidor
+    async function fetchMessages() {
+        try {
+            const response =  await go(`${iwconfig.rootUrl}/topic/${topicName}`, "GET", {});
 
-    stompClient.connect({}, function() {
-        console.log("Conexion con WebSocket para el chat");
+            console.log("Respuesta servidor:", response);
 
-        // Suscribe al topic del chat
-        stompClient.subscribe(`/topic/${topicName}`, function(message) {
-            console.log("Mensaje recibido desde el servidor:", message.body);
-            const mensaje = JSON.parse(message.body);
-            displayMessage(mensaje);
-        });
-    });
+            let messages = response.messages;
+            if(typeof messages === "string") {
+                messages = JSON.parse(messages); // Convierte el string a un objeto JSON
+            }
+                
+            if(!Array.isArray(messages)) {
+                messages = []; // Asegúrate de que sea un array
+            }
 
-    // Muestra mensajes en el chat
-    function displayMessage(mensaje) {
+                chatBox.innerHTML = ""; // Limpia el chat antes de mostrar los mensajes
+                messages.forEach(displayMessage); // Itera sobre los mensajes
+        } catch (error) {   
+            console.error("Error al realizar la solicitud GET:", error);
+        }
+    }
+
+    // Función para enviar un mensaje al servidor
+    async function sendMessage() {
+        const message = chatInput.value.trim();
+        if (message === "") return;
+
+        const messagePayload = {
+            message: message,
+        };
+
+        try {
+            const response = await go(`${iwconfig.rootUrl}/topic/${topicName}`, "POST", messagePayload);
+            
+            console.log("Mensaje enviado con éxito");
+            chatInput.value = ""; // Limpia el campo de entrada
+            fetchMessages(); // Actualiza los mensajes después de enviar
+        } catch (error) {
+            console.error("Error al realizar la solicitud POST:", error);
+        }
+    }
+
+    // Función para mostrar un mensaje en el chat
+    function displayMessage(message) {
         const messageElement = document.createElement("div");
-        messageElement.classList.add("chat-message"); // Para estilos en el css, por si acaso
-        messageElement.textContent = `${mensaje.from}: ${mensaje.text}`;
-        chatBox.appendChild(messageElement); // Añade mensaje en el contenedor chat
-        chatBox.scrollTop = chatBox.scrollHeight;
+        messageElement.classList.add("chat-message"); // Para estilos en el CSS
+        messageElement.textContent = `${message.from}: ${message.text}`;
+        chatBox.appendChild(messageElement); // Añade el mensaje al contenedor del chat
+        chatBox.scrollTop = chatBox.scrollHeight; // Desplaza el chat hacia abajo
     }
 
-    function sendMessage() {
-        const mensaje = chatInput.value.trim();
-        if (mensaje === "") return;
-
-        console.log("Se manda mensaje:", mensaje);
-
-        stompClient.send(`/app/topic/${topicName}`, {}, JSON.stringify({ mensaje: mensaje}));
-        chatInput.value = ""; // Limpiar el campo de entrada
-    }
-
-    // Envía un mensaje al servidor
+    // Configurar el botón de enviar y la tecla Enter
     chatSendBtn.addEventListener("click", sendMessage);
-    chatInput.addEventListener("keypress", function(event) {
+    chatInput.addEventListener("keypress", function (event) {
         if (event.key === "Enter") {
             sendMessage();
         }
     });
+
+    // Llamar periódicamente a fetchMessages para actualizar el chat
+    setInterval(fetchMessages, 3000); // Cada 3 segundos    
 
 }
 
@@ -642,7 +663,7 @@ async function startTimer() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    initializeChatWebSocket("general");
+    initializeChatHttp("general");
 });
 
 refreshShopBtns[0].click();

@@ -54,8 +54,25 @@ public class GameController {
     }
 
     @GetMapping("/game")
+    @Transactional
     public String showGamePage(Model model) {
 
+        // Verificar si el Topic "general" existe
+        String topicKey = "general";
+        Topic generalTopic;
+        try {
+            generalTopic = entityManager.createNamedQuery("Topic.byKey", Topic.class)
+                                        .setParameter("key", topicKey)
+                                        .getSingleResult();
+        } catch (jakarta.persistence.NoResultException e) {
+            // Si no existe, crearlo
+            generalTopic = new Topic();
+            generalTopic.setKey(topicKey);
+            generalTopic.setName("General");
+            entityManager.persist(generalTopic);
+            log.info("Topic 'general' creado automáticamente.");
+        }
+        
         List<Objeto> playerObjects = List.of(
                 new Objeto(null, "", 0, 0, 0, 0,"", 1),
                 new Objeto(null, "", 0, 0, 0, 0,"", 1),
@@ -138,7 +155,6 @@ public class GameController {
         String json = new ObjectMapper().writeValueAsString(m.toTransfer());
         log.info("Sending a message to group {} with contents {}", target.getName(), json);
         messagingTemplate.convertAndSend("/topic/" + name, json);
-        
         return Map.of("result", "message sent");
     }
 
@@ -156,6 +172,6 @@ public class GameController {
         }
 
         return Map.of("messages", new ObjectMapper().writeValueAsString(target.getMessages().stream().map(Message::toTransfer).toArray()));
-}
+    }
 }
 
