@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>LL Tactics</title>
+</head>
+
+<body class="h-100">
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+    
+    <div id="finding-game-container">
+        <div class="spinner-grow spinner-grow-sm" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <h1>Buscando partida</h1>
+    </div>
+
+    <!-- Degradado en la parte inferior -->
+    <div class="degradado"></div>
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+
+    <script type="module" src="js/find-game.js"></script>
+    
+</body>
+
+</html>

@@ -71,4 +71,9 @@ public class RootController {
     public String index(Model model) {
         return "index";
     }
+    
+    @GetMapping("/game-queue")
+    public String gameQueuePage() {
+        return "game-queue";
+    }
 }

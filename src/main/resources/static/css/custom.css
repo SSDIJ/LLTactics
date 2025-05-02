@@ -1587,3 +1587,14 @@ td img.icon {
         width: 100%; /* Una carta por fila */
     }
 }
+
+#finding-game-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    gap: 20px;
+    text-align: center;
+    font-family: var(--TITLE-FONT-FAMILY);
+}
