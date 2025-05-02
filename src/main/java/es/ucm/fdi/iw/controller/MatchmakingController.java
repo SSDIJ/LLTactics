@@ -36,6 +36,8 @@ public class MatchmakingController {
             Map<String, String> response = new HashMap<>();
             response.put("roomId", gameRoomId);
 
+            GameController.addActiveGame(gameRoomId, player1, player2);
+
             messagingTemplate.convertAndSendToUser(player1, "/queue/match", response);
             messagingTemplate.convertAndSendToUser(player2, "/queue/match", response);
         } else {

@@ -16,9 +16,9 @@ document.addEventListener("DOMContentLoaded", () => {
     ws.initialize(iwconfig.socketUrl, ["/user/queue/match"]);
 
     ws.receive = (message) => {
-        const gameRoom = message.body;
-        console.log("You have been matched! Join game room: " + gameRoom);
-        // window.location.href = `/game/${gameRoom}`;
+        const roomId = message.roomId;
+        console.log(roomId)
+        window.location.href = `/game/${roomId}`;
     };
 
     // Esperar hasta que el WebSocket esté conectado antes de enviar

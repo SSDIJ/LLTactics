@@ -675,9 +675,11 @@ async function startTimer() {
     }, 1000);
 }
 
+/*
 document.addEventListener("DOMContentLoaded", function () {
     initializeChatHttp("general");
 });
+*/
 
 refreshShopBtns[0].click();
 
