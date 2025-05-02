@@ -730,11 +730,11 @@ td img.icon {
     border-radius: 0px 10px 10px 0px;
 }
 
-#opponents-info-container img {
+#opponent-object-container img {
     pointer-events: none;
 }
 
-#opponents-info-container {
+#opponent-object-container {
     width: 80px;
     height: 390px;
 

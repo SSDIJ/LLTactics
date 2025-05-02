@@ -32,11 +32,10 @@
         <div id="game-status-container" class="w-100">
 
             <!-- Inventario jugador -->
-            <div th:replace="fragments/inventory :: inventory(${playerObjects})"></div>
+            <div th:replace="fragments/inventory :: inventory(${playerObjects}, false)"></div>
 
             <!-- Inventario oponente -->
-            <div id="opponents-info-container">
-            </div>
+            <div th:replace="fragments/inventory :: inventory(${opponentObjects}, true)"></div>
 
             <!-- Contenedor de unidades de ambos jugadores -->
             <div id="players-units-container" class="d-flex">

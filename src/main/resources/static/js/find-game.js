@@ -17,7 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     ws.receive = (message) => {
         const roomId = message.roomId;
-        console.log(roomId)
+        sessionStorage.setItem('roomId', roomId);
+        sessionStorage.setItem("socketUrl", iwconfig.socketUrl);
         window.location.href = `/game/${roomId}`;
     };
 

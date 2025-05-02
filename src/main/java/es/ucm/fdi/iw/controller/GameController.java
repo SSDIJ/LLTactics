@@ -9,10 +9,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import es.ucm.fdi.iw.model.GameRoom;
 import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.Jugador;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Objeto;
+import es.ucm.fdi.iw.model.PlayerAction;
 import es.ucm.fdi.iw.model.Topic;
 import es.ucm.fdi.iw.model.Unidad;
 import es.ucm.fdi.iw.model.User.Role;
@@ -25,7 +27,9 @@ import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -58,31 +62,6 @@ public class GameController {
     // Almacenamos las salas de juego activas
     private static final Map<String, GameRoom> activeGames = new ConcurrentHashMap<>();
 
-    // Esto es un ejemplo de cómo puedes estructurar una sala de juego
-    public static class GameRoom {
-        private final String gameRoomId;
-        private final String player1;
-        private final String player2;
-
-        public GameRoom(String gameRoomId, String player1, String player2) {
-            this.gameRoomId = gameRoomId;
-            this.player1 = player1;
-            this.player2 = player2;
-        }
-
-        public String getGameRoomId() {
-            return gameRoomId;
-        }
-
-        public String getPlayer1() {
-            return player1;
-        }
-
-        public String getPlayer2() {
-            return player2;
-        }
-    }
-
     // Método para añadir una sala de juego activa (por ejemplo, desde el matchmaking)
     public static void addActiveGame(String gameRoomId, String player1, String player2) {
         activeGames.put(gameRoomId, new GameRoom(gameRoomId, player1, player2));
@@ -114,6 +93,16 @@ public class GameController {
                 new Objeto(null, "", 0, 0, 0, 0,"", 1));
         model.addAttribute("playerObjects", playerObjects);
 
+        // Aquí agregas los objetos y unidades de los jugadores para que los vea el frontend
+        List<Objeto> opponentObjects = List.of(
+                new Objeto(null, "", 0, 0, 0, 0,"", 1),
+                new Objeto(null, "", 0, 0, 0, 0,"", 1),
+                new Objeto(null, "", 0, 0, 0, 0,"", 1),
+                new Objeto(null, "", 0, 0, 0, 0,"", 1),
+                new Objeto(null, "", 0, 0, 0, 0,"", 1),
+                new Objeto(null, "", 0, 0, 0, 0,"", 1));
+        model.addAttribute("opponentObjects", opponentObjects);
+
         List<Objeto> shopItems = List.of(
                 new Objeto("/img/items/potion-red.png", "Poción Roja", 0, 0, 0, 0,"", 1),
                 new Objeto("/img/items/flame-sword.png", "Espada de Hierro", 0, 0, 0, 0,"", 5));
@@ -141,12 +130,68 @@ public class GameController {
         model.addAttribute("unitsP2", unitsP2);
 
         List<Message> mensajes = new ArrayList<>();
-        // Agregar los mensajes al modelo
         model.addAttribute("mensajes", mensajes);
 
         return "game";
     }
+
+    // Método para recibir la acción de un jugador
+    @MessageMapping("/game/action/{gameRoomId}")
+    public void handlePlayerAction(@DestinationVariable String gameRoomId, @Payload PlayerAction action, Principal principal) {
+        // Verificar si la sala de juego existe
+        GameRoom gameRoom = activeGames.get(gameRoomId);
+
+        if (gameRoom == null) {
+            log.error("Intento de acción en una sala no existente: {}", gameRoomId);
+            return;
+        }
+
+        // Verificar si el jugador está en la partida
+        String playerName = principal.getName();
+        if (!gameRoom.getPlayers().contains(playerName)) {
+            log.error("El jugador {} no pertenece a la partida {}", playerName, gameRoomId);
+            return;
+        }
+
+        // Validar la acción
+        if (!isValidAction(action)) {
+            log.error("Acción inválida recibida de {} en la partida {}: {}", playerName, gameRoomId, action);
+            return;
+        }
+
+        // Difundir la acción a los demás jugadores
+        sendActionToPlayers(gameRoom, action, playerName);
+    }
+
+    // Método para validar la acción
+    private boolean isValidAction(PlayerAction action) {
+        // Aquí puedes poner la lógica de validación según el tipo de acción
+        // Por ejemplo: comprobar si la acción es un movimiento válido, si el jugador tiene suficiente energía, etc.
+        return true;  // Ejemplo: siempre válida, deberías implementar tu propia validación
+    }
+
+    // Método para enviar la acción a los jugadores
+    private void sendActionToPlayers(GameRoom gameRoom, PlayerAction action, String senderPlayer) {
+        String jsonAction;
+        try {
+            jsonAction = new ObjectMapper().writeValueAsString(action);
+        } catch (JsonProcessingException e) {
+            log.error("Error al convertir la acción a JSON: {}", action, e);
+            return;
+        }
+
+        // Enviar la acción a los jugadores
+        gameRoom.getPlayers().stream()
+        .filter(player -> !player.equals(senderPlayer)) // Filtra el jugador que envió la acción
+        .forEach(player -> 
+            messagingTemplate.convertAndSendToUser(player, "/queue/game/" + gameRoom.getGameRoomId() + "/actions", jsonAction)
+        );
+    }
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 }
+
 
 /*
 @Controller

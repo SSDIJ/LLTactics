@@ -18,6 +18,25 @@ class Unit {
         this.unitID = nombre ? Unit.nextId++ : null;
         this.items = new Array(this.MAX_ITEMS).fill(null);
     }
+
+    static fromUnit(otherUnit) {
+        const newUnit = new Unit(
+            otherUnit.armadura,
+            otherUnit.daño,
+            otherUnit.descripcion,
+            otherUnit.faccion,
+            otherUnit.id,
+            otherUnit.imagen,
+            otherUnit.nombre,
+            otherUnit.price,
+            otherUnit.velocidad,
+            otherUnit.vida
+        );
+
+        newUnit.unitID = otherUnit.unitID;
+        newUnit.items = [...otherUnit.items];
+        return newUnit;
+    }
   
     getLifePercentage() {
         return this.vida / this.vidaMax * 100;
@@ -34,6 +53,7 @@ class Unit {
                 if (this.items[i] === null) {
                     this.items[i] = item;
                     this.upgradeStats(item);
+                    console.log("Se ha añadido el item")
                     return true;
                 }
             }
