@@ -57,14 +57,14 @@ class Player {
     // Comprar una unidad de la tienda
     buyUnit(unit, toEnd = true) {
 
-        console.log(this.units);
-
+        
         if (this.stars >= unit.price) {
             // Busca la primera unidad undefined en el array
             let index;
             if (toEnd) index = this.units.slice().reverse().findIndex(unit => unit.imagen == "");
             else index = this.units.findIndex(unit => unit.imagen == "");
             // Reemplaza la unidad undefined
+
             if (index !== -1) {
 
                 index = toEnd ? this.MAX_UNITS - index - 1 : index;
@@ -108,8 +108,8 @@ class Player {
     }   
 
     // Comprar un objeto de la tienda
-    buyItem(item) {
-        if (this.stars >= item.price && this.inventory.size < this.MAX_ITEMS && this.shop.buyItem(item.id)) {
+    buyItem(item, isOpponent=false) {
+        if (this.stars >= item.price && this.inventory.size < this.MAX_ITEMS && (this.shop.buyItem(item.id) || isOpponent)) {
             this.stars -= item.price;
             console.log(`${this.name} compró un objeto: ${item.name}`);
 
@@ -120,11 +120,15 @@ class Player {
     }
 
     sellItem(soldItem) {
-        if (this.inventory.has(soldItem)) {
-            this.inventory.delete(soldItem);
-            this.stars += soldItem.price;
-            console.log(`${this.name} vendió un objeto: ${soldItem.name}`);
-        } 
+        for (let item of this.inventory) {
+            if (item.id === soldItem.id) {
+                this.inventory.delete(item);
+                this.stars += item.price;
+                console.log(`${this.name} vendió un objeto: ${item.name}`);
+                return;
+            }
+        }
+        console.log(`No se encontró el objeto con ID: ${soldItem.id}`);
     }
 
     removeFromInventory(item) {

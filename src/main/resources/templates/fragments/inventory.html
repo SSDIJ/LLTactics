@@ -5,8 +5,9 @@
     <title>Inventory</title>
 </head>
 <body>
-    <th:block th:fragment="inventory(playerObjects)">
-        <div id="player-objects-container" class="d-flex flex-column justify-content-center align-items-center gap-4">
+    <th:block th:fragment="inventory(playerObjects, isOpponent)">
+        <div th:id="${isOpponent} ? 'opponent-object-container' : 'player-objects-container'"
+             class="d-flex flex-column justify-content-center align-items-center gap-4">
             <div th:each="object : ${playerObjects}">
                 <th:block th:replace="fragments/item :: item(${object})"></th:block>
             </div>

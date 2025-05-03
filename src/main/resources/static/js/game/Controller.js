@@ -2,6 +2,9 @@ import Player from "./Player.js";
 import Game from "./Game.js";
 import Unit from "./Unit.js";
 
+// ID de la partida
+const roomId = sessionStorage.getItem('roomId');
+
 // Elementos de una ronda
 const timerElement = document.getElementById('round-timer');
 const roundElement = document.getElementById('round-name');
@@ -9,6 +12,7 @@ const roundPanel = document.getElementById('round-panel');
 
 // Inventario del jugador
 const inventoryContainer = document.getElementById("player-objects-container");
+const opponentInventoryContainer = document.getElementById("opponent-object-container");
 
 // Unidades del jugador
 const playerUnitsContainer = document.getElementById("player-units-container")
@@ -44,32 +48,7 @@ function toggleRoundPanel(text) {
         roundPanel.style.display = 'none';
     }, 3000)
     
-    
 }
-
-function attack(player, isOpponent = false) {
-    const unitCont = isOpponent ? opponentUnitsContainer : playerUnitsContainer;
-    const unitCells = unitCont.querySelectorAll(".unit-container");
-
-    // Seleccionar la primera unidad (suponiendo que haya al menos una unidad)
-    const firstUnitCell = unitCells[0];
-    const firstUnitImage = firstUnitCell.querySelector("img");
-
-    if (firstUnitImage) {
-        // Asegurarse de que la imagen no esté oculta
-        firstUnitImage.classList.remove("hidden");
-
-        // Añadir una clase para animar el movimiento (esto puede ser una animación CSS)
-        firstUnitImage.classList.add("attack-move");
-
-        // Si deseas que el movimiento sea breve, podrías usar un setTimeout para eliminar la clase de animación después de un tiempo.
-        setTimeout(() => {
-            firstUnitImage.classList.remove("attack-move");
-        }, 500); // Tiempo en milisegundos (ajústalo según lo que necesites)
-    }
-}
-
-
 
 function updateAllHealthBars(player, opponent) {
     // Actualizamos las barras de vida del jugador
@@ -234,6 +213,12 @@ function updateUnits(player, isOpponent = false) {
             // Opción de eliminar la unidad
             img.addEventListener('dblclick', () => {
 
+                sendAction({
+                    "actionType": "SELL_UNIT",
+                    "playerName": player1.name,
+                    "actionDetails": {"unit": unit}
+                });
+
                 player1.sellUnit(unitTemp)
                 updatePlayerStats();
                 updateInventory();
@@ -258,9 +243,13 @@ function updateUnits(player, isOpponent = false) {
 }
 
 // Actualiza el inventario
-function updateInventory() {
-    let objectCells = inventoryContainer.querySelectorAll(".object-cell");
-    const unitObjects = playerUnitsContainer.querySelectorAll(".unit-object-container");
+function updateInventory(isOpponent = false) {
+
+    const player = isOpponent ? player2 : player1;
+    const invContainer = isOpponent ? opponentInventoryContainer: inventoryContainer;
+    const unitsContainer = isOpponent ? opponentUnitsContainer : playerUnitsContainer;
+    let objectCells = invContainer.querySelectorAll(".object-cell");
+    const unitObjects = unitsContainer.querySelectorAll(".unit-object-container");
 
     // Eliminamos primero todas las imágenes
     objectCells.forEach(cell => {
@@ -270,8 +259,9 @@ function updateInventory() {
         }
     });
 
+
     // Rellenamos los primeros huecos con las imágenes de los objetos
-    [...player1.inventory].forEach((item, index) => {
+    [...player.inventory].forEach((item, index) => {
         if (objectCells[index]) {
             let img = objectCells[index].querySelector("img");
 
@@ -291,6 +281,8 @@ function updateInventory() {
             let newCell = objectCells[index].cloneNode(true);
             objectCells[index].replaceWith(newCell);
 
+            if (isOpponent) return;
+
             // Venta del item
             newCell.addEventListener('dblclick', () => {
                 newCell.classList.remove("selected");
@@ -299,15 +291,22 @@ function updateInventory() {
                 unitObjects.forEach(unit => {
                     unit.querySelectorAll(".object-cell").forEach(cell => cell.classList.remove("selectable"));
                 });
+
+                sendAction({
+                    "actionType": "SELL_ITEM",
+                    "playerName": player1.name,
+                    "actionDetails": {"item": itemTemp}
+
+                });
+
                 updatePlayerStats();
                 updateInventory();
-                
                 
             });
 
             newCell.addEventListener('click', () => {
 
-                objectCells = inventoryContainer.querySelectorAll(".object-cell");
+                objectCells = invContainer.querySelectorAll(".object-cell");
                 // Eliminar selección previa
                 objectCells.forEach(cell => cell.classList.remove("selected"));
                 newCell.classList.add("selected");
@@ -347,6 +346,15 @@ function updateInventory() {
                             assigned = true;
                             player1.removeFromInventory(selectedItem)
 
+                            sendAction({
+                                "actionType": "ASSIGN_ITEM_TO_UNIT",
+                                "playerName": player1.name,
+                                "actionDetails": {
+                                    "unitIndex": unitIndex,
+                                    "item": selectedItem
+                                }
+                            });
+
                             // Limpiar selección
                             objectCells.forEach(cell => cell.classList.remove("selected"));
                             unitObjects.forEach(unit => {
@@ -367,7 +375,6 @@ function updateInventory() {
 }
 
 function openShop() {
-    console.log("TIENDA ABIERTA");
     shopUnitsContainers.forEach((shopUnitsContainer) => {
         Array.from(shopUnitsContainer.children).forEach((c) => {
             c.classList.remove("closed");
@@ -376,8 +383,6 @@ function openShop() {
 }
 
 function closeShop() {
-
-    console.log("TIENDA CERRADA");
     shopUnitsContainers.forEach((shopUnitsContainer) => {
         Array.from(shopUnitsContainer.children).forEach((c) => {
             c.classList.add("closed");
@@ -410,8 +415,17 @@ function updateShop() {
 
                 // Añade la opción de compra de las unidades
                 newUnidadDiv.addEventListener('click', () => {
-                    console.log(`Intentando comprar unidad: ${unidad.nombre}`); // TODO: Borrar
+                    
+                    
                     if (player1.buyUnit(unidad)) {
+
+                        sendAction({
+                            "actionType": "BUY_UNIT",
+                            "playerName": player1.name,
+                            "actionDetails": {"unit": unidad}
+
+                        });
+
                         updatePlayerStats();
                         updateInventory();
                         updateUnits(player1);
@@ -444,6 +458,14 @@ function updateShop() {
                 // Añade la opción de compra de los objetos
                 newItemDiv.addEventListener('click', () => {
                     if (player1.buyItem(item)) {
+
+                        sendAction({
+                            "actionType": "BUY_ITEM",
+                            "playerName": player1.name,
+                            "actionDetails": {"item": item}
+
+                        });
+
                         updatePlayerStats();
                         updateInventory();
                         newItemDiv.classList.add("sold");
@@ -458,6 +480,13 @@ function updateShop() {
 refreshShopBtns.forEach((refreshShopBtn) => {
     refreshShopBtn.addEventListener("click", async () => {
         if (await player1.refreshShop()) {
+
+            sendAction({
+                "actionType": "REFRESH_SHOP",
+                "playerName": player1.name,
+                "actionDetails": {}
+
+            });
 
             updatePlayerStats();
             updateShop();
@@ -494,14 +523,12 @@ refreshShopBtns.forEach((refreshShopBtn) => {
 const player1 = new Player("Jugador 1");
 const player2 = new Player("Jugador 2");
 
-player2.units[0] = new Unit(10, 100, "", "", 500, "/img/units/trolls/1. TTanque/great-troll.png", "U1", 2, 5, 2000)
-
 updateUnits(player2, true);
 
 const game = new Game([player1, player2]);
 
 // Función para actualizar el temporizador
-const TIME_SHOP = 10;  
+const TIME_SHOP = 15;  
 const TIME_AFTER_BATTLE = 3;
 
 let timeLeft = TIME_SHOP;
@@ -675,9 +702,11 @@ async function startTimer() {
     }, 1000);
 }
 
+/*
 document.addEventListener("DOMContentLoaded", function () {
     initializeChatHttp("general");
 });
+*/
 
 refreshShopBtns[0].click();
 
@@ -687,3 +716,71 @@ updateShop();
 updatePlayerStats();
 updateRoundNumber();
 startTimer();
+
+// --- WEBSOCKETS ---
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    
+    // TODO: PREGUNTAR ESTO
+    const socketUrl = sessionStorage.getItem("socketUrl");
+    ws.initialize(socketUrl, ["/user/queue/game/" + roomId + "/actions"]);
+    ws.receive = (action) => {
+        processAction(action)
+    };
+
+});
+
+
+function sendAction(action) {
+    const destination = `/app/game/action/${roomId}`;
+    if (!ws || !ws.stompClient) {
+        console.error("WebSocket client is not initialized.");
+        return;
+    }
+
+    console.log(action)
+    ws.stompClient.send(destination, {}, JSON.stringify(action));
+
+}
+
+function processAction(action) {
+
+    if (action.actionType == "BUY_UNIT") {
+
+        const newUnit = Unit.fromUnit(action.actionDetails.unit)
+        player2.buyUnit(newUnit, false);
+        updateUnits(player2, true);
+    }
+    else if (action.actionType == "SELL_UNIT") {
+        player2.sellUnit(action.actionDetails.unit);
+        updateUnits(player2, true);
+    }
+    else if (action.actionType == "BUY_ITEM") {
+        player2.buyItem(action.actionDetails.item, true);
+        updateInventory(true);
+    }
+    else if (action.actionType == "SELL_ITEM") {
+        player2.sellItem(action.actionDetails.item)
+        updateInventory(true);
+    }
+    else if (action.actionType == "ASSIGN_ITEM_TO_UNIT") {
+
+        const index = player2.MAX_UNITS - action.actionDetails.unitIndex - 1;
+        player2.units[index].addItem(action.actionDetails.item);
+        updateUnits(player2, true);
+        player2.removeFromInventory(action.actionDetails.item);
+       
+        updateInventory(true);
+
+    }
+    else if (action.actionType == "REFRESH_SHOP") {
+        // No ocurre nada
+    }
+    else if (action.actionType == "SEND_MESSAGE") {
+
+    }
+
+    
+
+}
