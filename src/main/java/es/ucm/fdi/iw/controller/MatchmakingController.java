@@ -14,6 +14,9 @@ public class MatchmakingController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
+    @Autowired
+    private GameController gameController;
+
     private Queue<String> waitingPlayers = new LinkedList<>(); // Cola de jugadores esperando
     private Set<String> playersInQueue = new HashSet<>();      // Seguimiento de jugadores en cola
 
@@ -49,7 +52,7 @@ public class MatchmakingController {
             Map<String, String> response = new HashMap<>();
             response.put("roomId", gameRoomId);
 
-            GameController.addActiveGame(gameRoomId, player1, player2);
+            gameController.addActiveGame(gameRoomId, player1, player2);
 
             messagingTemplate.convertAndSendToUser(player1, "/queue/match", response);
             messagingTemplate.convertAndSendToUser(player2, "/queue/match", response);

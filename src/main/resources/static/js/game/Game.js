@@ -5,7 +5,7 @@ class Game {
     constructor(players) {
         this.round = 1;
         this.isBattleRound = false;
-        this.players = players
+        this.players = players;
     }
 
     getRound() {
@@ -13,10 +13,8 @@ class Game {
     }
 
     changeRound() {
-        this.round++;  // Incrementar la ronda
-
-        this.isBattleRound = !this.isBattleRound; 
-
+        this.round++;  // Increment the round
+        this.isBattleRound = !this.isBattleRound;
     }
 
     isBattleRound() {
@@ -25,72 +23,69 @@ class Game {
 
     async startBattle() {
         if (this.isBattleRound) {
-            return await this.fight(this.players[0], this.players[1])
+            return await this.fight(this.players[0], this.players[1]);
         }
     }
-
 
     async fight(player1, player2) {
 
         let unit1 = player1.units.slice().reverse().find(u => u.unitID && u.unitID !== null);
         let unit2 = player2.units.find(u => u.unitID && u.unitID !== null);
 
-        if (!unit1) player1.buyUnit(player1.getDefaultUnit())
-        if (!unit2) player2.buyUnit(player2.getDefaultUnit(), false)
-
+        if (!unit1) player1.buyUnit(player1.getDefaultUnit());
+        if (!unit2) player2.buyUnit(player2.getDefaultUnit(), false);
 
         while (true) {
 
             let unit1 = player1.units.slice().reverse().find(u => u.unitID && u.unitID !== null);
             let unit2 = player2.units.find(u => u.unitID && u.unitID !== null);
-    
-            if (!unit1 || !unit2) break; // Si no hay unidades válidas, se termina el combate
-    
-            while (unit1.vida > 0 && unit2.vida > 0) {
-                if (unit1.velocidad >= unit2.velocidad) {
+
+            if (!unit1 || !unit2) break; // End fight if no valid units
+
+            while (unit1.health > 0 && unit2.health > 0) {
+                if (unit1.speed >= unit2.speed) {
                     await this.attackWithDelay(unit1, unit2);
-                    if (unit2.vida > 0) await this.attackWithDelay(unit2, unit1);
+                    if (unit2.health > 0) await this.attackWithDelay(unit2, unit1);
                 } else {
                     await this.attackWithDelay(unit2, unit1);
-                    if (unit1.vida > 0) await this.attackWithDelay(unit1, unit2);
+                    if (unit1.health > 0) await this.attackWithDelay(unit1, unit2);
                 }
             }
-    
-            if (unit1.vida <= 0) {
+
+            if (unit1.health <= 0) {
                 let nullUnit = player1.getNullUnit();
                 player1.units = player1.units.map(u => (u === unit1 ? nullUnit : u));
             }
-            if (unit2.vida <= 0) {
+            if (unit2.health <= 0) {
                 let nullUnit = player2.getNullUnit();
                 player2.units = player2.units.map(u => (u === unit2 ? nullUnit : u));
             }
         }
-    
-        // Determinar el ganador del enfrentamiento
-        if (player1.units.every(u => u.vida <= 0 || !u.unitID)) {
+
+        // Determine the winner
+        if (player1.units.every(u => u.health <= 0 || !u.unitID)) {
             player1.health -= 5;
             return false;
-        } else if (player2.units.every(u => u.vida <= 0 || !u.unitID)) {
+        } else if (player2.units.every(u => u.health <= 0 || !u.unitID)) {
             player2.health -= 5;
             return true;
         }
     }
-    
-    // Función para realizar el ataque con un retraso
+
+    // Perform an attack with delay
     async attackWithDelay(unit1, unit2) {
         await new Promise(resolve => setTimeout(resolve, 200));
-        this.attack(unit1, unit2);  // Llamada al método de ataque
+        this.attack(unit1, unit2);
     }
-    
 
     attack(attacker, defender) {
-        let damage = Math.max(attacker.daño - defender.armadura, 1); // Daño mínimo de 1
-        defender.vida -= damage;
+        let damage = Math.max(attacker.damage - defender.armor, 1); // Minimum damage of 1
+        defender.health -= damage;
     }
 
     resetHealth() {
         this.players.forEach(p => {
-            p.resetUnitHealth()
+            p.resetUnitHealth();
         });
     }
 }

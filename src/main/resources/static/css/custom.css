@@ -1194,8 +1194,8 @@ td img.icon {
     flex-grow: 1;
     overflow-y: auto;
     margin-bottom: 10px;
-    overflow-x: hidden;       /* Oculta cualquier desbordamiento horizontal */
-    word-wrap: break-word;    /* Permite que las palabras largas se dividan en varias líneas */
+    overflow-x: hidden;
+    word-wrap: break-word;
 }
 
 

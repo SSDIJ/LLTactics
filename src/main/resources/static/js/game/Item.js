@@ -13,6 +13,21 @@ class Item {
         this.velocity = parseInt(velocity, 10) || 0;;
         this.life = parseInt(life, 10) || 0;;
     }
+
+    static fromItem(item) {
+        return new Item(
+            item.armor,
+            item.damage,
+            item.description,
+            item.id,
+            item.imageUrl,
+            item.name,
+            item.price,
+            item.unit,
+            item.velocity,
+            item.life
+        );
+    }
     
 }
 

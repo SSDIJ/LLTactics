@@ -9,27 +9,27 @@
     <th:block th:fragment="unit(object)">
         <div class="unit-container">
             
-            <div th:if="${object.imagen == null}" class="missing-unit"></div>
+            <div th:if="${object.image == null}" class="missing-unit"></div>
 
             <div class="unit-stats d-flex flex-column justify-content-center gap-2">
-                <div class="unit-name" th:text="${object.nombre}"></div>
-                <div class="unit-life" th:classappend="${object.imagen == null} ? 'hidden'">
+                <div class="unit-name" th:text="${object.name}"></div>
+                <div class="unit-life" th:classappend="${object.image == null} ? 'hidden'">
                     <div class="progress" role="progressbar" aria-label="Success example" 
-                        th:attr="aria-valuenow=${object.vida}, aria-valuemin=0, aria-valuemax=100">
-                        <div class="progress-bar bg-success" th:style="'width: ' + ${object.vida} + '%'" 
-                            th:text="${object.vida}"></div>
+                        th:attr="aria-valuenow=${object.health}, aria-valuemin=0, aria-valuemax=100">
+                        <div class="progress-bar bg-success" th:style="'width: ' + ${object.health} + '%'" 
+                            th:text="${object.health}"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Imagen de la unidad -->
-            <img th:if="${object.imagen != null}" th:src="@{${object.imagen}}" class="unit-game-img">
-            <img th:if="${object.imagen == null}" th:src="@{''}" class="unit-game-img hidden">
+            <img th:if="${object.image != null}" th:src="@{${object.image}}" class="unit-game-img">
+            <img th:if="${object.image == null}" th:src="@{''}" class="unit-game-img hidden">
 
 
             <!-- Contenedor de objetos -->
             <div class="unit-object-container d-flex justify-content-center gap-2">
-                <div th:each="item : ${object.objetos}">
+                <div th:each="item : ${object.items}">
                     <div th:replace="/fragments/unit-object-cell :: unit-object-cell(${item})"></div>
                 </div>
             </div>

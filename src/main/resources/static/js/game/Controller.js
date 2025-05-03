@@ -65,18 +65,18 @@ function updateAllHealthBars(player, opponent) {
 
         if (unitCell) {
    
-            if (unit.imagen) {
+            if (unit.image) {
 
                 const progressBar = unitCell.querySelector('.progress-bar');
 
                 // Vida
                 if (progressBar) {
         
-                    progressBar.style.width = unit.getLifePercentage() + "%";
-                    progressBar.textContent = unit.vida;
+                    progressBar.style.width = unit.getHealthPercentage() + "%";
+                    progressBar.textContent = unit.health;
     
                     // Actualizar el atributo aria-valuenow (accesibilidad)
-                    progressBar.parentElement.setAttribute("aria-valuenow", unit.getLifePercentage());
+                    progressBar.parentElement.setAttribute("aria-valuenow", unit.getHealthPercentage());
                 }
             }
         }
@@ -95,18 +95,18 @@ function updateAllHealthBars(player, opponent) {
         const unitCell = opponentUnitCells[index]
         if (unitCell) {
    
-            if (unit.imagen) {
+            if (unit.image) {
 
                 const progressBar = unitCell.querySelector('.progress-bar');
 
                 // Vida
                 if (progressBar) {
         
-                    progressBar.style.width = unit.getLifePercentage() + "%";
-                    progressBar.textContent = unit.vida;
+                    progressBar.style.width = unit.getHealthPercentage() + "%";
+                    progressBar.textContent = unit.health;
     
                     // Actualizar el atributo aria-valuenow (accesibilidad)
-                    progressBar.parentElement.setAttribute("aria-valuenow", unit.getLifePercentage());
+                    progressBar.parentElement.setAttribute("aria-valuenow", unit.getHealthPercentage());
                 }
             }
         }
@@ -165,33 +165,32 @@ function updateUnits(player, isOpponent = false) {
 
             let img = unitCell.querySelector("img");
 
-            if (missing && unit.imagen)  {
+            if (missing && unit.image)  {
                 missing.classList.add("hidden");
             }
             
-            if (unit.imagen) {
+            if (unit.image) {
 
-                img.src = unit.imagen || "";
+                img.src = unit.image || "";
                 img.classList.remove("hidden");
                 unitLife.classList.remove("hidden")
-                unitName.textContent = unit.nombre;
+                unitName.textContent = unit.name;
 
                 const progressBar = unitCell.querySelector('.progress-bar');
 
                 // Vida
                 if (progressBar) {
         
-                    progressBar.style.width = unit.getLifePercentage() + "%";
-                    progressBar.textContent = unit.vida;
+                    progressBar.style.width = unit.getHealthPercentage() + "%";
+                    progressBar.textContent = unit.health;
     
                     // Actualizar el atributo aria-valuenow (accesibilidad)
-                    progressBar.parentElement.setAttribute("aria-valuenow", unit.getLifePercentage());
+                    progressBar.parentElement.setAttribute("aria-valuenow", unit.getHealthPercentage());
                 }
 
                 // Mostramos los objetos
                 unit.items.forEach((item, index) => {
                     const imgObj = unitItemCells[index].querySelector("img");
-
 
                     if (item) { 
 
@@ -211,7 +210,9 @@ function updateUnits(player, isOpponent = false) {
             if (isOpponent) return;
 
             // Opción de eliminar la unidad
-            img.addEventListener('dblclick', () => {
+            const clonedImg = img.cloneNode(true); // Clonamos el nodo de la imagen
+
+            clonedImg.addEventListener('dblclick', () => {
 
                 sendAction({
                     "actionType": "SELL_UNIT",
@@ -219,28 +220,23 @@ function updateUnits(player, isOpponent = false) {
                     "actionDetails": {"unit": unit}
                 });
 
-                player1.sellUnit(unitTemp)
                 updatePlayerStats();
-                updateInventory();
-                
-                img.classList.add("hidden")
-                missing.classList.remove("hidden")
-                unitName.textContent = ""
-                unitLife.classList.add("hidden")
 
                 unitItemCells.forEach(cell => {
                     const objImg = cell.querySelector("img");
                     objImg.src = "";
-                    objImg.classList.add("hidden")
+                    objImg.classList.add("hidden");
                 })
                 
-            });
+            }, { once: true });
 
-            
+            // Reemplazamos la imagen original con el clon
+            img.replaceWith(clonedImg); 
         
         }
     });
 }
+
 
 // Actualiza el inventario
 function updateInventory(isOpponent = false) {
@@ -340,20 +336,23 @@ function updateInventory(isOpponent = false) {
                             if (assigned || !noc.classList.contains("selectable"))
                                 return;
 
+                            
                             // Asignar el objeto a la unidad
                             const unitIndex = Array.from(unitObjects).indexOf(container);
-                            player1.units[unitIndex].addItem(selectedItem);
                             assigned = true;
-                            player1.removeFromInventory(selectedItem)
-
+                            console.log(unitIndex)
+                            const sendIndex = Player.MAX_UNITS - unitIndex - 1;
+                            console.log(sendIndex)
                             sendAction({
                                 "actionType": "ASSIGN_ITEM_TO_UNIT",
                                 "playerName": player1.name,
                                 "actionDetails": {
-                                    "unitIndex": unitIndex,
+                                    "unitIndex": sendIndex,
                                     "item": selectedItem
                                 }
                             });
+
+                            console.log("OBJETO ASIGNADO");
 
                             // Limpiar selección
                             objectCells.forEach(cell => cell.classList.remove("selected"));
@@ -364,8 +363,6 @@ function updateInventory(isOpponent = false) {
                             // Eliminar el event listener después de ejecutarse
                             newObjContainer.removeEventListener('click', assignItem);
 
-                            updateUnits(player1);
-                            updateInventory();
                         }, { once: true });
                     });
                 });
@@ -411,13 +408,13 @@ function updateShop() {
                 valorP.textContent = unidad.price;
 
                 const imagenUnidad = newUnidadDiv.querySelector('.shop-unit-game-img');
-                imagenUnidad.setAttribute('src', unidad.imagen);
+                imagenUnidad.setAttribute('src', unidad.image);
 
                 // Añade la opción de compra de las unidades
                 newUnidadDiv.addEventListener('click', () => {
                     
                     
-                    if (player1.buyUnit(unidad)) {
+                    if (player1.canBuy(unidad)) {
 
                         sendAction({
                             "actionType": "BUY_UNIT",
@@ -427,8 +424,6 @@ function updateShop() {
                         });
 
                         updatePlayerStats();
-                        updateInventory();
-                        updateUnits(player1);
                         newUnidadDiv.classList.add("sold");
                     }
                 });
@@ -467,7 +462,6 @@ function updateShop() {
                         });
 
                         updatePlayerStats();
-                        updateInventory();
                         newItemDiv.classList.add("sold");
                     }
                 });
@@ -485,7 +479,6 @@ refreshShopBtns.forEach((refreshShopBtn) => {
                 "actionType": "REFRESH_SHOP",
                 "playerName": player1.name,
                 "actionDetails": {}
-
             });
 
             updatePlayerStats();
@@ -526,12 +519,6 @@ const player2 = new Player("Jugador 2");
 updateUnits(player2, true);
 
 const game = new Game([player1, player2]);
-
-// Función para actualizar el temporizador
-const TIME_SHOP = 15;  
-const TIME_AFTER_BATTLE = 3;
-
-let timeLeft = TIME_SHOP;
 
 
 function updateRoundNumber() {
@@ -591,7 +578,6 @@ async function sendMessage(chatInput) {
 
     sendAction(messageAction);
 
-    displayMessage(messageAction);
 
     chatInput.value = ""; // Limpia el campo de entrada
 }
@@ -600,8 +586,8 @@ async function sendMessage(chatInput) {
 // Función para mostrar un mensaje en el chat
 function displayMessage(messageAction) {
 
-    const message = messageAction.actionDetails.message;
-    const time =  messageAction.actionDetails.timestamp;
+    const message = messageAction.message.text;
+    const time =  messageAction.message.timestamp;
     
     const date = new Date(time);
     const hours = date.getHours().toString().padStart(2, '0');
@@ -619,7 +605,7 @@ function displayMessage(messageAction) {
     // Nombre de usuario
     const userElement = document.createElement("span");
     userElement.classList.add("chat-username");
-    userElement.textContent = `${messageAction.playerName}: `;
+    userElement.textContent = `${messageAction.message.playerName}: `;
 
     // Texto del mensaje
     const textElement = document.createElement("span");
@@ -657,49 +643,12 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 // Iniciar temporizador
-async function startTimer() {
+async function startTimer(timeLeft) {
 
     // Volvemos a iniciar el temporizador cada nueva ronda
     const intervalId = setInterval(async () => {
         if (timeLeft <= 0) {
-
             clearInterval(intervalId);
-            
-            game.changeRound();
-            game.resetHealth();
-
-            updateRoundNumber();
-            toggleUnitsContainer();
-            
-            if (game.isBattleRound) {
-
-                toggleRoundPanel("Batalla")
-                closeShop();
-
-                timerElement.innerText = `BATALLA`;
-
-                const intervalHealthsId = setInterval(() => {
-                    updateAllHealthBars(player1, player2);
-                }, 300);
-
-                const player1Wins = await game.startBattle();
-
-                clearInterval(intervalHealthsId);
-                winAnimation(!player1Wins);
-                
-            }
-            else {
-                toggleRoundPanel("Compra")
-                openShop();
-            }
-
-            timeLeft = game.isBattleRound ? TIME_AFTER_BATTLE : TIME_SHOP;
-
-            updateUnits(player1);
-            updateUnits(player2, true);
-            updatePlayerStats();
-
-            startTimer();
         } else {
             const minutes = Math.floor(timeLeft / 60);
             const seconds = timeLeft % 60;
@@ -709,15 +658,6 @@ async function startTimer() {
     }, 1000);
 }
 
-
-refreshShopBtns[0].click();
-
-toggleRoundPanel("Compra")
-updateInventory();
-updateShop();
-updatePlayerStats();
-updateRoundNumber();
-startTimer();
 
 // --- WEBSOCKETS ---
 
@@ -731,8 +671,19 @@ document.addEventListener("DOMContentLoaded", () => {
         processAction(action)
     };
 
+    setTimeout(() => {
+        sendAction({
+            actionType: "GENERAL",
+            playerName: player1.name,
+            actionDetails: {}
+        });
+    }, 100);
 });
 
+function sendReady() {
+    const destination = `/app/game/ready/${roomId}`;
+    ws.stompClient.send(destination, {}, {});
+}
 
 function sendAction(action) {
     const destination = `/app/game/action/${roomId}`;
@@ -740,45 +691,98 @@ function sendAction(action) {
         console.error("WebSocket client is not initialized.");
         return;
     }
-
     ws.stompClient.send(destination, {}, JSON.stringify(action));
 
 }
 
-function processAction(action) {
+async function processAction(action) {
 
-    if (action.actionType == "BUY_UNIT") {
-        const newUnit = Unit.fromUnit(action.actionDetails.unit)
-        player2.buyUnit(newUnit, false);
-        updateUnits(player2, true);
-    }
-    else if (action.actionType == "SELL_UNIT") {
-        player2.sellUnit(action.actionDetails.unit);
-        updateUnits(player2, true);
-        updateInventory(true);
-    }
-    else if (action.actionType == "BUY_ITEM") {
-        player2.buyItem(action.actionDetails.item, true);
-        updateInventory(true);
-    }
-    else if (action.actionType == "SELL_ITEM") {
-        player2.sellItem(action.actionDetails.item)
-        updateInventory(true);
-    }
-    else if (action.actionType == "ASSIGN_ITEM_TO_UNIT") {
+    if (action.updateAll != undefined) {
 
-        const index = player2.MAX_UNITS - action.actionDetails.unitIndex - 1;
-        player2.units[index].addItem(action.actionDetails.item);
+        player1.updateUnits(action.player1Units.reverse())
+        updateUnits(player1);
+        player2.updateUnits(action.player2Units)
         updateUnits(player2, true);
-        player2.removeFromInventory(action.actionDetails.item);
-        updateInventory(true);
 
+        player1.updateItems(action.player1Items)
+        updateInventory()
+        player2.updateItems(action.player2Items)
+        updateInventory(true)
+
+        player1.health = action.player1Health
+        player2.health = action.player2Health
+
+        player1.stars = action.player1Stars
+        player2.stars = action.player2Stars
+
+        updatePlayerStats()
+
+        return
     }
-    else if (action.actionType == "REFRESH_SHOP") {
-        // No ocurre nada
+
+    const isOpponent = !action.isSender;
+    const player = isOpponent ? player2 : player1;
+
+    // Actualizar unidades
+    if (action.updateUnits && action.updateUnits != undefined) {
+        player.updateUnits(isOpponent ? action.playerUnits : action.playerUnits.reverse())
+        updateUnits(player, isOpponent);
     }
-    else if (action.actionType == "SEND_MESSAGE") {
+    
+    // Actualizar inventarios
+    if (action.updateItems && action.updateItems != undefined) {
+        player.updateItems(action.playerItems)
+        updateInventory(isOpponent)
+    }
+
+    
+
+    // Añadir mensaje
+    if (action.newMessage != undefined && action.newMessage) {
         displayMessage(action);
     }
 
+
+    if (action.phase == "buy") {
+
+        game.round = action.round
+        updateRoundNumber()
+        startTimer(action.time)
+
+        toggleRoundPanel("Compra")
+        openShop();
+
+        if (game.round != 1) {
+            game.changeRound()
+        }
+    }
+    else if (action.phase == "battle") {
+
+        game.round = action.round
+        updateRoundNumber()
+        game.changeRound()
+
+        toggleRoundPanel("Batalla")
+        closeShop();
+
+        timerElement.innerText = `BATALLA`;
+
+        const intervalHealthsId = setInterval(() => {
+            updateAllHealthBars(player1, player2);
+        }, 300);
+
+        const player1Wins = await game.startBattle();
+        winAnimation(!player1Wins);
+
+        sendReady();
+
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        clearInterval(intervalHealthsId);
+        
+
+    }
+
+
 }
+

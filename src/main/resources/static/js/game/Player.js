@@ -4,8 +4,8 @@ import Shop from "./Shop.js"
 
 class Player {
 
-    MAX_ITEMS = 6;
-    MAX_UNITS = 4;
+    static MAX_ITEMS = 6;
+    static MAX_UNITS = 4;
 
     constructor(name) {
         this.name = name;
@@ -14,6 +14,12 @@ class Player {
         this.inventory = new Set();  // Usamos un Set para el inventario
         this.shop = new Shop();  // Cada jugador tiene su propia tienda
         this.resetUnits();
+    }
+
+    canBuy(unitToBuy) {
+        const index = this.units.slice().reverse().findIndex(unit => (unit.image == null || unit.image == ""));
+        const ok = (this.stars >= unitToBuy.price) && (index !== -1);
+        return ok;
     }
 
     getNullUnit(){
@@ -61,9 +67,8 @@ class Player {
         if (this.stars >= unit.price) {
             // Busca la primera unidad undefined en el array
             let index;
-            if (toEnd) index = this.units.slice().reverse().findIndex(unit => unit.imagen == "");
-            else index = this.units.findIndex(unit => unit.imagen == "");
-            // Reemplaza la unidad undefined
+            if (toEnd) index = this.units.slice().reverse().findIndex(unit => unit.image == "");
+            else index = this.units.findIndex(unit => unit.image == "");
 
             if (index !== -1) {
 
@@ -77,7 +82,7 @@ class Player {
             }
 
             this.stars -= unit.price;
-            console.log(`${this.name} compró una unidad: ${unit.nombre}`);
+            console.log(`${this.name} compró una unidad: ${unit.name}`);
             return true;
         } 
 
@@ -109,7 +114,7 @@ class Player {
 
     // Comprar un objeto de la tienda
     buyItem(item, isOpponent=false) {
-        if (this.stars >= item.price && this.inventory.size < this.MAX_ITEMS && (this.shop.buyItem(item.id) || isOpponent)) {
+        if (this.stars >= item.price && this.inventory.size < Player.MAX_ITEMS && (this.shop.buyItem(item.id) || isOpponent)) {
             this.stars -= item.price;
             console.log(`${this.name} compró un objeto: ${item.name}`);
 
@@ -117,6 +122,23 @@ class Player {
             return true;
         }
         return false;
+    }
+
+    updateUnits(units) {
+        if (Array.isArray(units)) {
+            this.units = units.map(unitObj => Unit.fromUnit(unitObj));
+            console.log(this.units)
+        }
+    }
+
+    updateItems(items) {
+        if (Array.isArray(items)) {
+            this.inventory = new Set(
+                items
+                    .filter(item => item.imageUrl !== null && item.imageUrl !== "")
+                    .map(itemObj => Item.fromItem(itemObj))
+            );
+        }
     }
 
     sellItem(soldItem) {
@@ -141,7 +163,7 @@ class Player {
     }
 
     resetUnitHealth() {
-        this.units.forEach((u) => u.vida = u.vidaMax)
+        this.units.forEach((u) => u.life = u.maxHealth)
     }
     
 }

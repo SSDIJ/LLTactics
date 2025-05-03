@@ -3,57 +3,56 @@ class Unit {
     static nextId = 1;
     MAX_ITEMS = 2;
 
-    constructor(armadura, daño, descripcion, faccion, id, imagen, nombre, price, velocidad, vida) {
-        this.armadura = armadura;
-        this.daño = daño;
-        this.descripcion = descripcion;
-        this.faccion = faccion;
+    constructor(armor, damage, description, faction, id, image, name, price, speed, health) {
+        this.armor = armor;
+        this.damage = damage;
+        this.description = description;
+        this.faction = faction;
         this.id = id;
-        this.imagen = imagen;
-        this.nombre = nombre;
+        this.image = image;
+        this.name = name;
         this.price = price;
-        this.velocidad = velocidad;
-        this.vida = vida;
-        this.vidaMax = vida;
-        this.unitID = nombre ? Unit.nextId++ : null;
+        this.speed = speed;
+        this.health = health;
+        this.maxHealth = health;
+        this.unitID = name ? Unit.nextId++ : null;
         this.items = new Array(this.MAX_ITEMS).fill(null);
     }
 
     static fromUnit(otherUnit) {
         const newUnit = new Unit(
-            otherUnit.armadura,
-            otherUnit.daño,
-            otherUnit.descripcion,
-            otherUnit.faccion,
+            otherUnit.armor,
+            otherUnit.damage,
+            otherUnit.description,
+            otherUnit.faction,
             otherUnit.id,
-            otherUnit.imagen,
-            otherUnit.nombre,
+            otherUnit.image,
+            otherUnit.name,
             otherUnit.price,
-            otherUnit.velocidad,
-            otherUnit.vida
+            otherUnit.speed,
+            otherUnit.health
         );
 
         newUnit.unitID = otherUnit.unitID;
         newUnit.items = [...otherUnit.items];
         return newUnit;
     }
-  
-    getLifePercentage() {
-        return this.vida / this.vidaMax * 100;
+
+    getHealthPercentage() {
+        return this.health / this.maxHealth * 100;
     }
 
     hasFullInventory() {
-        return this.items.every(item => item !== null);;
+        return this.items.every(item => item !== null);
     }
 
     addItem(item) {
-       
         if (!this.hasFullInventory()) {
             for (let i = 0; i < this.MAX_ITEMS; i++) {
                 if (this.items[i] === null) {
                     this.items[i] = item;
                     this.upgradeStats(item);
-                    console.log("Se ha añadido el item")
+                    console.log("Item has been added");
                     return true;
                 }
             }
@@ -62,22 +61,20 @@ class Unit {
     }
 
     upgradeStats(item) {
-        this.vida += item.life;
-        this.vidaMax += item.life;
-        this.daño += item.damage;
-        this.velocidad += item.velocity;
-        this.armadura += item.armor;
+        this.health += item.life;
+        this.maxHealth += item.life;
+        this.damage += item.damage;
+        this.speed += item.velocity;
+        this.armor += item.armor;
     }
 
     degradeStats(item) {
-        this.vida -= item.life;
-        this.vidaMax -= item.life;
-        this.daño -= item.damage;
-        this.velocidad -= item.velocity;
-        this.armadura -= item.armor;
+        this.health -= item.life;
+        this.maxHealth -= item.life;
+        this.damage -= item.damage;
+        this.speed -= item.velocity;
+        this.armor -= item.armor;
     }
-
-
 }
 
 export default Unit;

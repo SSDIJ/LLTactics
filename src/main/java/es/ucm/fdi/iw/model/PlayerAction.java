@@ -46,7 +46,7 @@ public class PlayerAction {
         SELL_ITEM,
         ASSIGN_ITEM_TO_UNIT,
         REFRESH_SHOP,
-        SEND_MESSAGE
+        SEND_MESSAGE, GENERAL
     }
 }
 
