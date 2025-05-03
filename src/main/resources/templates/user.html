@@ -147,8 +147,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
    <script th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function () {
-        const partidasGanadas = [[${user.partidasGanadas}]];
-        const partidasPerdidas = [[${user.partidasPerdidas}]];
+        const partidasGanadas = /*[[${user.partidasGanadas}]]*/ 0;
+        const partidasPerdidas = /*[[${user.partidasPerdidas}]]*/ 0;
 
         const canvas = document.getElementById("winrateChart");
 

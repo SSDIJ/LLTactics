@@ -1,109 +1,180 @@
 <!DOCTYPE html>
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
-    <th:block th:replace="~{fragments/head :: header}" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LL Tactics</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Enlazamos el archivo CSS -->
+
+    <!-- Estilos de Bootstrap y Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    
+    <!-- Fragmentos de Thymeleaf -->
+    <th:block th:replace="~{fragments/head :: header}" />
+    
+    <link rel="stylesheet" href="styles.css"> <!-- Archivo CSS propio -->
 </head>
 <body class="profile-body">
     <header th:replace="~{fragments/nav.html :: nav}"></header>
     
     <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
-
-    <!-- TOP: BARRA DE BUSQUEDA DE JUGADOR Y ENVIAR MENSAJES -->
-    <div class="top-user">
-        <form th:action="@{/user/__${usuarioBuscado.id}__/msg}" method="POST">
-            <input type="text" id="message" placeholder="Escribe a este usuario" />
-            <button id="sendmsg" class="btn btn-secondary" type="submit">Enviar</button>
-        </form>
+    <div class="user">
+        <!-- TOP: BARRA DE BÚSQUEDA DE JUGADOR -->
+        <div class="top-user">
+            <!-- BARRA DE BÚSQUEDA USANDO BOOTSTRAP -->
+            <form action="/user/viewProfile" method="GET">
+                <div class="input-group" style="max-width: 300px;">
+                    <span class="input-group-text bg-white border-end-0">
+                        <button type="submit" class="btn btn-light border-0" id="searchBtn2">
+                            <i class="fas fa-search text-muted"></i>
+                        </button>
+                    </span>
+                    <input type="text" id="searchPlayer2" name="nombre" class="form-control border-start-0 border-end-0" placeholder="Buscar">
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- IMAGEN DE PERFIL -->
-    <div class="mid-user">
+    <div class="mid-user text-center">
+        <h1 class="mt-5"><span th:text="${usuarioBuscado.username}"></span></h1>
         
         <div class="profile-pic">
-          <!---  <img th:src="@{/img/profile_pics/{filename}(filename=${usuarioBuscado.profilePic != null ? usuarioBuscado.profilePic : 'default_pic.jpg'})}" -->
-        
+            <!-- Si la foto de perfil es null, mostramos la imagen por defecto -->
+            <div th:if="${usuarioBuscadofotoPerfil == null}">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#editarFotoModal">
+                    <img th:src="@{/img/profile_pics/default_profile.png}" alt="Foto de perfil" class="rounded-circle border border-3 border-dark shadow"/>
+                </a>
+            </div>
+            <!-- Si hay una foto de perfil, la mostramos -->
+            <div th:unless="${usuarioBuscadofotoPerfil == null}">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#editarFotoModal">
+                    <img th:src="${usuarioBuscadofotoPerfil}" alt="Foto de perfil" class="rounded-circle border border-3 border-dark shadow"/>
+                </a>
+            </div>
         </div>
-    </div>
 
-    <!-- RECEPCIÓN DE MENSAJES -->
-    <div class="py-5 row" id="mensajes">
-        <!-- Los mensajes se cargarán aquí -->
-    </div>
+  
 
+            
     <!-- ESTADÍSTICAS DEL PERFIL -->
     <div class="bot-user">
-        <div class="stat-item">
-            <p>Puntuación de maestría</p>
-            <h3 th:text="${usuarioBuscado.puntuacion}">410</h3> 
-        </div>
-        <div class="stat-item">
-        
-            <p>Personaje más jugado</p>
+        <div class="container mt-5">
+            <div class="row d-flex justify-content-between" style="flex-wrap: wrap;">
+                <!-- Puntuación de Maestría -->
+                <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Puntuación de Maestría</h5>
+                        <h3 class="text-primary">410</h3>
+                    </div>
+                </div>
 
-            <!-- Mostrar imagen si hay datos -->
-            <div th:if="${usuarioBuscado.masJugados != null and !usuarioBuscado.masJugados.isEmpty()}">
-                <img th:src="@{/img/units/{unitCategory}/{unitName}/{unitName}.png(unitCategory=${usuarioBuscado.masJugados[0].category}, unitName=${usuarioBuscado.masJugados[0].name})}" 
-                     alt="Personaje más jugado"/>
-            </div>
-            
-            <!-- Mostrar mensaje si NO hay datos -->
-            <p th:unless="${usuarioBuscado.masJugados != null and !usuarioBuscado.masJugados.isEmpty()}">
-                No hay datos aún
-            </p>
-         
-        </div>
-        <div class="stat-item">
-            <p>Facción favorita</p>
-            <!-- 0 = humanos, 1 = dragones, 2 = trolls, 3 = no muertos, 4 = criaturas legendarias -->
-            <img th:if="${usuarioBuscado.faccionFavorita == 0}" src="/img/units/banners/humans.png" alt="Humanos">
-            <img th:if="${usuarioBuscado.faccionFavorita == 1}" src="/img/units/banners/dragons.png" alt="Dragones">
-            <img th:if="${usuarioBuscado.faccionFavorita == 2}" src="/img/units/banners/trolls.png" alt="Trolls">
-            <img th:if="${usuarioBuscado.faccionFavorita == 3}" src="/img/units/banners/undead.png" alt="No Muertos">
-            <img th:if="${usuarioBuscado.faccionFavorita == 4}" src="/img/units/banners/legendaries.png" alt="Legendarios">
-            <img th:if="${usuarioBuscado.faccionFavorita > 4}" src="/img/units/banners/humans.png" alt="Humanos">
-        </div>
-        <div class="stat-item chart-container">
-            <p> Victorias-Derrotas
-            <div th:if="${usuarioBuscado.partidasGanadas == 0 and usuarioBuscado.partidasPerdidas == 0}">
-                <p>No hay datos aún</p>
-            </div>
-            <div th:unless="${usuarioBuscado.partidasGanadas == 0 and usuarioBuscado.partidasPerdidas == 0}">
-            <canvas id="winrateChart"></canvas>
+                <!-- Personaje más Jugado -->
+                <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Personaje más Jugado</h5>
+                        <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero" class="img-fluid rounded-circle">
+                    </div>
+                </div>
+
+                <!-- Facción Favorita -->
+                <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Facción Favorita</h5>
+                        <img src="/img/units/banners/humans.png" class="img-fluid">
+                    </div>
+                </div>
+
+                <!-- GRÁFICA DE VICTORIAS Y DERROTAS -->
+                <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
+                    <div class="card-body ">
+                        <h5 class="card-title">Ratio de Victorias</h5>
+                        <canvas id="winrateChart" width="200" height="200"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <th:block th:replace="~{fragments/footer.html :: footer}" />
-
+    <!-- Scripts de Bootstrap, incluye el bundle que tiene Popper.js y Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var partidasGanadas = [[${usuarioBuscado.partidasGanadas}]];
-        var partidasPerdidas = [[${usuarioBuscado.partidasPerdidas}]];
+    <script th:inline="javascript">
+        console.log("Ganadas:", /*[[${usuarioBuscado.partidasGanadas}]]*/ 0);
 
-        var ctx1 = document.getElementById('winrateChart').getContext('2d');
-        new Chart(ctx1, {
-            type: 'doughnut',
-            data: {
-                labels: ['Victorias', 'Derrotas'],
-                datasets: [{
-                    data: [partidasGanadas, partidasPerdidas],
-                    backgroundColor: ['#4CAF50', '#F44336']
-                }]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white'
+        document.addEventListener("DOMContentLoaded", function () {
+            // Recupera las variables Thymeleaf
+            const ganadas = /*[[${usuarioBuscado.partidasGanadas}]]*/ 10;
+            const perdidas = /*[[${usuarioBuscado.partidasPerdidas}]]*/ 20;
+    
+            // Verifica que el canvas existe
+            const canvas = document.getElementById("winrateChart");
+            if (!canvas) {
+                console.warn("Canvas 'winrateChart' no encontrado");
+                return;
+            }
+    
+            const ctx = canvas.getContext("2d");
+    
+            // Dibuja el gráfico
+            new Chart(ctx, {
+                type: "",
+                data: {
+                    labels: ["Victorias", "Derrotas"],
+                    datasets: [{
+                        label: "Resultados",
+                        data: [ganadas, perdidas],
+                        backgroundColor: ["#4CAF50", "#F44336"],
+                        borderColor: "#222",
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: "bottom",
+                            labels: {
+                                color: "black",
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const label = context.label || "";
+                                    const value = context.raw || 0;
+                                    const total = ganadas + perdidas;
+                                    const porcentaje = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                                    return `${label}: ${value} (${porcentaje}%)`;
+                                }
+                            }
                         }
                     }
                 }
-            }
+            });
         });
     </script>
     
+    
+
+    <script>
+        
+    document.addEventListener("DOMContentLoaded", function () {
+        const previewImg = document.getElementById("preview-img");
+        const radioButtons = document.querySelectorAll('input[name="selectedPic"]');
+
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function () {
+                const imgElement = this.nextElementSibling; // imagen al lado del input
+                previewImg.src = imgElement.src;
+            });
+        });
+    });
+</script>
+
 </body>
 </html>
