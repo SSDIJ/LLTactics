@@ -1190,18 +1190,26 @@ td img.icon {
     color: #ffff;
 }
 
-#chat-box {
+.chat-box {
     flex-grow: 1;
     overflow-y: auto;
     margin-bottom: 10px;
+    overflow-x: hidden;       /* Oculta cualquier desbordamiento horizontal */
+    word-wrap: break-word;    /* Permite que las palabras largas se dividan en varias líneas */
 }
 
-#chat-input-container {
+
+.chat-message {
+    word-break: break-word;
+    white-space: normal;
+}
+
+.chat-input-container {
     display: flex;
     align-items: center;
 }
 
-#chat-input {
+#chat-input, #chat-input-small {
     flex-grow: 1;
     height: 35px;
     color: whitesmoke;
@@ -1213,6 +1221,7 @@ td img.icon {
     opacity: 0.7;
     margin-right: 10px;
 }
+
 
 .send-btn {
     width: 80px;

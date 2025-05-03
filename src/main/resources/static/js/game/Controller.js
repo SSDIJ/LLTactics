@@ -29,8 +29,8 @@ const shopItemsContainers = document.querySelectorAll('.shop-objects-container')
 const refreshShopBtns = document.querySelectorAll(".refresh-btn");
 
 // Chat
-const chatBox = document.getElementById("chat-box");
-const chatInput = document.getElementById("chat-input");
+const chatBoxes = document.querySelectorAll(".chat-box");
+const chatInputs = document.querySelectorAll(".chat-input");
 const chatSendBtn = document.getElementById("chat-send-btn");
 
 function toggleUnitsContainer() {
@@ -594,7 +594,7 @@ async function fetchMessages() {
 
 // Función para enviar un mensaje al servidor
 // Función para enviar un mensaje al servidor
-async function sendMessage() {
+async function sendMessage(chatInput) {
 
     const message = chatInput.value.trim();
     if (message === "") return;
@@ -632,21 +632,21 @@ function displayMessage(messageAction) {
     const timeFormatted = `${hours}:${minutes}`;
 
     const messageElement = document.createElement("div");
-    messageElement.classList.add("chat-message"); // Para estilos en el CSS
+    messageElement.classList.add("chat-message");
 
     // Hora del mensaje
     const timeElement = document.createElement("span");
-    timeElement.classList.add("chat-time"); // Para estilos en el CSS
+    timeElement.classList.add("chat-time");
     timeElement.textContent = `[${timeFormatted}] `;
 
     // Nombre de usuario
     const userElement = document.createElement("span");
-    userElement.classList.add("chat-username"); // Para estilos en el CSS
+    userElement.classList.add("chat-username");
     userElement.textContent = `${messageAction.playerName}: `;
 
     // Texto del mensaje
     const textElement = document.createElement("span");
-    textElement.classList.add("chat-text"); // Para estilos en el CSS
+    textElement.classList.add("chat-text");
     textElement.textContent = message;
 
     // Ensamblar el mensaje
@@ -654,19 +654,24 @@ function displayMessage(messageAction) {
     messageElement.appendChild(userElement);
     messageElement.appendChild(textElement);
 
-    chatBox.appendChild(messageElement); // Añade el mensaje al contenedor del chat
-    chatBox.scrollTop = chatBox.scrollHeight; // Desplaza el chat hacia abajo
+    console.log(chatBoxes)
+    chatBoxes.forEach(chatBox => {
+        const clonedMessage = messageElement.cloneNode(true);
+        chatBox.appendChild(clonedMessage);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
 }
 
 
 // Configurar el botón de enviar y la tecla Enter
 chatSendBtn.addEventListener("click", sendMessage);
-chatInput.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-        sendMessage();
-    }
-});  
-
+chatInputs.forEach(chatInput => {
+    chatInput.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            sendMessage(chatInput);
+        }
+    });  
+})
 
 
 // Iniciar temporizador

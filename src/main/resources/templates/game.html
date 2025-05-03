@@ -180,21 +180,26 @@
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body d-flex flex-column">
-                        <div id="game-messages-container" class="d-flex flex-column overflow-auto flex-grow-1">
+                        <div id="game-messages-container-small" class="chat-box d-flex flex-column overflow-auto">
                             <th:block th:each="msg : ${mensajes}">
                                 <th:block th:replace="fragments/chat-message :: chat-message(${msg})"></th:block>
                             </th:block>
                         </div>
-                        <textarea name="message-input-chat" id="message-input-chat" class="form-control mt-2"></textarea>
+
+                        <div class="chat-input-container">
+                            <input type="text" id="chat-input-small" class="chat-input form-control">
+                            <button id="chat-send-btn" class="send-btn">Enviar</button>
+                        </div>
                     </div>
                 </div>
 
-                <div id="chat-container">
-                    <div id="chat-box" class="d-flex flex-column overflow-auto">
+                <div id="chat-container" class="d-none d-xl-flex flex-column">
+                    <h3 class="section-title">Chat</h3>
+                    <div id="game-messages-container-big" class="chat-box d-flex flex-column overflow-auto">
                         <!-- MENSAJES VAN AQUI -->
                     </div>
-                    <div id="chat-input-container">
-                        <input type="text" id="chat-input" class="form-control" placeholder="Type a message...">
+                    <div class="chat-input-container">
+                        <input type="text" id="chat-input" class="chat-input form-control">
                         <button id="chat-send-btn" class="send-btn">Enviar</button>
                     </div>
                 </div>
