@@ -9,20 +9,20 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
-    
+
     <!-- Fragmentos de Thymeleaf -->
     <th:block th:replace="~{fragments/head :: header}" />
-    
+
     <link rel="stylesheet" href="styles.css"> <!-- Archivo CSS propio -->
 </head>
 <body class="profile-body">
     <header th:replace="~{fragments/nav.html :: nav}"></header>
-    
+
     <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
+
     <div class="user">
         <!-- TOP: BARRA DE BÚSQUEDA DE JUGADOR -->
         <div class="top-user">
-            <!-- BARRA DE BÚSQUEDA USANDO BOOTSTRAP -->
             <form action="/user/viewProfile" method="GET">
                 <div class="input-group" style="max-width: 300px;">
                     <span class="input-group-text bg-white border-end-0">
@@ -36,18 +36,21 @@
         </div>
     </div>
 
-    <!-- IMAGEN DE PERFIL -->
-    <div class="mid-user text-center">
+    <!-- MENSAJE DE USUARIO NO ENCONTRADO -->
+    <div th:if="${usuarioBuscado == null}">
+      <p> El usuario no ha sido encontrado o no existe.</p>
+    </div>
+
+    <!-- PERFIL DEL USUARIO SI EXISTE -->
+    <div class="mid-user text-center" th:if="${usuarioBuscado != null}">
         <h1 class="mt-5"><span th:text="${usuarioBuscado.username}"></span></h1>
-        
+
         <div class="profile-pic">
-            <!-- Si la foto de perfil es null, mostramos la imagen por defecto -->
             <div th:if="${usuarioBuscadofotoPerfil == null}">
                 <a href="#" data-bs-toggle="modal" data-bs-target="#editarFotoModal">
                     <img th:src="@{/img/profile_pics/default_profile.png}" alt="Foto de perfil" class="rounded-circle border border-3 border-dark shadow"/>
                 </a>
             </div>
-            <!-- Si hay una foto de perfil, la mostramos -->
             <div th:unless="${usuarioBuscadofotoPerfil == null}">
                 <a href="#" data-bs-toggle="modal" data-bs-target="#editarFotoModal">
                     <img th:src="${usuarioBuscadofotoPerfil}" alt="Foto de perfil" class="rounded-circle border border-3 border-dark shadow"/>
@@ -55,71 +58,66 @@
             </div>
         </div>
 
-  
-
-            
-    <!-- ESTADÍSTICAS DEL PERFIL -->
-    <div class="bot-user">
-        <div class="container mt-5">
-            <div class="row d-flex justify-content-between" style="flex-wrap: wrap;">
-                <!-- Puntuación de Maestría -->
-                <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
-                    <div class="card-body">
-                        <h5 class="card-title">Puntuación de Maestría</h5>
-                        <h3 class="text-primary">410</h3>
+        <!-- ESTADÍSTICAS DEL PERFIL -->
+        <div class="bot-user">
+            <div class="container mt-5">
+                <div class="row d-flex justify-content-between" style="flex-wrap: wrap;">
+                    <!-- Puntuación de Maestría -->
+                    <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
+                        <div class="card-body">
+                            <h5 class="card-title">Puntuación de Maestría</h5>
+                            <h3 class="text-primary">410</h3>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Personaje más Jugado -->
-                <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
-                    <div class="card-body">
-                        <h5 class="card-title">Personaje más Jugado</h5>
-                        <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero" class="img-fluid rounded-circle">
+                    <!-- Personaje más Jugado -->
+                    <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
+                        <div class="card-body">
+                            <h5 class="card-title">Personaje más Jugado</h5>
+                            <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero" class="img-fluid rounded-circle">
+                        </div>
                     </div>
-                </div>
 
-                <!-- Facción Favorita -->
-                <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
-                    <div class="card-body">
-                        <h5 class="card-title">Facción Favorita</h5>
-                        <img src="/img/units/banners/humans.png" class="img-fluid">
+                    <!-- Facción Favorita -->
+                    <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
+                        <div class="card-body">
+                            <h5 class="card-title">Facción Favorita</h5>
+                            <img src="/img/units/banners/humans.png" class="img-fluid">
+                        </div>
                     </div>
-                </div>
 
-                <!-- GRÁFICA DE VICTORIAS Y DERROTAS -->
-                <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
-                    <div class="card-body ">
-                        <h5 class="card-title">Ratio de Victorias</h5>
-                        <canvas id="winrateChart" width="200" height="200"></canvas>
+                    <!-- GRÁFICA DE VICTORIAS Y DERROTAS -->
+                    <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
+                        <div class="card-body">
+                            <h5 class="card-title">Ratio de Victorias</h5>
+                            <canvas id="winrateChart" width="200" height="200"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts de Bootstrap, incluye el bundle que tiene Popper.js y Bootstrap JS -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script th:inline="javascript">
         console.log("Ganadas:", /*[[${usuarioBuscado.partidasGanadas}]]*/ 0);
 
         document.addEventListener("DOMContentLoaded", function () {
-            // Recupera las variables Thymeleaf
             const ganadas = /*[[${usuarioBuscado.partidasGanadas}]]*/ 10;
             const perdidas = /*[[${usuarioBuscado.partidasPerdidas}]]*/ 20;
-    
-            // Verifica que el canvas existe
+
             const canvas = document.getElementById("winrateChart");
             if (!canvas) {
                 console.warn("Canvas 'winrateChart' no encontrado");
                 return;
             }
-    
+
             const ctx = canvas.getContext("2d");
-    
-            // Dibuja el gráfico
+
             new Chart(ctx, {
-                type: "",
+                type: "pie",
                 data: {
                     labels: ["Victorias", "Derrotas"],
                     datasets: [{
@@ -158,23 +156,20 @@
             });
         });
     </script>
-    
-    
 
     <script>
-        
-    document.addEventListener("DOMContentLoaded", function () {
-        const previewImg = document.getElementById("preview-img");
-        const radioButtons = document.querySelectorAll('input[name="selectedPic"]');
+        document.addEventListener("DOMContentLoaded", function () {
+            const previewImg = document.getElementById("preview-img");
+            const radioButtons = document.querySelectorAll('input[name="selectedPic"]');
 
-        radioButtons.forEach(radio => {
-            radio.addEventListener('change', function () {
-                const imgElement = this.nextElementSibling; // imagen al lado del input
-                previewImg.src = imgElement.src;
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', function () {
+                    const imgElement = this.nextElementSibling;
+                    previewImg.src = imgElement.src;
+                });
             });
         });
-    });
-</script>
+    </script>
 
 </body>
 </html>

@@ -53,6 +53,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -461,22 +462,27 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 
 
 // Funcion que sirve para cargar las fotos de la carpeta al abrir el user.html
-	@GetMapping("/viewProfile")
-	public String searchUser(@RequestParam("username") String nombre, Model model) {
+@GetMapping("/viewProfile")
+public String searchUser(@RequestParam("username") String username, Model model) {
+    log.info("Entrando en el método viewProfile");
 
-		log.info("Entrando en el método viewProfile"); // Aquí se agrega el lo
-		User user = userRepository.findByUsernameContainingIgnoreCase(nombre);
-		if (user == null) {
-			model.addAttribute("error", "Usuario no encontrado.");
-		} else {
-			model.addAttribute("usuarioBuscado", user);
-		}
-		long id = user.getId();
+    Optional<User> usuarioBuscado = userRepository.findByUsernameContainingIgnoreCase(username);
 
-		model.addAttribute("usuarioBuscado", user);
-		
-		return "viewProfile";
-	}
+    if (usuarioBuscado.isEmpty()) {
+		log.info("El usuario no existe");
+        model.addAttribute("error", "Usuario no encontrado.");
+        model.addAttribute("usuarioBuscado", null);
+        return "viewProfile";
+    } else {
+		log.info("El usuario existe");
+		User user=usuarioBuscado.get();
+		log.info("El nombre del usuario es: {}", user.getUsername());
+       	 model.addAttribute("usuarioBuscado", user);
+    }
+	log.info("Salimos de la funcion viewProfile");
+    return "viewProfile";
+}
+
 
 	@PostMapping("/updateFoto/{id}")
 public String updateProfilePicture(@PathVariable Long id, @RequestParam(required = true) String selectedPic, Model model, RedirectAttributes redirectAttributes) {
