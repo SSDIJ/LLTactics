@@ -6,9 +6,9 @@
 </head>
 <body>
     <th:block th:fragment="item(object)">
-    <div class="object-cell position-relative">
-        <img th:if="${object.imagen != null}" th:src="@{${object.imagen}}" alt="" class="object-img">
-    </div>
-</th:block> 
+        <div class="object-cell position-relative">
+            <img th:if="${object.imagen != null}" th:src="@{${object.imagen}}" alt="" class="object-img">
+        </div>
+    </th:block> 
 </body>
 </html>

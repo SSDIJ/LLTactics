@@ -181,9 +181,8 @@
                     </div>
                     <div class="offcanvas-body d-flex flex-column">
                         <div id="game-messages-container-small" class="chat-box d-flex flex-column overflow-auto">
-                            <th:block th:each="msg : ${mensajes}">
-                                <th:block th:replace="fragments/chat-message :: chat-message(${msg})"></th:block>
-                            </th:block>
+                            <!-- MENSAJES VAN AQUI -->
+                            <div th:replace="fragments/game-chat :: chatList(${mensajes})"></div>
                         </div>
 
                         <div class="chat-input-container">
@@ -197,6 +196,7 @@
                     <h3 class="section-title">Chat</h3>
                     <div id="game-messages-container-big" class="chat-box d-flex flex-column overflow-auto">
                         <!-- MENSAJES VAN AQUI -->
+                        <div th:replace="fragments/game-chat :: chatList(${mensajes})"></div>
                     </div>
                     <div class="chat-input-container">
                         <input type="text" id="chat-input" class="chat-input form-control">

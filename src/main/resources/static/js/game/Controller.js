@@ -569,30 +569,7 @@ function winAnimation(isOpponent) {
 
 // ------ CHAT -------
 
-// Función para obtener mensajes del servidor
-async function fetchMessages() {
-    try {
-        const response =  await go(`${iwconfig.rootUrl}/topic/${topicName}`, "GET", {});
 
-        console.log("Respuesta servidor:", response);
-
-        let messages = response.messages;
-        if(typeof messages === "string") {
-            messages = JSON.parse(messages); // Convierte el string a un objeto JSON
-        }
-            
-        if(!Array.isArray(messages)) {
-            messages = []; // Asegúrate de que sea un array
-        }
-
-            chatBox.innerHTML = ""; // Limpia el chat antes de mostrar los mensajes
-            messages.forEach(displayMessage); // Itera sobre los mensajes
-    } catch (error) {   
-        console.error("Error al realizar la solicitud GET:", error);
-    }
-}
-
-// Función para enviar un mensaje al servidor
 // Función para enviar un mensaje al servidor
 async function sendMessage(chatInput) {
 
@@ -673,6 +650,11 @@ chatInputs.forEach(chatInput => {
     });  
 })
 
+document.addEventListener("DOMContentLoaded", () => {
+    chatBoxes.forEach(chatBox => {
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+})
 
 // Iniciar temporizador
 async function startTimer() {

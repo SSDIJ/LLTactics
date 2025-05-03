@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Game chat</title>
+</head>
+<body>
+    <div th:fragment="chatList(mensajes)">
+        <div th:each="msg : ${mensajes}" class="chat-message">
+            <span class="chat-time"
+                  th:text="${'[' + msg.formattedTime + ']'}">
+            </span>
+            <span class="chat-username" 
+                  th:text="${msg.playerName + ': '}">
+            </span>
+            <span class="chat-text" 
+                  th:text="${msg.message}">
+            </span>
+        </div>
+    </div>
+</body>
+</html>
