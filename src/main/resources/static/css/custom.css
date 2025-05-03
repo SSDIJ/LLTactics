@@ -1598,3 +1598,9 @@ td img.icon {
     text-align: center;
     font-family: var(--TITLE-FONT-FAMILY);
 }
+
+.chat-time {
+    color: gray;
+    font-size: 0.85em;
+    margin-right: 5px;
+}

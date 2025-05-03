@@ -567,86 +567,106 @@ function winAnimation(isOpponent) {
     });
 }
 
-// Inicializa y declara funciones del chat
-function initializeChatHttp(topicName) {
+// ------ CHAT -------
 
-    // Función para obtener mensajes del servidor
-    async function fetchMessages() {
-        try {
-            const response =  await go(`${iwconfig.rootUrl}/topic/${topicName}`, "GET", {});
+// Función para obtener mensajes del servidor
+async function fetchMessages() {
+    try {
+        const response =  await go(`${iwconfig.rootUrl}/topic/${topicName}`, "GET", {});
 
-            console.log("Respuesta servidor:", response);
+        console.log("Respuesta servidor:", response);
 
-            let messages = response.messages;
-            if(typeof messages === "string") {
-                messages = JSON.parse(messages); // Convierte el string a un objeto JSON
-            }
-                
-            if(!Array.isArray(messages)) {
-                messages = []; // Asegúrate de que sea un array
-            }
-
-                chatBox.innerHTML = ""; // Limpia el chat antes de mostrar los mensajes
-                messages.forEach(displayMessage); // Itera sobre los mensajes
-        } catch (error) {   
-            console.error("Error al realizar la solicitud GET:", error);
+        let messages = response.messages;
+        if(typeof messages === "string") {
+            messages = JSON.parse(messages); // Convierte el string a un objeto JSON
         }
-    }
-
-    // Función para enviar un mensaje al servidor
-    async function sendMessage() {
-        const message = chatInput.value.trim();
-        if (message === "") return;
-
-        const messagePayload = {
-            message: message,
-        };
-
-        try {
-            const response = await go(`${iwconfig.rootUrl}/topic/${topicName}`, "POST", messagePayload);
             
-            console.log("Mensaje enviado con éxito");
-            chatInput.value = ""; // Limpia el campo de entrada
-            fetchMessages(); // Actualiza los mensajes después de enviar
-        } catch (error) {
-            console.error("Error al realizar la solicitud POST:", error);
+        if(!Array.isArray(messages)) {
+            messages = []; // Asegúrate de que sea un array
         }
+
+            chatBox.innerHTML = ""; // Limpia el chat antes de mostrar los mensajes
+            messages.forEach(displayMessage); // Itera sobre los mensajes
+    } catch (error) {   
+        console.error("Error al realizar la solicitud GET:", error);
     }
-
-    // Función para mostrar un mensaje en el chat
-    function displayMessage(message) {
-        const messageElement = document.createElement("div");
-        messageElement.classList.add("chat-message"); // Para estilos en el CSS
-
-        // Nombre de usuario
-        const userElement = document.createElement("span");
-        userElement.classList.add("chat-username"); // Para estilos en el CSS
-        userElement.textContent = `${message.from}: `;
-
-        // Texto
-        const textElement = document.createElement("span");
-        textElement.classList.add("chat-text"); // Para estilos en el CSS
-        textElement.textContent = message.text;
-        
-        messageElement.appendChild(userElement);
-        messageElement.appendChild(textElement);
-
-        chatBox.appendChild(messageElement); // Añade el mensaje al contenedor del chat
-        chatBox.scrollTop = chatBox.scrollHeight; // Desplaza el chat hacia abajo
-    }
-
-    // Configurar el botón de enviar y la tecla Enter
-    chatSendBtn.addEventListener("click", sendMessage);
-    chatInput.addEventListener("keypress", function (event) {
-        if (event.key === "Enter") {
-            sendMessage();
-        }
-    });
-
-    // Llamar periódicamente a fetchMessages para actualizar el chat
-    setInterval(fetchMessages, 5); // Cada 1 segundo    
-
 }
+
+// Función para enviar un mensaje al servidor
+// Función para enviar un mensaje al servidor
+async function sendMessage() {
+
+    const message = chatInput.value.trim();
+    if (message === "") return;
+
+    const now = new Date();
+
+    const messageObj = {
+        message: message,
+        timestamp: now
+    };
+
+    const messageAction = {
+        "actionType": "SEND_MESSAGE",
+        "playerName": player1.name,
+        "actionDetails": messageObj
+    };
+
+    sendAction(messageAction);
+
+    displayMessage(messageAction);
+
+    chatInput.value = ""; // Limpia el campo de entrada
+}
+
+
+// Función para mostrar un mensaje en el chat
+function displayMessage(messageAction) {
+
+    const message = messageAction.actionDetails.message;
+    const time =  messageAction.actionDetails.timestamp;
+    
+    const date = new Date(time);
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const timeFormatted = `${hours}:${minutes}`;
+
+    const messageElement = document.createElement("div");
+    messageElement.classList.add("chat-message"); // Para estilos en el CSS
+
+    // Hora del mensaje
+    const timeElement = document.createElement("span");
+    timeElement.classList.add("chat-time"); // Para estilos en el CSS
+    timeElement.textContent = `[${timeFormatted}] `;
+
+    // Nombre de usuario
+    const userElement = document.createElement("span");
+    userElement.classList.add("chat-username"); // Para estilos en el CSS
+    userElement.textContent = `${messageAction.playerName}: `;
+
+    // Texto del mensaje
+    const textElement = document.createElement("span");
+    textElement.classList.add("chat-text"); // Para estilos en el CSS
+    textElement.textContent = message;
+
+    // Ensamblar el mensaje
+    messageElement.appendChild(timeElement);
+    messageElement.appendChild(userElement);
+    messageElement.appendChild(textElement);
+
+    chatBox.appendChild(messageElement); // Añade el mensaje al contenedor del chat
+    chatBox.scrollTop = chatBox.scrollHeight; // Desplaza el chat hacia abajo
+}
+
+
+// Configurar el botón de enviar y la tecla Enter
+chatSendBtn.addEventListener("click", sendMessage);
+chatInput.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+});  
+
 
 
 // Iniciar temporizador
@@ -702,11 +722,6 @@ async function startTimer() {
     }, 1000);
 }
 
-/*
-document.addEventListener("DOMContentLoaded", function () {
-    initializeChatHttp("general");
-});
-*/
 
 refreshShopBtns[0].click();
 
@@ -739,7 +754,6 @@ function sendAction(action) {
         return;
     }
 
-    console.log(action)
     ws.stompClient.send(destination, {}, JSON.stringify(action));
 
 }
@@ -747,7 +761,6 @@ function sendAction(action) {
 function processAction(action) {
 
     if (action.actionType == "BUY_UNIT") {
-
         const newUnit = Unit.fromUnit(action.actionDetails.unit)
         player2.buyUnit(newUnit, false);
         updateUnits(player2, true);
@@ -755,6 +768,7 @@ function processAction(action) {
     else if (action.actionType == "SELL_UNIT") {
         player2.sellUnit(action.actionDetails.unit);
         updateUnits(player2, true);
+        updateInventory(true);
     }
     else if (action.actionType == "BUY_ITEM") {
         player2.buyItem(action.actionDetails.item, true);
@@ -770,7 +784,6 @@ function processAction(action) {
         player2.units[index].addItem(action.actionDetails.item);
         updateUnits(player2, true);
         player2.removeFromInventory(action.actionDetails.item);
-       
         updateInventory(true);
 
     }
@@ -778,9 +791,7 @@ function processAction(action) {
         // No ocurre nada
     }
     else if (action.actionType == "SEND_MESSAGE") {
-
+        displayMessage(action);
     }
-
-    
 
 }

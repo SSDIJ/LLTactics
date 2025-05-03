@@ -131,9 +131,13 @@ class Player {
         console.log(`No se encontró el objeto con ID: ${soldItem.id}`);
     }
 
-    removeFromInventory(item) {
-        if (this.inventory.has(item))
-            this.inventory.delete(item);
+    removeFromInventory(removedItem) {
+        for (let item of this.inventory) {
+            if (item.id === removedItem.id) {
+                this.inventory.delete(item);
+                return;
+            }
+        }
     }
 
     resetUnitHealth() {
