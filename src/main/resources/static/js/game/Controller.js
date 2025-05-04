@@ -39,6 +39,16 @@ function toggleUnitsContainer() {
     else playerUnitsContainer.classList.add("no-click")
 }
 
+function showWinnerContainer(winner) {
+    const container = document.getElementById('winner-container');
+    const winnerName = document.getElementById('winnerName');
+    winnerName.textContent = winner
+    container.style.display = 'flex';
+    setTimeout(() => {
+        container.classList.add('show');
+    }, 10);
+}
+
 function toggleRoundPanel(text) {
 
     roundPanel.innerText = text;
@@ -520,7 +530,6 @@ updateUnits(player2, true);
 
 const game = new Game([player1, player2]);
 
-
 function updateRoundNumber() {
     roundElement.innerText = `Ronda ${game.getRound()}`;
 }
@@ -680,9 +689,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 100);
 });
 
-function sendReady() {
+function sendBattleEnd(player1Wins) {
     const destination = `/app/game/ready/${roomId}`;
-    ws.stompClient.send(destination, {}, {});
+
+    const battleEndMsg = {
+        "winner": player1Wins ? player1.name : player2.name,
+        "units": {
+            [player1.name]: player1.units,
+            [player2.name]: player2.units
+        }
+        
+    };
+
+    ws.stompClient.send(destination, {}, JSON.stringify(battleEndMsg));
 }
 
 function sendAction(action) {
@@ -696,6 +715,11 @@ function sendAction(action) {
 }
 
 async function processAction(action) {
+
+    if (action.isWinner != undefined) {
+        showWinnerContainer(action.winner);
+        return;
+    }
 
     if (action.updateAll != undefined) {
 
@@ -714,6 +738,9 @@ async function processAction(action) {
 
         player1.stars = action.player1Stars
         player2.stars = action.player2Stars
+
+        player1.name = action.player1Name
+        player2.name = action.player2Name
 
         updatePlayerStats()
 
@@ -734,8 +761,6 @@ async function processAction(action) {
         player.updateItems(action.playerItems)
         updateInventory(isOpponent)
     }
-
-    
 
     // Añadir mensaje
     if (action.newMessage != undefined && action.newMessage) {
@@ -772,17 +797,19 @@ async function processAction(action) {
         }, 300);
 
         const player1Wins = await game.startBattle();
+        
         winAnimation(!player1Wins);
 
-        sendReady();
+        sendBattleEnd(player1Wins);
 
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         clearInterval(intervalHealthsId);
-        
 
     }
 
 
 }
+
+
 

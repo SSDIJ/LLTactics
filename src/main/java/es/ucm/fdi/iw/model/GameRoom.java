@@ -3,26 +3,37 @@ package es.ucm.fdi.iw.model;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+
+import java.util.Set;
+
 import java.util.ArrayList;
 import java.time.ZonedDateTime;
 
 public class GameRoom {
 
-    public static final int SHOP_TIME = 20;
+    public static final int SHOP_TIME = 10;
     public static final int INITIAL_STARS = 100;
-    public static final int INITIAL_LIFE = 100;
-    public static final int DAMAGE_WIN = 5;
+    public static final int INITIAL_LIFE = 2;
+    public static final int DAMAGE_WIN = 1;
 
     private final String gameRoomId;
     private final Map<String, GamePlayer> players = new HashMap<>();
     private int currentRound;
     private final List<GameMessage> messageHistory;
+    private String player1Name;
+    private String player2Name;
+    private String lastRoundLoser;
 
     public GameRoom(String gameRoomId, String player1Name, String player2Name) {
         this.gameRoomId = gameRoomId;
+
+        this.player1Name = player1Name;
+        this.player2Name = player2Name;
         this.players.put(player1Name, new GamePlayer(player1Name));
         this.players.put(player2Name, new GamePlayer(player2Name));
         this.currentRound = 1;
@@ -47,6 +58,13 @@ public class GameRoom {
         this.currentPhase = phase;
     }
 
+    public String getPlayer1Name() {
+        return player1Name;
+    }
+
+    public String getPlayer2Name() {
+        return player2Name;
+    }
 
     public boolean isBuyingPhase() {
         return currentRound % 2 == 1;
@@ -110,88 +128,83 @@ public class GameRoom {
         return players;
     }
 
-    public void fight() {
-        List<GamePlayer> playerList = new ArrayList<>(players.values());
-        Collections.shuffle(playerList);
+    private Map<String, GameBattleResult> playerResults = new ConcurrentHashMap<>();
 
-        GamePlayer player1 = playerList.get(0);
-        GamePlayer player2 = playerList.get(1);
+    public void setPlayerResult(String playerName, GameBattleResult result) {
+        playerResults.put(playerName, result);
+    }
 
-        GameUnit unit1 = getLastValidUnit(player1);
-        GameUnit unit2 = getFirstValidUnit(player2);
+    public GameBattleResult getPlayerResult(String playerName) {
+        return playerResults.get(playerName);
+    }
+
+    public void reduceLoserHealth() {
+        this.players.get(lastRoundLoser).reduceHealth(DAMAGE_WIN);
+    }
+
+    public String getWinner() {
+        Iterator<GamePlayer> iterator = players.values().iterator();
+        GamePlayer player1 = iterator.next();
+        GamePlayer player2 = iterator.next();
+
+        System.out.println("\n\n");
+        System.out.println(player1.getName());
+        System.out.println(player1.getHealth());
+        System.out.println(player2.getName());
+        System.out.println(player2.getHealth());
+        System.out.println("\n\n");
     
-        if (unit1 == null) {
-            player1.buyUnit(player1.getDefaultUnit());
-            unit1 = getLastValidUnit(player1);
-        }
-        if (unit2 == null) {
-            player2.buyUnit(player2.getDefaultUnit());
-            unit2 = getFirstValidUnit(player2);
-        }
-    
-        while (unit1 != null && unit2 != null) {
-            // Fight between unit1 and unit2
-            while (unit1.getHealth() > 0 && unit2.getHealth() > 0) {
-                if (unit1.getSpeed() >= unit2.getSpeed()) {
-                    attack(unit1, unit2);
-                    if (unit2.getHealth() > 0) {
-                        attack(unit2, unit1);
-                    }
-                } else {
-                    attack(unit2, unit1);
-                    if (unit1.getHealth() > 0) {
-                        attack(unit1, unit2);
-                    }
-                }
-            }
-    
-            if (unit1.getHealth() <= 0) {
-                player1.replaceUnit(unit1, player1.getNullUnit());
-            }
-            if (unit2.getHealth() <= 0) {
-                player2.replaceUnit(unit2, player2.getNullUnit());
-            }
-    
-            unit1 = getLastValidUnit(player1);
-            unit2 = getFirstValidUnit(player2);
+        if (player1.getHealth() <= 0) {
+            return player2.getName();
+        } else if (player2.getHealth() <= 0) {
+            return player1.getName();
         }
     
-        // Determine the winner
-        boolean player1Defeated = player1.getUnits().stream().allMatch(u -> u.getHealth() <= 0 || u.getUnitID() == -1);
-        boolean player2Defeated = player2.getUnits().stream().allMatch(u -> u.getHealth() <= 0 || u.getUnitID() == -1);
-    
-        if (player1Defeated) {
-            player1.reduceHealth(DAMAGE_WIN);
-        } else if (player2Defeated) {
-            player2.reduceHealth(DAMAGE_WIN);
-        }
+        return null; // Ningún jugador ha perdido aún
     }
     
-    private GameUnit getLastValidUnit(GamePlayer player) {
-        List<GameUnit> units = player.getUnits();
-        for (int i = units.size() - 1; i >= 0; i--) {
-            GameUnit unit = units.get(i);
-            if (unit != null && unit.getUnitID() != -1 && unit.getHealth() > 0) {
-                return unit;
-            }
+    public boolean resultsMatch(GameBattleResult r1, GameBattleResult r2) {
+
+        if (!Objects.equals(r1.getWinner(), r2.getWinner())) return false;
+    
+        Set<String> playerNames = r1.getUnits().keySet();
+        if (!playerNames.equals(r2.getUnits().keySet())) return false;
+        
+        /* 
+        for (String player : playerNames) {
+            List<GameUnit> units1 = r1.getUnits().get(player);
+            List<GameUnit> units2 = r2.getUnits().get(player);
+    
+            if (!unitsMatch(units1, units2)) return false;
         }
-        return null;
+        */
+
+        lastRoundLoser = r1.getWinner().equals(this.player1Name) ? this.player2Name : this.player1Name;
+
+        return true;
+    }
+
+    private boolean unitsMatch(List<GameUnit> units1, List<GameUnit> units2) {
+        if (units1.size() != units2.size()) return false;
+    
+        for (int i = 0; i < units1.size(); i++) {
+            GameUnit u1 = units1.get(i);
+            GameUnit u2 = units2.get(i);
+    
+            if (!unitEquals(u1, u2)) return false;
+        }
+    
+        return true;
     }
     
-    private GameUnit getFirstValidUnit(GamePlayer player) {
-        for (GameUnit unit : player.getUnits()) {
-            if (unit != null && unit.getUnitID() != -1 && unit.getHealth() > 0) {
-                return unit;
-            }
-        }
-        return null;
+    private boolean unitEquals(GameUnit u1, GameUnit u2) {
+        return u1.getHealth() == u2.getHealth()
+            && u1.getMaxHealth() == u2.getMaxHealth()
+            && u1.getArmor() == u2.getArmor()
+            && u1.getDamage() == u2.getDamage()
+            && u1.getSpeed() == u2.getSpeed()
+            && u1.getId() == u2.getId();
     }
     
-    private void attack(GameUnit attacker, GameUnit defender) {
-        int rawDamage = attacker.getDamage();
-        int armor = defender.getArmor();
-        int damage = Math.max(rawDamage - armor, 1);
-        defender.setHealth(defender.getHealth() - damage);
-    }
 
 }

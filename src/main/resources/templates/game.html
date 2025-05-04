@@ -13,13 +13,18 @@
     <!-- Contenedor de la partida -->
     <div id="game-container" class="w-100 position-absolute">
 
+        <div id="winner-container">
+            <h1 id="winnerName">Jugador</h1>
+            <a th:href="@{/}" href="/"><button type="button" class="btn btn-outline-light">Volver al inicio</button></a>
+        </div>
+
 
         <!-- Información relativa a la ronda -->
         <div id="round-info-container">
             
             <!-- Número de ronda -->
             <div id="round-name" class="d-flex justify-content-center align-items-center">
-                Ronda 5
+                Esperando
             </div>
 
             <!-- Contador -->
