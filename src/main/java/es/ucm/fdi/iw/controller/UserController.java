@@ -67,7 +67,6 @@ import org.springframework.security.core.Authentication;
  */
 @Controller
 
-
 @RequestMapping("user")
 public class UserController {
 
@@ -86,8 +85,8 @@ public class UserController {
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
-    private UserRepository userRepository;
-	
+	private UserRepository userRepository;
+
 	// Añadido para el inicio de sesion automatico tras registrarse
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -140,35 +139,35 @@ public class UserController {
 	 * Landing page for a user profile
 	 */
 	@GetMapping("{id}")
-public String index(@PathVariable long id, Model model, HttpSession session) {
-    User target = entityManager.find(User.class, id);
-    model.addAttribute("user", target);
+	public String index(@PathVariable long id, Model model, HttpSession session) {
+		User target = entityManager.find(User.class, id);
+		model.addAttribute("user", target);
 
-    // Ruta relativa en la carpeta static
-    String rutaImgs = "/img/profile_pics";  // Sin "src/main/resources/static", ya que Spring Boot maneja los recursos estáticos
+		// Ruta relativa en la carpeta static
+		String rutaImgs = "/img/profile_pics"; // Sin "src/main/resources/static", ya que Spring Boot maneja los
+												// recursos estáticos
 
-    // Carpeta donde se encuentran las imágenes
-    File folder = new File("src/main/resources/static/" + rutaImgs);
-    File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".png") || name.endsWith(".jpg"));
+		// Carpeta donde se encuentran las imágenes
+		File folder = new File("src/main/resources/static/" + rutaImgs);
+		File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".png") || name.endsWith(".jpg"));
 
-    // Crear una lista con los nombres de las imágenes 
-    List<String> availablePics = new ArrayList<>();
+		// Crear una lista con los nombres de las imágenes
+		List<String> availablePics = new ArrayList<>();
 
-    // Asegurarse de agregar las imágenes disponibles
-    if (listOfFiles != null && listOfFiles.length > 0) {
-        for (File file : listOfFiles) {
-            availablePics.add(rutaImgs + "/" + file.getName());  // Ruta relativa
-        }
-    } else {
-        availablePics.add("pepe"); // Imagen por defecto si no hay imágenes
-    }
+		// Asegurarse de agregar las imágenes disponibles
+		if (listOfFiles != null && listOfFiles.length > 0) {
+			for (File file : listOfFiles) {
+				availablePics.add(rutaImgs + "/" + file.getName()); // Ruta relativa
+			}
+		} else {
+			availablePics.add("pepe"); // Imagen por defecto si no hay imágenes
+		}
 
-    // Agregar la lista de imágenes al modelo
-    model.addAttribute("availablePics", availablePics);
+		// Agregar la lista de imágenes al modelo
+		model.addAttribute("availablePics", availablePics);
 
-    return "user";  // Retornar la vista
-}
-
+		return "user"; // Retornar la vista
+	}
 
 	/**
 	 * Alter or create a user
@@ -217,7 +216,7 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		target.setUsername(edited.getUsername());
 		target.setFirstName(edited.getFirstName());
 		target.setLastName(edited.getLastName());
-	    target.setFotoPerfil(edited.getFotoPerfil());
+		target.setFotoPerfil(edited.getFotoPerfil());
 		target.setFaccionFavorita(edited.getFaccionFavorita());
 		target.setPartidasGanadas(edited.getPartidasGanadas());
 		target.setPartidasPerdidas(edited.getPartidasPerdidas());
@@ -429,9 +428,8 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		newUser.setPartidasPerdidas(0);
 		newUser.setPuntuacion(0);
 		newUser.setIndiceRanking(0);
-	
+
 		newUser.setFotoPerfil(profilePic);
-		
 
 		// Guarda el nuevo usuario en la base de datos
 		entityManager.persist(newUser);
@@ -460,67 +458,62 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		return "redirect:/"; // Redirige a la página principal
 	}
 
+	// Funcion que sirve para cargar las fotos de la carpeta al abrir el user.html
+	@GetMapping("/viewProfile")
+	public String searchUser(@RequestParam("username") String username, Model model) {
+		log.info("Entrando en el método viewProfile");
 
-// Funcion que sirve para cargar las fotos de la carpeta al abrir el user.html
-@GetMapping("/viewProfile")
-public String searchUser(@RequestParam("username") String username, Model model) {
-    log.info("Entrando en el método viewProfile");
+		Optional<User> usuarioBuscado = userRepository.findByUsernameContainingIgnoreCase(username);
 
-    Optional<User> usuarioBuscado = userRepository.findByUsernameContainingIgnoreCase(username);
-
-    if (usuarioBuscado.isEmpty()) {
-		log.info("El usuario no existe");
-        model.addAttribute("error", "Usuario no encontrado.");
-        model.addAttribute("usuarioBuscado", null);
-        return "viewProfile";
-    } else {
-		log.info("El usuario existe");
-		User user=usuarioBuscado.get();
-		log.info("El nombre del usuario es: {}", user.getUsername());
-       	 model.addAttribute("usuarioBuscado", user);
-    }
-	log.info("Salimos de la funcion viewProfile");
-    return "viewProfile";
-}
-
+		if (usuarioBuscado.isEmpty()) {
+			log.info("El usuario no existe");
+			model.addAttribute("error", "Usuario no encontrado.");
+			model.addAttribute("usuarioBuscado", null);
+			return "viewProfile";
+		} else {
+			log.info("El usuario existe");
+			User user = usuarioBuscado.get();
+			log.info("El nombre del usuario es: {}", user.getUsername());
+			model.addAttribute("usuarioBuscado", user);
+		}
+		log.info("Salimos de la funcion viewProfile");
+		return "viewProfile";
+	}
 
 	@PostMapping("/updateFoto/{id}")
-public String updateProfilePicture(@PathVariable Long id, @RequestParam(required = true) String selectedPic, Model model, RedirectAttributes redirectAttributes) {
-	// Buscar al usuario por su id
-	System.out.println("Buenaaas");
-	System.out.println("Cambiando foto por: "+selectedPic);
-    User user = userRepository.findById(id).orElse(null);
+	public String updateProfilePicture(@PathVariable Long id, @RequestParam(required = true) String selectedPic,
+			Model model, RedirectAttributes redirectAttributes) {
+		// Buscar al usuario por su id
+		System.out.println("Buenaaas");
+		System.out.println("Cambiando foto por: " + selectedPic);
+		User user = userRepository.findById(id).orElse(null);
 
-    if (user == null) {
-        // Si no se encuentra el usuario, devolver un mensaje de error
-        model.addAttribute("error", "Usuario no encontrado.");
-        return "error"; // Puedes redirigir a una página de error o mostrar un mensaje adecuado
-    }
+		if (user == null) {
+			// Si no se encuentra el usuario, devolver un mensaje de error
+			model.addAttribute("error", "Usuario no encontrado.");
+			return "error"; // Puedes redirigir a una página de error o mostrar un mensaje adecuado
+		}
 
-    // Mostrar por consola el ID y la nueva foto
-    System.out.println("ID del usuario: " + id);
-    System.out.println("Nueva imagen: " + selectedPic);
+		// Mostrar por consola el ID y la nueva foto
+		System.out.println("ID del usuario: " + id);
+		System.out.println("Nueva imagen: " + selectedPic);
 
-    // Verificar que la nueva foto de perfil no sea nula o vacía
-    if (selectedPic != null && !selectedPic.isEmpty()) {
-        // Actualizar la foto de perfil
-        user.setFotoPerfil(selectedPic);
-        // Guardar el usuario con la nueva foto de perfil en la base de datos
-        userRepository.save(user);
-        model.addAttribute("success", "Foto de perfil actualizada correctamente.");
-    } else {
-        model.addAttribute("error", "La foto de perfil no puede estar vacía.");
-    }
+		// Verificar que la nueva foto de perfil no sea nula o vacía
+		if (selectedPic != null && !selectedPic.isEmpty()) {
+			// Actualizar la foto de perfil
+			user.setFotoPerfil(selectedPic);
+			// Guardar el usuario con la nueva foto de perfil en la base de datos
+			userRepository.save(user);
+			model.addAttribute("success", "Foto de perfil actualizada correctamente.");
+		} else {
+			model.addAttribute("error", "La foto de perfil no puede estar vacía.");
+		}
 
-    // Retornar a la vista del usuario con el modelo actualizado
-	
-	redirectAttributes.addAttribute("id", id);
-    return "redirect:/user/{id}";
-	
+		// Retornar a la vista del usuario con el modelo actualizado
+
+		redirectAttributes.addAttribute("id", id);
+		return "redirect:/user/{id}";
+
+	}
+
 }
-
-	
-	
-}
-	
-
