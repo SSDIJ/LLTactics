@@ -553,13 +553,18 @@ td img.icon {
 .profile-body .img-fluid{
     max-height: 100px;
 }
-.profile-body .card{
-    background-color:white!important;
+
+.profile-body .card {
+    background-color: white !important;
     z-index: 1;
-   max-height:5%;
-   
-  
+    min-height: 36vh;  /* Esto asegura que las tarjetas ocupen el 25% de la altura de la ventana */
+     /* Limita la altura máxima a un 25% de la ventana */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Asegura que el contenido de la tarjeta esté centrado verticalmente */
 }
+
+
 .profile-body h3 {
     color: var(--COLOR-DARK-1) !important;
 }
