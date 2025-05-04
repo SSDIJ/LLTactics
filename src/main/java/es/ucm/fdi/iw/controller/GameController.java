@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import es.ucm.fdi.iw.model.GameBattleResult;
 import es.ucm.fdi.iw.model.GameItem;
 import es.ucm.fdi.iw.model.GameMessage;
 import es.ucm.fdi.iw.model.GamePlayer;
@@ -156,8 +157,6 @@ public class GameController {
         }
         model.addAttribute("unitsP2", unitsP2);
 
-
-
         List<GameMessage> mensajes = gameRoom.getMessageHistory();
         model.addAttribute("mensajes", mensajes);
 
@@ -236,6 +235,10 @@ public class GameController {
 
     }
 
+    private void sendActionToPlayers(GameRoom gameRoom, PlayerAction action) {
+        sendActionToPlayers(gameRoom, action, "server");
+    }
+
     private void sendActionToPlayers(GameRoom gameRoom, PlayerAction action, String senderPlayer) {
 
         ObjectMapper mapper = new ObjectMapper();
@@ -280,9 +283,16 @@ public class GameController {
                 basePayload.put("player2Units", player2.getUnits());
                 basePayload.put("player2Items", new ArrayList<>(player2.getInventory()));
                 basePayload.put("player2Health", player2.getHealth());
-                basePayload.put("player2Stars", player2.getStars()) ;
+                basePayload.put("player2Stars", player2.getStars());
+                basePayload.put("player1Name", player1.getName());
+                basePayload.put("player2Name", player2.getName());
                 basePayload.put("updateAll", true);
                 sendAll = false;
+                break;
+            case WINNER:
+            Map<String, Object> winnerDetails = (Map<String, Object>) action.getActionDetails();
+                basePayload.put("isWinner", true);
+                basePayload.put("winner", winnerDetails.get("winner"));
                 break;
             case REFRESH_SHOP:
                 sendAll = false;
@@ -339,15 +349,48 @@ public class GameController {
     }
 
     @MessageMapping("/game/ready/{gameRoomId}")
-    public void handleBattleReady(@DestinationVariable String gameRoomId, Principal principal) {
+    public void handleEndBattle(@DestinationVariable String gameRoomId, @Payload GameBattleResult playerResult, Principal principal) {
         GameRoom gameRoom = activeGames.get(gameRoomId);
         String playerName = principal.getName();
     
         synchronized (gameRoom) {
+
+            
+            gameRoom.setPlayerResult(playerName, playerResult);
             gameRoom.setPlayerReady(playerName);
-    
+            
             if (gameRoom.bothPlayersReady()) {
+                GameBattleResult result1 = gameRoom.getPlayerResult(gameRoom.getPlayer1Name());
+                GameBattleResult result2 = gameRoom.getPlayerResult(gameRoom.getPlayer2Name());
+
+                if (result1 == null || result2 == null) return;
+                
                 gameRoom.resetReadiness();
+
+                if (!gameRoom.resultsMatch(result1, result2)) {
+                    // Manejar discrepancia
+                    log.warn("Discrepancia en resultados de batalla entre jugadores.");
+                    return;
+                }
+
+                System.out.println("TODO PIOLA");
+                gameRoom.reduceLoserHealth();
+
+                String winner = gameRoom.getWinner();
+                if (winner != null) {
+
+                    Map<String, Object> details = new HashMap<>();
+                    details.put("winner", winner);
+
+                    PlayerAction winnerAction = new PlayerAction(
+                        PlayerAction.ActionType.WINNER, 
+                        "server", 
+                        details
+                    );
+
+                    sendActionToPlayers(gameRoom, winnerAction);
+                    return;
+                }
     
                 // Validar si ya se está en fase de transición
                 if (!gameRoom.isInTransition()) {
@@ -413,8 +456,6 @@ public class GameController {
                 payload
             );
         }
-
-        gameRoom.fight();
     }
 
     @Autowired
