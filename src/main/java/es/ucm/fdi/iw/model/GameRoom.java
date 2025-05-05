@@ -8,12 +8,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.Data;
 
 import java.util.Set;
 
 import java.util.ArrayList;
 import java.time.ZonedDateTime;
 
+@Data
 public class GameRoom {
 
     public static final int SHOP_TIME = 10;
@@ -44,42 +46,12 @@ public class GameRoom {
     private Phase currentPhase = Phase.WAITING;
     private boolean inTransition = false;
 
-    public synchronized boolean isInTransition() {
-        return inTransition;
-    }
-    public synchronized void setInTransition(boolean val) {
-        inTransition = val;
-    }
-
-    public synchronized Phase getCurrentPhase() {
-        return currentPhase;
-    }
-    public synchronized void setCurrentPhase(Phase phase) {
-        this.currentPhase = phase;
-    }
-
-    public String getPlayer1Name() {
-        return player1Name;
-    }
-
-    public String getPlayer2Name() {
-        return player2Name;
-    }
-
     public boolean isBuyingPhase() {
         return currentRound % 2 == 1;
     }
 
     public void nextRound() {
         currentRound++;
-    }
-
-    public String getGameRoomId() {
-        return gameRoomId;
-    }
-
-    public int getCurrentRound() {
-        return this.currentRound;
     }
 
     private final Map<String, Boolean> battleReady = new ConcurrentHashMap<>();
@@ -205,6 +177,4 @@ public class GameRoom {
             && u1.getSpeed() == u2.getSpeed()
             && u1.getId() == u2.getId();
     }
-    
-
 }
