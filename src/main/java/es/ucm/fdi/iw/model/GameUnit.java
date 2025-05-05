@@ -2,6 +2,9 @@ package es.ucm.fdi.iw.model;
 
 import java.util.Arrays;
 
+import lombok.Data;
+
+@Data
 public class GameUnit {
     private static int nextId = 1;
     private static final int MAX_ITEMS = 2;
@@ -19,8 +22,6 @@ public class GameUnit {
     private int maxHealth;
     private int unitID;
     private GameItem[] items;
-
-    public GameUnit() {}
 
     public GameUnit(int armor, int damage, String description, String faction, int id,
                     String image, String name, int price, int speed, int health) {
@@ -113,8 +114,12 @@ public class GameUnit {
         nullUnit.setHealth(0);
         nullUnit.setMaxHealth(0);
         nullUnit.setUnitID(0);
-        nullUnit.setItems(new GameItem[nullUnit.getMAX_ITEMS()]);
+        nullUnit.setItems(new GameItem[nullUnit.getMaxItems()]);
         return nullUnit;
+    }
+
+    private int getMaxItems() {
+        return MAX_ITEMS;
     }
 
     public static GameUnit getDefaultUnit() {
@@ -131,49 +136,7 @@ public class GameUnit {
             150 // health (también se usará como maxHealth)
         );
     }
-    
 
-
-    // Getters and Setters
-
-    public int getArmor() { return armor; }
-    public void setArmor(int armor) { this.armor = armor; }
-
-    public int getDamage() { return damage; }
-    public void setDamage(int damage) { this.damage = damage; }
-
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
-    public String getFaction() { return faction; }
-    public void setFaction(String faction) { this.faction = faction; }
-
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-
-    public String getImage() { return image; }
-    public void setImage(String image) { this.image = image; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public int getPrice() { return price; }
-    public void setPrice(int price) { this.price = price; }
-
-    public int getSpeed() { return speed; }
-    public void setSpeed(int speed) { this.speed = speed; }
-
-    public int getHealth() { return health; }
-    public void setHealth(int health) { this.health = health; }
-
-    public int getMaxHealth() { return maxHealth; }
-    public void setMaxHealth(int maxHealth) { this.maxHealth = maxHealth; }
-
-    public int getUnitID() { return unitID; }
-    public void setUnitID(int unitID) { this.unitID = unitID; }
-
-    public GameItem[] getItems() { return items; }
-    public void setItems(GameItem[] items) { this.items = items; }
-
-    public int getMAX_ITEMS() { return MAX_ITEMS; }
+    public GameUnit() {
+    }  
 }

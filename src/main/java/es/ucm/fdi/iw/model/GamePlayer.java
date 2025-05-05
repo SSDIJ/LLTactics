@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import lombok.Data;
 
+@Data
 public class GamePlayer {
 
     public static final int MAX_ITEMS = 6;
@@ -88,14 +90,6 @@ public class GamePlayer {
         return false;
     }
 
-    public int getHealth() {
-        return health;
-    }
-
-    public int getStars() {
-        return stars;
-    }
-
     public boolean buyItem(GameItem item) {
 
         // FALTA COMPROBAR QUE ESTÁ EN LA TIENDA
@@ -134,19 +128,6 @@ public class GamePlayer {
             }
         }
         return false;
-    }
-
-
-    public Set<GameItem> getInventory() {
-        return inventory;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public List<GameUnit> getUnits() {
-        return units;
     }
 
     public void replaceUnit(GameUnit oldUnit, GameUnit newUnit) {

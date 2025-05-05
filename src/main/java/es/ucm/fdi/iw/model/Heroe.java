@@ -44,8 +44,4 @@ public class Heroe {
         this.precio = precio;
         this.probabilidad = probabilidad;
     }
-
-    public int getPrecio() {
-        return precio;
-    }
 }
