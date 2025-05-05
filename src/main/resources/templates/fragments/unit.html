@@ -23,7 +23,7 @@
             </div>
 
             <!-- Imagen de la unidad -->
-            <img th:if="${object.image != null}" th:src="@{${object.image}}" class="unit-game-img">
+            <img th:if="${object.image != null}" th:src="@{/user/{id}/heroe(id=${object.id})}" class="unit-game-img">
             <img th:if="${object.image == null}" th:src="@{''}" class="unit-game-img hidden">
 
 

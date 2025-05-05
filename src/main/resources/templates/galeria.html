@@ -27,7 +27,8 @@
             <!-- Título y héroes humanos -->
             <h2 id="humanos" class="w-100 text-center">Humanos</h2>
             <div id="div-humanos" th:each="heroe : ${humanos}">
-                <th:block th:replace="~{fragments/card :: carta(
+                <th:block th:replace="~{fragments/cardHeroe :: carta(
+                    ${heroe.idHeroe},
                     ${heroe.nombre}, 
                     ${heroe.imagen}, 
                     ${heroe.vida}, 
@@ -41,7 +42,8 @@
             <!-- Título y héroes trolls -->
             <h2 id="trolls" class="w-100 text-center">Trolls</h2>
             <div th:each="heroe : ${trolls}">
-                <th:block th:replace="~{fragments/card :: carta(
+                <th:block th:replace="~{fragments/cardHeroe :: carta(
+                    ${heroe.idHeroe},
                     ${heroe.nombre}, 
                     ${heroe.imagen}, 
                     ${heroe.vida}, 
@@ -55,7 +57,8 @@
             <!-- Título y héroes dragones -->
             <h2 id="dragones" class="w-100 text-center">Dragones</h2>
             <div th:each="heroe : ${dragones}">
-                <th:block th:replace="~{fragments/card :: carta(
+                <th:block th:replace="~{fragments/cardHeroe :: carta(
+                    ${heroe.idHeroe},
                     ${heroe.nombre}, 
                     ${heroe.imagen}, 
                     ${heroe.vida}, 
@@ -69,7 +72,8 @@
             <!-- Título y héroes no muertos -->
             <h2 id="noMuertos" class="w-100 text-center">No Muertos</h2>
             <div th:each="heroe : ${noMuertos}">
-                <th:block th:replace="~{fragments/card :: carta(
+                <th:block th:replace="~{fragments/cardHeroe :: carta(
+                    ${heroe.idHeroe},
                     ${heroe.nombre}, 
                     ${heroe.imagen}, 
                     ${heroe.vida}, 
@@ -83,7 +87,8 @@
             <!-- Título y héroes legendarios -->
             <h2 id="legendarios" class="w-100 text-center">Legendarios</h2>
             <div th:each="heroe : ${legendarios}">
-                <th:block th:replace="~{fragments/card :: carta(
+                <th:block th:replace="~{fragments/cardHeroe :: carta(
+                    ${heroe.idHeroe},
                     ${heroe.nombre}, 
                     ${heroe.imagen}, 
                     ${heroe.vida}, 
@@ -98,7 +103,8 @@
             <h2 id="objetos" class="w-100 text-center">Objetos</h2>
             <div th:each="objeto : ${objetos}">
                 <!-- EL ÚLTIMO PARÁMETRO ESTÁ PUESTO A MANO, SOLO PARA LA GALERÍA -->
-                <th:block th:replace="~{fragments/card :: carta(
+                <th:block th:replace="~{fragments/cardObjeto :: carta(
+                    ${objeto.idObjeto},
                     ${objeto.nombre}, 
                     ${objeto.imagen}, 
                     ${objeto.vida}, 

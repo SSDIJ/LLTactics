@@ -43,15 +43,15 @@
         
         <div class="profile-pic">
             <!-- Si la foto de perfil es null, mostramos la imagen por defecto -->
-            <div th:if="${usuarioBuscado.fotoPerfil == null}">
+            <div th:if="${usuarioBuscado.idfotoPerfil == null}">
                 <a href="#" data-bs-toggle="modal" data-bs-target="#editarFotoModal">
                     <img th:src="@{/img/profile_pics/default_profile.png}" alt="Foto de perfil" class="rounded-circle border border-3 border-dark shadow"/>
                 </a>
             </div>
             <!-- Si hay una foto de perfil, la mostramos -->
-            <div th:unless="${usuarioBuscado.fotoPerfil == null}">
+            <div th:unless="${usuarioBuscado.idfotoPerfil == null}">
                 <a href="#" data-bs-toggle="modal" data-bs-target="#editarFotoModal">
-                    <img th:src="${usuarioBuscado.fotoPerfil}" alt="Foto de perfil" class="rounded-circle border border-3 border-dark shadow"/>
+                    <img th:src="@{/user/{id}/pic(id=${usuarioBuscado.idfotoPerfil})}" alt="Foto de perfil" class="rounded-circle border border-3 border-dark shadow"/>
                 </a>
             </div>
         </div>

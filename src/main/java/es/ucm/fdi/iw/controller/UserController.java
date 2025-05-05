@@ -216,7 +216,7 @@ public class UserController {
 		target.setUsername(edited.getUsername());
 		target.setFirstName(edited.getFirstName());
 		target.setLastName(edited.getLastName());
-		target.setFotoPerfil(edited.getFotoPerfil());
+		target.setIdfotoPerfil(edited.getIdfotoPerfil());
 		target.setFaccionFavorita(edited.getFaccionFavorita());
 		target.setPartidasGanadas(edited.getPartidasGanadas());
 		target.setPartidasPerdidas(edited.getPartidasPerdidas());
@@ -224,7 +224,7 @@ public class UserController {
 		target.setIndiceRanking(edited.getIndiceRanking());
 		target.setRoles(edited.getRoles());
 		target.setEnabled(edited.isEnabled());
-		target.setFotoPerfil(edited.getFotoPerfil());
+		
 
 		// update user session so that changes are persisted in the session, too
 		if (requester.getId() == target.getId()) {
@@ -254,7 +254,21 @@ public class UserController {
 	 */
 	@GetMapping("{id}/pic")
 	public StreamingResponseBody getPic(@PathVariable long id) throws IOException {
-		File f = localData.getFile("user", "" + id + ".jpg");
+		File f = localData.getFile("user", "" + id + ".png");    //Obtiene la imagen del usuario de iwdata
+		InputStream in = new BufferedInputStream(f.exists() ? new FileInputStream(f) : UserController.defaultPic());
+		return os -> FileCopyUtils.copy(in, os);
+	}
+
+	@GetMapping("{id}/heroe")
+	public StreamingResponseBody getHeroePic(@PathVariable long id) throws IOException {
+		File f = localData.getFile("heroes", "" + id + ".png");     //Obtiene la imagen del heroe de iwdata
+		InputStream in = new BufferedInputStream(f.exists() ? new FileInputStream(f) : UserController.defaultPic());
+		return os -> FileCopyUtils.copy(in, os);
+	}
+
+	@GetMapping("{id}/objeto")
+	public StreamingResponseBody getObjetoPic(@PathVariable long id) throws IOException {
+		File f = localData.getFile("objetos", "" + id + ".png");     //Obtiene la imagen del heroe de iwdata
 		InputStream in = new BufferedInputStream(f.exists() ? new FileInputStream(f) : UserController.defaultPic());
 		return os -> FileCopyUtils.copy(in, os);
 	}
@@ -393,7 +407,7 @@ public class UserController {
 			HttpServletResponse response,
 			@ModelAttribute User newUser,
 			@RequestParam(required = false) String pass2,
-			@RequestParam(required = false) String profilePic, // Captura la foto de perfil seleccionada
+			@RequestParam(required = false) Long idprofilePic, // Captura la foto de perfil seleccionada
 			Model model, HttpSession session, HttpServletRequest request) throws IOException {
 
 		// Verifica si las contraseñas coinciden
@@ -429,7 +443,7 @@ public class UserController {
 		newUser.setPuntuacion(0);
 		newUser.setIndiceRanking(0);
 
-		newUser.setFotoPerfil(profilePic);
+		newUser.setIdfotoPerfil(idprofilePic);
 
 		// Guarda el nuevo usuario en la base de datos
 		entityManager.persist(newUser);
@@ -481,11 +495,11 @@ public class UserController {
 	}
 
 	@PostMapping("/updateFoto/{id}")
-	public String updateProfilePicture(@PathVariable Long id, @RequestParam(required = true) String selectedPic,
+	public String updateProfilePicture(@PathVariable Long id, @RequestParam(required = true) Long IdselectedPic,
 			Model model, RedirectAttributes redirectAttributes) {
 		// Buscar al usuario por su id
 		System.out.println("Buenaaas");
-		System.out.println("Cambiando foto por: " + selectedPic);
+		System.out.println("Cambiando foto por: " + IdselectedPic);
 		User user = userRepository.findById(id).orElse(null);
 
 		if (user == null) {
@@ -496,12 +510,12 @@ public class UserController {
 
 		// Mostrar por consola el ID y la nueva foto
 		System.out.println("ID del usuario: " + id);
-		System.out.println("Nueva imagen: " + selectedPic);
+		System.out.println("Nueva imagen: " + IdselectedPic);
 
 		// Verificar que la nueva foto de perfil no sea nula o vacía
-		if (selectedPic != null && !selectedPic.isEmpty()) {
+		if (IdselectedPic != null && !IdselectedPic.isEmpty()) {
 			// Actualizar la foto de perfil
-			user.setFotoPerfil(selectedPic);
+			user.setIdfotoPerfil(IdselectedPic);
 			// Guardar el usuario con la nueva foto de perfil en la base de datos
 			userRepository.save(user);
 			model.addAttribute("success", "Foto de perfil actualizada correctamente.");

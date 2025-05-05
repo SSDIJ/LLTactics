@@ -52,9 +52,9 @@ public class User implements Transferable<User.Transfer> {
     private String firstName;
     @Column(nullable = true)
     private String lastName;
-  @Setter
-@Column(nullable = true)
-private String fotoPerfil;
+    @Setter
+    @Column(nullable = true)
+    private long IdfotoPerfil;
 
 
     private boolean enabled;

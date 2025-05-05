@@ -5,8 +5,8 @@
     <link th:href="@{/css/styles.css}" rel="stylesheet">
 </head>
 <body>
-    <div th:fragment="carta(unit, imgSrc, health, defense, damage, attackSpeed, description, type)" class="card">
-        <img th:src="${imgSrc}" class="card-img-top" alt="Imagen de ${unit}">
+    <div th:fragment="carta(id, unit, imgSrc, health, defense, damage, attackSpeed, description, type)" class="card">
+        <img th:src="@{/user/{id}/objeto(id=${id})}" class="card-img-top" alt="Imagen de ${unit}">
         <div class="card-body">
             <h5 class="card-title" th:text="${unit}">Nombre de la unidad</h5>
 
