@@ -280,37 +280,60 @@ public class UserController {
 	 * @return
 	 * @throws IOException
 	 */
-	@PostMapping("{id}/pic")
-	@ResponseBody
-	public String setPic(@RequestParam("photo") MultipartFile photo, @PathVariable long id,
-			HttpServletResponse response, HttpSession session, Model model) throws IOException {
+	@Transactional
+@PostMapping("{id}/pic")
+public String setPic(@RequestParam("photo") MultipartFile photo, @PathVariable long id,
+        HttpServletResponse response, HttpSession session, Model model, RedirectAttributes redirectAttributes) throws IOException {
 
-		User target = entityManager.find(User.class, id);
-		model.addAttribute("user", target);
+    User target = entityManager.find(User.class, id);
+    model.addAttribute("user", target);
 
-		// check permissions
-		User requester = (User) session.getAttribute("u");
-		if (requester.getId() != target.getId() &&
-				!requester.hasRole(Role.ADMIN)) {
-			throw new NoEsTuPerfilException();
-		}
+    // check permissions
+    User requester = (User) session.getAttribute("u");
+    if (requester.getId() != target.getId() &&
+            !requester.hasRole(Role.ADMIN)) {
+        throw new NoEsTuPerfilException();
+    }
 
-		log.info("Updating photo for user {}", id);
-		File f = localData.getFile("user", "" + id + ".jpg");
-		if (photo.isEmpty()) {
-			log.info("failed to upload photo: emtpy file?");
-		} else {
-			try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(f))) {
-				byte[] bytes = photo.getBytes();
-				stream.write(bytes);
-				log.info("Uploaded photo for {} into {}!", id, f.getAbsolutePath());
-			} catch (Exception e) {
-				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				log.warn("Error uploading " + id + " ", e);
-			}
-		}
-		return "{\"status\":\"photo uploaded correctly\"}";
-	}
+    // Define the directory where the photos are stored
+    File userDir = localData.getFile("user", "");
+    if (!userDir.exists()) {
+        userDir.mkdirs(); // Create the directory if it doesn't exist
+    }
+
+    // Find the next available file name (e.g., 1.png, 2.png, ...)
+    int nextAvailableId = 1;
+    while (new File(userDir, nextAvailableId + ".png").exists()) {
+        nextAvailableId++;
+    }
+
+    // Define the file to save the photo
+    File f = new File(userDir, nextAvailableId + ".png");
+
+    if (photo.isEmpty()) {
+        log.info("Failed to upload photo: empty file?");
+        redirectAttributes.addFlashAttribute("error", "El archivo está vacío.");
+    } else {
+        try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(f))) {
+            byte[] bytes = photo.getBytes();
+            stream.write(bytes);
+            log.info("Uploaded photo for {} into {}!", id, f.getAbsolutePath());
+            redirectAttributes.addFlashAttribute("success", "Foto subida correctamente.");
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            log.warn("Error uploading " + id + " ", e);
+            redirectAttributes.addFlashAttribute("error", "Error al subir la foto.");
+        }
+    }
+
+	target.setIdfotoPerfil(nextAvailableId); // Update the user's profile picture ID
+	entityManager.persist(target); // Persist the changes to the database
+	entityManager.flush(); // Ensure the changes are saved
+	session.setAttribute("u", target);
+    
+    // Redirect to the user's profile page
+    return "redirect:/user/" + id;
+}
 
 	@GetMapping("error")
 	public String error(Model model, HttpSession session, HttpServletRequest request) {
@@ -513,7 +536,7 @@ public class UserController {
 		System.out.println("Nueva imagen: " + IdselectedPic);
 
 		// Verificar que la nueva foto de perfil no sea nula o vacía
-		if (IdselectedPic != null && !IdselectedPic.isEmpty()) {
+		if (IdselectedPic != null && IdselectedPic<0) {
 			// Actualizar la foto de perfil
 			user.setIdfotoPerfil(IdselectedPic);
 			// Guardar el usuario con la nueva foto de perfil en la base de datos
