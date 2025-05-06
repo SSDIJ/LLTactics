@@ -1189,6 +1189,15 @@ td img.icon {
 .chat-username {
     color: #feb47b;
     font-weight: bold;
+    cursor: pointer;
+}
+
+.chat-username:hover {
+    text-decoration: underline;
+}
+
+.btn-danger {
+    font-size: 0.8rem;
 }
 
 .chat-text {

@@ -614,17 +614,34 @@ function displayMessage(messageAction) {
     // Nombre de usuario
     const userElement = document.createElement("span");
     userElement.classList.add("chat-username");
-    userElement.textContent = `${messageAction.message.playerName}: `;
+    userElement.textContent = `${messageAction.message.playerName}:`;
+    userElement.style.cursor = "pointer"; // Cambia el cursor
 
     // Texto del mensaje
     const textElement = document.createElement("span");
     textElement.classList.add("chat-text");
-    textElement.textContent = message;
+    textElement.textContent = ` ${message}`;
+
+    // Botón de "Reportar" (inicialmente oculto)
+    const reportButton = document.createElement("button");
+    reportButton.classList.add("btn", "d-none");
+    reportButton.innerHTML = '<i class="bi bi-person-fill-slash"></i> Reportar usuario';
+    reportButton.addEventListener("click", () => {
+        console.log(`Reportar al usuario: ${messageAction.message.playerName}`);
+        // TODO: lógica de reporte
+    });
+
+    // Mostrar el botón de "Reportar" al hacer clic en el nombre de usuario
+    userElement.addEventListener("click", () => {
+        console.log("Debería aparecer el botón de reportar");
+        reportButton.classList.toggle("d-none"); // Alternar visibilidad del botón
+    });
 
     // Ensamblar el mensaje
     messageElement.appendChild(timeElement);
     messageElement.appendChild(userElement);
     messageElement.appendChild(textElement);
+    messageElement.appendChild(reportButton);
 
     console.log(chatBoxes)
     chatBoxes.forEach(chatBox => {
@@ -636,7 +653,10 @@ function displayMessage(messageAction) {
 
 
 // Configurar el botón de enviar y la tecla Enter
-chatSendBtn.addEventListener("click", sendMessage);
+chatSendBtn.addEventListener("click", () => {
+    const chatInput = document.querySelector(".chat-input"); // Asegúrate de seleccionar el input correcto
+    sendMessage(chatInput);
+});
 chatInputs.forEach(chatInput => {
     chatInput.addEventListener("keypress", function (event) {
         if (event.key === "Enter") {
