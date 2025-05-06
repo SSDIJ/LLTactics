@@ -32,6 +32,8 @@ const refreshShopBtns = document.querySelectorAll(".refresh-btn");
 const chatBoxes = document.querySelectorAll(".chat-box");
 const chatInputs = document.querySelectorAll(".chat-input");
 const chatSendBtn = document.getElementById("chat-send-btn");
+const reportBtn = document.querySelector(".report-btn");
+const reportBtnOffCanvas = document.querySelector(".report-btn-offCanvas");
 
 function toggleUnitsContainer() {
     if (playerUnitsContainer.classList.contains("no-click"))
@@ -622,28 +624,11 @@ function displayMessage(messageAction) {
     textElement.classList.add("chat-text");
     textElement.textContent = ` ${message}`;
 
-    // Botón de "Reportar" (inicialmente oculto)
-    const reportButton = document.createElement("button");
-    reportButton.classList.add("btn", "d-none");
-    reportButton.innerHTML = '<i class="bi bi-person-fill-slash"></i> Reportar usuario';
-    reportButton.addEventListener("click", () => {
-        console.log(`Reportar al usuario: ${messageAction.message.playerName}`);
-        // TODO: lógica de reporte
-    });
-
-    // Mostrar el botón de "Reportar" al hacer clic en el nombre de usuario
-    userElement.addEventListener("click", () => {
-        console.log("Debería aparecer el botón de reportar");
-        reportButton.classList.toggle("d-none"); // Alternar visibilidad del botón
-    });
-
     // Ensamblar el mensaje
     messageElement.appendChild(timeElement);
     messageElement.appendChild(userElement);
     messageElement.appendChild(textElement);
-    messageElement.appendChild(reportButton);
 
-    console.log(chatBoxes)
     chatBoxes.forEach(chatBox => {
         const clonedMessage = messageElement.cloneNode(true);
         chatBox.appendChild(clonedMessage);
@@ -651,9 +636,23 @@ function displayMessage(messageAction) {
     });
 }
 
+// Configurar el botón de reporte
+if (reportBtn) {
+    reportBtn.addEventListener("click", () => {
+        console.log("Reportar chat (pantalla completa)");
+        // TODO: Lógica de reportar chat
+    });
+}
+if (reportBtnOffCanvas) {
+    reportBtnOffCanvas.addEventListener("click", () => {
+        console.log("Reportar chat (offcanvas)");
+        // TODO: Lógica de reportar chat
+    });
+}
 
 // Configurar el botón de enviar y la tecla Enter
 chatSendBtn.addEventListener("click", () => {
+    console.log("click");
     const chatInput = document.querySelector(".chat-input"); // Asegúrate de seleccionar el input correcto
     sendMessage(chatInput);
 });

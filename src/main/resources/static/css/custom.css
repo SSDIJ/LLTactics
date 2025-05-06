@@ -1074,10 +1074,16 @@ td img.icon {
     border-radius: 10px;
 }
 
-.shop-unit:hover, .object-cell:hover, .refresh-btn:hover, .send-btn:hover {
+.shop-unit:hover, .object-cell:hover, .refresh-btn:hover, .send-btn:hover, .report-btn-offCanvas:hover {
     transform: scale(1.1);
     transition: 0.3s;
     box-shadow: inset 0px 0px 15px 5px rgba(255, 255, 255, 0.8);
+}
+
+.report-btn:hover {
+    transform: scale(1.1);
+    transition: 0.3s;
+    box-shadow: inset 0px 0px 15px 5px rgba(0, 0, 0, 0.322);
 }
 
 .attack-move {
@@ -1176,8 +1182,43 @@ td img.icon {
     border-radius: 10px 0 0 0;
     padding: 20px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-between;
+}
+
+.section-title {
+    margin: 0; /* Asegúrate de que no haya márgenes adicionales en el título */
+    font-size: 1.5rem; /* Ajusta el tamaño del título si es necesario */
+}
+
+.report-btn {
+    position: absolute;
+    top: -43px;
+    margin-left: 40px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: rgb(33, 37, 41);
+    border: 1px solid white;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.report-btn-offCanvas {
+    margin-left: 10px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: rgb(33, 37, 41);
+    border: 1px solid white;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
 .chat-message {
@@ -1235,7 +1276,6 @@ td img.icon {
     opacity: 0.7;
     margin-right: 10px;
 }
-
 
 .send-btn {
     width: 80px;
