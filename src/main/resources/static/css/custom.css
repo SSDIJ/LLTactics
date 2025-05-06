@@ -1407,6 +1407,16 @@ td img.icon {
     margin: 50px auto;
 }
 
+.sectionReportados{
+    width: 75%;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin: 50px auto;
+}
+
 .sectionFiltrarUsuarios{
     width: 75%;
     padding: 20px;

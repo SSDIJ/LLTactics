@@ -11,19 +11,9 @@
     <header th:replace="~{fragments/nav.html :: nav}"></header>
     <h1 class="adminTitle text-center">Gestión de Usuarios</h1><br>
     <div class="containerAdmin">
-        <div class="sectionBuscarUsuarios">
-            <h2>Usuarios</h2>
-            <p class="text-muted">
-                <strong> Username | Nombre completo | Roles </strong>
-            </p>
-            <li th:each="usuario : ${usuarios}">
-                <a th:href="@{/user/viewProfile(username=${usuario.username})}">
-                    <strong th:text="${usuario.username}"></strong>
-                </a> -
-                <span th:text="${usuario.firstName}"></span>
-                <span th:text="${usuario.lastName}"></span> -
-                <em th:text="${usuario.roles}"></em>
-            </li>
+        <div class ="sectionReportados">
+            <h2>Usuarios Reportados</h2>
+
         </div>
         <hr class="divider">
         <div class="sectionFiltrarUsuarios">
@@ -57,9 +47,10 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Nombre</th>
+                        <th>Username</th>
+                        <th>Nombre Completo</th>
                         <th>Roles</th>
-                        <th>Baneado</th>
+                        <th>Estado</th>
                         <th th:if="${mostrarBaneo}">Fecha Baneo</th>
                         <th th:if="${mostrarBaneo}">Razón Baneo</th>
                     </tr>
@@ -67,7 +58,12 @@
                 <tbody>
                     <tr th:each="usuario : ${usuarios}">
                         <td th:text="${usuario.id}"></td>
-                        <td th:text="${usuario.username}"></td>
+                        <td>
+                            <a th:href="@{/user/viewProfile(username=${usuario.username})}">
+                                <strong th:text="${usuario.username}"></strong>
+                            </a>
+                        </td>         
+                        <td th:text="${usuario.firstName} + ' ' + ${usuario.lastName}"></td>               
                         <td th:text="${usuario.roles}"></td>
                         <td th:text="${usuario.baneado}"></td>
                         <!-- Solo se muestra para baneados -->
