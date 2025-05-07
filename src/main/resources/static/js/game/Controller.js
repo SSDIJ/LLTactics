@@ -217,8 +217,6 @@ function updateUnits(player, isOpponent = false) {
 
             }
 
-            const unitTemp = unit;
-
             if (isOpponent) return;
 
             // Opción de eliminar la unidad
@@ -431,7 +429,7 @@ function updateShop() {
                         sendAction({
                             "actionType": "BUY_UNIT",
                             "playerName": player1.name,
-                            "actionDetails": {"unit": unidad}
+                            "actionDetails": JSON.stringify(unidad)
 
                         });
 
@@ -469,7 +467,7 @@ function updateShop() {
                         sendAction({
                             "actionType": "BUY_ITEM",
                             "playerName": player1.name,
-                            "actionDetails": {"item": item}
+                            "actionDetails": JSON.stringify(item)
 
                         });
 
@@ -490,7 +488,7 @@ refreshShopBtns.forEach((refreshShopBtn) => {
             sendAction({
                 "actionType": "REFRESH_SHOP",
                 "playerName": player1.name,
-                "actionDetails": {}
+                "actionDetails": ""
             });
 
             updatePlayerStats();
@@ -574,17 +572,10 @@ async function sendMessage(chatInput) {
     const message = chatInput.value.trim();
     if (message === "") return;
 
-    const now = new Date();
-
-    const messageObj = {
-        message: message,
-        timestamp: now
-    };
-
     const messageAction = {
         "actionType": "SEND_MESSAGE",
         "playerName": player1.name,
-        "actionDetails": messageObj
+        "actionDetails": message
     };
 
     sendAction(messageAction);
@@ -690,11 +681,7 @@ async function startTimer(timeLeft) {
 // --- WEBSOCKETS ---
 
 
-document.addEventListener("DOMContentLoaded", () => {
-    
-    // TODO: PREGUNTAR ESTO
-    const socketUrl = sessionStorage.getItem("socketUrl");
-    ws.initialize(socketUrl, ["/user/queue/game/" + roomId + "/actions"]);
+document.addEventListener("DOMContentLoaded", () => {   
     ws.receive = (action) => {
         processAction(action)
     };
@@ -703,7 +690,7 @@ document.addEventListener("DOMContentLoaded", () => {
         sendAction({
             actionType: "GENERAL",
             playerName: player1.name,
-            actionDetails: {}
+            actionDetails: ""
         });
     }, 100);
 });
@@ -724,13 +711,7 @@ function sendBattleEnd(player1Wins) {
 }
 
 function sendAction(action) {
-    const destination = `/app/game/action/${roomId}`;
-    if (!ws || !ws.stompClient) {
-        console.error("WebSocket client is not initialized.");
-        return;
-    }
-    ws.stompClient.send(destination, {}, JSON.stringify(action));
-
+    go("/game/action/" + roomId, "POST", action);
 }
 
 async function processAction(action) {

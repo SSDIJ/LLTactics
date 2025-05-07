@@ -18,6 +18,7 @@
                     name: "[[${_csrf.parameterName}]]",
                     value: "[[${_csrf.token}]]"
                 },
+                gameId: "[[${gameId}]]",
                 admin: "[[${u != null && u.hasRole('ADMIN')} ? true : false]]",
                 userId: +"[[${u != null} ? ${u.id} : -1]]"
             };
