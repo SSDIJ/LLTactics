@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,12 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import es.ucm.fdi.iw.model.Heroe;
-import es.ucm.fdi.iw.model.Jugador;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
@@ -97,7 +92,10 @@ public class AdminController {
 
     @GetMapping("/gestUsuarios")
     public String showUsuarios(Model model) {
+        List<User> reportados = userRepository.findByEstado(1);
         List<User> usuarios = userRepository.findAll();
+        model.addAttribute("reportados", reportados);
+
         model.addAttribute("usuarios", usuarios);
         return "gestUsuarios";
     }
@@ -183,49 +181,46 @@ public class AdminController {
 
         return "gestHeroes";
     }
-    // @GetMapping("/filtrar")
-    // public List<User> filtrarUsuarios(
-    // @RequestParam(required = false) String role,
-    // @RequestParam(required = false) Boolean baneado) {
 
-    // if (role != null && baneado != null) {
-    // return userRepository.findByRolesAndBaneado(role, baneado);
-    // } else if (role != null) {
-    // return userRepository.findByRoles(role);
-    // } else if (baneado != null) {
-    // return userRepository.findByBaneado(baneado);
-    // } else {
-    // return userRepository.findAll();
-    // }
-    // }
+        @PostMapping("/banearUsuario/{idUsuario}")
+        @Transactional
+        public String banearUsuario(@PathVariable("idUsuario") Long idUsuario, Model model) {
+            User usuario = userRepository.findById(idUsuario)
+                    .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+            usuario.setEstado(2);
+            userRepository.save(usuario);
+
+            return "redirect:/admin/gestUsuarios";
+        }
+
+        @PostMapping("/desbanearUsuario/{idUsuario}")
+        @Transactional
+        public String desbanearUsuario(@PathVariable("idUsuario") Long idUsuario, Model model) {
+            User usuario = userRepository.findById(idUsuario)
+                    .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+            usuario.setEstado(0);
+            userRepository.save(usuario);
+
+            return "redirect:/admin/gestUsuarios";
+        }
+
 
     @GetMapping("/filtrarUsuarios")
-    public String filtrarUsuarios(
-            @RequestParam(required = false) String role,
-            @RequestParam(required = false) Boolean baneado,
-            Model model) {
-
+    public String filtrarUsuarios(@RequestParam(required = false) String role, @RequestParam(required = false) Boolean baneado, Model model) {
         List<User> usuarios;
 
         if ("ADMIN".equals(role))   // Mostramos solo admins (ignoramos el checkbox baneado)
             usuarios = userRepository.findByRolesContaining("ADMIN");
 
         else if ("USER".equals(role)) {
-            if (baneado != null) {
-                // Filtrar usuarios que sean no admin (o que no tengan el rol ADMIN) y con el
-                // estado baneado indicado
-                usuarios = userRepository.findByBaneado(baneado)
-                        .stream()
-                        .filter(u -> !u.getRoles().contains("ADMIN"))
-                        .collect(Collectors.toList());
-            } else {
-                // Mostrar todos los usuarios que no sean admin
-                usuarios = userRepository.findAll()
-                        .stream()
-                        .filter(u -> !u.getRoles().contains("ADMIN"))
-                        .collect(Collectors.toList());
-            }
-        } else    // Si no se selecciona nada, mostramos todos
+            if (baneado != null) // Filtrar usuarios que sean no admin (o que no tengan el rol ADMIN) y con elestado baneado indicado
+                usuarios = userRepository.findByEstadoAndRolesNotContaining(2, "ADMIN");
+            else // Mostrar todos los usuarios que no sean admin
+                usuarios = userRepository.findByRolesNotContaining("ADMIN");
+            
+        } else // Si no se selecciona nada, mostramos todos
             usuarios = userRepository.findAll();
 
         boolean mostrarBaneo = (baneado != null);

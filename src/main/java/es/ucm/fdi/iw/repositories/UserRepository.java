@@ -20,9 +20,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByRolesContaining(String roles);
 
-    List<User> findByBaneadoAndRolesContaining(Boolean baneado, String roles);
+    List<User> findByRolesNotContaining(String roles);
 
-    List<User> findByBaneado(Boolean baneado);
+    List<User> findByEstadoAndRolesContaining(int estado, String roles);
+
+    List<User> findByEstadoAndRolesNotContaining(int estado, String roles);
+
+    List<User> findByEstado(int estado);
 
     // Encuentra todos los jugadores ordenados por partidas ganadas
     //List<User> findAllByOrderByPartidasGanadasDesc();

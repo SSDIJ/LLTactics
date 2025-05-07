@@ -302,7 +302,7 @@ public String setPic(@RequestParam("photo") MultipartFile photo, @PathVariable l
     }
 
     // Find the next available file name (e.g., 1.png, 2.png, ...)
-    int nextAvailableId = 1;
+    Long nextAvailableId = (long)1;
     while (new File(userDir, nextAvailableId + ".png").exists()) {
         nextAvailableId++;
     }

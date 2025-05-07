@@ -54,7 +54,7 @@ public class User implements Transferable<User.Transfer> {
     private String lastName;
     @Setter
     @Column(nullable = true)
-    private long IdfotoPerfil;
+    private Long IdfotoPerfil;
 
 
     private boolean enabled;
@@ -72,7 +72,7 @@ public class User implements Transferable<User.Transfer> {
     @Column(nullable = true)
     private int faccionFavorita;  // 0 = humanos, 1 = dragones, 2 = trolls, 3 = no muertos, 4 = criaturas 
     @Column(nullable = true)
-    private boolean baneado;
+    private int estado; // 0 = normal, 1 = reportado, 2 = baneado
     @Column(nullable = true)
    private String razonBaneo;
    @Column(nullable = true)
