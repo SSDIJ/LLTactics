@@ -360,7 +360,7 @@ public class GameController {
 
                 System.out.println("TODO PIOLA");
                 gameRoom.reduceLoserHealth();
-
+                //Aqui se elige al ganador de la partida
                 String winner = gameRoom.getWinner();
                 if (winner != null) {
 
