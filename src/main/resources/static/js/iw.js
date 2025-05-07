@@ -97,7 +97,9 @@ function go(url, method, data = {}, headers = false) {
         .then(response => {
             const r = response;
             if (r.ok) {
-                return r.json().then(json => Promise.resolve(json));
+                return r.text().then(text => Promise.resolve(
+                    text === "" ? {} : JSON.parse(text)
+                ));
             } else {
                 return r.text().then(text => Promise.reject({
                     url,
@@ -197,6 +199,10 @@ function postImage(img, endpoint, name, filename) {
 document.addEventListener("DOMContentLoaded", () => {
     if (iwconfig.socketUrl) {
         let subs = iwconfig.admin ? ["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
+        if (iwconfig.gameId) {
+            subs.push(`/topic/game/${iwconfig.gameId}`);
+        }
+
         ws.initialize(iwconfig.socketUrl, subs);
 
         let p = document.querySelector("#nav-unread");

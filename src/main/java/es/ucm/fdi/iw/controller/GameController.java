@@ -76,6 +76,13 @@ public class GameController {
 
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4);
 
+    @ModelAttribute
+    public void populateModel(HttpSession session, Model model) {        
+        for (String name : new String[] {"u", "url", "ws", "gameId"}) {
+            model.addAttribute(name, session.getAttribute(name));
+        }
+    }
+
     // Método para añadir una sala de juego activa (por ejemplo, desde el matchmaking)
     public void addActiveGame(String gameRoomId, String player1, String player2) {
 
@@ -89,7 +96,7 @@ public class GameController {
     
     @GetMapping("/game/{gameRoomId}")
     @Transactional
-    public String showGamePage(@PathVariable String gameRoomId, Model model, HttpServletResponse response, Principal principal) {
+    public String showGamePage(@PathVariable String gameRoomId, HttpSession session, Model model, HttpServletResponse response, Principal principal) {
         // Verificar si la sala de juego existe
         GameRoom gameRoom = activeGames.get(gameRoomId);
 
@@ -101,6 +108,7 @@ public class GameController {
         String currentUsername = principal.getName();
         // Cargar los datos de la sala de juego
         model.addAttribute("gameRoomId", gameRoom.getGameRoomId());
+        session.setAttribute("gameId", gameRoom.getGameRoomId());
 
         Map<String, GamePlayer> players = gameRoom.getPlayers();
         GamePlayer player1 = players.get(currentUsername);
@@ -119,7 +127,7 @@ public class GameController {
             playerObjects.add(item);
         }
         while (playerObjects.size() < GamePlayer.MAX_ITEMS) {
-            playerObjects.add(new GameItem(0, 0, "", "", null, "", 0, null, 0, 0));
+            playerObjects.add(new GameItem());
         }   
         model.addAttribute("playerObjects", playerObjects);
 
@@ -128,7 +136,7 @@ public class GameController {
             opponentObjects.add(item);
         }
         while (opponentObjects.size() < GamePlayer.MAX_ITEMS) {
-            opponentObjects.add(new GameItem(0, 0, "", "", null, "", 0, null, 0, 0));
+            opponentObjects.add(new GameItem());
         }   
         model.addAttribute("opponentObjects", opponentObjects);
 
@@ -164,8 +172,10 @@ public class GameController {
     }
 
     // Método para recibir la acción de un jugador
-    @MessageMapping("/game/action/{gameRoomId}")
-    public void handlePlayerAction(@DestinationVariable String gameRoomId, @Payload PlayerAction action, Principal principal) {
+    @PostMapping("/game/action/{gameRoomId}")
+    @Transactional
+    @ResponseBody
+    public void handlePlayerAction(@PathVariable String gameRoomId, @RequestBody PlayerAction action, Principal principal) {
         // Verificar si la sala de juego existe
         GameRoom gameRoom = activeGames.get(gameRoomId);
 
@@ -183,53 +193,51 @@ public class GameController {
             return;
         }
         */
-
-        processAction(gameRoom, action, playerName);
+        try {
+            processAction(gameRoom, action, playerName);
+        } catch(JsonProcessingException e) {
+            log.warn("Error al procesar la acción del jugador {}: {}", playerName, action, e);
+        }
 
         // Difundir la acción a los demás jugadores
         sendActionToPlayers(gameRoom, action, playerName);
     }
 
-    private void processAction(GameRoom gameRoom, PlayerAction action, String senderPlayer) {
+    private void processAction(GameRoom gameRoom, PlayerAction action, String senderPlayer) throws JsonProcessingException {
         ActionType type = action.getActionType();
-        Map<String, Object> details = (Map<String, Object>) action.getActionDetails();
+        String details = action.getActionDetails();
 
         ObjectMapper mapper = new ObjectMapper();
 
         switch (type) {
             case BUY_UNIT:
-                Map<String, Object> unitMap1 = (Map<String, Object>) details.get("unit");
-                unitMap1.remove("MAX_ITEMS");
-                GameUnit unitBought = mapper.convertValue(unitMap1, GameUnit.class);
+                GameUnit unitBought = mapper.readValue(details, GameUnit.class);
                 gameRoom.playerBuyUnit(senderPlayer, unitBought);
                 break;
             case SELL_UNIT:
-                Map<String, Object> unitMap2 = (Map<String, Object>) details.get("unit");
-                unitMap2.remove("MAX_ITEMS");
-                GameUnit unitSold = mapper.convertValue(unitMap2, GameUnit.class);
+                GameUnit unitSold = mapper.readValue(details, GameUnit.class);
                 gameRoom.playerSellUnit(senderPlayer, unitSold);
                 break;
             case BUY_ITEM:
-                GameItem itemBought = mapper.convertValue(details.get("item"), GameItem.class);
+                GameItem itemBought = mapper.readValue(details, GameItem.class);
                 gameRoom.playerBuyItem(senderPlayer, itemBought);
                 break;
             case SELL_ITEM:
-                GameItem itemSold = mapper.convertValue(details.get("item"), GameItem.class);
+                GameItem itemSold = mapper.readValue(details, GameItem.class);
                 gameRoom.playerSellItem(senderPlayer, itemSold);
                 break;
             case ASSIGN_ITEM_TO_UNIT:
-                int unitIndex = (int) details.get("unitIndex");
-                GameItem itemAssigned = mapper.convertValue(details.get("item"), GameItem.class);
-                gameRoom.playerAssignItemToUnit(senderPlayer, unitIndex, itemAssigned);
+                GameItem itemAssigned = mapper.readValue(details, GameItem.class);
+                gameRoom.playerAssignItemToUnit(senderPlayer, itemAssigned.getUnitUnitId(), itemAssigned);
                 break;
             case REFRESH_SHOP:
                 // Lógica para refrescar la tienda
                 break;
             case SEND_MESSAGE:
-                String message = (String) details.get("message");
-                String timestamp = (String) details.get("timestamp");
-                ZonedDateTime zdt = ZonedDateTime.parse(timestamp);
-                gameRoom.addMessage(senderPlayer, message, zdt);
+                gameRoom.addMessage(senderPlayer, details, ZonedDateTime.now());
+                break;
+            default:
+                log.warn("Acción desconocida: {}", action);
                 break;
         }        
 
@@ -242,29 +250,29 @@ public class GameController {
     private void sendActionToPlayers(GameRoom gameRoom, PlayerAction action, String senderPlayer) {
 
         ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> basePayload = new HashMap<>();
+        Map<String, Object> payload = new HashMap<>();
         GamePlayer senderDataUnits = gameRoom.getPlayers().get(senderPlayer);
         GamePlayer senderDataItems = gameRoom.getPlayers().get(senderPlayer);
         boolean sendAll = true;
     
         switch (action.getActionType()) {
             case BUY_UNIT:
-                basePayload.put("playerUnits", senderDataUnits.getUnits());
-                basePayload.put("updateUnits", true);
-                basePayload.put("updateItems", false);
+                payload.put("playerUnits", senderDataUnits.getUnits());
+                payload.put("updateUnits", true);
+                payload.put("updateItems", false);
                 break;
             case BUY_ITEM:
             case SELL_ITEM:
-                basePayload.put("updateUnits", false);
-                basePayload.put("updateItems", true);
-                basePayload.put("playerItems", new ArrayList<>(senderDataItems.getInventory()));
+                payload.put("updateUnits", false);
+                payload.put("updateItems", true);
+                payload.put("playerItems", new ArrayList<>(senderDataItems.getInventory()));
                 break;
             case SELL_UNIT:
             case ASSIGN_ITEM_TO_UNIT:
-                basePayload.put("playerUnits", senderDataUnits.getUnits());
-                basePayload.put("playerItems", new ArrayList<>(senderDataItems.getInventory()));
-                basePayload.put("updateUnits", true);
-                basePayload.put("updateItems", true);
+                payload.put("playerUnits", senderDataUnits.getUnits());
+                payload.put("playerItems", new ArrayList<>(senderDataItems.getInventory()));
+                payload.put("updateUnits", true);
+                payload.put("updateItems", true);
                 break;
             case GENERAL:
                 Map<String, GamePlayer> players = gameRoom.getPlayers();
@@ -276,75 +284,52 @@ public class GameController {
                     .map(Map.Entry::getValue)
                     .findFirst()
                     .orElse(null);
-                basePayload.put("player1Units", player1.getUnits());
-                basePayload.put("player1Items", new ArrayList<>(player1.getInventory()));
-                basePayload.put("player1Health", player1.getHealth());
-                basePayload.put("player1Stars", player1.getStars()) ;
-                basePayload.put("player2Units", player2.getUnits());
-                basePayload.put("player2Items", new ArrayList<>(player2.getInventory()));
-                basePayload.put("player2Health", player2.getHealth());
-                basePayload.put("player2Stars", player2.getStars());
-                basePayload.put("player1Name", player1.getName());
-                basePayload.put("player2Name", player2.getName());
-                basePayload.put("updateAll", true);
+                payload.put("player1Units", player1.getUnits());
+                payload.put("player1Items", new ArrayList<>(player1.getInventory()));
+                payload.put("player1Health", player1.getHealth());
+                payload.put("player1Stars", player1.getStars()) ;
+                payload.put("player2Units", player2.getUnits());
+                payload.put("player2Items", new ArrayList<>(player2.getInventory()));
+                payload.put("player2Health", player2.getHealth());
+                payload.put("player2Stars", player2.getStars());
+                payload.put("player1Name", player1.getName());
+                payload.put("player2Name", player2.getName());
+                payload.put("updateAll", true);
                 sendAll = false;
                 break;
             case WINNER:
-            Map<String, Object> winnerDetails = (Map<String, Object>) action.getActionDetails();
-                basePayload.put("isWinner", true);
-                basePayload.put("winner", winnerDetails.get("winner"));
+                String winnerDetails = action.getActionDetails();
+                payload.put("isWinner", true);
+                payload.put("winner", winnerDetails);
                 break;
             case REFRESH_SHOP:
                 sendAll = false;
                 break;
             case SEND_MESSAGE:
-                basePayload.put("newMessage", true);
+                payload.put("newMessage", true);
 
-                Map<String, Object> details = (Map<String, Object>) action.getActionDetails();
-                String message = (String) details.get("message");
-                String timestamp = (String) details.get("timestamp");
-
+                String message = action.getActionDetails();
+                
                 // Crear un mapa para el mensaje
                 Map<String, Object> messageMap = new HashMap<>();
                 messageMap.put("text", message);
-                messageMap.put("timestamp", timestamp);
+                messageMap.put("timestamp", ZonedDateTime.now());
                 messageMap.put("playerName", senderPlayer);
 
                 // Añadir el mensaje al payload
-                basePayload.put("message", messageMap);
+                payload.put("message", messageMap);
 
                 break;
-    
         }
     
-        if (!sendAll) {
-            Map<String, Object> payload = new HashMap<>(basePayload);
-            payload.put("isSender", true);
-            try {
-                String jsonPayload = mapper.writeValueAsString(payload);
-                messagingTemplate.convertAndSendToUser(
-                    senderPlayer,
-                    "/queue/game/" + gameRoom.getGameRoomId() + "/actions",
-                    jsonPayload
-                );
-            } catch (JsonProcessingException e) {
-                log.error("Error al convertir la acción a JSON: {}", action, e);
-            }
-        } else {
-            for (String player : gameRoom.getPlayers().keySet()) {
-                Map<String, Object> payload = new HashMap<>(basePayload);
-                payload.put("isSender", player.equals(senderPlayer));
-                try {
-                    String jsonPayload = mapper.writeValueAsString(payload);
-                    messagingTemplate.convertAndSendToUser(
-                        player,
-                        "/queue/game/" + gameRoom.getGameRoomId() + "/actions",
-                        jsonPayload
-                    );
-                } catch (JsonProcessingException e) {
-                    log.error("Error al convertir la acción a JSON: {}", action, e);
-                }
-            }
+        try {
+            String jsonPayload = mapper.writeValueAsString(payload);
+            messagingTemplate.convertAndSend(
+                "/topic/game/" + gameRoom.getGameRoomId(),
+                jsonPayload
+            );
+        } catch (JsonProcessingException e) {
+            log.error("Error al convertir la acción a JSON: {}", action, e);
         }
     }
 
@@ -379,13 +364,11 @@ public class GameController {
                 String winner = gameRoom.getWinner();
                 if (winner != null) {
 
-                    Map<String, Object> details = new HashMap<>();
-                    details.put("winner", winner);
 
                     PlayerAction winnerAction = new PlayerAction(
                         PlayerAction.ActionType.WINNER, 
                         "server", 
-                        details
+                        winner
                     );
 
                     sendActionToPlayers(gameRoom, winnerAction);

@@ -92,8 +92,8 @@ public class GameRoom {
         return this.players.get(playerName).sellItem(item);
     }
 
-    public boolean playerAssignItemToUnit(String playerName, int unitIndex, GameItem item) {
-        return this.players.get(playerName).assignItem(unitIndex, item);
+    public boolean playerAssignItemToUnit(String playerName, int unitUnitId, GameItem item) {
+        return this.players.get(playerName).assignItem(unitUnitId, item);
     }
 
     public Map<String, GamePlayer> getPlayers() {

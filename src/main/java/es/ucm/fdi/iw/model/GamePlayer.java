@@ -20,9 +20,9 @@ public class GamePlayer {
 
     public GamePlayer(String name) {
         this.name = name;
-        this.health = GameRoom.INITIAL_LIFE;
-        this.stars = GameRoom.INITIAL_STARS;
-        this.inventory = new HashSet<>();
+        health = GameRoom.INITIAL_LIFE;
+        stars = GameRoom.INITIAL_STARS;
+        inventory = new HashSet<>();
         resetUnits();
     }
 
@@ -104,7 +104,7 @@ public class GamePlayer {
 
     public boolean sellItem(GameItem soldItem) {
         for (GameItem item : new HashSet<>(inventory)) {
-            if (item.getId().equals(soldItem.getId())) {
+            if (item.getId() == soldItem.getId()) {
                 inventory.remove(item);
                 stars += item.getPrice();
                 System.out.println(name + " vendió un objeto: " + item.getName());
@@ -115,16 +115,20 @@ public class GamePlayer {
     }
 
     public void removeFromInventory(GameItem removedItem) {
-        inventory.removeIf(item -> item.getId().equals(removedItem.getId()));
+        inventory.removeIf(item -> item.getId() == removedItem.getId());
     }
 
-    public boolean assignItem(int unitIndex, GameItem item) {
+    public boolean assignItem(int unitUnitId, GameItem item) {
 
-        for (GameItem it : this.getInventory()) {
-            if (item.getId().equals(it.getId())) {
-                this.units.get(unitIndex).addItem(item);
-                this.removeFromInventory(item);
-                return true;
+        for (GameItem it : getInventory()) {
+            if (item.getId() == it.getId()) {
+                for(GameUnit u : units) {
+                    if (u.getUnitID() == unitUnitId) {
+                        u.addItem(item);
+                        removeFromInventory(item);
+                        return true;                    
+                    }
+                }
             }
         }
         return false;

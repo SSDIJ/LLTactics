@@ -3,10 +3,10 @@ package es.ucm.fdi.iw.model;
 public class PlayerAction {
     private ActionType actionType;  // Tipo de acción (BUY_UNIT, SELL_UNIT, etc.)
     private String playerName;      // Nombre del jugador que realiza la acción
-    private Object actionDetails;   // Detalles de la acción (puede ser un objeto, unidad, mensaje, etc.)
+    private String actionDetails;   // Detalles de la acción (puede ser un objeto, unidad, mensaje, etc.)
 
     // Constructor para inicializar los valores
-    public PlayerAction(ActionType actionType, String playerName, Object actionDetails) {
+    public PlayerAction(ActionType actionType, String playerName, String actionDetails) {
         this.actionType = actionType;
         this.playerName = playerName;
         this.actionDetails = actionDetails;
@@ -29,11 +29,11 @@ public class PlayerAction {
         this.playerName = playerName;
     }
 
-    public Object getActionDetails() {
+    public String getActionDetails() {
         return actionDetails;
     }
 
-    public void setActionDetails(Object actionDetails) {
+    public void setActionDetails(String actionDetails) {
         this.actionDetails = actionDetails;
     }
 
