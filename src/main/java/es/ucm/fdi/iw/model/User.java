@@ -63,6 +63,7 @@ public class User implements Transferable<User.Transfer> {
     
     @Column(nullable = true)
     private int indiceRanking;
+    @Getter @Setter
     @Column(nullable = true)
     private int puntuacion;
     @Column(nullable = true)

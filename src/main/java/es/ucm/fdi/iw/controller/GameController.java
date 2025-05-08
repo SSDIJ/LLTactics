@@ -24,6 +24,7 @@ import es.ucm.fdi.iw.model.PlayerAction;
 import es.ucm.fdi.iw.model.Topic;
 import es.ucm.fdi.iw.model.Unidad;
 import es.ucm.fdi.iw.model.User.Role;
+import es.ucm.fdi.iw.repositories.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.PlayerAction.ActionType;
@@ -63,6 +64,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import es.ucm.fdi.iw.controller.UserController;
+
 @Controller
 public class GameController {
 
@@ -71,19 +74,23 @@ public class GameController {
 
     private static final Logger log = LogManager.getLogger(GameController.class);
 
+    @Autowired
+    private UserController userController;
+
     // Almacenamos las salas de juego activas
     private static final Map<String, GameRoom> activeGames = new ConcurrentHashMap<>();
 
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4);
 
     @ModelAttribute
-    public void populateModel(HttpSession session, Model model) {        
-        for (String name : new String[] {"u", "url", "ws", "gameId"}) {
+    public void populateModel(HttpSession session, Model model) {
+        for (String name : new String[] { "u", "url", "ws", "gameId" }) {
             model.addAttribute(name, session.getAttribute(name));
         }
     }
 
-    // Método para añadir una sala de juego activa (por ejemplo, desde el matchmaking)
+    // Método para añadir una sala de juego activa (por ejemplo, desde el
+    // matchmaking)
     public void addActiveGame(String gameRoomId, String player1, String player2) {
 
         activeGames.put(gameRoomId, new GameRoom(gameRoomId, player1, player2));
@@ -93,16 +100,17 @@ public class GameController {
             startBuyPhase(gameRoomId);
         }, 5, TimeUnit.SECONDS);
     }
-    
+
     @GetMapping("/game/{gameRoomId}")
     @Transactional
-    public String showGamePage(@PathVariable String gameRoomId, HttpSession session, Model model, HttpServletResponse response, Principal principal) {
+    public String showGamePage(@PathVariable String gameRoomId, HttpSession session, Model model,
+            HttpServletResponse response, Principal principal) {
         // Verificar si la sala de juego existe
         GameRoom gameRoom = activeGames.get(gameRoomId);
 
         if (gameRoom == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return "errorPage";  // Devuelve una página de error si la sala no existe
+            return "errorPage"; // Devuelve una página de error si la sala no existe
         }
 
         String currentUsername = principal.getName();
@@ -114,11 +122,11 @@ public class GameController {
         GamePlayer player1 = players.get(currentUsername);
 
         GamePlayer player2 = players.entrySet().stream()
-            .filter(entry -> !entry.getKey().equals(currentUsername))
-            .map(Map.Entry::getValue)
-            .findFirst()
-            .orElse(null);
-        
+                .filter(entry -> !entry.getKey().equals(currentUsername))
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .orElse(null);
+
         model.addAttribute("player1", player1);
         model.addAttribute("player2", player2);
 
@@ -128,7 +136,7 @@ public class GameController {
         }
         while (playerObjects.size() < GamePlayer.MAX_ITEMS) {
             playerObjects.add(new GameItem());
-        }   
+        }
         model.addAttribute("playerObjects", playerObjects);
 
         List<GameItem> opponentObjects = new ArrayList<>();
@@ -137,13 +145,12 @@ public class GameController {
         }
         while (opponentObjects.size() < GamePlayer.MAX_ITEMS) {
             opponentObjects.add(new GameItem());
-        }   
+        }
         model.addAttribute("opponentObjects", opponentObjects);
 
-
         List<Objeto> shopItems = List.of(
-                new Objeto("/img/items/potion-red.png", "Poción Roja", 0, 0, 0, 0,"", 1),
-                new Objeto("/img/items/flame-sword.png", "Espada de Hierro", 0, 0, 0, 0,"", 5));
+                new Objeto("/img/items/potion-red.png", "Poción Roja", 0, 0, 0, 0, "", 1),
+                new Objeto("/img/items/flame-sword.png", "Espada de Hierro", 0, 0, 0, 0, "", 5));
         model.addAttribute("shopItems", shopItems);
 
         List<Heroe> shopUnits = List.of(
@@ -151,7 +158,6 @@ public class GameController {
                 new Heroe("Esqueleto", "/img/units/humans/5. Mago/white-mage.png", 0, 0, 0, 0, null, 0, 4, 0),
                 new Heroe("Mago", "/img/units/humans/5. Mago/white-mage.png", 0, 0, 0, 0, null, 0, 1, 0));
         model.addAttribute("shopUnits", shopUnits);
-
 
         List<GameUnit> unitsP1 = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
@@ -175,7 +181,8 @@ public class GameController {
     @PostMapping("/game/action/{gameRoomId}")
     @Transactional
     @ResponseBody
-    public void handlePlayerAction(@PathVariable String gameRoomId, @RequestBody PlayerAction action, Principal principal) {
+    public void handlePlayerAction(@PathVariable String gameRoomId, @RequestBody PlayerAction action,
+            Principal principal) {
         // Verificar si la sala de juego existe
         GameRoom gameRoom = activeGames.get(gameRoomId);
 
@@ -185,17 +192,18 @@ public class GameController {
         }
 
         String playerName = principal.getName();
-        
+
         /*
-        // Verificar si el jugador está en la partida
-        if (!gameRoom.getPlayers().contains(playerName)) {
-            log.error("El jugador {} no pertenece a la partida {}", playerName, gameRoomId);
-            return;
-        }
-        */
+         * // Verificar si el jugador está en la partida
+         * if (!gameRoom.getPlayers().contains(playerName)) {
+         * log.error("El jugador {} no pertenece a la partida {}", playerName,
+         * gameRoomId);
+         * return;
+         * }
+         */
         try {
             processAction(gameRoom, action, playerName);
-        } catch(JsonProcessingException e) {
+        } catch (JsonProcessingException e) {
             log.warn("Error al procesar la acción del jugador {}: {}", playerName, action, e);
         }
 
@@ -203,7 +211,8 @@ public class GameController {
         sendActionToPlayers(gameRoom, action, playerName);
     }
 
-    private void processAction(GameRoom gameRoom, PlayerAction action, String senderPlayer) throws JsonProcessingException {
+    private void processAction(GameRoom gameRoom, PlayerAction action, String senderPlayer)
+            throws JsonProcessingException {
         ActionType type = action.getActionType();
         String details = action.getActionDetails();
 
@@ -239,7 +248,7 @@ public class GameController {
             default:
                 log.warn("Acción desconocida: {}", action);
                 break;
-        }        
+        }
 
     }
 
@@ -254,7 +263,7 @@ public class GameController {
         GamePlayer senderDataUnits = gameRoom.getPlayers().get(senderPlayer);
         GamePlayer senderDataItems = gameRoom.getPlayers().get(senderPlayer);
         boolean sendAll = true;
-    
+
         switch (action.getActionType()) {
             case BUY_UNIT:
                 payload.put("playerUnits", senderDataUnits.getUnits());
@@ -278,16 +287,16 @@ public class GameController {
                 Map<String, GamePlayer> players = gameRoom.getPlayers();
 
                 GamePlayer player1 = gameRoom.getPlayers().get(senderPlayer);
-        
+
                 GamePlayer player2 = players.entrySet().stream()
-                    .filter(entry -> !entry.getKey().equals(senderPlayer))
-                    .map(Map.Entry::getValue)
-                    .findFirst()
-                    .orElse(null);
+                        .filter(entry -> !entry.getKey().equals(senderPlayer))
+                        .map(Map.Entry::getValue)
+                        .findFirst()
+                        .orElse(null);
                 payload.put("player1Units", player1.getUnits());
                 payload.put("player1Items", new ArrayList<>(player1.getInventory()));
                 payload.put("player1Health", player1.getHealth());
-                payload.put("player1Stars", player1.getStars()) ;
+                payload.put("player1Stars", player1.getStars());
                 payload.put("player2Units", player2.getUnits());
                 payload.put("player2Items", new ArrayList<>(player2.getInventory()));
                 payload.put("player2Health", player2.getHealth());
@@ -309,7 +318,7 @@ public class GameController {
                 payload.put("newMessage", true);
 
                 String message = action.getActionDetails();
-                
+
                 // Crear un mapa para el mensaje
                 Map<String, Object> messageMap = new HashMap<>();
                 messageMap.put("text", message);
@@ -321,35 +330,35 @@ public class GameController {
 
                 break;
         }
-    
+
         try {
             String jsonPayload = mapper.writeValueAsString(payload);
             messagingTemplate.convertAndSend(
-                "/topic/game/" + gameRoom.getGameRoomId(),
-                jsonPayload
-            );
+                    "/topic/game/" + gameRoom.getGameRoomId(),
+                    jsonPayload);
         } catch (JsonProcessingException e) {
             log.error("Error al convertir la acción a JSON: {}", action, e);
         }
     }
 
     @MessageMapping("/game/ready/{gameRoomId}")
-    public void handleEndBattle(@DestinationVariable String gameRoomId, @Payload GameBattleResult playerResult, Principal principal) {
+    public void handleEndBattle(@DestinationVariable String gameRoomId, @Payload GameBattleResult playerResult,
+            Principal principal) {
         GameRoom gameRoom = activeGames.get(gameRoomId);
         String playerName = principal.getName();
-    
+
         synchronized (gameRoom) {
 
-            
             gameRoom.setPlayerResult(playerName, playerResult);
             gameRoom.setPlayerReady(playerName);
-            
+
             if (gameRoom.bothPlayersReady()) {
                 GameBattleResult result1 = gameRoom.getPlayerResult(gameRoom.getPlayer1Name());
                 GameBattleResult result2 = gameRoom.getPlayerResult(gameRoom.getPlayer2Name());
 
-                if (result1 == null || result2 == null) return;
-                
+                if (result1 == null || result2 == null)
+                    return;
+
                 gameRoom.resetReadiness();
 
                 if (!gameRoom.resultsMatch(result1, result2)) {
@@ -360,25 +369,32 @@ public class GameController {
 
                 System.out.println("TODO PIOLA");
                 gameRoom.reduceLoserHealth();
-                //Aqui se elige al ganador de la partida
+                // Aqui se elige al ganador de la partida
                 String winner = gameRoom.getWinner();
                 if (winner != null) {
-
+                    // TOCAR A PARTIR DE AQUI
 
                     PlayerAction winnerAction = new PlayerAction(
-                        PlayerAction.ActionType.WINNER, 
-                        "server", 
-                        winner
-                    );
+                            PlayerAction.ActionType.WINNER,
+                            "server",
+                            winner);
 
                     sendActionToPlayers(gameRoom, winnerAction);
+                    String defeated = gameRoom.getPlayers().keySet().stream()
+                            .filter(p -> !p.equals(winner))
+                            .findFirst()
+                            .orElse(null);
+
+                    if (defeated != null) {
+                        userController.updateWinner(winner, defeated);
+                    }
                     return;
                 }
-    
+
                 // Validar si ya se está en fase de transición
                 if (!gameRoom.isInTransition()) {
                     gameRoom.setInTransition(true); // bandera para evitar duplicación
-    
+
                     scheduler.schedule(() -> {
                         startBuyPhase(gameRoomId);
                         gameRoom.setInTransition(false); // liberar transición
@@ -387,28 +403,26 @@ public class GameController {
             }
         }
     }
-    
 
     private void startBuyPhase(String gameRoomId) {
 
         GameRoom gameRoom = activeGames.get(gameRoomId);
-        if (gameRoom == null) return;
+        if (gameRoom == null)
+            return;
 
         log.info("Comienza fase de compra para sala {}", gameRoomId);
         gameRoom.setCurrentPhase(Phase.BUY);
 
         // Notificar a los jugadores que comienza la fase de compra
         Map<String, Object> payload = Map.of(
-            "phase", "buy",
-            "round", gameRoom.getCurrentRound(),
-            "time", GameRoom.SHOP_TIME
-        );
+                "phase", "buy",
+                "round", gameRoom.getCurrentRound(),
+                "time", GameRoom.SHOP_TIME);
         for (String player : gameRoom.getPlayers().keySet()) {
             messagingTemplate.convertAndSendToUser(
-                player,
-                "/queue/game/" + gameRoomId + "/actions",
-                payload
-            );
+                    player,
+                    "/queue/game/" + gameRoomId + "/actions",
+                    payload);
         }
 
         // Iniciar temporizador de 30 segundos
@@ -420,24 +434,23 @@ public class GameController {
 
     private void startBattlePhase(String gameRoomId) {
         GameRoom gameRoom = activeGames.get(gameRoomId);
-        if (gameRoom == null) return;
-    
+        if (gameRoom == null)
+            return;
+
         log.info("Comienza fase de batalla para sala {}", gameRoomId);
-    
+
         // Avanzamos la ronda
         gameRoom.nextRound();
-    
+
         // Notificar a los jugadores que deben esperar y luego confirmar
         Map<String, Object> payload = Map.of(
-            "phase", "battle",
-            "round", gameRoom.getCurrentRound()
-        );
+                "phase", "battle",
+                "round", gameRoom.getCurrentRound());
         for (String player : gameRoom.getPlayers().keySet()) {
             messagingTemplate.convertAndSendToUser(
-                player,
-                "/queue/game/" + gameRoomId + "/actions",
-                payload
-            );
+                    player,
+                    "/queue/game/" + gameRoomId + "/actions",
+                    payload);
         }
     }
 
@@ -445,39 +458,40 @@ public class GameController {
     private SimpMessagingTemplate messagingTemplate;
 
     /*
-    private void resolveBattle(GameRoom gameRoom) {
-        String loser = gameRoom.calculateBattleLoser(); // Método que debes definir según tu lógica
-        if (loser != null) {
-            GamePlayer losingPlayer = gameRoom.getPlayers().get(loser);
-            losingPlayer.reduceHealth(5);
-    
-            if (losingPlayer.getHealth() <= 0) {
-                endGame(gameRoom, loser);
-            }
-        }
-    }
-
-    private void endGame(GameRoom gameRoom, String loser) {
-        String winner = gameRoom.getPlayers().keySet().stream()
-            .filter(name -> !name.equals(loser))
-            .findFirst()
-            .orElse("Desconocido");
-    
-        Map<String, Object> payload = Map.of(
-            "gameOver", true,
-            "winner", winner
-        );
-    
-        for (String player : gameRoom.getPlayers().keySet()) {
-            messagingTemplate.convertAndSendToUser(
-                player,
-                "/queue/game/" + gameRoom.getGameRoomId() + "/actions",
-                payload
-            );
-        }
-    
-        activeGames.remove(gameRoom.getGameRoomId());
-    }
-    */
+     * private void resolveBattle(GameRoom gameRoom) {
+     * String loser = gameRoom.calculateBattleLoser(); // Método que debes definir
+     * según tu lógica
+     * if (loser != null) {
+     * GamePlayer losingPlayer = gameRoom.getPlayers().get(loser);
+     * losingPlayer.reduceHealth(5);
+     * 
+     * if (losingPlayer.getHealth() <= 0) {
+     * endGame(gameRoom, loser);
+     * }
+     * }
+     * }
+     * 
+     * private void endGame(GameRoom gameRoom, String loser) {
+     * String winner = gameRoom.getPlayers().keySet().stream()
+     * .filter(name -> !name.equals(loser))
+     * .findFirst()
+     * .orElse("Desconocido");
+     * 
+     * Map<String, Object> payload = Map.of(
+     * "gameOver", true,
+     * "winner", winner
+     * );
+     * 
+     * for (String player : gameRoom.getPlayers().keySet()) {
+     * messagingTemplate.convertAndSendToUser(
+     * player,
+     * "/queue/game/" + gameRoom.getGameRoomId() + "/actions",
+     * payload
+     * );
+     * }
+     * 
+     * activeGames.remove(gameRoom.getGameRoomId());
+     * }
+     */
 
 }

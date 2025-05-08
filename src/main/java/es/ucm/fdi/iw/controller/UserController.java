@@ -553,4 +553,39 @@ public String setPic(@RequestParam("photo") MultipartFile photo, @PathVariable l
 
 	}
 
+	/*
+	 * Esta funcion unicamente hace una actualizacion de la puntuacion.
+	 */
+	@ResponseBody
+	public String updateWinner(
+			@RequestParam String winnerUsername,
+			@RequestParam String defeatedUsername) {
+		
+		Optional<User> optionalWinnerUser = userRepository.findByUsername(winnerUsername);
+		Optional<User> optionalDefeatedUser = userRepository.findByUsername(defeatedUsername);
+	
+		User winnerUser = optionalWinnerUser.orElse(null);
+		User defeatedUser = optionalDefeatedUser.orElse(null);
+	
+		if (winnerUser == null || defeatedUser == null) {
+			System.out.println("Hubo problemas para encontrar a los jugadores");
+			return "error";
+		}
+	
+		int puntuacionWinner = winnerUser.getPuntuacion();
+		int puntuacionDefeated = defeatedUser.getPuntuacion();
+	
+		puntuacionWinner += 20;
+		//Esta funcion basicamente pone la puntuacion a 0 si es menor que 20
+		puntuacionDefeated = Math.max(puntuacionDefeated - 20, 0);
+	
+		winnerUser.setPuntuacion(puntuacionWinner);
+		defeatedUser.setPuntuacion(puntuacionDefeated);
+	
+		userRepository.save(winnerUser);
+		userRepository.save(defeatedUser);
+	
+		return "OK";
+	}
+	
 }

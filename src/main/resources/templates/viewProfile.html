@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LL Tactics</title>
 
     <!-- Estilos de Bootstrap y Font Awesome -->
@@ -11,167 +10,172 @@
     <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-
     <!-- Fragmentos de Thymeleaf -->
     <th:block th:replace="~{fragments/head :: header}" />
-
-    <link rel="stylesheet" href="styles.css"> <!-- Archivo CSS propio -->
 </head>
+
 <body class="profile-body">
 
     <header th:replace="~{fragments/nav.html :: nav}"></header>
 
     <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
     <div th:if="${usuarioBuscado != null}">
-    <div class="user">
-        <!-- TOP: BARRA DE BÚSQUEDA DE JUGADOR -->
-       
-    </div>
+        <div class="user">
+            <!-- TOP: BARRA DE BÚSQUEDA DE JUGADOR -->
 
-    <!-- MENSAJE DE USUARIO NO ENCONTRADO -->
-    <div th:if="${usuarioBuscado == null}" class="d-flex flex-column justify-content-center align-items-center text-center" style="height: 70vh;">
-        <h1 class="mb-4">El usuario no ha sido encontrado o no existe.</h1>
-        <button class="btn btn-secondary" onclick="window.history.back();">
-            <i class="bi bi-arrow-return-left me-2"></i> Volver
-          </button>
-    </div>
-    
-
-    <!-- PERFIL DEL USUARIO SI EXISTE -->
-    <div class="mid-user text-center" style="padding-top: 7vh;">
-        <h1 class="mt-5"><span th:text="${usuarioBuscado.username}"></span></h1>
-        
-        <div class="profile-pic">
-            <!-- Si la foto de perfil es null, mostramos la imagen por defecto -->
-            <div th:if="${usuarioBuscado.idfotoPerfil == null}">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#editarFotoModal">
-                    <img th:src="@{/img/profile_pics/default_profile.png}" alt="Foto de perfil" class="rounded-circle border border-3 border-dark shadow"/>
-                </a>
-            </div>
-            <!-- Si hay una foto de perfil, la mostramos -->
-            <div th:unless="${usuarioBuscado.idfotoPerfil == null}">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#editarFotoModal">
-                    <img th:src="@{/user/{id}/pic(id=${usuarioBuscado.idfotoPerfil})}" alt="Foto de perfil" class="rounded-circle border border-3 border-dark shadow"/>
-                </a>
-            </div>
         </div>
 
-        <!-- ESTADÍSTICAS DEL PERFIL -->
-        <div class="bot-user">
-            <div class="container mt-5">
-                <div class="row d-flex justify-content-between" style="flex-wrap: wrap;">
-                    <!-- Puntuación de Maestría -->
-                    <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
-                        <div class="card-body">
-                            <h5 class="card-title">Puntuación de Maestría</h5>
-                            <h3 class="text-primary">410</h3>
-                        </div>
-                    </div>
+        <!-- MENSAJE DE USUARIO NO ENCONTRADO -->
+        <div th:if="${usuarioBuscado == null}"
+            class="d-flex flex-column justify-content-center align-items-center text-center" style="height: 70vh;">
+            <h1 class="mb-4">El usuario no ha sido encontrado o no existe.</h1>
+            <button class="btn btn-secondary" onclick="window.history.back();">
+                <i class="bi bi-arrow-return-left me-2"></i> Volver
+            </button>
+        </div>
 
-                    <!-- Personaje más Jugado -->
-                    <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
-                        <div class="card-body">
-                            <h5 class="card-title">Personaje más Jugado</h5>
-                            <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero" class="img-fluid rounded-circle">
-                        </div>
-                    </div>
 
-                    <!-- Facción Favorita -->
-                    <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
-                        <div class="card-body">
-                            <h5 class="card-title">Facción Favorita</h5>
-                            <img src="/img/units/banners/humans.png" class="img-fluid">
-                        </div>
-                    </div>
+        <!-- PERFIL DEL USUARIO SI EXISTE -->
+        <div class="mid-user text-center" style="padding-top: 7vh;">
+            <h1 class="mt-5"><span th:text="${usuarioBuscado.username}"></span></h1>
 
-                    <!-- GRÁFICA DE VICTORIAS Y DERROTAS -->
-                    <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
-                        <div class="card-body">
-                            <div th:if="${usuarioBuscado.partidasGanadas == 0 and usuarioBuscado.partidasPerdidas == 0}">
-                            
-                                <p>El usuario no ha jugado ninguna partida.</p>
+            <div class="profile-pic">
+                <!-- Si la foto de perfil es null, mostramos la imagen por defecto -->
+                <div th:if="${usuarioBuscado.idfotoPerfil == null}">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#editarFotoModal">
+                        <img th:src="@{/img/profile_pics/default_profile.png}" alt="Foto de perfil"
+                            class="rounded-circle border border-3 border-dark shadow" />
+                    </a>
+                </div>
+                <!-- Si hay una foto de perfil, la mostramos -->
+                <div th:unless="${usuarioBuscado.idfotoPerfil == null}">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#editarFotoModal">
+                        <img th:src="@{/user/{id}/pic(id=${usuarioBuscado.idfotoPerfil})}" alt="Foto de perfil"
+                            class="rounded-circle border border-3 border-dark shadow" />
+                    </a>
+                </div>
+            </div>
+
+            <!-- ESTADÍSTICAS DEL PERFIL -->
+            <div class="bot-user">
+                <div class="container mt-5">
+                    <div class="row d-flex justify-content-between" style="flex-wrap: wrap;">
+                        <!-- Puntuación de Maestría -->
+                        <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
+                            <div class="card-body">
+                                <h5 class="card-title">Puntuación de Maestría</h5>
+                                <h3 class="text-primary">410</h3>
                             </div>
-                            <div th:unless="${usuarioBuscado.partidasGanadas == 0 and usuarioBuscado.partidasPerdidas == 0}">
-                            <h5 class="card-title">Ratio de Victorias</h5>
-                            <canvas id="winrateChart" width="200" height="200"></canvas>
+                        </div>
+
+                        <!-- Personaje más Jugado -->
+                        <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
+                            <div class="card-body">
+                                <h5 class="card-title">Personaje más Jugado</h5>
+                                <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero"
+                                    class="img-fluid rounded-circle">
+                            </div>
+                        </div>
+
+                        <!-- Facción Favorita -->
+                        <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
+                            <div class="card-body">
+                                <h5 class="card-title">Facción Favorita</h5>
+                                <img src="/img/units/banners/humans.png" class="img-fluid">
+                            </div>
+                        </div>
+
+                        <!-- GRÁFICA DE VICTORIAS Y DERROTAS -->
+                        <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
+                            <div class="card-body">
+                                <div
+                                    th:if="${usuarioBuscado.partidasGanadas == 0 and usuarioBuscado.partidasPerdidas == 0}">
+
+                                    <p>El usuario no ha jugado ninguna partida.</p>
+                                </div>
+                                <div
+                                    th:unless="${usuarioBuscado.partidasGanadas == 0 and usuarioBuscado.partidasPerdidas == 0}">
+                                    <h5 class="card-title">Ratio de Victorias</h5>
+                                    <canvas id="winrateChart" width="200" height="200"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            let victorias = /*[[${usuarioBuscado.partidasGanadas}]]*/ 1;
-            let derrotas = /*[[${usuarioBuscado.partidasPerdidas}]]*/ 1;
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                let victorias = /*[[${usuarioBuscado.partidasGanadas}]]*/ 1;
+                let derrotas = /*[[${usuarioBuscado.partidasPerdidas}]]*/ 1;
 
-            const canvas = document.getElementById("winrateChart");
-            if (!canvas) {
-                console.warn("Canvas 'winrateChart' no encontrado");
-                return;
-            }
+                const canvas = document.getElementById("winrateChart");
+                if (!canvas) {
+                    console.warn("Canvas 'winrateChart' no encontrado");
+                    return;
+                }
 
-            const ctx = canvas.getContext("2d");
+                const ctx = canvas.getContext("2d");
 
-            new Chart(ctx, {
-                type: "doughnut",
-                data: {
-                    labels: ["Victorias", "Derrotas"],
-                    datasets: [{
-                        label: "Victorias/Derrotas",
-                        data: [victorias, derrotas],
-                        backgroundColor: ["#6f42c1", "#0d6efd"],
-                        borderColor: "#343a40",
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: "bottom",
-                            labels: {
-                                color: "black",
-                                font: {
-                                    size: 14
+                new Chart(ctx, {
+                    type: "doughnut",
+                    data: {
+                        labels: ["Victorias", "Derrotas"],
+                        datasets: [{
+                            label: "Victorias/Derrotas",
+                            data: [victorias, derrotas],
+                            backgroundColor: ["#6f42c1", "#0d6efd"],
+                            borderColor: "#343a40",
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: "bottom",
+                                labels: {
+                                    color: "black",
+                                    font: {
+                                        size: 14
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        const value = context.raw;
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const porcentaje = ((value / total) * 100).toFixed(1);
+                                        return `${context.label}: ${value.toFixed(1)} (${porcentaje}%)`;
+                                    }
                                 }
                             }
                         },
-                        tooltip: {
-                            callbacks: {
-                                label: function (context) {
-                                    const value = context.raw;
-                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                    const porcentaje = ((value / total) * 100).toFixed(1);
-                                    return `${context.label}: ${value.toFixed(1)} (${porcentaje}%)`;
-                                }
-                            }
-                        }
-                    },
-                    cutout: "60%" // para un efecto más "donut"
-                }
-            });
-        });
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const previewImg = document.getElementById("preview-img");
-            const radioButtons = document.querySelectorAll('input[name="selectedPic"]');
-
-            radioButtons.forEach(radio => {
-                radio.addEventListener('change', function () {
-                    const imgElement = this.nextElementSibling;
-                    previewImg.src = imgElement.src;
+                        cutout: "60%" // para un efecto más "donut"
+                    }
                 });
             });
-        });
-    </script>
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const previewImg = document.getElementById("preview-img");
+                const radioButtons = document.querySelectorAll('input[name="selectedPic"]');
+
+                radioButtons.forEach(radio => {
+                    radio.addEventListener('change', function () {
+                        const imgElement = this.nextElementSibling;
+                        previewImg.src = imgElement.src;
+                    });
+                });
+            });
+        </script>
 
 </body>
+
 </html>
