@@ -2,6 +2,9 @@ package es.ucm.fdi.iw.controller;
 
 import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.LoginSuccessHandler;
+import es.ucm.fdi.iw.model.FaccionUsos;
+import es.ucm.fdi.iw.model.Heroe;
+import es.ucm.fdi.iw.model.HeroeUsos;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Transferable;
 import es.ucm.fdi.iw.model.User;
@@ -467,7 +470,23 @@ public String setPic(@RequestParam("photo") MultipartFile photo, @PathVariable l
 		newUser.setIndiceRanking(0);
 
 		newUser.setIdfotoPerfil(idprofilePic);
+		List<Heroe> heroes = entityManager
+    .createQuery("SELECT h FROM Heroe h", Heroe.class)
+    .getResultList();
 
+	for (Heroe heroe : heroes) {
+    HeroeUsos hu = new HeroeUsos();
+    hu.setJugador(newUser);
+    hu.setHeroe(heroe);
+    hu.setUsos(0);
+    entityManager.persist(hu);
+}
+FaccionUsos fu= new FaccionUsos();
+ for(int i=0; i<4 ; i++){
+	fu.setJugador(newUser);
+	fu.setFaccion(i);
+	fu.setUsos(0);
+ }
 		// Guarda el nuevo usuario en la base de datos
 		entityManager.persist(newUser);
 		entityManager.flush(); // Asegura que el usuario se ha guardado y tiene un id válido

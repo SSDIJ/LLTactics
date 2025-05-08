@@ -76,6 +76,10 @@ public class User implements Transferable<User.Transfer> {
     private int estado; // 0 = normal, 1 = reportado, 2 = baneado
     @Column(nullable = true)
    private String razonBaneo;
+   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HeroeUso> heroeUsos = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FaccionUsos> faccionUsos = new ArrayList<>();
    @Column(nullable = true)
    private LocalDateTime fechaBaneo;
    //Sin el oneToMany peta (relacion entre 2 clases distintas.)

@@ -29,4 +29,28 @@ public class HeroeUsos {
     private Heroe heroe;
 
     private int vecesUsado;
+
+     public User getJugador() {
+        return this.user;
+    }
+
+    public void setJugador(User jugador) {
+        this.user = jugador;
+    }
+
+    public Heroe getHeroe() {
+        return heroe;
+    }
+
+    public void setHeroe(Heroe heroe) {
+        this.heroe = heroe;
+    }
+
+    public int getUsos() {
+        return vecesUsado;
+    }
+
+    public void setUsos(int usos) {
+        this.vecesUsado = usos;
+    }
 }
