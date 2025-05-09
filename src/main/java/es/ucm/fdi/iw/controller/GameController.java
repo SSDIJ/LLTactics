@@ -222,6 +222,8 @@ public class GameController {
             case BUY_UNIT:
                 GameUnit unitBought = mapper.readValue(details, GameUnit.class);
                 gameRoom.playerBuyUnit(senderPlayer, unitBought);
+                //ACTUALIZAR AQUI TANTO EL USO DE FACCIONES COMO EL USO DE TROPAS
+                 userController.updateUserByUsername(senderPlayer, unitBought);
                 break;
             case SELL_UNIT:
                 GameUnit unitSold = mapper.readValue(details, GameUnit.class);

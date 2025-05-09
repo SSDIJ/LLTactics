@@ -3,6 +3,7 @@ package es.ucm.fdi.iw.controller;
 import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.LoginSuccessHandler;
 import es.ucm.fdi.iw.model.FaccionUsos;
+import es.ucm.fdi.iw.model.GameUnit;
 import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.HeroeUsos;
 import es.ucm.fdi.iw.model.Message;
@@ -10,6 +11,8 @@ import es.ucm.fdi.iw.model.Transferable;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
 import es.ucm.fdi.iw.repositories.UserRepository;
+import es.ucm.fdi.iw.repositories.HeroeUsosRepository;
+import es.ucm.fdi.iw.repositories.FaccionRepository;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -89,6 +92,16 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private HeroeController heroeController;
+
+	@Autowired
+	private HeroeUsosRepository heroeUsosRepository;
+
+	
+	@Autowired
+	private FaccionRepository faccionUsosRepository;
 
 	// Añadido para el inicio de sesion automatico tras registrarse
 	@Autowired
@@ -470,9 +483,7 @@ public String setPic(@RequestParam("photo") MultipartFile photo, @PathVariable l
 		newUser.setIndiceRanking(0);
 
 		newUser.setIdfotoPerfil(idprofilePic);
-		List<Heroe> heroes = entityManager
-    .createQuery("SELECT h FROM Heroe h", Heroe.class)
-    .getResultList();
+		List<Heroe> heroes = heroeController.getTodosLosHeroes();
 
 	for (Heroe heroe : heroes) {
     HeroeUsos hu = new HeroeUsos();
@@ -481,12 +492,16 @@ public String setPic(@RequestParam("photo") MultipartFile photo, @PathVariable l
     hu.setUsos(0);
     entityManager.persist(hu);
 }
-FaccionUsos fu= new FaccionUsos();
+
+
  for(int i=0; i<4 ; i++){
+	FaccionUsos fu= new FaccionUsos();
 	fu.setJugador(newUser);
 	fu.setFaccion(i);
 	fu.setUsos(0);
+	 entityManager.persist(fu);
  }
+ 
 		// Guarda el nuevo usuario en la base de datos
 		entityManager.persist(newUser);
 		entityManager.flush(); // Asegura que el usuario se ha guardado y tiene un id válido
@@ -606,5 +621,53 @@ FaccionUsos fu= new FaccionUsos();
 	
 		return "OK";
 	}
-	
+
+	public void updateUserByUsername(String username, GameUnit heroe) {
+    // Buscar al usuario por su nombre de usuario
+    User updatableUser = userRepository.findByUsername(username).orElse(null);
+    
+    // Verificar que el usuario exista
+    if (updatableUser == null) {
+        // Manejar el caso cuando el usuario no se encuentra
+        System.out.println("Usuario no encontrado.");
+        return; // O lanzar una excepción
+    }
+
+    // Buscar al héroe por su id
+    Heroe updatableHeroe = heroeController.findbyId(heroe.getId());
+    
+    // Verificar que el héroe exista
+    if (updatableHeroe == null) {
+        // Manejar el caso cuando el héroe no se encuentra
+        System.out.println("Héroe no encontrado.");
+        return; // O lanzar una excepción
+    }
+
+    // Buscar la instancia de HeroeUsos correspondiente al User y Heroe
+    HeroeUsos heroeUsos = heroeUsosRepository.findByUserAndHeroe(updatableUser, updatableHeroe);
+    
+    if (heroeUsos != null) {
+        // Si ya existe la relación, incrementar las veces jugadas
+        heroeUsos.setUsos(heroeUsos.getUsos() + 1);
+        // Guardar los cambios
+        heroeUsosRepository.save(heroeUsos);
+        System.out.println("Veces jugadas de " + updatableHeroe.getNombre() + " incrementadas en 1.");
+		
+
+    } else {
+        // Si no existe la relación, crear una nueva
+        HeroeUsos nuevoHeroeUso = new HeroeUsos();
+        nuevoHeroeUso.setJugador(updatableUser);
+        nuevoHeroeUso.setHeroe(updatableHeroe);
+        nuevoHeroeUso.setUsos(1); // Primer uso
+        heroeUsosRepository.save(nuevoHeroeUso);
+        System.out.println("Nuevo registro de uso de héroe creado.");
+    }
+		FaccionUsos usosFaccion= faccionUsosRepository.findByUserAndFaccion(updatableUser, updatableHeroe.getFaccion());
+		usosFaccion.setUsos(usosFaccion.getUsos()+1);
+		faccionUsosRepository.save(usosFaccion);
+
+}
+
+
 }

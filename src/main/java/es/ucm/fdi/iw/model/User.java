@@ -77,7 +77,7 @@ public class User implements Transferable<User.Transfer> {
     @Column(nullable = true)
    private String razonBaneo;
    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HeroeUso> heroeUsos = new ArrayList<>();
+    private List<HeroeUsos> heroeUsos = new ArrayList<>();
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FaccionUsos> faccionUsos = new ArrayList<>();
    @Column(nullable = true)
