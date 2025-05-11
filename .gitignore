@@ -33,5 +33,6 @@ build/
 .vscode/
 
 *.DS_Store
-logs/app.log
-logs/app.log
+
+### Logs file ###
+logs/

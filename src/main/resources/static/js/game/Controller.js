@@ -681,7 +681,13 @@ async function startTimer(timeLeft) {
 // --- WEBSOCKETS ---
 
 
-document.addEventListener("DOMContentLoaded", () => {   
+document.addEventListener("DOMContentLoaded", () => {  
+    
+    // TODO: ELIMINAR ESTO CUANDO FUNCIONE
+    const socketUrl = sessionStorage.getItem("socketUrl")
+    ws.initialize(socketUrl, ["/topic/game/" + roomId]);
+
+
     ws.receive = (action) => {
         processAction(action)
     };

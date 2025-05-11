@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -217,6 +218,7 @@ public class GameController {
         String details = action.getActionDetails();
 
         ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         switch (type) {
             case BUY_UNIT:
@@ -264,7 +266,6 @@ public class GameController {
         Map<String, Object> payload = new HashMap<>();
         GamePlayer senderDataUnits = gameRoom.getPlayers().get(senderPlayer);
         GamePlayer senderDataItems = gameRoom.getPlayers().get(senderPlayer);
-        boolean sendAll = true;
 
         switch (action.getActionType()) {
             case BUY_UNIT:
@@ -306,7 +307,7 @@ public class GameController {
                 payload.put("player1Name", player1.getName());
                 payload.put("player2Name", player2.getName());
                 payload.put("updateAll", true);
-                sendAll = false;
+
                 break;
             case WINNER:
                 String winnerDetails = action.getActionDetails();
@@ -314,7 +315,6 @@ public class GameController {
                 payload.put("winner", winnerDetails);
                 break;
             case REFRESH_SHOP:
-                sendAll = false;
                 break;
             case SEND_MESSAGE:
                 payload.put("newMessage", true);
@@ -420,12 +420,10 @@ public class GameController {
                 "phase", "buy",
                 "round", gameRoom.getCurrentRound(),
                 "time", GameRoom.SHOP_TIME);
-        for (String player : gameRoom.getPlayers().keySet()) {
-            messagingTemplate.convertAndSendToUser(
-                    player,
-                    "/queue/game/" + gameRoomId + "/actions",
-                    payload);
-        }
+        
+        messagingTemplate.convertAndSend(
+            "/topic/game/" + gameRoomId,
+            payload);
 
         // Iniciar temporizador de 30 segundos
         scheduler.schedule(() -> {
@@ -448,12 +446,10 @@ public class GameController {
         Map<String, Object> payload = Map.of(
                 "phase", "battle",
                 "round", gameRoom.getCurrentRound());
-        for (String player : gameRoom.getPlayers().keySet()) {
-            messagingTemplate.convertAndSendToUser(
-                    player,
-                    "/queue/game/" + gameRoomId + "/actions",
-                    payload);
-        }
+        messagingTemplate.convertAndSend(
+            "/topic/game/" + gameRoomId,
+            payload);
+
     }
 
     @Autowired
