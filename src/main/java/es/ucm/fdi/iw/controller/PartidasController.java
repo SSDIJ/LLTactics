@@ -32,12 +32,16 @@ public class PartidasController {
             model.addAttribute(name, session.getAttribute(name));
     }
 
-    @PostMapping("/creaPartida")
+    @PostMapping("/guardaPartida")
     @Transactional
-    public String creaPartida(
+    public String guardaPartida(
             @RequestParam long idJugador1,
             @RequestParam long idJugador2,
-            @RequestParam int duracionMin,
+            @RequestParam String estado,
+            @RequestParam String gameRoomId,
+            @RequestParam boolean enCurso,
+            @RequestParam int ganador,
+            @RequestParam int perdedor,
             Model model) {
 
         // Obtén los jugadores desde la base de datos
@@ -50,15 +54,28 @@ public class PartidasController {
             return "error"; // Redirige a una página de error
         }
 
-        // Crea una nueva partida
-        Partida nuevaPartida = new Partida(jugador1, jugador2, duracionMin);
+        // Busca la partida en la base de datos por gameRoomId
+        Partida partida = entityManager.createQuery(
+                "SELECT p FROM Partida p WHERE p.gameRoomId = :gameRoomId", Partida.class)
+                .setParameter("gameRoomId", gameRoomId)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
 
-        // Persiste la partida en la base de datos
-        entityManager.persist(nuevaPartida);
-
-        // Agrega un mensaje de éxito al modelo
-        model.addAttribute("success", "Partida creada exitosamente.");
-
+        if (partida != null) {
+            // Si la partida existe, actualiza sus datos
+            partida.setEstado(estado);
+            partida.setEnCurso(enCurso);
+            partida.setGanador(ganador);
+            partida.setPerdedor(perdedor);
+            entityManager.merge(partida); // Actualiza la partida en la base de datos
+            model.addAttribute("success", "Partida actualizada exitosamente.");
+        } else {
+            // Si la partida no existe, crea una nueva
+            Partida nuevaPartida = new Partida(jugador1, jugador2, estado, gameRoomId);
+            entityManager.persist(nuevaPartida); // Persiste la nueva partida en la base de datos
+            model.addAttribute("success", "Nueva partida creada exitosamente.");
+        }
         // Redirige a la página principal
         return "redirect:/admin/gestPartidas";
     }
