@@ -21,6 +21,8 @@ import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.Jugador;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Objeto;
+import es.ucm.fdi.iw.model.Partida;
+import es.ucm.fdi.iw.model.PartidaActiva;
 import es.ucm.fdi.iw.model.PlayerAction;
 import es.ucm.fdi.iw.model.Topic;
 import es.ucm.fdi.iw.model.Unidad;
@@ -79,7 +81,8 @@ public class GameController {
     private UserController userController;
 
     // Almacenamos las salas de juego activas
-    private static final Map<String, GameRoom> activeGames = new ConcurrentHashMap<>();
+    //OBSOLETO AHORA QUE SE GUARDA EN LA BD
+    //private static final Map<String, GameRoom> activeGames = new ConcurrentHashMap<>();
 
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4);
 
@@ -92,11 +95,48 @@ public class GameController {
 
     // Método para añadir una sala de juego activa (por ejemplo, desde el
     // matchmaking)
+    //ESTO EN VEZ DE AÑADIRLO AL MAP ACTIVEGAMES; DEBERIA HACER UN UPDATE A LA BD
+    @Transactional
     public void addActiveGame(String gameRoomId, String player1, String player2) {
+        System.out.println("INTENTANDO GUARDAR PARTIDA EN BD");
 
-        activeGames.put(gameRoomId, new GameRoom(gameRoomId, player1, player2));
+        //OBSOLETO AHORA QUE SE GUARDA EN LA BD
+        //activeGames.put(gameRoomId, new GameRoom(gameRoomId, player1, player2));
+
+        // Crear una nueva instancia de GameRoom
+        GameRoom gameRoom = new GameRoom(gameRoomId, player1, player2);
+
+        // Serializar el estado inicial de la partida a JSON
+        ObjectMapper objectMapper = new ObjectMapper();
+        String estadoPartidaJson = "";
+        
+        //Parsea el estado de la partida a JSON
+        try {
+            estadoPartidaJson = objectMapper.writeValueAsString(gameRoom);
+        } catch (JsonProcessingException e) {
+            log.error("Error al serializar el estado de la partida: {}", e.getMessage());
+            return;
+        } 
+
+        // Buscar los usuarios en la base de datos
+        User jugador1 = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+                .setParameter("username", player1)
+                .getSingleResult();
+
+        User jugador2 = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+                .setParameter("username", player2)
+                .getSingleResult();
+
+        // Crear una nueva instancia de Partida
+        PartidaActiva partida = new PartidaActiva(jugador1, jugador2, estadoPartidaJson, gameRoomId);
+
+        // Guardar la partida en la base de datos
+        entityManager.persist(partida);
+        System.out.println("Partida guardada en la base de datos!!!!!");
+        entityManager.flush();
 
         // Espera 5 segundos antes de empezar la partida
+        //ESTO SE REEMPLAZARá POR UN BOTON DE LISTO
         scheduler.schedule(() -> {
             startBuyPhase(gameRoomId);
         }, 5, TimeUnit.SECONDS);
@@ -107,13 +147,14 @@ public class GameController {
     public String showGamePage(@PathVariable String gameRoomId, HttpSession session, Model model,
             HttpServletResponse response, Principal principal) {
         // Verificar si la sala de juego existe
-        GameRoom gameRoom = activeGames.get(gameRoomId);
+        GameRoom gameRoom = getGameRoomFromDatabase(gameRoomId);
 
         if (gameRoom == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return "errorPage"; // Devuelve una página de error si la sala no existe
         }
 
+        System.out.println("\n\nMOSTRNADO PARTIDA\n\n");
         String currentUsername = principal.getName();
         // Cargar los datos de la sala de juego
         model.addAttribute("gameRoomId", gameRoom.getGameRoomId());
@@ -185,7 +226,7 @@ public class GameController {
     public void handlePlayerAction(@PathVariable String gameRoomId, @RequestBody PlayerAction action,
             Principal principal) {
         // Verificar si la sala de juego existe
-        GameRoom gameRoom = activeGames.get(gameRoomId);
+        GameRoom gameRoom = getGameRoomFromDatabase(gameRoomId);
 
         if (gameRoom == null) {
             log.error("Intento de acción en una sala no existente: {}", gameRoomId);
@@ -346,7 +387,7 @@ public class GameController {
     @MessageMapping("/game/ready/{gameRoomId}")
     public void handleEndBattle(@DestinationVariable String gameRoomId, @Payload GameBattleResult playerResult,
             Principal principal) {
-        GameRoom gameRoom = activeGames.get(gameRoomId);
+        GameRoom gameRoom = getGameRoomFromDatabase(gameRoomId);
         String playerName = principal.getName();
 
         synchronized (gameRoom) {
@@ -408,7 +449,7 @@ public class GameController {
 
     private void startBuyPhase(String gameRoomId) {
 
-        GameRoom gameRoom = activeGames.get(gameRoomId);
+        GameRoom gameRoom = getGameRoomFromDatabase(gameRoomId);
         if (gameRoom == null)
             return;
 
@@ -433,7 +474,7 @@ public class GameController {
     }
 
     private void startBattlePhase(String gameRoomId) {
-        GameRoom gameRoom = activeGames.get(gameRoomId);
+        GameRoom gameRoom = getGameRoomFromDatabase(gameRoomId);
         if (gameRoom == null)
             return;
 
@@ -492,4 +533,29 @@ public class GameController {
      * }
      */
 
+    //FUNCION QUE DEVUELVE LA PARTIDA DESDE LA BD
+    @Transactional
+    public GameRoom getGameRoomFromDatabase(String gameRoomId) {
+        try {
+            // Buscar la partida activa en la base de datos
+            PartidaActiva partida = entityManager.createQuery(
+                "SELECT p FROM PartidaActiva p WHERE p.gameRoomId = :gameRoomId", PartidaActiva.class)
+                .setParameter("gameRoomId", gameRoomId) // No convertir a Long, ya que gameRoomId es un String
+                .getSingleResult();
+
+            log.info("PARTIDA ENCONTRADAAAAAAAAAAAAAAAAA\n\n");
+            // Obtener el estado de la partida en formato JSON
+            String estadoPartidaJson = partida.getEstado();
+
+            // Deserializar el JSON a un objeto GameRoom
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // Ignorar propiedades desconocidas
+            GameRoom gameRoom = objectMapper.readValue(estadoPartidaJson, GameRoom.class);
+
+            return gameRoom;
+        } catch (Exception e) {
+            log.error("Error al obtener o deserializar el estado de la partida: {}", e.getMessage());
+            return null;
+        }
+    }
 }

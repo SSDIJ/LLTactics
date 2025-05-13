@@ -18,6 +18,11 @@ public class GamePlayer {
     private Set<GameItem> inventory;
     private List<GameUnit> units;
 
+    public GamePlayer() {
+        this.inventory =  new HashSet<>();
+        this.units = new ArrayList<>();
+    }
+
     public GamePlayer(String name) {
         this.name = name;
         health = GameRoom.INITIAL_LIFE;

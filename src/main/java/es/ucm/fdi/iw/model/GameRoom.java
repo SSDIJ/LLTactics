@@ -31,6 +31,16 @@ public class GameRoom {
     private String player2Name;
     private String lastRoundLoser;
 
+    // Constructor por defecto
+    public GameRoom() {
+        this.gameRoomId = "";
+        // Inicializar estructuras complejas para evitar null
+        this.players.put(player1Name, new GamePlayer(player1Name));
+        this.players.put(player2Name, new GamePlayer(player2Name));
+        this.messageHistory = new ArrayList<>();
+        this.playerResults = new HashMap<>();
+    }
+
     public GameRoom(String gameRoomId, String player1Name, String player2Name) {
         this.gameRoomId = gameRoomId;
 

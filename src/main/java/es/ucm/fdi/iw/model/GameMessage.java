@@ -9,6 +9,13 @@ public class GameMessage {
     private final ZonedDateTime timestamp;
     private final String formattedTime;
 
+    public GameMessage() {
+    this.playerName = null;
+    this.message = null;
+    this.timestamp = null;
+    this.formattedTime = null;
+}
+
     public GameMessage(String playerName, String message, ZonedDateTime timestamp) {
         this.playerName = playerName;
         this.message = message;
