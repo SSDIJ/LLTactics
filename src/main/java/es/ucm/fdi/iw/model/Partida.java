@@ -1,5 +1,6 @@
 package es.ucm.fdi.iw.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -37,6 +38,12 @@ public class Partida {
     private int ganador;   // 0 si no hay ganador, 1 si gana jugador1, 2 si gana jugador2
     @Column(nullable = true)
     private int perdedor;  // 0 si no hay perdedor, 1 si pierde jugador1, 2 si pierde jugador2
+
+    @Column(nullable = true)
+    private LocalDateTime inicio; 
+
+    @Column(nullable = true)
+    private LocalDateTime fin; 
 
   
     @Column(columnDefinition = "TEXT", nullable = true) // Permite almacenar JSON largos
