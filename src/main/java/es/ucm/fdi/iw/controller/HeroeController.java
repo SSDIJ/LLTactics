@@ -36,6 +36,10 @@ public class HeroeController {
         return findHeroe;
     }
    
+    public Heroe findByNombre(String nombre){
+        Heroe findHeroe= heroeRepository.findByNombre(nombre);
+        return findHeroe;
+    }
 
 
 }

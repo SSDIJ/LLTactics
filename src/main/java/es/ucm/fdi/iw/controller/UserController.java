@@ -634,7 +634,7 @@ public String setPic(@RequestParam("photo") MultipartFile photo, @PathVariable l
     }
 
     // Buscar al héroe por su id
-    Heroe updatableHeroe = heroeController.findbyId(heroe.getId());
+    Heroe updatableHeroe = heroeController.findByNombre(heroe.getName());
     
     // Verificar que el héroe exista
     if (updatableHeroe == null) {
@@ -655,7 +655,6 @@ public String setPic(@RequestParam("photo") MultipartFile photo, @PathVariable l
 		
 
     } else {
-        // Si no existe la relación, crear una nueva
         HeroeUsos nuevoHeroeUso = new HeroeUsos();
         nuevoHeroeUso.setJugador(updatableUser);
         nuevoHeroeUso.setHeroe(updatableHeroe);

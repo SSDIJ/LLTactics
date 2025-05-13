@@ -17,6 +17,8 @@ public interface HeroeRepository extends JpaRepository<Heroe, Long> {
     void deleteById(long id);
 
     Heroe findById(long id);
+
+    Heroe findByNombre(String nombre);
     
     List<Heroe> findAll();
 }
