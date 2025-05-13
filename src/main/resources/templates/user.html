@@ -127,22 +127,53 @@
                         </div>
                     </div>
 
-                    <!-- Personaje más Jugado -->
-                    <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
-                        <div class="card-body">
-                            <h5 class="card-title">Personaje más Jugado</h5>
-                            <img src="/img/units/humans/3. Caballero/knight.png" alt="Caballero"
-                                class="img-fluid rounded-circle">
-                        </div>
-                    </div>
+                  <!-- Personaje más Jugado -->
+                        <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
+                            <div class="card-body">
+                                <h5 class="card-title">Personaje más Jugado</h5>
 
-                    <!-- Facción Favorita -->
-                    <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
-                        <div class="card-body">
-                            <h5 class="card-title">Facción Favorita</h5>
-                            <img src="/img/units/banners/humans.png" class="img-fluid">
+                                <!-- Si la lista es vacía o el primer elemento es null, mostramos un mensaje -->
+                                <div
+                                    th:if="${user.masJugados.size() == 0 or user.masJugados.get(0) == null}">
+                                    <p>No hay datos</p>
+                                </div>
+
+                                <!-- Si hay un personaje, mostramos su imagen -->
+                                <div
+                                    th:unless="${user.masJugados.size() == 0 or user.masJugados.get(0) == null}">
+                                    <img th:src="@{${user.masJugados.get(0).imagen}}"
+                                        alt="Personaje más Jugado" class="img-fluid rounded-circle" />
+                                </div>
+                            </div>
                         </div>
-                    </div>
+
+                        <!-- Facción Favorita -->
+                        <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
+                            <div class="card-body">
+                                <h5 class="card-title">Facción Favorita</h5>
+
+                                <!-- Humanos -->
+                                <img th:if="${user.faccionFavorita == 0}" src="/img/units/banners/humans.png"
+                                    class="img-fluid" alt="Humanos">
+
+                                <!-- Dragones -->
+                                <img th:if="${user.faccionFavorita == 1}" src="/img/units/banners/dragons.png"
+                                    class="img-fluid" alt="Dragones">
+
+                                <!-- Trolls -->
+                                <img th:if="${user.faccionFavorita == 2}" src="/img/units/banners/trolls.png"
+                                    class="img-fluid" alt="Trolls">
+
+                                <!-- No Muertos -->
+                                <img th:if="${user.faccionFavorita == 3}" src="/img/units/banners/undead.png"
+                                    class="img-fluid" alt="No Muertos">
+
+                                <!-- Criaturas Legendarias -->
+                                <img th:if="${user.faccionFavorita == 4}"
+                                    src="/img/units/banners/legendaries.png" class="img-fluid"
+                                    alt="Criaturas Legendarias">
+                            </div>
+                        </div>
 
                     <!-- GRÁFICA DE VICTORIAS Y DERROTAS -->
                     <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">

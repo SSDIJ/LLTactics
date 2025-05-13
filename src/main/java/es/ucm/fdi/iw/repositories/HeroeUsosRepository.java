@@ -12,4 +12,5 @@ import java.util.List;
 @Repository
 public interface HeroeUsosRepository extends JpaRepository<HeroeUsos, Long> {
     HeroeUsos findByUserAndHeroe(User user, Heroe heroe);
+    List<HeroeUsos> findByUser(User user);
 }

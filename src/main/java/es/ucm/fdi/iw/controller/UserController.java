@@ -99,7 +99,6 @@ public class UserController {
 	@Autowired
 	private HeroeUsosRepository heroeUsosRepository;
 
-	
 	@Autowired
 	private FaccionRepository faccionUsosRepository;
 
@@ -155,35 +154,68 @@ public class UserController {
 	 * Landing page for a user profile
 	 */
 	@GetMapping("{id}")
-	public String index(@PathVariable long id, Model model, HttpSession session) {
-		User target = entityManager.find(User.class, id);
-		model.addAttribute("user", target);
+public String index(@PathVariable long id, Model model, HttpSession session) {
+    User target = entityManager.find(User.class, id);
+    model.addAttribute("user", target);
 
-		// Ruta relativa en la carpeta static
-		String rutaImgs = "/img/profile_pics"; // Sin "src/main/resources/static", ya que Spring Boot maneja los
-												// recursos estáticos
+    // === Cargar imágenes disponibles ===
+    String rutaImgs = "/img/profile_pics";
+    File folder = new File("src/main/resources/static/" + rutaImgs);
+    File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".png") || name.endsWith(".jpg"));
 
-		// Carpeta donde se encuentran las imágenes
-		File folder = new File("src/main/resources/static/" + rutaImgs);
-		File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".png") || name.endsWith(".jpg"));
+    List<String> availablePics = new ArrayList<>();
+    if (listOfFiles != null && listOfFiles.length > 0) {
+        for (File file : listOfFiles) {
+            availablePics.add(rutaImgs + "/" + file.getName());
+        }
+    } else {
+        availablePics.add("pepe"); // Imagen por defecto
+    }
+    model.addAttribute("availablePics", availablePics);
 
-		// Crear una lista con los nombres de las imágenes
-		List<String> availablePics = new ArrayList<>();
+    // === Obtener facciones y héroes usados del usuario ===
+    List<FaccionUsos> facciones = faccionUsosRepository.findByUser(target);
+    List<HeroeUsos> heroes = heroeUsosRepository.findByUser(target);
 
-		// Asegurarse de agregar las imágenes disponibles
-		if (listOfFiles != null && listOfFiles.length > 0) {
-			for (File file : listOfFiles) {
-				availablePics.add(rutaImgs + "/" + file.getName()); // Ruta relativa
-			}
-		} else {
-			availablePics.add("pepe"); // Imagen por defecto si no hay imágenes
-		}
+    // === Facción favorita ===
+    FaccionUsos faccionFavorita = null;
+    int maxUsosFaccion = -1;
 
-		// Agregar la lista de imágenes al modelo
-		model.addAttribute("availablePics", availablePics);
+    for (FaccionUsos faccion : facciones) {
+        if (faccion.getUsos() > maxUsosFaccion) {
+            maxUsosFaccion = faccion.getUsos();
+            faccionFavorita = faccion;
+        }
+    }
 
-		return "user"; // Retornar la vista
-	}
+    if (faccionFavorita != null) {
+        target.setFaccionFavorita(faccionFavorita.getFaccion());
+        model.addAttribute("faccionFavorita", faccionFavorita.getFaccion());
+    }
+
+    // === Héroe favorito ===
+    HeroeUsos heroeFavorito = null;
+    Heroe heroeMostrar = null;
+    int maxUsosHeroe = -1;
+
+    for (HeroeUsos heroeUso : heroes) {
+        if (heroeUso.getUsos() > maxUsosHeroe) {
+            maxUsosHeroe = heroeUso.getUsos();
+            heroeFavorito = heroeUso;
+        }
+    }
+
+    if (heroeFavorito != null) {
+        heroeMostrar = heroeFavorito.getHeroe();
+        List<Heroe> atributoHeroesMostrar = new ArrayList<>();
+        atributoHeroesMostrar.add(heroeMostrar);
+        target.setMasJugados(atributoHeroesMostrar);
+        model.addAttribute("heroeFavorito", heroeMostrar);
+    }
+
+    return "user";
+}
+
 
 	/**
 	 * Alter or create a user
@@ -240,7 +272,6 @@ public class UserController {
 		target.setIndiceRanking(edited.getIndiceRanking());
 		target.setRoles(edited.getRoles());
 		target.setEnabled(edited.isEnabled());
-		
 
 		// update user session so that changes are persisted in the session, too
 		if (requester.getId() == target.getId()) {
@@ -270,21 +301,21 @@ public class UserController {
 	 */
 	@GetMapping("{id}/pic")
 	public StreamingResponseBody getPic(@PathVariable long id) throws IOException {
-		File f = localData.getFile("user", "" + id + ".png");    //Obtiene la imagen del usuario de iwdata
+		File f = localData.getFile("user", "" + id + ".png"); // Obtiene la imagen del usuario de iwdata
 		InputStream in = new BufferedInputStream(f.exists() ? new FileInputStream(f) : UserController.defaultPic());
 		return os -> FileCopyUtils.copy(in, os);
 	}
 
 	@GetMapping("{id}/heroe")
 	public StreamingResponseBody getHeroePic(@PathVariable long id) throws IOException {
-		File f = localData.getFile("heroes", "" + id + ".png");     //Obtiene la imagen del heroe de iwdata
+		File f = localData.getFile("heroes", "" + id + ".png"); // Obtiene la imagen del heroe de iwdata
 		InputStream in = new BufferedInputStream(f.exists() ? new FileInputStream(f) : UserController.defaultPic());
 		return os -> FileCopyUtils.copy(in, os);
 	}
 
 	@GetMapping("{id}/objeto")
 	public StreamingResponseBody getObjetoPic(@PathVariable long id) throws IOException {
-		File f = localData.getFile("objetos", "" + id + ".png");     //Obtiene la imagen del heroe de iwdata
+		File f = localData.getFile("objetos", "" + id + ".png"); // Obtiene la imagen del heroe de iwdata
 		InputStream in = new BufferedInputStream(f.exists() ? new FileInputStream(f) : UserController.defaultPic());
 		return os -> FileCopyUtils.copy(in, os);
 	}
@@ -297,59 +328,60 @@ public class UserController {
 	 * @throws IOException
 	 */
 	@Transactional
-@PostMapping("{id}/pic")
-public String setPic(@RequestParam("photo") MultipartFile photo, @PathVariable long id,
-        HttpServletResponse response, HttpSession session, Model model, RedirectAttributes redirectAttributes) throws IOException {
+	@PostMapping("{id}/pic")
+	public String setPic(@RequestParam("photo") MultipartFile photo, @PathVariable long id,
+			HttpServletResponse response, HttpSession session, Model model, RedirectAttributes redirectAttributes)
+			throws IOException {
 
-    User target = entityManager.find(User.class, id);
-    model.addAttribute("user", target);
+		User target = entityManager.find(User.class, id);
+		model.addAttribute("user", target);
 
-    // check permissions
-    User requester = (User) session.getAttribute("u");
-    if (requester.getId() != target.getId() &&
-            !requester.hasRole(Role.ADMIN)) {
-        throw new NoEsTuPerfilException();
-    }
+		// check permissions
+		User requester = (User) session.getAttribute("u");
+		if (requester.getId() != target.getId() &&
+				!requester.hasRole(Role.ADMIN)) {
+			throw new NoEsTuPerfilException();
+		}
 
-    // Define the directory where the photos are stored
-    File userDir = localData.getFile("user", "");
-    if (!userDir.exists()) {
-        userDir.mkdirs(); // Create the directory if it doesn't exist
-    }
+		// Define the directory where the photos are stored
+		File userDir = localData.getFile("user", "");
+		if (!userDir.exists()) {
+			userDir.mkdirs(); // Create the directory if it doesn't exist
+		}
 
-    // Find the next available file name (e.g., 1.png, 2.png, ...)
-    Long nextAvailableId = (long)1;
-    while (new File(userDir, nextAvailableId + ".png").exists()) {
-        nextAvailableId++;
-    }
+		// Find the next available file name (e.g., 1.png, 2.png, ...)
+		Long nextAvailableId = (long) 1;
+		while (new File(userDir, nextAvailableId + ".png").exists()) {
+			nextAvailableId++;
+		}
 
-    // Define the file to save the photo
-    File f = new File(userDir, nextAvailableId + ".png");
+		// Define the file to save the photo
+		File f = new File(userDir, nextAvailableId + ".png");
 
-    if (photo.isEmpty()) {
-        log.info("Failed to upload photo: empty file?");
-        redirectAttributes.addFlashAttribute("error", "El archivo está vacío.");
-    } else {
-        try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(f))) {
-            byte[] bytes = photo.getBytes();
-            stream.write(bytes);
-            log.info("Uploaded photo for {} into {}!", id, f.getAbsolutePath());
-            redirectAttributes.addFlashAttribute("success", "Foto subida correctamente.");
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            log.warn("Error uploading " + id + " ", e);
-            redirectAttributes.addFlashAttribute("error", "Error al subir la foto.");
-        }
-    }
+		if (photo.isEmpty()) {
+			log.info("Failed to upload photo: empty file?");
+			redirectAttributes.addFlashAttribute("error", "El archivo está vacío.");
+		} else {
+			try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(f))) {
+				byte[] bytes = photo.getBytes();
+				stream.write(bytes);
+				log.info("Uploaded photo for {} into {}!", id, f.getAbsolutePath());
+				redirectAttributes.addFlashAttribute("success", "Foto subida correctamente.");
+			} catch (Exception e) {
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				log.warn("Error uploading " + id + " ", e);
+				redirectAttributes.addFlashAttribute("error", "Error al subir la foto.");
+			}
+		}
 
-	target.setIdfotoPerfil(nextAvailableId); // Update the user's profile picture ID
-	entityManager.persist(target); // Persist the changes to the database
-	entityManager.flush(); // Ensure the changes are saved
-	session.setAttribute("u", target);
-    
-    // Redirect to the user's profile page
-    return "redirect:/user/" + id;
-}
+		target.setIdfotoPerfil(nextAvailableId); // Update the user's profile picture ID
+		entityManager.persist(target); // Persist the changes to the database
+		entityManager.flush(); // Ensure the changes are saved
+		session.setAttribute("u", target);
+
+		// Redirect to the user's profile page
+		return "redirect:/user/" + id;
+	}
 
 	@GetMapping("error")
 	public String error(Model model, HttpSession session, HttpServletRequest request) {
@@ -485,23 +517,22 @@ public String setPic(@RequestParam("photo") MultipartFile photo, @PathVariable l
 		newUser.setIdfotoPerfil(idprofilePic);
 		List<Heroe> heroes = heroeController.getTodosLosHeroes();
 
-	for (Heroe heroe : heroes) {
-    HeroeUsos hu = new HeroeUsos();
-    hu.setJugador(newUser);
-    hu.setHeroe(heroe);
-    hu.setUsos(0);
-    entityManager.persist(hu);
-}
+		for (Heroe heroe : heroes) {
+			HeroeUsos hu = new HeroeUsos();
+			hu.setJugador(newUser);
+			hu.setHeroe(heroe);
+			hu.setUsos(0);
+			entityManager.persist(hu);
+		}
 
+		for (int i = 0; i < 4; i++) {
+			FaccionUsos fu = new FaccionUsos();
+			fu.setJugador(newUser);
+			fu.setFaccion(i);
+			fu.setUsos(0);
+			entityManager.persist(fu);
+		}
 
- for(int i=0; i<4 ; i++){
-	FaccionUsos fu= new FaccionUsos();
-	fu.setJugador(newUser);
-	fu.setFaccion(i);
-	fu.setUsos(0);
-	 entityManager.persist(fu);
- }
- 
 		// Guarda el nuevo usuario en la base de datos
 		entityManager.persist(newUser);
 		entityManager.flush(); // Asegura que el usuario se ha guardado y tiene un id válido
@@ -531,25 +562,73 @@ public String setPic(@RequestParam("photo") MultipartFile photo, @PathVariable l
 
 	// Funcion que sirve para cargar las fotos de la carpeta al abrir el user.html
 	@GetMapping("/viewProfile")
-	public String searchUser(@RequestParam("username") String username, Model model) {
-		log.info("Entrando en el método viewProfile");
+public String searchUser(@RequestParam("username") String username, Model model) {
+    log.info("Entrando en el método viewProfile");
 
-		Optional<User> usuarioBuscado = userRepository.findByUsernameContainingIgnoreCase(username);
+    Optional<User> usuarioBuscado = userRepository.findByUsernameContainingIgnoreCase(username);
 
-		if (usuarioBuscado.isEmpty()) {
-			log.info("El usuario no existe");
-			model.addAttribute("error", "Usuario no encontrado.");
-			model.addAttribute("usuarioBuscado", null);
-			return "viewProfile";
-		} else {
-			log.info("El usuario existe");
-			User user = usuarioBuscado.get();
-			log.info("El nombre del usuario es: {}", user.getUsername());
-			model.addAttribute("usuarioBuscado", user);
-		}
-		log.info("Salimos de la funcion viewProfile");
-		return "viewProfile";
-	}
+    if (usuarioBuscado.isEmpty()) {
+        log.info("El usuario no existe");
+        model.addAttribute("error", "Usuario no encontrado.");
+        model.addAttribute("usuarioBuscado", null);
+        return "viewProfile";
+    } else {
+        log.info("El usuario existe");
+        User user = usuarioBuscado.get();
+        
+
+        List<FaccionUsos> facciones = faccionUsosRepository.findByUser(user);
+        List<HeroeUsos> heroes = heroeUsosRepository.findByUser(user);
+
+
+        FaccionUsos faccionFavorita = null;
+        int maxUsosFaccion = -1;
+
+        for (FaccionUsos faccion : facciones) {
+            if (faccion.getUsos() > maxUsosFaccion) {
+                maxUsosFaccion = faccion.getUsos();
+                faccionFavorita = faccion;
+            }
+        }
+
+
+        if (faccionFavorita != null) {
+            user.setFaccionFavorita(faccionFavorita.getFaccion());
+            log.info("La facción favorita del usuario es: {}", faccionFavorita.getFaccion());
+        } else {
+            log.warn("No se encontraron facciones para este usuario.");
+        }
+
+
+        HeroeUsos heroeFavorito = null;
+		Heroe heroeMostrar=null;
+        int maxUsosHeroe = -1;
+
+        for (HeroeUsos heroeUso : heroes) {
+            if (heroeUso.getUsos() > maxUsosHeroe) {
+                maxUsosHeroe = heroeUso.getUsos();
+                heroeFavorito = heroeUso;
+            }
+        }
+
+        if (heroeFavorito != null) {
+			heroeMostrar=heroeFavorito.getHeroe();
+			List<Heroe> atributoHeroesMostrar= new ArrayList<>();
+			atributoHeroesMostrar.add(heroeMostrar);
+			user.setMasJugados(atributoHeroesMostrar);
+            log.info("El héroe favorito del usuario es: {}", heroeFavorito.getHeroe().getNombre());
+        } else {
+            log.warn("No se encontraron héroes para este usuario.");
+        }
+
+        log.info("El nombre del usuario es: {}", user.getUsername());
+        model.addAttribute("usuarioBuscado", user);
+    }
+
+    log.info("Salimos de la funcion viewProfile");
+    return "viewProfile";
+}
+
 
 	@PostMapping("/updateFoto/{id}")
 	public String updateProfilePicture(@PathVariable Long id, @RequestParam(required = true) Long IdselectedPic,
@@ -570,7 +649,7 @@ public String setPic(@RequestParam("photo") MultipartFile photo, @PathVariable l
 		System.out.println("Nueva imagen: " + IdselectedPic);
 
 		// Verificar que la nueva foto de perfil no sea nula o vacía
-		if (IdselectedPic != null && IdselectedPic<0) {
+		if (IdselectedPic != null && IdselectedPic < 0) {
 			// Actualizar la foto de perfil
 			user.setIdfotoPerfil(IdselectedPic);
 			// Guardar el usuario con la nueva foto de perfil en la base de datos
@@ -594,79 +673,78 @@ public String setPic(@RequestParam("photo") MultipartFile photo, @PathVariable l
 	public String updateWinner(
 			@RequestParam String winnerUsername,
 			@RequestParam String defeatedUsername) {
-		
+
 		Optional<User> optionalWinnerUser = userRepository.findByUsername(winnerUsername);
 		Optional<User> optionalDefeatedUser = userRepository.findByUsername(defeatedUsername);
-	
+
 		User winnerUser = optionalWinnerUser.orElse(null);
 		User defeatedUser = optionalDefeatedUser.orElse(null);
-	
+
 		if (winnerUser == null || defeatedUser == null) {
 			System.out.println("Hubo problemas para encontrar a los jugadores");
 			return "error";
 		}
-	
+
 		int puntuacionWinner = winnerUser.getPuntuacion();
 		int puntuacionDefeated = defeatedUser.getPuntuacion();
-	
+
 		puntuacionWinner += 20;
-		//Esta funcion basicamente pone la puntuacion a 0 si es menor que 20
+		// Esta funcion basicamente pone la puntuacion a 0 si es menor que 20
 		puntuacionDefeated = Math.max(puntuacionDefeated - 20, 0);
-	
+
 		winnerUser.setPuntuacion(puntuacionWinner);
 		defeatedUser.setPuntuacion(puntuacionDefeated);
-	
+
 		userRepository.save(winnerUser);
 		userRepository.save(defeatedUser);
-	
+
 		return "OK";
 	}
 
 	public void updateUserByUsername(String username, GameUnit heroe) {
-    // Buscar al usuario por su nombre de usuario
-    User updatableUser = userRepository.findByUsername(username).orElse(null);
-    
-    // Verificar que el usuario exista
-    if (updatableUser == null) {
-        // Manejar el caso cuando el usuario no se encuentra
-        System.out.println("Usuario no encontrado.");
-        return; // O lanzar una excepción
-    }
+		// Buscar al usuario por su nombre de usuario
+		User updatableUser = userRepository.findByUsername(username).orElse(null);
 
-    // Buscar al héroe por su id
-    Heroe updatableHeroe = heroeController.findByNombre(heroe.getName());
-    
-    // Verificar que el héroe exista
-    if (updatableHeroe == null) {
-        // Manejar el caso cuando el héroe no se encuentra
-        System.out.println("Héroe no encontrado.");
-        return; // O lanzar una excepción
-    }
+		// Verificar que el usuario exista
+		if (updatableUser == null) {
+			// Manejar el caso cuando el usuario no se encuentra
+			System.out.println("Usuario no encontrado.");
+			return; // O lanzar una excepción
+		}
 
-    // Buscar la instancia de HeroeUsos correspondiente al User y Heroe
-    HeroeUsos heroeUsos = heroeUsosRepository.findByUserAndHeroe(updatableUser, updatableHeroe);
-    
-    if (heroeUsos != null) {
-        // Si ya existe la relación, incrementar las veces jugadas
-        heroeUsos.setUsos(heroeUsos.getUsos() + 1);
-        // Guardar los cambios
-        heroeUsosRepository.save(heroeUsos);
-        System.out.println("Veces jugadas de " + updatableHeroe.getNombre() + " incrementadas en 1.");
-		
+		// Buscar al héroe por su id
+		Heroe updatableHeroe = heroeController.findByNombre(heroe.getName());
 
-    } else {
-        HeroeUsos nuevoHeroeUso = new HeroeUsos();
-        nuevoHeroeUso.setJugador(updatableUser);
-        nuevoHeroeUso.setHeroe(updatableHeroe);
-        nuevoHeroeUso.setUsos(1); // Primer uso
-        heroeUsosRepository.save(nuevoHeroeUso);
-        System.out.println("Nuevo registro de uso de héroe creado.");
-    }
-		FaccionUsos usosFaccion= faccionUsosRepository.findByUserAndFaccion(updatableUser, updatableHeroe.getFaccion());
-		usosFaccion.setUsos(usosFaccion.getUsos()+1);
+		// Verificar que el héroe exista
+		if (updatableHeroe == null) {
+			// Manejar el caso cuando el héroe no se encuentra
+			System.out.println("Héroe no encontrado.");
+			return; // O lanzar una excepción
+		}
+
+		// Buscar la instancia de HeroeUsos correspondiente al User y Heroe
+		HeroeUsos heroeUsos = heroeUsosRepository.findByUserAndHeroe(updatableUser, updatableHeroe);
+
+		if (heroeUsos != null) {
+			// Si ya existe la relación, incrementar las veces jugadas
+			heroeUsos.setUsos(heroeUsos.getUsos() + 1);
+			// Guardar los cambios
+			heroeUsosRepository.save(heroeUsos);
+			System.out.println("Veces jugadas de " + updatableHeroe.getNombre() + " incrementadas en 1.");
+
+		} else {
+			HeroeUsos nuevoHeroeUso = new HeroeUsos();
+			nuevoHeroeUso.setJugador(updatableUser);
+			nuevoHeroeUso.setHeroe(updatableHeroe);
+			nuevoHeroeUso.setUsos(1); // Primer uso
+			heroeUsosRepository.save(nuevoHeroeUso);
+			System.out.println("Nuevo registro de uso de héroe creado.");
+		}
+		FaccionUsos usosFaccion = faccionUsosRepository.findByUserAndFaccion(updatableUser,
+				updatableHeroe.getFaccion());
+		usosFaccion.setUsos(usosFaccion.getUsos() + 1);
 		faccionUsosRepository.save(usosFaccion);
 
-}
-
+	}
 
 }
