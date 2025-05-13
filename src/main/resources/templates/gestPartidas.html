@@ -69,25 +69,19 @@
     <div class="degradado"></div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 
-    <script >
-
-        function filtrarPartidas(estado) {
-            // Obtener el contenedor de las partidas
-            const accordionPartidas = document.getElementById('accordionPartidas');
-            // Limpiar el contenedor
-            accordionPartidas.innerHTML = '';
-
-            // Filtrar las partidas según el estado
-            const partidasFiltradas = /*[[${partidas}]]*/ [];
-
-            partidasFiltradas.forEach(partida => {
-                if (estado === 'enCurso' && partida.enCurso) {
-                    agregarPartida(accordionPartidas, partida);
-                } else if (estado === 'terminadas' && !partida.enCurso) {
-                    agregarPartida(accordionPartidas, partida);
-                }
-            });
-        }
+   <script>
+      function filtrarPartidas(filtro) {
+        const items = document.querySelectorAll('#accordionPartidas .accordion-item');
+        items.forEach(item => {
+          if (filtro === 'all') {
+            item.style.display = '';
+          } else {
+            const enCurso = item.getAttribute('data-en-curso') === 'true';
+            const mostrar = (filtro === 'enCurso' && enCurso) || (filtro === 'terminadas' && !enCurso);
+            item.style.display = mostrar ? '' : 'none';
+          }
+        });
+      }
     </script>
 
 </body>
