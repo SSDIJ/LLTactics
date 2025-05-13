@@ -25,7 +25,7 @@ INSERT INTO "PUBLIC"."IWUSER" VALUES
 
 
 INSERT INTO "PUBLIC"."PARTIDA" VALUES
-(0, 1, 1, 2, null);
+(FALSE, 1, 2, 1, 1, 2, '', '');
 
 -- start id numbering from a value that is larger than any assigned above
 ALTER SEQUENCE "PUBLIC"."GEN" RESTART WITH 1024;

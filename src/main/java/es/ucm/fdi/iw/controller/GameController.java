@@ -22,7 +22,7 @@ import es.ucm.fdi.iw.model.Jugador;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Objeto;
 import es.ucm.fdi.iw.model.Partida;
-import es.ucm.fdi.iw.model.PartidaActiva;
+//import es.ucm.fdi.iw.model.PartidaActiva;
 import es.ucm.fdi.iw.model.PlayerAction;
 import es.ucm.fdi.iw.model.Topic;
 import es.ucm.fdi.iw.model.Unidad;
@@ -128,7 +128,7 @@ public class GameController {
                 .getSingleResult();
 
         // Crear una nueva instancia de Partida
-        PartidaActiva partida = new PartidaActiva(jugador1, jugador2, estadoPartidaJson, gameRoomId);
+        Partida partida = new Partida(jugador1, jugador2, estadoPartidaJson, gameRoomId);
 
         // Guardar la partida en la base de datos
         entityManager.persist(partida);
@@ -140,6 +140,7 @@ public class GameController {
         scheduler.schedule(() -> {
             startBuyPhase(gameRoomId);
         }, 5, TimeUnit.SECONDS);
+        
     }
 
     @GetMapping("/game/{gameRoomId}")
@@ -216,6 +217,9 @@ public class GameController {
         List<GameMessage> mensajes = gameRoom.getMessageHistory();
         model.addAttribute("mensajes", mensajes);
 
+        // Actualizar el estado de la partida en la base de datos
+        updateGameRoomInDatabase(gameRoomId, gameRoom);
+
         return "game";
     }
 
@@ -248,7 +252,8 @@ public class GameController {
         } catch (JsonProcessingException e) {
             log.warn("Error al procesar la acción del jugador {}: {}", playerName, action, e);
         }
-
+        // Actualizar el estado de la partida en la base de datos
+        updateGameRoomInDatabase(gameRoomId, gameRoom);
         // Difundir la acción a los demás jugadores
         sendActionToPlayers(gameRoom, action, playerName);
     }
@@ -445,6 +450,8 @@ public class GameController {
                 }
             }
         }
+        // Actualizar el estado de la partida en la base de datos
+        updateGameRoomInDatabase(gameRoomId, gameRoom);
     }
 
     private void startBuyPhase(String gameRoomId) {
@@ -471,6 +478,8 @@ public class GameController {
             log.info("Fase de compra terminó automáticamente para sala {}", gameRoomId);
             startBattlePhase(gameRoomId);
         }, GameRoom.SHOP_TIME + 1, TimeUnit.SECONDS);
+        // Actualizar el estado de la partida en la base de datos
+        updateGameRoomInDatabase(gameRoomId, gameRoom);
     }
 
     private void startBattlePhase(String gameRoomId) {
@@ -491,6 +500,8 @@ public class GameController {
             "/topic/game/" + gameRoomId,
             payload);
 
+        // Actualizar el estado de la partida en la base de datos
+        updateGameRoomInDatabase(gameRoomId, gameRoom);
     }
 
     @Autowired
@@ -538,8 +549,8 @@ public class GameController {
     public GameRoom getGameRoomFromDatabase(String gameRoomId) {
         try {
             // Buscar la partida activa en la base de datos
-            PartidaActiva partida = entityManager.createQuery(
-                "SELECT p FROM PartidaActiva p WHERE p.gameRoomId = :gameRoomId", PartidaActiva.class)
+            Partida partida = entityManager.createQuery(
+                "SELECT p FROM Partida p WHERE p.gameRoomId = :gameRoomId", Partida.class)
                 .setParameter("gameRoomId", gameRoomId) // No convertir a Long, ya que gameRoomId es un String
                 .getSingleResult();
 
@@ -556,6 +567,30 @@ public class GameController {
         } catch (Exception e) {
             log.error("Error al obtener o deserializar el estado de la partida: {}", e.getMessage());
             return null;
+        }
+    }
+
+    //FUNCION QUE ACTUALIZA LA PARTIDA EN LA BD
+    @Transactional
+    public void updateGameRoomInDatabase(String gameRoomId, GameRoom gameRoom) {
+        try {
+            // Serializar el objeto GameRoom a JSON
+            ObjectMapper objectMapper = new ObjectMapper();
+            String estadoPartidaJson = objectMapper.writeValueAsString(gameRoom);
+
+            // Buscar la partida activa en la base de datos
+            Partida partida = entityManager.createQuery(
+                    "SELECT p FROM Partida p WHERE p.gameRoomId = :gameRoomId", Partida.class)
+                    .setParameter("gameRoomId", gameRoomId)
+                    .getSingleResult();
+
+            // Actualizar el estado de la partida
+            partida.setEstado(estadoPartidaJson);
+            entityManager.merge(partida); // Actualizar la entidad en la base de datos
+
+            log.info("Estado de la partida actualizado en la base de datos para gameRoomId: {}", gameRoomId);
+        } catch (Exception e) {
+            log.error("Error al actualizar el estado de la partida en la base de datos: {}", e.getMessage(), e);
         }
     }
 }

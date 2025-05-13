@@ -26,10 +26,14 @@
                     </div>
                 </div>
                 <!-- Botón para generar una partida de prueba -->
-                <form th:action="@{/creaPartida}" method="post" style="margin-bottom: 20px;">
+                <form th:action="@{/guardaPartida}" method="post" style="margin-bottom: 20px;">
                     <input type="hidden" name="idJugador1" value="1" />
                     <input type="hidden" name="idJugador2" value="2" />
-                    <input type="hidden" name="duracionMin" value="30" />
+                    <input type="hidden" name="enCurso" value="false" />
+                    <input type="hidden" name="ganador" value="3" />
+                    <input type="hidden" name="perdedor" value="1" />
+                    <input type="hidden" name="estado" value="test" />
+                    <input type="hidden" name="gameRoomId" value="test" />
                     <button type="submit" class="btn btn-primary">Generar Partida de Prueba</button>
                 </form>
 
@@ -49,9 +53,12 @@
                            data-bs-parent="#accordionPartidas">
                         <div class="accordion-body">
                           <p><strong>ID:</strong> <span th:text="${partida.idPartida}"></span></p>
-                          <p><strong>Duración:</strong> <span th:text="${partida.duracionMin}"></span> minutos</p>
                           <p><strong>Jugador 1:</strong> <span th:text="${partida.jugador1.username}"></span></p>
                           <p><strong>Jugador 2:</strong> <span th:text="${partida.jugador2.username}"></span></p>
+                          <p><strong>En curso:</strong> <span th:text="${partida.enCurso}"></span> </p>
+                          <p><strong>Ganador:</strong> <span th:text="${partida.ganador}"></span></p>
+                          <p><strong>Perdedor:</strong> <span th:text="${partida.perdedor}"></span></p>
+                            
                         </div>
                       </div>
                     </div>
