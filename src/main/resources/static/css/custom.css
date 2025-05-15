@@ -796,6 +796,11 @@ td img.icon {
         width: 300px;
     }
 
+    #ready-btn {
+        top: -45px !important;
+        height: 40px !important;
+    }
+
     #player-units-container {
         width: 95px !important;
     }
@@ -1074,7 +1079,7 @@ td img.icon {
     border-radius: 10px;
 }
 
-.shop-unit:hover, .object-cell:hover, .refresh-btn:hover, .send-btn:hover, .report-btn-offCanvas:hover {
+.shop-unit:hover, .object-cell:hover, #ready-btn:hover, .refresh-btn:hover, .send-btn:hover, .report-btn-offCanvas:hover {
     transform: scale(1.1);
     transition: 0.3s;
     box-shadow: inset 0px 0px 15px 5px rgba(255, 255, 255, 0.8);
@@ -1137,6 +1142,17 @@ td img.icon {
 
 }
 
+#ready-btn {
+    width: 150px;
+    height: 50px;
+    position: fixed;
+    top: -60px;
+    border: 1px solid white;
+    color: white;
+    background-color: rgba(23,28,91,255);
+    border-radius: 10px;  
+}
+
 .refresh-btn:hover #refresh-icon {
     transform: rotate(360deg);
     transition:0.5s ease-in-out;
@@ -1151,8 +1167,8 @@ td img.icon {
 }
 
 #player-stats-container {
-    width: 70px;
-    height: 200px;
+    width: 150px;
+    height: 140px;
     background-color: var(--COLOR-DARK-1);
 
     position: fixed;
