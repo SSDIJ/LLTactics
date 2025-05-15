@@ -32,7 +32,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>#</th>
+                       
                         <th>Jugador</th>
                         <th>Puntuación</th>
                         <th>Partidas Jugadas</th>
@@ -40,18 +40,40 @@
                         <th>Derrotas</th>
                     </tr>
                 </thead>
-                <tbody>
-                    
-                    <tr th:each="user, stat : ${usuarios}" class="clickable-row" th:attr="data-href=@{'/user/viewProfile'(username=${user.username})}">
-                        <td th:text="${stat.index + 1}"></td>
-                        <td th:text="${user.username}"></td>
-                        <td th:text="${user.puntuacion}"></td>
-                        <td th:text="${user.partidasGanadas + user.partidasPerdidas}"></td>
-                        <td th:text="${user.partidasGanadas}"></td>
-                        <td th:text="${user.partidasPerdidas}"></td>
-                    </tr>
-                    
-                </tbody>
+               <tbody>
+    <tr th:each="user, stat : ${usuarios}" class="clickable-row" 
+        th:attr="data-href=@{'/user/viewProfile'(username=${user.username})}">
+
+     
+
+        <!-- Columna del jugador con imagen y nombre -->
+        <td>
+            <div class="d-flex align-items-center">
+                <!-- Imagen de perfil -->
+                <div class="me-2">
+                    <img th:if="${user.idfotoPerfil == null}" 
+                         th:src="@{/img/profile_pics/default_profile.png}" 
+                         alt="Foto de perfil" width="40" height="40"
+                         class="rounded-circle border border-2 shadow-sm" />
+
+                    <img th:unless="${user.idfotoPerfil == null}" 
+                         th:src="@{/user/{id}/pic(id=${user.idfotoPerfil})}" 
+                         alt="Foto de perfil" width="40" height="40"
+                         class="rounded-circle border border-2 shadow-sm" />
+                </div>
+
+                <!-- Nombre de usuario -->
+                <span th:text="${user.username}"></span>
+            </div>
+        </td>
+
+        <td th:text="${user.puntuacion}"></td>
+        <td th:text="${user.partidasGanadas + user.partidasPerdidas}"></td>
+        <td th:text="${user.partidasGanadas}"></td>
+        <td th:text="${user.partidasPerdidas}"></td>
+    </tr>
+</tbody>
+
             </table>
         </div>
     </div>
