@@ -867,9 +867,10 @@ async function processAction(action) {
         await new Promise(resolve => setTimeout(resolve, 1000));
         clearInterval(intervalHealthsId);
 
-        await new Promise(resolve => setTimeout(resolve, 3000));
-        readyForNextRound()
-    }
+        const delay = Math.floor(Math.random() * (10000 - 3000 + 1)) + 3000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        readyForNextRound();
+    }   
 }
 
 

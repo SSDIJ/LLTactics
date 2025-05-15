@@ -194,4 +194,108 @@ public class GameRoom {
     public void refreshPlayerShop(String player, List<Heroe> heroes, List<Objeto> items) {
         this.players.get(player).refreshShop(heroes, items);
     }
+
+    public void fight() {
+        System.out.println("GameRoom: FIGHTING"); // TODO: ELIMINAR
+
+        GamePlayer player1 = players.get(player1Name);
+        GamePlayer player2 = players.get(player2Name);
+
+        GameUnit unit1 = null;
+        GameUnit unit2 = null;
+
+        // Bucle principal de combate
+        while (true) {
+            unit1 = getLastValidUnit(player1); // TODO: revisar
+            unit2 = getFirstValidUnit(player2); // TODO: revisar
+
+            if (unit1 == null || unit2 == null) break;
+
+            // Pelea entre unidades mientras vivas
+            while (unit1.getHealth() > 0 && unit2.getHealth() > 0) {
+                if (unit1.getSpeed() >= unit2.getSpeed()) {
+                    attack(unit1, unit2);
+                    if (unit2.getHealth() > 0) attack(unit2, unit1);
+                } else {
+                    attack(unit2, unit1);
+                    if (unit1.getHealth() > 0) attack(unit1, unit2);
+                }
+            }
+
+            // Si una unidad muere, reemplaza por nula
+            if (unit1.getHealth() <= 0) {
+                replaceUnitWithNull(player1, unit1);
+            }
+            if (unit2.getHealth() <= 0) {
+                replaceUnitWithNull(player2, unit2);
+            }
+        }
+
+        // Determina el ganador y actualiza la vida
+        String winner = null;
+        if (allUnitsDead(player1)) {
+            player1.setHealth(player1.getHealth() - 5);
+            winner = player2.getName();
+        } else if (allUnitsDead(player2)) {
+            player2.setHealth(player2.getHealth() - 5);
+            winner = player1.getName();
+        }
+
+        // Prepara el resultado y actualiza el estado de la sala
+        Map<String, List<GameUnit>> units = Map.of(
+            player1.getName(), player1.getUnits(),
+            player2.getName(), player2.getUnits()
+        );
+        GameBattleResult result = new GameBattleResult(winner, units);
+        setPlayerResult(player1.getName(), result);
+        setPlayerResult(player2.getName(), result);
+        lastRoundLoser = (winner != null && winner.equals(player1.getName())) ? player2.getName() : player1.getName();
+        
+        System.out.println("GameRoom: GANADOR " + winner); // TODO: ELIMINAR
+        if(getLastValidUnit(player1) != null)
+            System.out.println("GameRoom: " + player1.getName() + " unit: " + getLastValidUnit(player1)); // TODO: ELIMINAR
+        if(getLastValidUnit(player2) != null)
+            System.out.println("GameRoom: " + player2.getName() + " unit: " + getLastValidUnit(player2)); // TODO: ELIMINAR
+    }
+
+    public GameUnit getLastValidUnit(GamePlayer player) {
+        for (int i = player.getUnits().size() - 1; i >= 0; i--) {
+            GameUnit unit = player.getUnits().get(i);
+            if (unit != null && unit.getHealth() > 0) {
+                return unit;
+            }
+        }
+        return null;
+    }
+
+    public GameUnit getFirstValidUnit(GamePlayer player) {
+        for (GameUnit unit : player.getUnits()) {
+            if (unit != null && unit.getHealth() > 0) {
+                return unit;
+            }
+        }
+        return null;
+    }
+
+    private void replaceUnitWithNull(GamePlayer player, GameUnit deadUnit) {
+        List<GameUnit> units = player.getUnits();
+        for (int i = 0; i < units.size(); i++) {
+            if (units.get(i) == deadUnit) {
+                units.set(i, player.getNullUnit());
+            }
+        }
+    }
+
+    private boolean allUnitsDead(GamePlayer player) {
+        for (GameUnit u : player.getUnits()) {
+            if (u != null && u.getUnitID() > 0 && u.getHealth() > 0) return false;
+        }
+        return true;
+    }
+
+    private void attack(GameUnit attacker, GameUnit defender) {
+        int damage = Math.max(attacker.getDamage() - defender.getArmor(), 1);
+        defender.setHealth(defender.getHealth() - damage);
+    }
+
 }

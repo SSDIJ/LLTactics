@@ -410,8 +410,6 @@ public class GameController {
 
         gameRoom.setPlayerReady(playerName);
 
-        updateGameRoomInDatabase(gameRoomId, gameRoom);
-
         boolean allReady = gameRoom.bothPlayersReady();
 
         if (allReady) gameRoom.resetReadiness();
@@ -420,12 +418,103 @@ public class GameController {
 
         if (allReady) {
             if (gameRoom.isBuyingPhase()) {
+                sendActionToPlayers(gameRoom, new PlayerAction(ActionType.GENERAL, "server", ""));
+                startBuyPhase(gameRoomId);
+            }
+            else {
+                prepareDefaultUnits(gameRoom);
+                sendActionToPlayers(gameRoom, new PlayerAction(ActionType.GENERAL, "server", ""));
                 startBattlePhase(gameRoomId);
             }
-            else startBuyPhase(gameRoomId);
         }
     }
 
+    private void prepareDefaultUnits(GameRoom gameRoom) {
+        GamePlayer player1 = gameRoom.getPlayers().get(gameRoom.getPlayer1Name());
+        GamePlayer player2 = gameRoom.getPlayers().get(gameRoom.getPlayer2Name());
+
+        GameUnit unit1 = gameRoom.getLastValidUnit(player1); // let unit1 = player1.units.slice().reverse().find(u => u.unitID && u.unitID !== null);  
+        GameUnit unit2 = gameRoom.getFirstValidUnit(player2); // let unit2 = player2.units.find(u => u.unitID && u.unitID !== null);
+
+        // Si no hay unidad válida, compra unidad por defecto
+        if (unit1 == null) {
+            player1.buyUnit(player1.getDefaultUnit());
+            unit1 = gameRoom.getLastValidUnit(player1);
+        }
+        if (unit2 == null) {
+            player2.buyUnit(player2.getDefaultUnit());
+            unit2 = gameRoom.getFirstValidUnit(player2);
+        }
+    }
+
+    /*
+    @MessageMapping("/game/ready/{gameRoomId}")
+    public void handleEndBattle(@DestinationVariable String gameRoomId, @Payload GameBattleResult playerResult,
+            Principal principal) {
+        GameRoom gameRoom = getGameRoomFromDatabase(gameRoomId);
+        String playerName = principal.getName();
+
+        synchronized (gameRoom) {
+
+            gameRoom.setPlayerResult(playerName, playerResult);
+            gameRoom.setPlayerReady(playerName);
+
+            if (gameRoom.bothPlayersReady()) {
+                GameBattleResult result1 = gameRoom.getPlayerResult(gameRoom.getPlayer1Name());
+                GameBattleResult result2 = gameRoom.getPlayerResult(gameRoom.getPlayer2Name());
+
+                if (result1 == null || result2 == null)
+                    return;
+
+                gameRoom.resetReadiness();
+
+                if (!gameRoom.resultsMatch(result1, result2)) {
+                    // Manejar discrepancia
+                    log.warn("Discrepancia en resultados de batalla entre jugadores.");
+                    return;
+                }
+
+                System.out.println("TODO PIOLA");
+                gameRoom.reduceLoserHealth();
+                // Aqui se elige al ganador de la partida
+                String winner = gameRoom.getWinner();
+                if (winner != null) {
+                    // TOCAR A PARTIR DE AQUI
+
+                    PlayerAction winnerAction = new PlayerAction(
+                            PlayerAction.ActionType.WINNER,
+                            "server",
+                            winner);
+
+                    sendActionToPlayers(gameRoom, winnerAction);
+                    String defeated = gameRoom.getPlayers().keySet().stream()
+                            .filter(p -> !p.equals(winner))
+                            .findFirst()
+                            .orElse(null);
+
+                    if (defeated != null) {
+                        userController.updateWinner(winner, defeated);
+                    }
+                    return;
+                }
+
+                // Validar si ya se está en fase de transición
+                if (!gameRoom.isInTransition()) {
+                    gameRoom.setInTransition(true); // bandera para evitar duplicación
+
+                    scheduler.schedule(() -> {
+                        startBuyPhase(gameRoomId);
+                        gameRoom.setInTransition(false); // liberar transición
+                    }, 5, TimeUnit.SECONDS);
+                }
+            }
+        }
+        // Actualizar el estado de la partida en la base de datos
+        updateGameRoomInDatabase(gameRoomId, gameRoom);
+    }
+
+    */
+    
     private void startBuyPhase(String gameRoomId) {
 
         GameRoom gameRoom = getGameRoomFromDatabase(gameRoomId);
@@ -473,6 +562,8 @@ public class GameController {
         messagingTemplate.convertAndSend(
             "/topic/game/" + gameRoomId,
             payload);
+
+        
 
         // Actualizar el estado de la partida en la base de datos
         updateGameRoomInDatabase(gameRoomId, gameRoom);
