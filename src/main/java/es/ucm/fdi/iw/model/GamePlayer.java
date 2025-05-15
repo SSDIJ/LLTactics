@@ -160,6 +160,10 @@ public class GamePlayer {
             u.resetHealth();
         }
     }
+
+    public void addStars(int starsNewRound) {
+        stars += starsNewRound;
+    }
     
 }
 

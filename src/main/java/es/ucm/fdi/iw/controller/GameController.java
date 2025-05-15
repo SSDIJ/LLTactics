@@ -104,8 +104,6 @@ public class GameController {
     public void addActiveGame(String gameRoomId, String player1, String player2) {
         System.out.println("INTENTANDO GUARDAR PARTIDA EN BD");
 
-        //OBSOLETO AHORA QUE SE GUARDA EN LA BD
-        //activeGames.put(gameRoomId, new GameRoom(gameRoomId, player1, player2));
 
         // Crear una nueva instancia de GameRoom
         GameRoom gameRoom = new GameRoom(gameRoomId, player1, player2);
@@ -231,14 +229,7 @@ public class GameController {
     public void handlePlayerAction(@PathVariable String gameRoomId, @RequestBody PlayerAction action,
             Principal principal) {
         // Verificar si la sala de juego existe
-        GameRoom gameRoom = new GameRoom();
-        try {
-            gameRoom = getGameRoomFromDatabase(gameRoomId);
-        }
-        catch (Exception e) {
-            System.out.println("\n\n ES AQUÍ \n\n");
-        }
-        
+        GameRoom gameRoom = getGameRoomFromDatabase(gameRoomId);
 
         if (gameRoom == null) {
             log.error("Intento de acción en una sala no existente: {}", gameRoomId);
@@ -331,6 +322,13 @@ public class GameController {
         GamePlayer sender = gameRoom.getPlayers().get(senderPlayer);
         payload.put("actor", senderPlayer);
 
+        for (Map.Entry<String, GamePlayer> entry : gameRoom.getPlayers().entrySet()) {
+            String playerName = entry.getKey();
+            GamePlayer player = entry.getValue();
+            payload.put("health_" + playerName, player.getHealth());
+            payload.put("stars_" + playerName, player.getStars());
+        }
+
         switch (action.getActionType()) {
             case BUY_UNIT:
                 payload.put("units_" + senderPlayer, sender.getUnits());
@@ -355,6 +353,8 @@ public class GameController {
 
             case GENERAL:
                 payload.put("updateAll", true);
+                payload.put("currentRound", gameRoom.getCurrentRound());
+                payload.put("currentPhase", gameRoom.getCurrentPhase());
                 payload.put("preferredPlayer", gameRoom.getPreferredPlayer());
                 for (Map.Entry<String, GamePlayer> entry : gameRoom.getPlayers().entrySet()) {
                     String playerName = entry.getKey();
@@ -476,9 +476,13 @@ public class GameController {
             return;
 
         gameRoom.nextRound();
+        gameRoom.setBuyPhase();
 
         updatePlayerShop(gameRoom, gameRoom.getPlayer1Name());
         updatePlayerShop(gameRoom, gameRoom.getPlayer2Name());
+
+        gameRoom.newRoundStars();
+
         sendActionToPlayers(gameRoom, new PlayerAction(PlayerAction.ActionType.GENERAL, "server", ""));
         
         log.info("Comienza fase de compra para sala {}", gameRoomId);
@@ -487,8 +491,7 @@ public class GameController {
         // Notificar a los jugadores que comienza la fase de compra
         Map<String, Object> payload = Map.of(
                 "phase", "buy",
-                "round", gameRoom.getCurrentRound(),
-                "time", GameRoom.SHOP_TIME);
+                "round", gameRoom.getCurrentRound());
         
         messagingTemplate.convertAndSend(
             "/topic/game/" + gameRoomId,
@@ -507,6 +510,7 @@ public class GameController {
 
         // Avanzamos la ronda
         gameRoom.nextRound();
+        gameRoom.setBattlePhase();
 
         // Notificar a los jugadores que deben esperar y luego confirmar
         Map<String, Object> payload = Map.of(
