@@ -224,7 +224,6 @@ function updateUnits(player, isOpponent = false) {
 
             // Opción de eliminar la unidad
             const clonedImg = img.cloneNode(true); // Clonamos el nodo de la imagen
-
             clonedImg.addEventListener('dblclick', () => {
 
                 sendAction({
@@ -249,7 +248,6 @@ function updateUnits(player, isOpponent = false) {
         }
     });
 }
-
 
 // Actualiza el inventario
 function updateInventory(isOpponent = false) {
@@ -612,7 +610,7 @@ function displayMessage(messageAction) {
     const message = messageAction.message.text;
     const time =  messageAction.message.timestamp;
     
-    const date = new Date(time);
+    const date = new Date(time * 1000);
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const timeFormatted = `${hours}:${minutes}`;
