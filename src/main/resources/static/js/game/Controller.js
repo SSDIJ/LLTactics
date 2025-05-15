@@ -4,6 +4,8 @@ import Unit from "./Unit.js";
 
 // ID de la partida
 const roomId = sessionStorage.getItem('roomId');
+const player1NameContainer = document.getElementById("player1Name");
+const player2NameContainer = document.getElementById("player2Name");;
 
 // Elementos de una ronda
 const timerElement = document.getElementById('round-timer');
@@ -227,7 +229,7 @@ function updateUnits(player, isOpponent = false) {
                 sendAction({
                     "actionType": "SELL_UNIT",
                     "playerName": player1.name,
-                    "actionDetails": {"unit": unit}
+                    "actionDetails": JSON.stringify(unit)
                 });
 
                 updatePlayerStats();
@@ -301,9 +303,8 @@ function updateInventory(isOpponent = false) {
                 sendAction({
                     "actionType": "SELL_ITEM",
                     "playerName": player1.name,
-                    "actionDetails": {"item": itemTemp}
-
-                });
+                    "actionDetails": JSON.stringify(itemTemp)}
+                );
 
                 updatePlayerStats();
                 updateInventory();
@@ -350,16 +351,12 @@ function updateInventory(isOpponent = false) {
                             // Asignar el objeto a la unidad
                             const unitIndex = Array.from(unitObjects).indexOf(container);
                             assigned = true;
-                            console.log(unitIndex)
-                            const sendIndex = Player.MAX_UNITS - unitIndex - 1;
-                            console.log(sendIndex)
+                            selectedItem.unitUnitId = player1.units[unitIndex].unitID
+
                             sendAction({
                                 "actionType": "ASSIGN_ITEM_TO_UNIT",
                                 "playerName": player1.name,
-                                "actionDetails": {
-                                    "unitIndex": sendIndex,
-                                    "item": selectedItem
-                                }
+                                "actionDetails": JSON.stringify(selectedItem)
                             });
 
                             console.log("OBJETO ASIGNADO");
@@ -523,8 +520,8 @@ refreshShopBtns.forEach((refreshShopBtn) => {
 });
 
 
-const player1 = new Player("Jugador 1");
-const player2 = new Player("Jugador 2");
+const player1 = new Player("J1");
+const player2 = new Player("J2");
 
 updateUnits(player2, true);
 
@@ -682,6 +679,9 @@ async function startTimer(timeLeft) {
 
 
 document.addEventListener("DOMContentLoaded", () => {  
+
+    player1.name = player1NameContainer.innerText;
+    player2.name = player2NameContainer.innerText;
     
     // TODO: ELIMINAR ESTO CUANDO FUNCIONE
     const socketUrl = sessionStorage.getItem("socketUrl")
@@ -722,78 +722,86 @@ function sendAction(action) {
 
 async function processAction(action) {
 
-    if (action.isWinner != undefined) {
+    if (action.isWinner !== undefined) {
         showWinnerContainer(action.winner);
         return;
     }
 
-    if (action.updateAll != undefined) {
+    if (action.updateAll !== undefined) {
 
-        player1.updateUnits(action.player1Units.reverse())
+        const name1 = player1.name;
+        const name2 = player2.name;
+
+        player1.updateUnits((action[`units_${name1}`] || []).reverse());
         updateUnits(player1);
-        player2.updateUnits(action.player2Units)
+
+        player2.updateUnits(action[`units_${name2}`] || []);
         updateUnits(player2, true);
 
-        player1.updateItems(action.player1Items)
-        updateInventory()
-        player2.updateItems(action.player2Items)
-        updateInventory(true)
+        player1.updateItems(action[`items_${name1}`] || []);
+        updateInventory();
 
-        player1.health = action.player1Health
-        player2.health = action.player2Health
+        player2.updateItems(action[`items_${name2}`] || []);
+        updateInventory(true);
 
-        player1.stars = action.player1Stars
-        player2.stars = action.player2Stars
+        console.log(`health_${name1}`)
+        player1.health = action[`health_${name1}`];
 
-        player1.name = action.player1Name
-        player2.name = action.player2Name
+        console.log(player1.health)
+        player2.health = action[`health_${name2}`];
 
-        updatePlayerStats()
+        player1.stars = action[`stars_${name1}`];
+        player2.stars = action[`stars_${name2}`];
 
-        return
+        player1.name = action[`name_${name1}`] || name1;
+        player2.name = action[`name_${name2}`] || name2;
+
+        updatePlayerStats();
+
+        return;
     }
 
-    const isOpponent = !action.isSender;
+    const actor = action["actor"]
+    const isOpponent = actor == player2.name;
     const player = isOpponent ? player2 : player1;
+    const playerName = player.name;
 
     // Actualizar unidades
-    if (action.updateUnits && action.updateUnits != undefined) {
-        player.updateUnits(isOpponent ? action.playerUnits : action.playerUnits.reverse())
+    if (action.updateUnits) {
+        const units = action[`units_${playerName}`] || [];
+        player.updateUnits(isOpponent ? units : units.reverse());
         updateUnits(player, isOpponent);
     }
-    
-    // Actualizar inventarios
-    if (action.updateItems && action.updateItems != undefined) {
-        player.updateItems(action.playerItems)
-        updateInventory(isOpponent)
+
+    // Actualizar inventario
+    if (action.updateItems) {
+        const items = action[`items_${playerName}`] || [];
+        player.updateItems(items);
+        updateInventory(isOpponent);
     }
 
     // Añadir mensaje
-    if (action.newMessage != undefined && action.newMessage) {
+    if (action.newMessage) {
         displayMessage(action);
     }
 
+    if (action.phase === "buy") {
+        game.round = action.round;
+        updateRoundNumber();
+        startTimer(action.time);
 
-    if (action.phase == "buy") {
-
-        game.round = action.round
-        updateRoundNumber()
-        startTimer(action.time)
-
-        toggleRoundPanel("Compra")
+        toggleRoundPanel("Compra");
         openShop();
 
-        if (game.round != 1) {
-            game.changeRound()
+        if (game.round !== 1) {
+            game.changeRound();
         }
-    }
-    else if (action.phase == "battle") {
+    } else if (action.phase === "battle") {
+        game.round = action.round;
+        updateRoundNumber();
+        game.changeRound();
 
-        game.round = action.round
-        updateRoundNumber()
-        game.changeRound()
-
-        toggleRoundPanel("Batalla")
+        toggleRoundPanel("Batalla");
         closeShop();
 
         timerElement.innerText = `BATALLA`;
@@ -803,19 +811,16 @@ async function processAction(action) {
         }, 300);
 
         const player1Wins = await game.startBattle();
-        
+
         winAnimation(!player1Wins);
 
         sendBattleEnd(player1Wins);
 
         await new Promise(resolve => setTimeout(resolve, 1000));
-
         clearInterval(intervalHealthsId);
-
     }
-
-
 }
+
 
 
 

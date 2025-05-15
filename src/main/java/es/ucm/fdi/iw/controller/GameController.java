@@ -50,6 +50,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -230,7 +231,14 @@ public class GameController {
     public void handlePlayerAction(@PathVariable String gameRoomId, @RequestBody PlayerAction action,
             Principal principal) {
         // Verificar si la sala de juego existe
-        GameRoom gameRoom = getGameRoomFromDatabase(gameRoomId);
+        GameRoom gameRoom = new GameRoom();
+        try {
+            gameRoom = getGameRoomFromDatabase(gameRoomId);
+        }
+        catch (Exception e) {
+            System.out.println("\n\n ES AQUÍ \n\n");
+        }
+        
 
         if (gameRoom == null) {
             log.error("Intento de acción en una sala no existente: {}", gameRoomId);
@@ -308,75 +316,63 @@ public class GameController {
     }
 
     private void sendActionToPlayers(GameRoom gameRoom, PlayerAction action, String senderPlayer) {
-
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> payload = new HashMap<>();
-        GamePlayer senderDataUnits = gameRoom.getPlayers().get(senderPlayer);
-        GamePlayer senderDataItems = gameRoom.getPlayers().get(senderPlayer);
+        GamePlayer sender = gameRoom.getPlayers().get(senderPlayer);
+        payload.put("actor", senderPlayer);
 
         switch (action.getActionType()) {
             case BUY_UNIT:
-                payload.put("playerUnits", senderDataUnits.getUnits());
+                payload.put("units_" + senderPlayer, sender.getUnits());
                 payload.put("updateUnits", true);
                 payload.put("updateItems", false);
                 break;
+
             case BUY_ITEM:
             case SELL_ITEM:
+                payload.put("items_" + senderPlayer, new ArrayList<>(sender.getInventory()));
                 payload.put("updateUnits", false);
                 payload.put("updateItems", true);
-                payload.put("playerItems", new ArrayList<>(senderDataItems.getInventory()));
                 break;
+
             case SELL_UNIT:
             case ASSIGN_ITEM_TO_UNIT:
-                payload.put("playerUnits", senderDataUnits.getUnits());
-                payload.put("playerItems", new ArrayList<>(senderDataItems.getInventory()));
+                payload.put("units_" + senderPlayer, sender.getUnits());
+                payload.put("items_" + senderPlayer, new ArrayList<>(sender.getInventory()));
                 payload.put("updateUnits", true);
                 payload.put("updateItems", true);
                 break;
+
             case GENERAL:
-                Map<String, GamePlayer> players = gameRoom.getPlayers();
-
-                GamePlayer player1 = gameRoom.getPlayers().get(senderPlayer);
-
-                GamePlayer player2 = players.entrySet().stream()
-                        .filter(entry -> !entry.getKey().equals(senderPlayer))
-                        .map(Map.Entry::getValue)
-                        .findFirst()
-                        .orElse(null);
-                payload.put("player1Units", player1.getUnits());
-                payload.put("player1Items", new ArrayList<>(player1.getInventory()));
-                payload.put("player1Health", player1.getHealth());
-                payload.put("player1Stars", player1.getStars());
-                payload.put("player2Units", player2.getUnits());
-                payload.put("player2Items", new ArrayList<>(player2.getInventory()));
-                payload.put("player2Health", player2.getHealth());
-                payload.put("player2Stars", player2.getStars());
-                payload.put("player1Name", player1.getName());
-                payload.put("player2Name", player2.getName());
                 payload.put("updateAll", true);
-
+                for (Map.Entry<String, GamePlayer> entry : gameRoom.getPlayers().entrySet()) {
+                    String playerName = entry.getKey();
+                    GamePlayer player = entry.getValue();
+                    payload.put("units_" + playerName, player.getUnits());
+                    payload.put("items_" + playerName, new ArrayList<>(player.getInventory()));
+                    payload.put("health_" + playerName, player.getHealth());
+                    payload.put("stars_" + playerName, player.getStars());
+                    payload.put("name_" + playerName, player.getName());
+                }
                 break;
+
             case WINNER:
                 String winnerDetails = action.getActionDetails();
                 payload.put("isWinner", true);
                 payload.put("winner", winnerDetails);
                 break;
+
             case REFRESH_SHOP:
+                // Implementar si es necesario
                 break;
+
             case SEND_MESSAGE:
                 payload.put("newMessage", true);
-
-                String message = action.getActionDetails();
-
-                // Crear un mapa para el mensaje
                 Map<String, Object> messageMap = new HashMap<>();
-                messageMap.put("text", message);
+                messageMap.put("text", action.getActionDetails());
                 messageMap.put("timestamp", ZonedDateTime.now());
                 messageMap.put("playerName", senderPlayer);
-
-                // Añadir el mensaje al payload
                 payload.put("message", messageMap);
-
                 break;
         }
 
@@ -389,6 +385,7 @@ public class GameController {
             log.error("Error al convertir la acción a JSON: {}", action, e);
         }
     }
+
 
     @MessageMapping("/game/ready/{gameRoomId}")
     public void handleEndBattle(@DestinationVariable String gameRoomId, @Payload GameBattleResult playerResult,
@@ -474,11 +471,6 @@ public class GameController {
             "/topic/game/" + gameRoomId,
             payload);
 
-        // Iniciar temporizador de 30 segundos
-        scheduler.schedule(() -> {
-            log.info("Fase de compra terminó automáticamente para sala {}", gameRoomId);
-            startBattlePhase(gameRoomId);
-        }, GameRoom.SHOP_TIME + 1, TimeUnit.SECONDS);
         // Actualizar el estado de la partida en la base de datos
         updateGameRoomInDatabase(gameRoomId, gameRoom);
     }
