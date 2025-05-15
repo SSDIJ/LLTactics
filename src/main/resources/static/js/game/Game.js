@@ -6,12 +6,17 @@ class Game {
         this.round = 1;
         this.isBattleRound = false;
         this.players = players;
+        this.preferredPlayer = null;
     }
 
     getRound() {
         return this.round;
     }
 
+    setPreferredPlayer(playerName) {
+        this.preferredPlayer = playerName;
+    }
+    
     changeRound() {
         this.round++;  // Increment the round
         this.isBattleRound = !this.isBattleRound;
@@ -43,12 +48,21 @@ class Game {
             if (!unit1 || !unit2) break; // End fight if no valid units
 
             while (unit1.health > 0 && unit2.health > 0) {
-                if (unit1.speed >= unit2.speed) {
+                if (unit1.speed > unit2.speed) {
                     await this.attackWithDelay(unit1, unit2);
                     if (unit2.health > 0) await this.attackWithDelay(unit2, unit1);
-                } else {
+                } else if (unit2.speed > unit1.speed) {
                     await this.attackWithDelay(unit2, unit1);
                     if (unit1.health > 0) await this.attackWithDelay(unit1, unit2);
+                } else {
+                    // Velocidades iguales → decidir por preferencia
+                    if (player1.name == this.preferredPlayer) {
+                        await this.attackWithDelay(unit1, unit2);
+                        if (unit2.health > 0) await this.attackWithDelay(unit2, unit1);
+                    } else {
+                        await this.attackWithDelay(unit2, unit1);
+                        if (unit1.health > 0) await this.attackWithDelay(unit1, unit2);
+                    }
                 }
             }
 

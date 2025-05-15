@@ -154,6 +154,12 @@ public class GamePlayer {
     public void refreshShop(List<Heroe> heroes, List<Objeto> items) {
        this.shop.refresh(heroes, items);
     }
+
+    public void resetHealth() {
+        for (GameUnit u : units) {
+            u.resetHealth();
+        }
+    }
     
 }
 

@@ -355,6 +355,7 @@ public class GameController {
 
             case GENERAL:
                 payload.put("updateAll", true);
+                payload.put("preferredPlayer", gameRoom.getPreferredPlayer());
                 for (Map.Entry<String, GamePlayer> entry : gameRoom.getPlayers().entrySet()) {
                     String playerName = entry.getKey();
                     GamePlayer player = entry.getValue();
@@ -564,7 +565,8 @@ public class GameController {
             payload);
 
         
-
+        gameRoom.fight();
+        
         // Actualizar el estado de la partida en la base de datos
         updateGameRoomInDatabase(gameRoomId, gameRoom);
     }

@@ -794,6 +794,8 @@ async function processAction(action) {
         player1.name = action[`name_${name1}`] || name1;
         player2.name = action[`name_${name2}`] || name2;
 
+        game.setPreferredPlayer(action["preferredPlayer"]);
+
         updatePlayerStats();
 
         return;

@@ -84,6 +84,10 @@ public class GameUnit {
         );
     }
 
+    public void resetHealth() {
+        this.health = maxHealth;
+    }
+
     public double getHealthPercentage() {
         return (health / (double) maxHealth) * 100;
     }
