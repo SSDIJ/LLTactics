@@ -1707,7 +1707,6 @@ td img.icon {
     align-items: center;
     text-align: center;
     background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
     z-index: 9999;
     gap: 20px;
     opacity: 0; 

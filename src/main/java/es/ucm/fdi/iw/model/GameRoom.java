@@ -20,8 +20,8 @@ import java.time.ZonedDateTime;
 public class GameRoom {
 
     public static final int SHOP_TIME = 10;
-    public static final int INITIAL_STARS = 100;
-    public static final int INITIAL_LIFE = 2;
+    public static final int INITIAL_STARS = 15;
+    public static final int INITIAL_LIFE = 5;
     public static final int DAMAGE_WIN = 1;
 
     private final String gameRoomId;
@@ -33,6 +33,7 @@ public class GameRoom {
     private String lastRoundLoser;
     private final Map<String, Boolean> battleReady = new ConcurrentHashMap<>();
     private String preferredPlayer;
+    private String winner;
 
     // Constructor por defecto
     public GameRoom() {
@@ -55,6 +56,7 @@ public class GameRoom {
         this.messageHistory = new ArrayList<>();
         this.resetReadiness();
         preferredPlayer = new Random().nextBoolean() ? player1Name : player2Name;
+        winner = null;
     }
 
     public enum Phase { WAITING, BUY, BATTLE }
@@ -129,27 +131,6 @@ public class GameRoom {
         this.players.get(lastRoundLoser).reduceHealth(DAMAGE_WIN);
     }
 
-    public String getWinner() {
-        Iterator<GamePlayer> iterator = players.values().iterator();
-        GamePlayer player1 = iterator.next();
-        GamePlayer player2 = iterator.next();
-
-        System.out.println("\n\n");
-        System.out.println(player1.getName());
-        System.out.println(player1.getHealth());
-        System.out.println(player2.getName());
-        System.out.println(player2.getHealth());
-        System.out.println("\n\n");
-    
-        if (player1.getHealth() <= 0) {
-            return player2.getName();
-        } else if (player2.getHealth() <= 0) {
-            return player1.getName();
-        }
-    
-        return null; // Ningún jugador ha perdido aún
-    }
-
     public void refreshPlayerShop(String player, List<Heroe> heroes, List<Objeto> items) {
         this.players.get(player).refreshShop(heroes, items);
     }
@@ -198,17 +179,18 @@ public class GameRoom {
             }
         }
 
-        // Determina el ganador y actualiza la vida
-        String winner = null;
         if (allUnitsDead(player1)) {
-            player1.setHealth(player1.getHealth() - 5);
-            winner = player2.getName();
+            player1.setHealth(player1.getHealth() - GameRoom.DAMAGE_WIN);
         } else if (allUnitsDead(player2)) {
-            player2.setHealth(player2.getHealth() - 5);
-            winner = player1.getName();
+            player2.setHealth(player2.getHealth() - GameRoom.DAMAGE_WIN);
         }
 
-        lastRoundLoser = (winner != null && winner.equals(player1.getName())) ? player2.getName() : player1.getName();
+        if (player1.getHealth() <= 0) {
+            winner = player2.getName();
+        }
+        else if (player2.getHealth() <= 0) {
+            winner = player1.getName();
+        }
 
         player1.resetHealth();
         player2.resetHealth();
@@ -253,6 +235,10 @@ public class GameRoom {
     private void attack(GameUnit attacker, GameUnit defender) {
         int damage = Math.max(attacker.getDamage() - defender.getArmor(), 1);
         defender.setHealth(defender.getHealth() - damage);
+    }
+
+    public String getWinner() {
+        return winner;
     }
 
 }

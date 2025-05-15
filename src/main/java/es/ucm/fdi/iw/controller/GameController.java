@@ -415,6 +415,26 @@ public class GameController {
 
         if (allReady) gameRoom.resetReadiness();
 
+        String winner = gameRoom.getWinner();
+        if (winner != null) {
+
+            PlayerAction winnerAction = new PlayerAction(
+                    PlayerAction.ActionType.WINNER,
+                    "server",
+                    winner);
+
+            sendActionToPlayers(gameRoom, winnerAction);
+            String defeated = gameRoom.getPlayers().keySet().stream()
+                    .filter(p -> !p.equals(winner))
+                    .findFirst()
+                    .orElse(null);
+
+            if (defeated != null) {
+                userController.updateWinner(winner, defeated);
+            }
+            return;
+        }
+
         updateGameRoomInDatabase(gameRoomId, gameRoom);
 
         if (allReady) {
@@ -447,74 +467,6 @@ public class GameController {
             unit2 = gameRoom.getFirstValidUnit(player2);
         }
     }
-
-    /*
-    @MessageMapping("/game/ready/{gameRoomId}")
-    public void handleEndBattle(@DestinationVariable String gameRoomId, @Payload GameBattleResult playerResult,
-            Principal principal) {
-        GameRoom gameRoom = getGameRoomFromDatabase(gameRoomId);
-        String playerName = principal.getName();
-
-        synchronized (gameRoom) {
-
-            gameRoom.setPlayerResult(playerName, playerResult);
-            gameRoom.setPlayerReady(playerName);
-
-            if (gameRoom.bothPlayersReady()) {
-                GameBattleResult result1 = gameRoom.getPlayerResult(gameRoom.getPlayer1Name());
-                GameBattleResult result2 = gameRoom.getPlayerResult(gameRoom.getPlayer2Name());
-
-                if (result1 == null || result2 == null)
-                    return;
-
-                gameRoom.resetReadiness();
-
-                if (!gameRoom.resultsMatch(result1, result2)) {
-                    // Manejar discrepancia
-                    log.warn("Discrepancia en resultados de batalla entre jugadores.");
-                    return;
-                }
-
-                System.out.println("TODO PIOLA");
-                gameRoom.reduceLoserHealth();
-                // Aqui se elige al ganador de la partida
-                String winner = gameRoom.getWinner();
-                if (winner != null) {
-                    // TOCAR A PARTIR DE AQUI
-
-                    PlayerAction winnerAction = new PlayerAction(
-                            PlayerAction.ActionType.WINNER,
-                            "server",
-                            winner);
-
-                    sendActionToPlayers(gameRoom, winnerAction);
-                    String defeated = gameRoom.getPlayers().keySet().stream()
-                            .filter(p -> !p.equals(winner))
-                            .findFirst()
-                            .orElse(null);
-
-                    if (defeated != null) {
-                        userController.updateWinner(winner, defeated);
-                    }
-                    return;
-                }
-
-                // Validar si ya se está en fase de transición
-                if (!gameRoom.isInTransition()) {
-                    gameRoom.setInTransition(true); // bandera para evitar duplicación
-
-                    scheduler.schedule(() -> {
-                        startBuyPhase(gameRoomId);
-                        gameRoom.setInTransition(false); // liberar transición
-                    }, 5, TimeUnit.SECONDS);
-                }
-            }
-        }
-        // Actualizar el estado de la partida en la base de datos
-        updateGameRoomInDatabase(gameRoomId, gameRoom);
-    }
-
-    */
     
     private void startBuyPhase(String gameRoomId) {
 
