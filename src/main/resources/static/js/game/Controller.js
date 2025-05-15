@@ -11,6 +11,7 @@ const player2NameContainer = document.getElementById("player2Name");;
 const timerElement = document.getElementById('round-timer');
 const roundElement = document.getElementById('round-name');
 const roundPanel = document.getElementById('round-panel');
+const readyBtn = document.getElementById('ready-btn');
 
 // Inventario del jugador
 const inventoryContainer = document.getElementById("player-objects-container");
@@ -384,6 +385,14 @@ function openShop() {
             c.classList.remove("closed");
         })
     })
+
+    shopItemsContainers.forEach((shopItemsContainer) => {
+        Array.from(shopItemsContainer.children).forEach((c) => {
+            c.classList.remove("closed");
+        })
+    })
+
+    readyBtn.classList.remove("closed")
 }
 
 function closeShop() {
@@ -392,8 +401,23 @@ function closeShop() {
             c.classList.add("closed");
         })
     })
+
+    shopItemsContainers.forEach((shopItemsContainer) => {
+        Array.from(shopItemsContainer.children).forEach((c) => {
+            c.classList.add("closed");
+        })
+    })
+
+    readyBtn.classList.add("closed")
 }
 
+function closeInventory() {
+    inventoryContainer.classList.add("closed")
+}
+
+function openInventory() {
+    inventoryContainer.classList.remove("closed")
+}
 
 // Actualiza la tienda
 function updateShop() {
@@ -577,7 +601,6 @@ async function sendMessage(chatInput) {
 
     sendAction(messageAction);
 
-
     chatInput.value = ""; // Limpia el campo de entrada
 }
 
@@ -650,6 +673,17 @@ chatInputs.forEach(chatInput => {
             sendMessage(chatInput);
         }
     });  
+})
+
+function readyForNextRound() {
+    go("/game/ready/" + roomId, "POST");
+}
+
+
+readyBtn.addEventListener("click", () => {
+    readyForNextRound()
+    closeShop();
+    closeInventory();
 })
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -788,10 +822,11 @@ async function processAction(action) {
     if (action.phase === "buy") {
         game.round = action.round;
         updateRoundNumber();
-        startTimer(action.time);
+        timerElement.innerText = `COMPRA`;
 
         toggleRoundPanel("Compra");
         openShop();
+        openInventory();
 
         if (game.round !== 1) {
             game.changeRound();
@@ -802,8 +837,7 @@ async function processAction(action) {
         game.changeRound();
 
         toggleRoundPanel("Batalla");
-        closeShop();
-
+    
         timerElement.innerText = `BATALLA`;
 
         const intervalHealthsId = setInterval(() => {
@@ -818,6 +852,9 @@ async function processAction(action) {
 
         await new Promise(resolve => setTimeout(resolve, 1000));
         clearInterval(intervalHealthsId);
+
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        readyForNextRound()
     }
 }
 

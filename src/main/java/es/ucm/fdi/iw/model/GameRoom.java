@@ -30,6 +30,7 @@ public class GameRoom {
     private String player1Name;
     private String player2Name;
     private String lastRoundLoser;
+    private final Map<String, Boolean> battleReady = new ConcurrentHashMap<>();
 
     // Constructor por defecto
     public GameRoom() {
@@ -48,13 +49,13 @@ public class GameRoom {
         this.player2Name = player2Name;
         this.players.put(player1Name, new GamePlayer(player1Name));
         this.players.put(player2Name, new GamePlayer(player2Name));
-        this.currentRound = 1;
+        this.currentRound = 0;
         this.messageHistory = new ArrayList<>();
+        this.resetReadiness();
     }
 
     public enum Phase { WAITING, BUY, BATTLE }
     private Phase currentPhase = Phase.WAITING;
-    private boolean inTransition = false;
 
     public boolean isBuyingPhase() {
         return currentRound % 2 == 1;
@@ -62,20 +63,22 @@ public class GameRoom {
 
     public void nextRound() {
         currentRound++;
+        
     }
-
-    private final Map<String, Boolean> battleReady = new ConcurrentHashMap<>();
 
     public void setPlayerReady(String player) {
         battleReady.put(player, true);
     }
 
     public boolean bothPlayersReady() {
+        System.out.println("\n\n\nEstado readiness: " + battleReady);
         return battleReady.values().stream().allMatch(Boolean::booleanValue);
     }
 
     public void resetReadiness() {
         battleReady.clear();
+        battleReady.put(player1Name, false);
+        battleReady.put(player2Name, false);
     }
 
     public void addMessage(String playerName, String message, ZonedDateTime timestamp) {

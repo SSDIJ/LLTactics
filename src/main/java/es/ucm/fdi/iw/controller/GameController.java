@@ -18,7 +18,6 @@ import es.ucm.fdi.iw.model.GameRoom;
 import es.ucm.fdi.iw.model.GameRoom.Phase;
 import es.ucm.fdi.iw.model.GameUnit;
 import es.ucm.fdi.iw.model.Heroe;
-import es.ucm.fdi.iw.model.Jugador;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Objeto;
 import es.ucm.fdi.iw.model.Partida;
@@ -386,7 +385,35 @@ public class GameController {
         }
     }
 
+    @PostMapping("/game/ready/{gameRoomId}")
+    @Transactional
+    @ResponseBody
+    public void handleRoundReady(@PathVariable String gameRoomId,
+            Principal principal) {
 
+        System.out.println("\n\nDETECTADO LISTO\n\n");
+        GameRoom gameRoom = getGameRoomFromDatabase(gameRoomId);
+        String playerName = principal.getName();
+
+        gameRoom.setPlayerReady(playerName);
+
+        updateGameRoomInDatabase(gameRoomId, gameRoom);
+
+        boolean allReady = gameRoom.bothPlayersReady();
+
+        if (allReady) gameRoom.resetReadiness();
+
+        updateGameRoomInDatabase(gameRoomId, gameRoom);
+
+        if (allReady) {
+            if (gameRoom.isBuyingPhase()) {
+                startBuyPhase(gameRoomId);
+            }
+            else startBattlePhase(gameRoomId);
+        }
+    }
+
+    /*
     @MessageMapping("/game/ready/{gameRoomId}")
     public void handleEndBattle(@DestinationVariable String gameRoomId, @Payload GameBattleResult playerResult,
             Principal principal) {
@@ -452,11 +479,15 @@ public class GameController {
         updateGameRoomInDatabase(gameRoomId, gameRoom);
     }
 
+    */
     private void startBuyPhase(String gameRoomId) {
 
         GameRoom gameRoom = getGameRoomFromDatabase(gameRoomId);
+
         if (gameRoom == null)
             return;
+
+        gameRoom.nextRound();
 
         log.info("Comienza fase de compra para sala {}", gameRoomId);
         gameRoom.setCurrentPhase(Phase.BUY);
@@ -492,6 +523,8 @@ public class GameController {
         messagingTemplate.convertAndSend(
             "/topic/game/" + gameRoomId,
             payload);
+
+        
 
         // Actualizar el estado de la partida en la base de datos
         updateGameRoomInDatabase(gameRoomId, gameRoom);
