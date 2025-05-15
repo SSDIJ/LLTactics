@@ -19,10 +19,11 @@
 --    "USERNAME" CHARACTER VARYING(255)
 --);    
 
-INSERT INTO "PUBLIC"."IWUSER" VALUES
-(TRUE, 0, 0, 0, 0, 0, 0, null, 1, 5, 'Admin', 'Administrez', '{bcrypt}$2a$10$GU4mO.Uxc.tRP3.DsrBIvO3543uERYAvJwkuplrpFTAYdXoteTFOm', null, 'ADMIN,USER', 'pruebaAdmin123'),
-(TRUE, 0, 0, 1, 0, 0, 0, null, 2, 2, 'Usuario', 'Usuariez', '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', null, 'USER', 'usuarioMolon77');
-
+INSERT INTO "IWUSER"
+(ID, IDFOTO_PERFIL, ENABLED, ESTADO, FACCION_FAVORITA, FECHA_BANEO, FIRST_NAME, INDICE_RANKING, LAST_NAME, PARTIDAS_GANADAS, PARTIDAS_PERDIDAS, PASSWORD, PUNTUACION, RAZON_BANEO, ROLES, USERNAME)
+VALUES
+(1, 5, TRUE, 0, 0, null, 'Admin', 1, 'Administrez', 0, 0, '{bcrypt}$2a$10$GU4mO.Uxc.tRP3.DsrBIvO3543uERYAvJwkuplrpFTAYdXoteTFOm', 0, null, 'ADMIN,USER', 'pruebaAdmin123'),
+(2, 2, TRUE, 0, 0, null, 'Usuario', 2, 'Usuariez', 0, 0, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 0, null, 'USER', 'usuarioMolon77');
 
 INSERT INTO "PUBLIC"."PARTIDA" VALUES
 (FALSE, 1, 2, 1, 1, 2, '', '');
