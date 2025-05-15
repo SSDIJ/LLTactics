@@ -6,19 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LL Tactics</title>
 
+    <th:block th:replace="~{fragments/head :: header}" />
     <!-- Estilos de Bootstrap y Font Awesome -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-  
-
-  
-    <th:block th:replace="~{fragments/head :: header}" />
-
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css"> <!-- Archivo CSS propio -->
 </head>
 
 <body class="profile-body">
-   <header th:replace="~{fragments/nav.html :: nav}"></header>
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
 
     <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
     <div class="user">
@@ -63,61 +60,65 @@
         <!-- Botón para cambiar la foto de perfil -->
         <!DOCTYPE html>
         <html xmlns:th="http://www.thymeleaf.org">
-        
+
         <head>
             <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+            <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <title>Cambiar Foto de Perfil</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
+            <head>
+                <title>Cambiar Foto de Perfil</title>
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+            </head>
 
-<body>
-  
+        <body>
 
-    <!-- Modal para cambiar foto -->
-    <div class="modal fade" id="editarFotoModal" tabindex="-1" aria-labelledby="editarFotoModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
 
-                <!-- Cabecera del modal -->
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editarFotoModalLabel">Cambiar Foto de Perfil</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
+            <!-- Modal para cambiar foto -->
+            <div class="modal fade" id="editarFotoModal" tabindex="-1" aria-labelledby="editarFotoModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
 
-                <!-- Cuerpo del modal -->
-                <div class="modal-body">
-                    <form th:action="@{/user/{id}/pic(id=${user.id})}" method="post" enctype="multipart/form-data">
-                        <!-- Campo para seleccionar la foto -->
-                        <div class="mb-3">
-                            <label for="photo" class="form-label">Selecciona una foto:</label>
-                            <input type="file" class="form-control" id="photo" name="photo" accept="image/*" required>
+                        <!-- Cabecera del modal -->
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editarFotoModalLabel">Cambiar Foto de Perfil</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Cerrar"></button>
                         </div>
 
-                        <!-- Botón para enviar -->
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-success">Subir Foto</button>
-                        </div>
-                    </form>
-                </div>
+                        <!-- Cuerpo del modal -->
+                        <div class="modal-body">
+                            <form th:action="@{/user/{id}/pic(id=${user.id})}" method="post"
+                                enctype="multipart/form-data">
+                                <!-- Campo para seleccionar la foto -->
+                                <div class="mb-3">
+                                    <label for="photo" class="form-label">Selecciona una foto:</label>
+                                    <input type="file" class="form-control" id="photo" name="photo" accept="image/*"
+                                        required>
+                                </div>
 
+                                <!-- Botón para enviar -->
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-success">Subir Foto</button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+            <!-- Bootstrap JS -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        </body>
 
-</html>
+        </html>
 
 
 
         <!-- ESTADÍSTICAS DEL PERFIL -->
         <div class="bot-user">
-            <div class="container mt-5">
+            <div class="container mt-5" style="min-height: 45vh;">
                 <div class="row d-flex justify-content-between" style="flex-wrap: wrap;">
                     <!-- Puntuación de Maestría -->
                     <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
@@ -127,67 +128,59 @@
                         </div>
                     </div>
 
-                  <!-- Personaje más Jugado -->
-                        <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
-                            <div class="card-body">
-                                <h5 class="card-title">Personaje más Jugado</h5>
+                    <!-- Personaje más Jugado -->
+                    <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
+                        <div class="card-body">
+                            <h5 class="card-title">Personaje más Jugado</h5>
 
-                                <!-- Si la lista es vacía o el primer elemento es null, mostramos un mensaje -->
-                                <div
-                                    th:if="${user.masJugados.size() == 0 or user.masJugados.get(0) == null}">
-                                    <p>No hay datos</p>
-                                </div>
+                            <!-- Si la lista es vacía o el primer elemento es null, mostramos un mensaje -->
+                            <div th:if="${user.masJugados.size() == 0 or user.masJugados.get(0) == null}">
+                                <p>No hay datos</p>
+                            </div>
 
-                                <!-- Si hay un personaje, mostramos su imagen -->
-                                <div
-                                    th:unless="${user.masJugados.size() == 0 or user.masJugados.get(0) == null}">
-                                    <img th:src="@{${user.masJugados.get(0).imagen}}"
-                                        alt="Personaje más Jugado" class="img-fluid rounded-circle" />
-                                </div>
+                            <!-- Si hay un personaje, mostramos su imagen -->
+                            <div th:unless="${user.masJugados.size() == 0 or user.masJugados.get(0) == null}">
+                                <img th:src="@{${user.masJugados.get(0).imagen}}" alt="Personaje más Jugado"
+                                    class="img-fluid rounded-circle" />
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Facción Favorita -->
-                        <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
-                            <div class="card-body">
-                                <h5 class="card-title">Facción Favorita</h5>
+                    <!-- Facción Favorita -->
+                    <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
+                        <div class="card-body">
+                            <h5 class="card-title">Facción Favorita</h5>
 
-                                <!-- Humanos -->
-                                <img th:if="${user.faccionFavorita == 0}" src="/img/units/banners/humans.png"
-                                    class="img-fluid" alt="Humanos">
+                            <!-- Humanos -->
+                            <img th:if="${user.faccionFavorita == 0}" src="/img/units/banners/humans.png"
+                                class="img-fluid mx-auto d-block faction-img" alt="Humanos">
+                            <!-- Dragones -->
+                            <img th:if="${user.faccionFavorita == 1}" src="/img/units/banners/dragons.png"
+                                class="img-fluid mx-auto d-block faction-img" alt="Dragones">
+                            <!-- Trolls -->
+                            <img th:if="${user.faccionFavorita == 2}" src="/img/units/banners/trolls.png"
+                                class="img-fluid mx-auto d-block faction-img" alt="Trolls">
+                            <!-- No Muertos -->
+                            <img th:if="${user.faccionFavorita == 3}" src="/img/units/banners/undead.png"
+                                class="img-fluid mx-auto d-block faction-img" alt="No Muertos">
+                            <!-- Criaturas Legendarias -->
+                            <img th:if="${user.faccionFavorita == 4}" src="/img/units/banners/legendaries.png"
+                                class="img-fluid mx-auto d-block faction-img" alt="Legendarias">
 
-                                <!-- Dragones -->
-                                <img th:if="${user.faccionFavorita == 1}" src="/img/units/banners/dragons.png"
-                                    class="img-fluid" alt="Dragones">
-
-                                <!-- Trolls -->
-                                <img th:if="${user.faccionFavorita == 2}" src="/img/units/banners/trolls.png"
-                                    class="img-fluid" alt="Trolls">
-
-                                <!-- No Muertos -->
-                                <img th:if="${user.faccionFavorita == 3}" src="/img/units/banners/undead.png"
-                                    class="img-fluid" alt="No Muertos">
-
-                                <!-- Criaturas Legendarias -->
-                                <img th:if="${user.faccionFavorita == 4}"
-                                    src="/img/units/banners/legendaries.png" class="img-fluid"
-                                    alt="Criaturas Legendarias">
-                            </div>
                         </div>
+                    </div>
 
                     <!-- GRÁFICA DE VICTORIAS Y DERROTAS -->
                     <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
                         <div class="card-body ">
-                            <div
-                                th:if="${user.partidasGanadas == 0 and user.partidasPerdidas == 0}">
+                            <div th:if="${user.partidasGanadas == 0 and user.partidasPerdidas == 0}">
 
                                 <p>El usuario no ha jugado ninguna partida.</p>
                             </div>
 
-                            <div
-                                th:unless="${user.partidasGanadas == 0 and user.partidasPerdidas == 0}">
+                            <div th:unless="${user.partidasGanadas == 0 and user.partidasPerdidas == 0}">
                                 <h5 class="card-title">Ratio de Victorias</h5>
-                                <canvas id="winrateChart" width="200" height="200"></canvas>
+                                <canvas id="winrateChart" width="80" height="80"></canvas>
                             </div>
                         </div>
                     </div>
@@ -200,8 +193,8 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script th:inline="javascript">
             document.addEventListener("DOMContentLoaded", function () {
-                const partidasGanadas = [[${user.partidasGanadas}]];
-                const partidasPerdidas = [[${user.partidasPerdidas}]];
+                const partidasGanadas = [[${ user.partidasGanadas }]];
+                const partidasPerdidas = [[${ user.partidasPerdidas }]];
 
                 const canvas = document.getElementById("winrateChart");
 
