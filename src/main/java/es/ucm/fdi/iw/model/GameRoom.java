@@ -19,10 +19,10 @@ import java.time.ZonedDateTime;
 @Data
 public class GameRoom {
 
-    public static final int SHOP_TIME = 10;
-    public static final int INITIAL_STARS = 15;
+    public static final int INITIAL_STARS = 20;
     public static final int INITIAL_LIFE = 5;
     public static final int DAMAGE_WIN = 1;
+    public static final int STARS_NEW_ROUND = 15;
 
     private final String gameRoomId;
     private final Map<String, GamePlayer> players = new HashMap<>();
@@ -64,6 +64,14 @@ public class GameRoom {
 
     public boolean isBuyingPhase() {
         return currentRound % 2 == 1;
+    }
+
+    public void setBuyPhase() {
+        this.currentPhase = Phase.BUY;
+    }
+
+    public void setBattlePhase() {
+        this.currentPhase = Phase.BATTLE;
     }
 
     public void nextRound() {
@@ -239,6 +247,12 @@ public class GameRoom {
 
     public String getWinner() {
         return winner;
+    }
+
+    public void newRoundStars() {
+        for (GamePlayer p : players.values()) {
+            p.addStars(GameRoom.STARS_NEW_ROUND);
+        }
     }
 
 }

@@ -755,15 +755,27 @@ function sendAction(action) {
 
 async function processAction(action) {
 
+    const name1 = player1.name;
+    const name2 = player2.name;
+
+
+    if (!(action.phase === "buy" || action.phase === "battle")) {
+        player1.health = action[`health_${name1}`];
+        player2.health = action[`health_${name2}`];
+
+        player1.stars = action[`stars_${name1}`];
+        player2.stars = action[`stars_${name2}`];
+    }
+    
+
+    updatePlayerStats();
+
     if (action.isWinner !== undefined) {
         showWinnerContainer(action.winner);
         return;
     }
 
     if (action.updateAll !== undefined) {
-
-        const name1 = player1.name;
-        const name2 = player2.name;
 
         player1.updateUnits((action[`units_${name1}`] || []).reverse());
         updateUnits(player1);
@@ -783,18 +795,17 @@ async function processAction(action) {
             updateShop()
         }
 
-        player1.health = action[`health_${name1}`];
-        player2.health = action[`health_${name2}`];
-
-        player1.stars = action[`stars_${name1}`];
-        player2.stars = action[`stars_${name2}`];
-
         player1.name = action[`name_${name1}`] || name1;
         player2.name = action[`name_${name2}`] || name2;
 
         game.setPreferredPlayer(action["preferredPlayer"]);
 
-        updatePlayerStats();
+        playerPositionElement.innerText = player1.health >= player2.health ? "#1" : "#2";
+
+        game.round = action["currentRound"];
+        if (action["currentPhase"] == "WAITING") {
+            closeShop();
+        }
 
         return;
     }
@@ -803,6 +814,7 @@ async function processAction(action) {
     const isOpponent = actor == player2.name;
     const player = isOpponent ? player2 : player1;
     const playerName = player.name;
+
 
     // Actualizar unidades
     if (action.updateUnits) {
