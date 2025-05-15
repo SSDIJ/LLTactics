@@ -397,8 +397,6 @@ public class GameController {
 
         gameRoom.setPlayerReady(playerName);
 
-        updateGameRoomInDatabase(gameRoomId, gameRoom);
-
         boolean allReady = gameRoom.bothPlayersReady();
 
         if (allReady) gameRoom.resetReadiness();
@@ -407,9 +405,32 @@ public class GameController {
 
         if (allReady) {
             if (gameRoom.isBuyingPhase()) {
+                sendActionToPlayers(gameRoom, new PlayerAction(ActionType.GENERAL, "server", ""));
                 startBuyPhase(gameRoomId);
             }
-            else startBattlePhase(gameRoomId);
+            else {
+                prepareDefaultUnits(gameRoom);
+                sendActionToPlayers(gameRoom, new PlayerAction(ActionType.GENERAL, "server", ""));
+                startBattlePhase(gameRoomId);
+            }
+        }
+    }
+
+    private void prepareDefaultUnits(GameRoom gameRoom) {
+        GamePlayer player1 = gameRoom.getPlayers().get(gameRoom.getPlayer1Name());
+        GamePlayer player2 = gameRoom.getPlayers().get(gameRoom.getPlayer2Name());
+
+        GameUnit unit1 = gameRoom.getLastValidUnit(player1); // let unit1 = player1.units.slice().reverse().find(u => u.unitID && u.unitID !== null);  
+        GameUnit unit2 = gameRoom.getFirstValidUnit(player2); // let unit2 = player2.units.find(u => u.unitID && u.unitID !== null);
+
+        // Si no hay unidad válida, compra unidad por defecto
+        if (unit1 == null) {
+            player1.buyUnit(player1.getDefaultUnit());
+            unit1 = gameRoom.getLastValidUnit(player1);
+        }
+        if (unit2 == null) {
+            player2.buyUnit(player2.getDefaultUnit());
+            unit2 = gameRoom.getFirstValidUnit(player2);
         }
     }
 
@@ -480,6 +501,7 @@ public class GameController {
     }
 
     */
+    
     private void startBuyPhase(String gameRoomId) {
 
         GameRoom gameRoom = getGameRoomFromDatabase(gameRoomId);
@@ -524,7 +546,7 @@ public class GameController {
             "/topic/game/" + gameRoomId,
             payload);
 
-        
+        gameRoom.fight();
 
         // Actualizar el estado de la partida en la base de datos
         updateGameRoomInDatabase(gameRoomId, gameRoom);
