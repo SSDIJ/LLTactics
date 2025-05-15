@@ -390,6 +390,10 @@ function openShop() {
         })
     })
 
+    refreshShopBtns.forEach((rb) => {
+        rb.classList.remove("closed");
+    })
+
     readyBtn.classList.remove("closed")
 }
 
@@ -405,6 +409,11 @@ function closeShop() {
             c.classList.add("closed");
         })
     })
+
+    refreshShopBtns.forEach((rb) => {
+        rb.classList.add("closed");
+    })
+    
 
     readyBtn.classList.add("closed")
 }
@@ -678,11 +687,15 @@ function readyForNextRound() {
     go("/game/ready/" + roomId, "POST");
 }
 
-
-readyBtn.addEventListener("click", () => {
-    readyForNextRound()
+function closeAll() {
     closeShop();
     closeInventory();
+}
+
+
+readyBtn.addEventListener("click", () => {
+    readyForNextRound();
+    closeAll();
 })
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -795,6 +808,7 @@ async function processAction(action) {
             updateShop()
         }
 
+
         player1.name = action[`name_${name1}`] || name1;
         player2.name = action[`name_${name2}`] || name2;
 
@@ -803,9 +817,32 @@ async function processAction(action) {
         playerPositionElement.innerText = player1.health >= player2.health ? "#1" : "#2";
 
         game.round = action["currentRound"];
-        if (action["currentPhase"] == "WAITING") {
-            closeShop();
+        updateRoundNumber();
+
+        /*
+        if (action["currentPhase"] == "BUY") {
+            console.log(1)
+            openShop();
+            timerElement.innerText = "COMPRA";
         }
+        else if (action["currentPhase"] == "BATTLE") {
+            console.log(2)
+            closeAll();
+            timerElement.innerText = "BATALLA";
+            readyForNextRound();
+        }
+        else if (action["currentPhase"] == "WAITING") {
+            console.log(3)
+            closeShop();
+            timerElement.innerText = "Esperando";
+        }
+
+        const ready = action["ready_" + name1]
+
+        if (ready) {
+            closeAll();
+        }
+        */
 
         return;
     }
@@ -872,12 +909,11 @@ async function processAction(action) {
 
         const player1Wins = await game.startBattle();
 
-        winAnimation(!player1Wins);
-
         sendBattleEnd(player1Wins);
 
         await new Promise(resolve => setTimeout(resolve, 1000));
         clearInterval(intervalHealthsId);
+        winAnimation(!player1Wins);
 
         const delay = Math.floor(Math.random() * (10000 - 3000 + 1)) + 3000;
         await new Promise(resolve => setTimeout(resolve, delay));

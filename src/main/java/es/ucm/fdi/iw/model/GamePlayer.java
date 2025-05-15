@@ -151,8 +151,13 @@ public class GamePlayer {
         }
     }
 
-    public void refreshShop(List<Heroe> heroes, List<Objeto> items) {
-       this.shop.refresh(heroes, items);
+    public void refreshShop(List<Heroe> heroes, List<Objeto> items, boolean cost) {
+
+        if ((stars >= GameRoom.SHOP_REFRESH_PRICE) || !cost) {
+            this.shop.refresh(heroes, items);
+            if (cost) stars -= GameRoom.SHOP_REFRESH_PRICE;
+        }
+       
     }
 
     public void resetHealth() {

@@ -17,7 +17,6 @@ import lombok.Data;
 @Data
 public class GameShop {
 
-    private final int REFRESH_PRICE = 2;
     private final int NUM_UNITS = 3;
     private final int NUM_ITEMS = 2;
 
@@ -36,7 +35,7 @@ public class GameShop {
     }
 
     public int getRefreshPrice() {
-        return REFRESH_PRICE;
+        return GameRoom.SHOP_REFRESH_PRICE;
     }
 
     public boolean buyItem(long itemId) {

@@ -107,8 +107,8 @@ public class GameController {
 
         // Crear una nueva instancia de GameRoom
         GameRoom gameRoom = new GameRoom(gameRoomId, player1, player2);
-        updatePlayerShop(gameRoom, gameRoom.getPlayer1Name());
-        updatePlayerShop(gameRoom, gameRoom.getPlayer2Name());
+        updatePlayerShop(gameRoom, gameRoom.getPlayer1Name(), false);
+        updatePlayerShop(gameRoom, gameRoom.getPlayer2Name(), false);
 
         // Serializar el estado inicial de la partida a JSON
         ObjectMapper objectMapper = new ObjectMapper();
@@ -293,7 +293,7 @@ public class GameController {
                 gameRoom.playerAssignItemToUnit(senderPlayer, itemAssigned.getUnitUnitId(), itemAssigned);
                 break;
             case REFRESH_SHOP:
-                updatePlayerShop(gameRoom, senderPlayer);
+                updatePlayerShop(gameRoom, senderPlayer, true);
                 break;
             case SEND_MESSAGE:
                 gameRoom.addMessage(senderPlayer, details, ZonedDateTime.now());
@@ -305,10 +305,10 @@ public class GameController {
 
     }
 
-    private void updatePlayerShop(GameRoom gameRoom, String player) {
+    private void updatePlayerShop(GameRoom gameRoom, String player, boolean cost) {
         List<Heroe> heroes = unitController.getRandomUnits(3);
         List<Objeto> items = itemController.getRandomItems(2);
-        gameRoom.refreshPlayerShop(player, heroes, items);
+        gameRoom.refreshPlayerShop(player, heroes, items, cost);
     }
 
     private void sendActionToPlayers(GameRoom gameRoom, PlayerAction action) {
@@ -352,9 +352,15 @@ public class GameController {
                 break;
 
             case GENERAL:
+
+                Map<String, Boolean> battleReady = gameRoom.getBattleReady();
                 payload.put("updateAll", true);
                 payload.put("currentRound", gameRoom.getCurrentRound());
                 payload.put("currentPhase", gameRoom.getCurrentPhase());
+
+                System.out.println("\n\n\n");
+                System.out.println(gameRoom.getCurrentPhase());
+                System.out.println("\n\n\n");
                 payload.put("preferredPlayer", gameRoom.getPreferredPlayer());
                 for (Map.Entry<String, GamePlayer> entry : gameRoom.getPlayers().entrySet()) {
                     String playerName = entry.getKey();
@@ -365,6 +371,8 @@ public class GameController {
                     payload.put("stars_" + playerName, player.getStars());
                     payload.put("name_" + playerName, player.getName());
                     payload.put("shop_" + playerName, player.getShop());
+                    Boolean isReady = battleReady.getOrDefault(playerName, false);
+                    payload.put("ready_" + playerName, isReady);
                 }
                 break;
 
@@ -478,15 +486,22 @@ public class GameController {
         gameRoom.nextRound();
         gameRoom.setBuyPhase();
 
-        updatePlayerShop(gameRoom, gameRoom.getPlayer1Name());
-        updatePlayerShop(gameRoom, gameRoom.getPlayer2Name());
+        System.out.println("\n\n\n");
+        System.out.println(gameRoom.getCurrentPhase());
+        System.out.println("\n\n\n");
+
+        boolean cost = false;
+
+        updatePlayerShop(gameRoom, gameRoom.getPlayer1Name(), cost);
+        updatePlayerShop(gameRoom, gameRoom.getPlayer2Name(), cost);
 
         gameRoom.newRoundStars();
+
+        // Actualizar el estado de la partida en la base de datos
 
         sendActionToPlayers(gameRoom, new PlayerAction(PlayerAction.ActionType.GENERAL, "server", ""));
         
         log.info("Comienza fase de compra para sala {}", gameRoomId);
-        gameRoom.setCurrentPhase(Phase.BUY);
 
         // Notificar a los jugadores que comienza la fase de compra
         Map<String, Object> payload = Map.of(
@@ -497,7 +512,6 @@ public class GameController {
             "/topic/game/" + gameRoomId,
             payload);
 
-        // Actualizar el estado de la partida en la base de datos
         updateGameRoomInDatabase(gameRoomId, gameRoom);
     }
 

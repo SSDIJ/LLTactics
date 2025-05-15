@@ -23,6 +23,9 @@ public class GameRoom {
     public static final int INITIAL_LIFE = 5;
     public static final int DAMAGE_WIN = 1;
     public static final int STARS_NEW_ROUND = 15;
+    public static final int SHOP_REFRESH_PRICE = 2;
+
+    public enum Phase { WAITING, BUY, BATTLE }
 
     private final String gameRoomId;
     private final Map<String, GamePlayer> players = new HashMap<>();
@@ -34,6 +37,7 @@ public class GameRoom {
     private final Map<String, Boolean> battleReady = new ConcurrentHashMap<>();
     private String preferredPlayer;
     private String winner;
+    private Phase currentPhase;
 
     // Constructor por defecto
     public GameRoom() {
@@ -57,10 +61,9 @@ public class GameRoom {
         this.resetReadiness();
         preferredPlayer = new Random().nextBoolean() ? player1Name : player2Name;
         winner = null;
+        this.currentPhase = Phase.WAITING;
     }
-
-    public enum Phase { WAITING, BUY, BATTLE }
-    private Phase currentPhase = Phase.WAITING;
+    
 
     public boolean isBuyingPhase() {
         return currentRound % 2 == 1;
@@ -139,8 +142,8 @@ public class GameRoom {
         this.players.get(lastRoundLoser).reduceHealth(DAMAGE_WIN);
     }
 
-    public void refreshPlayerShop(String player, List<Heroe> heroes, List<Objeto> items) {
-        this.players.get(player).refreshShop(heroes, items);
+    public void refreshPlayerShop(String player, List<Heroe> heroes, List<Objeto> items, boolean cost) {
+        this.players.get(player).refreshShop(heroes, items, cost);
     }
 
     public void fight() {
