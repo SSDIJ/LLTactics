@@ -190,4 +190,8 @@ public class GameRoom {
             && u1.getSpeed() == u2.getSpeed()
             && u1.getId() == u2.getId();
     }
+
+    public void refreshPlayerShop(String player, List<Heroe> heroes, List<Objeto> items) {
+        this.players.get(player).refreshShop(heroes, items);
+    }
 }

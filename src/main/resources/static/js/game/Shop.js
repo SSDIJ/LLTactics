@@ -10,7 +10,6 @@ class Shop {
         this.items = [];  // Objetos disponibles
         this.itemsPurchased = [];
         this.unitsPurchased = [];
-        this.refresh();
     }
 
     getRefreshPrice() {
@@ -48,48 +47,34 @@ class Shop {
         this.unitsPurchased = [false, false, false, false]
     }
 
-    // Refrescar la tienda con nuevas unidades y objetos
-    async refresh() {    
-        const fetchUnits = fetch('/api/shopUnits?count=3')
-            .then(response => response.json())
-            .then(data => {
-                this.units = data.map(unitData => new Unit(
-                    unitData.armadura,
-                    unitData.daño,
-                    unitData.descripcion,
-                    unitData.faccion,
-                    unitData.id,
-                    unitData.imagen,
-                    unitData.nombre,
-                    unitData.precio,
-                    unitData.velocidad,
-                    unitData.vida
-                ));
-            });
-    
-        const fetchItems = fetch('/api/shopItems?count=2')
-            .then(response => response.json())
-            .then(data => {
-                this.items = data.map(itemData => new Item(
-                    itemData.armadura,
-                    itemData.daño,
-                    itemData.descripcion,
-                    itemData.idObjeto,
-                    itemData.imagen,
-                    itemData.nombre,
-                    itemData.precio,
-                    itemData.unidad,
-                    itemData.velocidad,
-                    itemData.vida
-                ));
-            });
-    
-        return Promise.all([fetchUnits, fetchItems]).then(() => {
-            this.resetPurchases();
-            console.log("Tienda actualizada correctamente");
-            console.log(this.units);
-            console.log(this.items);
-        });
+    update(shop) {
+        this.units = shop.units.map(unitData => new Unit(
+                unitData.armadura,
+                unitData.daño,
+                unitData.descripcion,
+                unitData.faccion,
+                unitData.id,
+                unitData.imagen,
+                unitData.nombre,
+                unitData.precio,
+                unitData.velocidad,
+                unitData.vida
+            ));
+
+        this.items = shop.items.map(itemData => new Item(
+                itemData.armadura,
+                itemData.daño,
+                itemData.descripcion,
+                itemData.idObjeto,
+                itemData.imagen,
+                itemData.nombre,
+                itemData.precio,
+                itemData.unidad,
+                itemData.velocidad,
+                itemData.vida
+            ));
+        
+        this.resetPurchases();
     }
 }
 

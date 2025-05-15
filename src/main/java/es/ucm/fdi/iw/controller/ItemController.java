@@ -21,9 +21,8 @@ public class ItemController {
     public ItemController(ItemService itemService) {
         this.itemService = itemService;
     }
-    @GetMapping("/api/shopItems")
-    
-    public List<Objeto> getRandomItems(@RequestParam int count) {
+
+    public List<Objeto> getRandomItems(int count) {
         return itemService.getRandomItems(count);
     }
 }

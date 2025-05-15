@@ -500,11 +500,14 @@ function updateShop() {
         });
     });
 }
+
+const player1 = new Player("J1");
+const player2 = new Player("J2");
     
 // Efecto del botón de refrescar de la tienda
 refreshShopBtns.forEach((refreshShopBtn) => {
     refreshShopBtn.addEventListener("click", async () => {
-        if (await player1.refreshShop()) {
+        if (player1.canRefreshShop()) {
 
             sendAction({
                 "actionType": "REFRESH_SHOP",
@@ -513,7 +516,6 @@ refreshShopBtns.forEach((refreshShopBtn) => {
             });
 
             updatePlayerStats();
-            updateShop();
             
             // Animación de destello
 
@@ -544,8 +546,7 @@ refreshShopBtns.forEach((refreshShopBtn) => {
 });
 
 
-const player1 = new Player("J1");
-const player2 = new Player("J2");
+
 
 updateUnits(player2, true);
 
@@ -721,7 +722,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const socketUrl = sessionStorage.getItem("socketUrl")
     ws.initialize(socketUrl, ["/topic/game/" + roomId]);
 
-
     ws.receive = (action) => {
         processAction(action)
     };
@@ -733,6 +733,7 @@ document.addEventListener("DOMContentLoaded", () => {
             actionDetails: ""
         });
     }, 100);
+
 });
 
 function sendBattleEnd(player1Wins) {
@@ -778,10 +779,13 @@ async function processAction(action) {
         player2.updateItems(action[`items_${name2}`] || []);
         updateInventory(true);
 
-        console.log(`health_${name1}`)
-        player1.health = action[`health_${name1}`];
+        const shop1 = action[`shop_${name1}`];
+        if (shop1) {
+            player1.updateShop(shop1);
+            updateShop()
+        }
 
-        console.log(player1.health)
+        player1.health = action[`health_${name1}`];
         player2.health = action[`health_${name2}`];
 
         player1.stars = action[`stars_${name1}`];
@@ -812,6 +816,16 @@ async function processAction(action) {
         const items = action[`items_${playerName}`] || [];
         player.updateItems(items);
         updateInventory(isOpponent);
+    }
+
+    // Actualizar tienda
+    if (action.updateShop) {
+        const shop = action[`shop_${playerName}`];
+        if (shop) {
+            player.updateShop(shop);
+            updateShop();
+        }
+        
     }
 
     // Añadir mensaje
@@ -857,7 +871,6 @@ async function processAction(action) {
         readyForNextRound()
     }
 }
-
 
 
 

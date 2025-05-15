@@ -17,10 +17,12 @@ public class GamePlayer {
     private int stars;
     private Set<GameItem> inventory;
     private List<GameUnit> units;
+    private GameShop shop;
 
     public GamePlayer() {
         this.inventory =  new HashSet<>();
         this.units = new ArrayList<>();
+        this.shop = new GameShop();
     }
 
     public GamePlayer(String name) {
@@ -28,6 +30,7 @@ public class GamePlayer {
         health = GameRoom.INITIAL_LIFE;
         stars = GameRoom.INITIAL_STARS;
         inventory = new HashSet<>();
+        this.shop = new GameShop();
         resetUnits();
     }
 
@@ -146,6 +149,10 @@ public class GamePlayer {
                 return;
             }
         }
+    }
+
+    public void refreshShop(List<Heroe> heroes, List<Objeto> items) {
+       this.shop.refresh(heroes, items);
     }
     
 }

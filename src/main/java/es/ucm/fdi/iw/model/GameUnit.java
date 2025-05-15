@@ -59,6 +59,31 @@ public class GameUnit {
         return newUnit;
     }
 
+    public static GameUnit fromHeroe(Heroe heroe) {
+        String factionName;
+        switch (heroe.getFaccion()) {
+            case 0: factionName = "Humanos"; break;
+            case 1: factionName = "Dragones"; break;
+            case 2: factionName = "Trolls"; break;
+            case 3: factionName = "No muertos"; break;
+            case 4: factionName = "Criaturas legendarias"; break;
+            default: factionName = "Desconocida"; break;
+        }
+
+        return new GameUnit(
+            heroe.getArmadura(),              // armor
+            heroe.getDaño(),                  // damage
+            heroe.getDescripcion(),           // description
+            factionName,                      // faction
+            heroe.getIdHeroe().intValue(),    // id (convertir de Long a int)
+            heroe.getImagen(),                // image
+            heroe.getNombre(),                // name
+            heroe.getPrecio(),                // price
+            heroe.getVelocidad(),             // speed
+            heroe.getVida()                   // health
+        );
+    }
+
     public double getHealthPercentage() {
         return (health / (double) maxHealth) * 100;
     }

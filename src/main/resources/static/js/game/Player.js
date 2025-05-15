@@ -47,10 +47,8 @@ class Player {
         return this.stars;
     }
 
-    async refreshShop() {
+    canRefreshShop() {
         if (this.stars >= this.shop.getRefreshPrice()) {
-            this.stars -= this.shop.getRefreshPrice();
-            await this.shop.refresh();
             return true;
         }
         else {
@@ -58,6 +56,10 @@ class Player {
         }
 
         return false;
+    }
+
+    updateShop(shop) {
+        this.shop.update(shop)
     }
 
     // Comprar una unidad de la tienda

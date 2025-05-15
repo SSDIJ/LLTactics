@@ -30,8 +30,8 @@ public class UnitController {
     public UnitController(HeroesService heroeService) {
         this.heroeService = heroeService;
     }
-    @GetMapping("/api/shopUnits")
-    public List<Heroe> getRandomUnits(@RequestParam int count) {
+    
+    public List<Heroe> getRandomUnits(int count) {
         return heroeService.getRandomHeroes(count);
     }
 }

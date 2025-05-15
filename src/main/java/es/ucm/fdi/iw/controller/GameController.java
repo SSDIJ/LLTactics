@@ -9,12 +9,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import es.ucm.fdi.iw.model.GameBattleResult;
 import es.ucm.fdi.iw.model.GameItem;
 import es.ucm.fdi.iw.model.GameMessage;
 import es.ucm.fdi.iw.model.GamePlayer;
 import es.ucm.fdi.iw.model.GameRoom;
+import es.ucm.fdi.iw.model.GameShop;
 import es.ucm.fdi.iw.model.GameRoom.Phase;
 import es.ucm.fdi.iw.model.GameUnit;
 import es.ucm.fdi.iw.model.Heroe;
@@ -80,9 +82,11 @@ public class GameController {
     @Autowired
     private UserController userController;
 
-    // Almacenamos las salas de juego activas
-    //OBSOLETO AHORA QUE SE GUARDA EN LA BD
-    //private static final Map<String, GameRoom> activeGames = new ConcurrentHashMap<>();
+    @Autowired 
+    private UnitController unitController;
+
+    @Autowired
+    private ItemController itemController;
 
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4);
 
@@ -105,9 +109,12 @@ public class GameController {
 
         // Crear una nueva instancia de GameRoom
         GameRoom gameRoom = new GameRoom(gameRoomId, player1, player2);
+        updatePlayerShop(gameRoom, gameRoom.getPlayer1Name());
+        updatePlayerShop(gameRoom, gameRoom.getPlayer2Name());
 
         // Serializar el estado inicial de la partida a JSON
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
         String estadoPartidaJson = "";
         
         //Parsea el estado de la partida a JSON
@@ -135,8 +142,7 @@ public class GameController {
         System.out.println("Partida guardada en la base de datos!!!!!");
         entityManager.flush();
 
-        // Espera 5 segundos antes de empezar la partida
-        //ESTO SE REEMPLAZARá POR UN BOTON DE LISTO
+        // TODO: ELIMINAR ESTO
         scheduler.schedule(() -> {
             startBuyPhase(gameRoomId);
         }, 5, TimeUnit.SECONDS);
@@ -191,15 +197,10 @@ public class GameController {
         }
         model.addAttribute("opponentObjects", opponentObjects);
 
-        List<Objeto> shopItems = List.of(
-                new Objeto("/img/items/potion-red.png", "Poción Roja", 0, 0, 0, 0, "", 1),
-                new Objeto("/img/items/flame-sword.png", "Espada de Hierro", 0, 0, 0, 0, "", 5));
+        List<Objeto> shopItems = player1.getShop().getItems();
         model.addAttribute("shopItems", shopItems);
 
-        List<Heroe> shopUnits = List.of(
-                new Heroe("Dragón", "/img/units/dragons/4. DGris/burner.png", 0, 0, 0, 0, null, 0, 2, 0),
-                new Heroe("Esqueleto", "/img/units/humans/5. Mago/white-mage.png", 0, 0, 0, 0, null, 0, 4, 0),
-                new Heroe("Mago", "/img/units/humans/5. Mago/white-mage.png", 0, 0, 0, 0, null, 0, 1, 0));
+        List<Heroe> shopUnits = player1.getShop().getUnits();
         model.addAttribute("shopUnits", shopUnits);
 
         List<GameUnit> unitsP1 = new ArrayList<>();
@@ -271,6 +272,9 @@ public class GameController {
         String details = action.getActionDetails();
 
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+    
+        
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         switch (type) {
@@ -298,7 +302,7 @@ public class GameController {
                 gameRoom.playerAssignItemToUnit(senderPlayer, itemAssigned.getUnitUnitId(), itemAssigned);
                 break;
             case REFRESH_SHOP:
-                // Lógica para refrescar la tienda
+                updatePlayerShop(gameRoom, senderPlayer);
                 break;
             case SEND_MESSAGE:
                 gameRoom.addMessage(senderPlayer, details, ZonedDateTime.now());
@@ -310,12 +314,19 @@ public class GameController {
 
     }
 
+    private void updatePlayerShop(GameRoom gameRoom, String player) {
+        List<Heroe> heroes = unitController.getRandomUnits(3);
+        List<Objeto> items = itemController.getRandomItems(2);
+        gameRoom.refreshPlayerShop(player, heroes, items);
+    }
+
     private void sendActionToPlayers(GameRoom gameRoom, PlayerAction action) {
         sendActionToPlayers(gameRoom, action, "server");
     }
 
     private void sendActionToPlayers(GameRoom gameRoom, PlayerAction action, String senderPlayer) {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
         Map<String, Object> payload = new HashMap<>();
         GamePlayer sender = gameRoom.getPlayers().get(senderPlayer);
         payload.put("actor", senderPlayer);
@@ -352,6 +363,7 @@ public class GameController {
                     payload.put("health_" + playerName, player.getHealth());
                     payload.put("stars_" + playerName, player.getStars());
                     payload.put("name_" + playerName, player.getName());
+                    payload.put("shop_" + playerName, player.getShop());
                 }
                 break;
 
@@ -362,7 +374,8 @@ public class GameController {
                 break;
 
             case REFRESH_SHOP:
-                // Implementar si es necesario
+                payload.put("updateShop", true);
+                payload.put("shop_" + senderPlayer, sender.getShop());
                 break;
 
             case SEND_MESSAGE:
@@ -407,79 +420,12 @@ public class GameController {
 
         if (allReady) {
             if (gameRoom.isBuyingPhase()) {
-                startBuyPhase(gameRoomId);
+                startBattlePhase(gameRoomId);
             }
-            else startBattlePhase(gameRoomId);
+            else startBuyPhase(gameRoomId);
         }
     }
 
-    /*
-    @MessageMapping("/game/ready/{gameRoomId}")
-    public void handleEndBattle(@DestinationVariable String gameRoomId, @Payload GameBattleResult playerResult,
-            Principal principal) {
-        GameRoom gameRoom = getGameRoomFromDatabase(gameRoomId);
-        String playerName = principal.getName();
-
-        synchronized (gameRoom) {
-
-            gameRoom.setPlayerResult(playerName, playerResult);
-            gameRoom.setPlayerReady(playerName);
-
-            if (gameRoom.bothPlayersReady()) {
-                GameBattleResult result1 = gameRoom.getPlayerResult(gameRoom.getPlayer1Name());
-                GameBattleResult result2 = gameRoom.getPlayerResult(gameRoom.getPlayer2Name());
-
-                if (result1 == null || result2 == null)
-                    return;
-
-                gameRoom.resetReadiness();
-
-                if (!gameRoom.resultsMatch(result1, result2)) {
-                    // Manejar discrepancia
-                    log.warn("Discrepancia en resultados de batalla entre jugadores.");
-                    return;
-                }
-
-                System.out.println("TODO PIOLA");
-                gameRoom.reduceLoserHealth();
-                // Aqui se elige al ganador de la partida
-                String winner = gameRoom.getWinner();
-                if (winner != null) {
-                    // TOCAR A PARTIR DE AQUI
-
-                    PlayerAction winnerAction = new PlayerAction(
-                            PlayerAction.ActionType.WINNER,
-                            "server",
-                            winner);
-
-                    sendActionToPlayers(gameRoom, winnerAction);
-                    String defeated = gameRoom.getPlayers().keySet().stream()
-                            .filter(p -> !p.equals(winner))
-                            .findFirst()
-                            .orElse(null);
-
-                    if (defeated != null) {
-                        userController.updateWinner(winner, defeated);
-                    }
-                    return;
-                }
-
-                // Validar si ya se está en fase de transición
-                if (!gameRoom.isInTransition()) {
-                    gameRoom.setInTransition(true); // bandera para evitar duplicación
-
-                    scheduler.schedule(() -> {
-                        startBuyPhase(gameRoomId);
-                        gameRoom.setInTransition(false); // liberar transición
-                    }, 5, TimeUnit.SECONDS);
-                }
-            }
-        }
-        // Actualizar el estado de la partida en la base de datos
-        updateGameRoomInDatabase(gameRoomId, gameRoom);
-    }
-
-    */
     private void startBuyPhase(String gameRoomId) {
 
         GameRoom gameRoom = getGameRoomFromDatabase(gameRoomId);
@@ -489,6 +435,10 @@ public class GameController {
 
         gameRoom.nextRound();
 
+        updatePlayerShop(gameRoom, gameRoom.getPlayer1Name());
+        updatePlayerShop(gameRoom, gameRoom.getPlayer2Name());
+        sendActionToPlayers(gameRoom, new PlayerAction(PlayerAction.ActionType.GENERAL, "server", ""));
+        
         log.info("Comienza fase de compra para sala {}", gameRoomId);
         gameRoom.setCurrentPhase(Phase.BUY);
 
@@ -524,51 +474,12 @@ public class GameController {
             "/topic/game/" + gameRoomId,
             payload);
 
-        
-
         // Actualizar el estado de la partida en la base de datos
         updateGameRoomInDatabase(gameRoomId, gameRoom);
     }
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
-
-    /*
-     * private void resolveBattle(GameRoom gameRoom) {
-     * String loser = gameRoom.calculateBattleLoser(); // Método que debes definir
-     * según tu lógica
-     * if (loser != null) {
-     * GamePlayer losingPlayer = gameRoom.getPlayers().get(loser);
-     * losingPlayer.reduceHealth(5);
-     * 
-     * if (losingPlayer.getHealth() <= 0) {
-     * endGame(gameRoom, loser);
-     * }
-     * }
-     * }
-     * 
-     * private void endGame(GameRoom gameRoom, String loser) {
-     * String winner = gameRoom.getPlayers().keySet().stream()
-     * .filter(name -> !name.equals(loser))
-     * .findFirst()
-     * .orElse("Desconocido");
-     * 
-     * Map<String, Object> payload = Map.of(
-     * "gameOver", true,
-     * "winner", winner
-     * );
-     * 
-     * for (String player : gameRoom.getPlayers().keySet()) {
-     * messagingTemplate.convertAndSendToUser(
-     * player,
-     * "/queue/game/" + gameRoom.getGameRoomId() + "/actions",
-     * payload
-     * );
-     * }
-     * 
-     * activeGames.remove(gameRoom.getGameRoomId());
-     * }
-     */
 
     //FUNCION QUE DEVUELVE LA PARTIDA DESDE LA BD
     @Transactional
@@ -586,6 +497,7 @@ public class GameController {
 
             // Deserializar el JSON a un objeto GameRoom
             ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // Ignorar propiedades desconocidas
             GameRoom gameRoom = objectMapper.readValue(estadoPartidaJson, GameRoom.class);
 
@@ -602,6 +514,7 @@ public class GameController {
         try {
             // Serializar el objeto GameRoom a JSON
             ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
             String estadoPartidaJson = objectMapper.writeValueAsString(gameRoom);
 
             // Buscar la partida activa en la base de datos
