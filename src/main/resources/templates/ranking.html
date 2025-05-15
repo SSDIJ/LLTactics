@@ -44,7 +44,7 @@
                     
                     <tr th:each="user, stat : ${usuarios}" class="clickable-row" th:attr="data-href=@{'/user/viewProfile'(username=${user.username})}">
                         <td th:text="${stat.index + 1}"></td>
-                        <td th:text="${user.firstName}"></td>
+                        <td th:text="${user.username}"></td>
                         <td th:text="${user.puntuacion}"></td>
                         <td th:text="${user.partidasGanadas + user.partidasPerdidas}"></td>
                         <td th:text="${user.partidasGanadas}"></td>

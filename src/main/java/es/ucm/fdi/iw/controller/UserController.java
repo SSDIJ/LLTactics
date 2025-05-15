@@ -269,7 +269,6 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		target.setPartidasGanadas(edited.getPartidasGanadas());
 		target.setPartidasPerdidas(edited.getPartidasPerdidas());
 		target.setPuntuacion(edited.getPuntuacion());
-		target.setIndiceRanking(edited.getIndiceRanking());
 		target.setRoles(edited.getRoles());
 		target.setEnabled(edited.isEnabled());
 
@@ -512,7 +511,6 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		newUser.setPartidasGanadas(0);
 		newUser.setPartidasPerdidas(0);
 		newUser.setPuntuacion(0);
-		newUser.setIndiceRanking(0);
 
 		newUser.setIdfotoPerfil(idprofilePic);
 		List<Heroe> heroes = heroeController.getTodosLosHeroes();
