@@ -740,17 +740,10 @@ public String searchUser(@RequestParam("username") String username, Model model)
 			heroeUsosRepository.save(nuevoHeroeUso);
 			System.out.println("Nuevo registro de uso de héroe creado.");
 		}
-		FaccionUsos usosFaccion = faccionUsosRepository.findByUserAndFaccion(updatableUser, updatableHeroe.getFaccion());
-		if (usosFaccion != null) {
-			usosFaccion.setUsos(usosFaccion.getUsos() + 1);
-			faccionUsosRepository.save(usosFaccion);
-		} else {
-			FaccionUsos nuevoUso = new FaccionUsos();
-			nuevoUso.setJugador(updatableUser);
-			nuevoUso.setFaccion(updatableHeroe.getFaccion());
-			nuevoUso.setUsos(1);
-			faccionUsosRepository.save(nuevoUso);
-		}
+		FaccionUsos usosFaccion = faccionUsosRepository.findByUserAndFaccion(updatableUser,
+				updatableHeroe.getFaccion());
+		usosFaccion.setUsos(usosFaccion.getUsos() + 1);
+		faccionUsosRepository.save(usosFaccion);
 
 	}
 

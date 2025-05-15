@@ -429,7 +429,8 @@ function updateShop() {
                         sendAction({
                             "actionType": "BUY_UNIT",
                             "playerName": player1.name,
-                            "actionDetails": JSON.stringify(unidad),
+                            "actionDetails": JSON.stringify(unidad)
+
                         });
 
                         updatePlayerStats();
@@ -684,10 +685,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // TODO: ELIMINAR ESTO CUANDO FUNCIONE
     const socketUrl = sessionStorage.getItem("socketUrl")
-    ws.initialize(socketUrl, [
-        "/topic/game/" + roomId,
-        "/topic/game/" + roomId + "/actions",
-    ]);
+    ws.initialize(socketUrl, ["/topic/game/" + roomId]);
+
 
     ws.receive = (action) => {
         processAction(action)
@@ -722,8 +721,6 @@ function sendAction(action) {
 }
 
 async function processAction(action) {
-
-    console.log("actor:", action.actor, "isSender:", action.isSender, "playerUnits:", action.playerUnits, "opponentUnits:", action.opponentUnits);
 
     if (action.isWinner != undefined) {
         showWinnerContainer(action.winner);
@@ -760,27 +757,15 @@ async function processAction(action) {
     const player = isOpponent ? player2 : player1;
 
     // Actualizar unidades
-    if (action.updateUnits) {
-        if (isOpponent && action.opponentUnits) {
-            player2.updateUnits(action.opponentUnits);
-            updateUnits(player2, true);
-            console.log("Oponente actualiza unidades:", player2.units); // TODO: ELIMINAR
-        } else if(!isOpponent && action.playerUnits) {
-            player1.updateUnits(action.playerUnits.reverse());
-            updateUnits(player1);
-            console.log("Actualizo mis unidades:", player1.units); // TODO: ELIMINAR
-        }
+    if (action.updateUnits && action.updateUnits != undefined) {
+        player.updateUnits(isOpponent ? action.playerUnits : action.playerUnits.reverse())
+        updateUnits(player, isOpponent);
     }
     
     // Actualizar inventarios
     if (action.updateItems && action.updateItems != undefined) {
-        if (isOpponent && action.opponentItems) {
-            player.updateItems(action.opponentItems);
-            updateInventory(true);
-        } else if(!isOpponent && action.playerItems) {
-            player.updateItems(action.playerItems);
-            updateInventory();
-        }
+        player.updateItems(action.playerItems)
+        updateInventory(isOpponent)
     }
 
     // Añadir mensaje
