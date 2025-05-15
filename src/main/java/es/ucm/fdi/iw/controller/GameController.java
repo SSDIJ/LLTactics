@@ -446,11 +446,16 @@ public class GameController {
         updateGameRoomInDatabase(gameRoomId, gameRoom);
 
         if (allReady) {
+            // Control de transición para evitar glitches
+            if (gameRoom.isInTransition()) {
+                return; // Ya se está cambiando de fase, no hacer nada
+            }
+            gameRoom.setInTransition(true);
+
             if (gameRoom.isBuyingPhase()) {
                 sendActionToPlayers(gameRoom, new PlayerAction(ActionType.GENERAL, "server", ""));
                 startBuyPhase(gameRoomId);
-            }
-            else {
+            } else {
                 prepareDefaultUnits(gameRoom);
                 sendActionToPlayers(gameRoom, new PlayerAction(ActionType.GENERAL, "server", ""));
                 startBattlePhase(gameRoomId);
@@ -512,6 +517,7 @@ public class GameController {
             "/topic/game/" + gameRoomId,
             payload);
 
+        gameRoom.setInTransition(false);
         updateGameRoomInDatabase(gameRoomId, gameRoom);
     }
 
@@ -537,6 +543,7 @@ public class GameController {
         
         gameRoom.fight();
         
+        gameRoom.setInTransition(false);
         // Actualizar el estado de la partida en la base de datos
         updateGameRoomInDatabase(gameRoomId, gameRoom);
     }

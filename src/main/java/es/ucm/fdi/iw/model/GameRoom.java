@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 import java.util.Set;
@@ -37,7 +40,11 @@ public class GameRoom {
     private final Map<String, Boolean> battleReady = new ConcurrentHashMap<>();
     private String preferredPlayer;
     private String winner;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Phase currentPhase;
+
+    private boolean inTransition = false;
 
     // Constructor por defecto
     public GameRoom() {
@@ -64,6 +71,14 @@ public class GameRoom {
         this.currentPhase = Phase.WAITING;
     }
     
+
+    public boolean isInTransition() {
+    return inTransition;
+    }
+
+    public void setInTransition(boolean inTransition) {
+        this.inTransition = inTransition;
+    }
 
     public boolean isBuyingPhase() {
         return currentRound % 2 == 1;

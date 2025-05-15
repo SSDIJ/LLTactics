@@ -819,7 +819,7 @@ async function processAction(action) {
         game.round = action["currentRound"];
         updateRoundNumber();
 
-        /*
+        
         if (action["currentPhase"] == "BUY") {
             console.log(1)
             openShop();
@@ -842,7 +842,7 @@ async function processAction(action) {
         if (ready) {
             closeAll();
         }
-        */
+        
 
         return;
     }
