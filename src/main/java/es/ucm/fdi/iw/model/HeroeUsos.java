@@ -1,9 +1,11 @@
 package es.ucm.fdi.iw.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
@@ -23,11 +25,14 @@ public class HeroeUsos {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "jid", referencedColumnName = "id", nullable = false)
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "hid", referencedColumnName = "idheroe", nullable = false)
     private Heroe heroe;
 
+    @Column(nullable = true)
     private int vecesUsado;
 
      public User getJugador() {

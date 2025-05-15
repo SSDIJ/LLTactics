@@ -15,15 +15,18 @@ import java.time.LocalDateTime;
 @Entity
 public class FaccionUsos {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen")
+    @SequenceGenerator(name = "gen", sequenceName = "gen")
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "jid", referencedColumnName = "id", nullable = false)
     private User user;
 
-  
+    @Column(nullable = true)
     private int faccion;
 
+    @Column(nullable = true)
     private int vecesUsado;
 
          public User getJugador() {

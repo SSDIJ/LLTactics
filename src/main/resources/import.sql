@@ -25,8 +25,24 @@ VALUES
 (1, 5, TRUE, 0, 0, null, 'Admin', 1, 'Administrez', 0, 0, '{bcrypt}$2a$10$GU4mO.Uxc.tRP3.DsrBIvO3543uERYAvJwkuplrpFTAYdXoteTFOm', 0, null, 'ADMIN,USER', 'pruebaAdmin123'),
 (2, 2, TRUE, 0, 0, null, 'Usuario', 2, 'Usuariez', 0, 0, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 0, null, 'USER', 'usuarioMolon77');
 
-INSERT INTO "PUBLIC"."PARTIDA" VALUES
-(FALSE, 1, 2, 1, 1, 2, '', '');
+INSERT INTO "PUBLIC"."FACCION_USOS" 
+(FACCION, VECES_USADO, ID, JID) 
+VALUES
+(0, 3,1, 1),
+(1, 5,2, 1),
+(2, 2,3, 1),
+(3, 0,4, 1),
+(4, 1,5, 1),
+(0, 1,6, 2),
+(1, 0,7, 2),
+(2, 4,8, 2),
+(3, 2,9, 2),
+(4, 3,10, 2);
+
+INSERT INTO "PUBLIC"."PARTIDA"
+(EN_CURSO, GANADOR, PERDEDOR, FIN, ID_PARTIDA, INICIO, JID1, JID2, ESTADO, GAME_ROOM_ID)
+VALUES
+(FALSE, 1, 2, null, 1, null, 1, 2, '', '');
 
 -- start id numbering from a value that is larger than any assigned above
 ALTER SEQUENCE "PUBLIC"."GEN" RESTART WITH 1024;
@@ -54,7 +70,27 @@ INSERT INTO "PUBLIC"."HEROE" (vida, armadura, faccion, precio, probabilidad, da�
 (180, 25, 3, 3, 0.4, 130, 85, 'Heroe', U&'La flecha de la muerte, el Esqueleto Arquero lanza sus proyectiles con una precisi\00f3n mortal. Desde la distancia, derrumba a sus enemigos uno por uno, como un cazador que acecha a su presa.', '/img/units/skeletons/4. SArquero/banebow-bow.png', 'Esqueleto Arquero'),
 (220, 20, 3, 5, 0.35, 150, 55, 'Heroe', 'El hechicero del abismo, el Esqueleto Mago invoca oscuros hechizos que devoran todo a su paso. Su magia arcana es tan poderosa como su cuerpo esqueleto, y arrastra a sus enemigos hacia la oscuridad.', '/img/units/skeletons/5. SMago/ancient-lich.png', 'Esqueleto mago'),
 (400, 120, 4, 6, 0.05, 200, 40, 'Heroe', U&'El espectro de fuego eterno, la Criatura Legendaria es una aparici\00f3n envuelta en llamas ardientes, cuya existencia desaf\00eda la realidad. Con habilidades extraordinarias, su poder es tan vasto como las llamas que consume, arrasando con todo a su paso.', '/img/units/legendary/fireghost/fireghost.png', 'Criatura Legendaria');          
-     
+
+INSERT INTO "PUBLIC"."HEROE_USOS" 
+(VECES_USADO, HID, ID, JID) 
+VALUES
+(0, 3,1, 1),
+(1, 5,2, 1),
+(2, 2,3, 1),
+(3, 6,4, 1),
+(4, 1,5, 1),
+(0, 1,6, 2),
+(1, 10,7, 2),
+(2, 4,8, 2),
+(3, 2,9, 2),
+(4, 3,10, 2);  
+
+INSERT INTO "PUBLIC"."IWUSER_MAS_JUGADOS" 
+(MAS_JUGADOS_ID_HEROE, USER_ID)
+VALUES
+(1, 1),
+(10, 2);
+
 -- 1 +/- SELECT COUNT(*) FROM PUBLIC.OBJETO;  
 INSERT INTO "PUBLIC"."OBJETO" VALUES
 (2, 3, 1, 4, 5, 1, NULL, 'Un collar místico con el símbolo del ankh.', '/img/items/ankh-necklace.png', 'Collar Ankh'),
