@@ -1,5 +1,6 @@
 package es.ucm.fdi.iw.controller;
 
+import java.io.ObjectInputFilter.Config;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,11 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
+import es.ucm.fdi.iw.model.ConfigPartida;
 import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
+import es.ucm.fdi.iw.repositories.ConfigPartidaRepository;
 import es.ucm.fdi.iw.repositories.HeroeRepository;
 import es.ucm.fdi.iw.repositories.PartidasRepository;
 import es.ucm.fdi.iw.repositories.UserRepository;
@@ -46,6 +48,9 @@ public class AdminController {
 
     @Autowired
     private PartidasRepository partidaRepository;
+
+    @Autowired
+    private ConfigPartidaRepository configPartidaRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -70,7 +75,31 @@ public class AdminController {
     public String showPartidas(Model model) {
         List<Partida> partidas = partidaRepository.findAll();
         model.addAttribute("partidas", partidas);
+        ConfigPartida config = configPartidaRepository.findAll().stream().findFirst().orElse(new ConfigPartida());
+        model.addAttribute("configPartida", config);
         return "gestPartidas";
+    }
+
+    @PostMapping("/gestPartidas/updateValues")
+    @Transactional
+    public String updateValuesPartida(
+        @RequestParam("estrellasIni") int estrellasIni,
+        @RequestParam("vidaIni") int vidaIni,
+        @RequestParam("danyoVictoria") int danyoVictoria,
+        @RequestParam("estrellasRonda") int estrellasRonda,
+        @RequestParam("precioRefrescar") int precioRefrescar,
+        Model model) {
+
+            
+        ConfigPartida config = configPartidaRepository.findAll().stream().findFirst().orElse(new ConfigPartida());
+        config.setEstrellasIni(estrellasIni);
+        config.setVidaIni(vidaIni);
+        config.setDanyoVictoria(danyoVictoria);
+        config.setEstrellasRonda(estrellasRonda);
+        config.setPrecioRefrescar(precioRefrescar);
+        configPartidaRepository.save(config);
+
+        return "redirect:/admin/gestPartidas";
     }
 
     // @GetMapping("/gestHeroes")
@@ -182,29 +211,29 @@ public class AdminController {
         return "gestHeroes";
     }
 
-        @PostMapping("/banearUsuario/{idUsuario}")
-        @Transactional
-        public String banearUsuario(@PathVariable("idUsuario") Long idUsuario, Model model) {
-            User usuario = userRepository.findById(idUsuario)
-                    .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+    @PostMapping("/banearUsuario/{idUsuario}")
+    @Transactional
+    public String banearUsuario(@PathVariable("idUsuario") Long idUsuario, Model model) {
+        User usuario = userRepository.findById(idUsuario)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
-            usuario.setEstado(2);
-            userRepository.save(usuario);
+        usuario.setEstado(2);
+        userRepository.save(usuario);
 
-            return "redirect:/admin/gestUsuarios";
-        }
+        return "redirect:/admin/gestUsuarios";
+    }
 
-        @PostMapping("/desbanearUsuario/{idUsuario}")
-        @Transactional
-        public String desbanearUsuario(@PathVariable("idUsuario") Long idUsuario, Model model) {
-            User usuario = userRepository.findById(idUsuario)
-                    .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+    @PostMapping("/desbanearUsuario/{idUsuario}")
+    @Transactional
+    public String desbanearUsuario(@PathVariable("idUsuario") Long idUsuario, Model model) {
+        User usuario = userRepository.findById(idUsuario)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
-            usuario.setEstado(0);
-            userRepository.save(usuario);
+        usuario.setEstado(0);
+        userRepository.save(usuario);
 
-            return "redirect:/admin/gestUsuarios";
-        }
+        return "redirect:/admin/gestUsuarios";
+    }
 
 
     @GetMapping("/filtrarUsuarios")

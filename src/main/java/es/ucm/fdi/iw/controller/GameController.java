@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import es.ucm.fdi.iw.model.ConfigPartida;
 import es.ucm.fdi.iw.model.GameBattleResult;
 import es.ucm.fdi.iw.model.GameItem;
 import es.ucm.fdi.iw.model.GameMessage;
@@ -28,6 +29,7 @@ import es.ucm.fdi.iw.model.PlayerAction;
 import es.ucm.fdi.iw.model.Topic;
 import es.ucm.fdi.iw.model.Unidad;
 import es.ucm.fdi.iw.model.User.Role;
+import es.ucm.fdi.iw.repositories.ConfigPartidaRepository;
 import es.ucm.fdi.iw.repositories.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import es.ucm.fdi.iw.model.User;
@@ -88,6 +90,9 @@ public class GameController {
     @Autowired
     private ItemController itemController;
 
+    @Autowired
+    private ConfigPartidaRepository configPartidaRepository;
+
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4);
 
     @ModelAttribute
@@ -104,9 +109,9 @@ public class GameController {
     public void addActiveGame(String gameRoomId, String player1, String player2) {
         System.out.println("INTENTANDO GUARDAR PARTIDA EN BD");
 
-
+        ConfigPartida config = configPartidaRepository.findAll().stream().findFirst().orElse(null);
         // Crear una nueva instancia de GameRoom
-        GameRoom gameRoom = new GameRoom(gameRoomId, player1, player2);
+        GameRoom gameRoom = new GameRoom(gameRoomId, player1, player2, config);
         updatePlayerShop(gameRoom, gameRoom.getPlayer1Name(), false);
         updatePlayerShop(gameRoom, gameRoom.getPlayer2Name(), false);
 

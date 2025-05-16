@@ -113,3 +113,9 @@ INSERT INTO "PUBLIC"."OBJETO" VALUES
 (0, 1, 2, 3, 2, 18, NULL, 'Un collar hecho de huesos de criaturas míticas.', '/img/items/necklace-bone.png', 'Collar de Hueso'),
 (0, 5, 3, 2, 5, 19, NULL, 'Un bastón mágico con poderosos hechizos.', '/img/items/staff-2.png', 'Bastón de Poder'),
 (1, 3, 2, 3, 2, 20, NULL, 'Una espada básica para combate cuerpo a cuerpo.', '/img/items/sword.png', 'Espada');
+
+
+INSERT INTO "PUBLIC"."CONFIG_PARTIDA" 
+(DANYO_VICTORIA,ESTRELLAS_INI, ESTRELLAS_RONDA, PRECIO_REFRESCAR, VIDA_INI)
+VALUES
+(1, 20, 15, 2, 5);

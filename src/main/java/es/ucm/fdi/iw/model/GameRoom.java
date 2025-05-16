@@ -22,11 +22,11 @@ import java.time.ZonedDateTime;
 @Data
 public class GameRoom {
 
-    public static final int INITIAL_STARS = 20;
-    public static final int INITIAL_LIFE = 5;
-    public static final int DAMAGE_WIN = 1;
-    public static final int STARS_NEW_ROUND = 15;
-    public static final int SHOP_REFRESH_PRICE = 2;
+    public static int INITIAL_STARS = 10;
+    public static int INITIAL_LIFE = 20;
+    public static int DAMAGE_WIN = 2;
+    public static int STARS_NEW_ROUND = 5;
+    public static int SHOP_REFRESH_PRICE = 1;
 
     public enum Phase { WAITING, BUY, BATTLE }
 
@@ -47,16 +47,21 @@ public class GameRoom {
     private boolean inTransition = false;
 
     // Constructor por defecto
-    public GameRoom() {
+    public GameRoom(ConfigPartida config) {
         this.gameRoomId = "";
         // Inicializar estructuras complejas para evitar null
         this.players.put(player1Name, new GamePlayer(player1Name));
         this.players.put(player2Name, new GamePlayer(player2Name));
         this.messageHistory = new ArrayList<>();
         this.playerResults = new HashMap<>();
+        this.INITIAL_STARS = config.getEstrellasIni();
+        this.INITIAL_LIFE = config.getVidaIni();
+        this.DAMAGE_WIN = config.getDanyoVictoria();
+        this.STARS_NEW_ROUND = config.getEstrellasRonda();
+        this.SHOP_REFRESH_PRICE = config.getPrecioRefrescar(); 
     }
 
-    public GameRoom(String gameRoomId, String player1Name, String player2Name) {
+    public GameRoom(String gameRoomId, String player1Name, String player2Name, ConfigPartida config) {
         this.gameRoomId = gameRoomId;
 
         this.player1Name = player1Name;
@@ -69,6 +74,11 @@ public class GameRoom {
         preferredPlayer = new Random().nextBoolean() ? player1Name : player2Name;
         winner = null;
         this.currentPhase = Phase.WAITING;
+        this.INITIAL_STARS = config.getEstrellasIni();
+        this.INITIAL_LIFE = config.getVidaIni();
+        this.DAMAGE_WIN = config.getDanyoVictoria();
+        this.STARS_NEW_ROUND = config.getEstrellasRonda();
+        this.SHOP_REFRESH_PRICE = config.getPrecioRefrescar(); 
     }
     
 

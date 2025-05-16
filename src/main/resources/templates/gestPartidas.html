@@ -9,58 +9,98 @@
 
 <body>
     <header th:replace="~{fragments/nav.html :: nav}"></header>
-      <div class="container mt-5">
-                <h1 class="mt-5 title display-1 text-center">Gestión de Partidas</h1>
-            </div>
+    <div class="container mt-5">
+        <h1 class="mt-5 title display-1 text-center">Gestión de Partidas</h1>
+    </div>
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="filtrar-container mb-4">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          Filtrar Partidas
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" onclick="filtrarPartidas('all')">Todas</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="filtrarPartidas('enCurso')">En curso</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="filtrarPartidas('terminadas')">Terminadas</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- Botón para generar una partida de prueba -->
-                <form th:action="@{/guardaPartida}" method="post" style="margin-bottom: 20px;">
-                    <input type="hidden" name="idJugador1" value="1" />
-                    <input type="hidden" name="idJugador2" value="2" />
-                    <input type="hidden" name="enCurso" value="false" />
-                    <input type="hidden" name="ganador" value="3" />
-                    <input type="hidden" name="perdedor" value="1" />
-                    <input type="hidden" name="estado" value="test" />
-                    <input type="hidden" name="gameRoomId" value="test" />
-                    <button type="submit" class="btn btn-primary">Generar Partida de Prueba</button>
-                </form>
-
-                <div class="accordion" id="accordionPartidas">
-                    <div th:each="partida : ${partidas}" class="accordion-item">
-                      <h2 class="accordion-header" th:id="'heading-' + ${partida.idPartida}">
-                        <button class="accordion-button collapsed" type="button" 
-                                data-bs-toggle="collapse" 
-                                th:data-bs-target="'#collapse' + ${partida.idPartida}" 
-                                aria-expanded="false" 
-                                th:aria-controls="'collapse' + ${partida.idPartida}">
-                          <span th:text="'Partida ' + ${partida.idPartida}"></span>
-                        </button>
-                      </h2>
-                        <div th:id="'collapse' + ${partida.idPartida}" 
-                           class="accordion-collapse collapse" 
-                           data-bs-parent="#accordionPartidas">
-                            <div class="accordion-body">
-                                <p><strong>ID:</strong> <span th:text="${partida.idPartida}"></span></p>
-                                <p><strong>Jugador 1:</strong> <span th:text="${partida.jugador1.username}"></span></p>
-                                <p><strong>Jugador 2:</strong> <span th:text="${partida.jugador2.username}"></span></p>
-                                <p><strong>En curso:</strong> <span th:text="${partida.enCurso}"></span> </p>
-                                <p><strong>Ganador:</strong> <span th:text="${partida.ganador}"></span></p>
-                                <p><strong>Perdedor:</strong> <span th:text="${partida.perdedor}"></span></p>
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Configuración inicial de partidas -->
+            <div class="col-lg-4 col-md-5 mb-4">
+              <div class="sectionAjustesPartida p-3 border rounded bg-light">
+                  <h2 class="h4">Configuración inicial de partidas</h2>
+                  <form class="initialValues-form" th:action="@{/admin/gestPartidas/updateValues}" method="post">
+                      <div class="row">
+                          <div class="col-6 mb-3">
+                              <label class="form-label">Estrellas iniciales</label>
+                              <input type="number" class="form-control" name="estrellasIni"th:value="${configPartida.estrellasIni}" required />
+                          </div>
+                          <div class="col-6 mb-3">
+                              <label class="form-label">Vida inicial</label>
+                              <input type="number" class="form-control" name="vidaIni" th:value="${configPartida.vidaIni}" required />
+                          </div>
+                          <div class="col-6 mb-3">
+                              <label class="form-label">Daño por victoria</label>
+                              <input type="number" class="form-control" name="danyoVictoria" th:value="${configPartida.danyoVictoria}" required />
+                          </div>
+                          <div class="col-6 mb-3">
+                              <label class="form-label">Estrellas por ronda</label>
+                              <input type="number" class="form-control" name="estrellasRonda" th:value="${configPartida.estrellasRonda}" required />
+                          </div>
+                          <div class="col-12 mb-3">
+                              <label class="form-label">Precio de refrescar la tienda</label>
+                              <input type="number" class="form-control" name="precioRefrescar" th:value="${configPartida.precioRefrescar}" required />
+                          </div>
+                          <div class="col-12">
+                            <button type="submit" class="btn btn-success w-100">Guardar cambios</button>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+            <!-- Filtrar Partidas -->
+            <div class="col-lg-8 col-md-7">
+                <div class="sectionFiltrarPartidas p-3 border rounded h-100">
+                    <h2 class="h4">Filtrar Partidas</h2>
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="filtrar-container mb-4">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Filtrar Partidas
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" onclick="filtrarPartidas('all')">Todas</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="filtrarPartidas('enCurso')">En curso</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="filtrarPartidas('terminadas')">Terminadas</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- Botón para generar una partida de prueba -->
+                            <form th:action="@{/guardaPartida}" method="post" style="margin-bottom: 20px;">
+                                <input type="hidden" name="idJugador1" value="1" />
+                                <input type="hidden" name="idJugador2" value="2" />
+                                <input type="hidden" name="enCurso" value="false" />
+                                <input type="hidden" name="ganador" value="3" />
+                                <input type="hidden" name="perdedor" value="1" />
+                                <input type="hidden" name="estado" value="test" />
+                                <input type="hidden" name="gameRoomId" value="test" />
+                                <button type="submit" class="btn btn-primary">Generar Partida de Prueba</button>
+                            </form>
+                            <div class="accordion" id="accordionPartidas">
+                                <div th:each="partida : ${partidas}" class="accordion-item" th:attr="data-en-curso=${partida.enCurso}">
+                                    <h2 class="accordion-header" th:id="'heading-' + ${partida.idPartida}">
+                                        <button class="accordion-button collapsed" type="button" 
+                                                data-bs-toggle="collapse" 
+                                                th:data-bs-target="'#collapse' + ${partida.idPartida}" 
+                                                aria-expanded="false" 
+                                                th:aria-controls="'collapse' + ${partida.idPartida}">
+                                            <span th:text="'Partida ' + ${partida.idPartida}"></span>
+                                        </button>
+                                    </h2>
+                                    <div th:id="'collapse' + ${partida.idPartida}" 
+                                         class="accordion-collapse collapse" 
+                                         data-bs-parent="#accordionPartidas">
+                                        <div class="accordion-body">
+                                            <p><strong>ID:</strong> <span th:text="${partida.idPartida}"></span></p>
+                                            <p><strong>Jugador 1:</strong> <span th:text="${partida.jugador1.username}"></span></p>
+                                            <p><strong>Jugador 2:</strong> <span th:text="${partida.jugador2.username}"></span></p>
+                                            <p><strong>En curso:</strong> <span th:text="${partida.enCurso}"></span> </p>
+                                            <p><strong>Ganador:</strong> <span th:text="${partida.ganador}"></span></p>
+                                            <p><strong>Perdedor:</strong> <span th:text="${partida.perdedor}"></span></p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -72,21 +112,19 @@
     <div class="degradado"></div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 
-   <script>
-      function filtrarPartidas(filtro) {
-        const items = document.querySelectorAll('#accordionPartidas .accordion-item');
-        items.forEach(item => {
-          if (filtro === 'all') {
-            item.style.display = '';
-          } else {
-            const enCurso = item.getAttribute('data-en-curso') === 'true';
-            const mostrar = (filtro === 'enCurso' && enCurso) || (filtro === 'terminadas' && !enCurso);
-            item.style.display = mostrar ? '' : 'none';
-          }
-        });
-      }
+    <script>
+        function filtrarPartidas(filtro) {
+            const items = document.querySelectorAll('#accordionPartidas .accordion-item');
+            items.forEach(item => {
+                if (filtro === 'all') {
+                    item.style.display = '';
+                } else {
+                    const enCurso = item.getAttribute('data-en-curso') === 'true';
+                    const mostrar = (filtro === 'enCurso' && enCurso) || (filtro === 'terminadas' && !enCurso);
+                    item.style.display = mostrar ? '' : 'none';
+                }
+            });
+        }
     </script>
-
 </body>
-
 </html>
