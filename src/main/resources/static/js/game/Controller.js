@@ -820,6 +820,7 @@ async function processAction(action) {
         updateRoundNumber();
 
         
+        /*
         if (action["currentPhase"] == "BUY") {
             console.log(1)
             openShop();
@@ -842,7 +843,7 @@ async function processAction(action) {
         if (ready) {
             closeAll();
         }
-        
+        */
 
         return;
     }

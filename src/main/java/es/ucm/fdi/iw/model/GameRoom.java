@@ -47,18 +47,13 @@ public class GameRoom {
     private boolean inTransition = false;
 
     // Constructor por defecto
-    public GameRoom(ConfigPartida config) {
+    public GameRoom() {
         this.gameRoomId = "";
         // Inicializar estructuras complejas para evitar null
         this.players.put(player1Name, new GamePlayer(player1Name));
         this.players.put(player2Name, new GamePlayer(player2Name));
         this.messageHistory = new ArrayList<>();
-        this.playerResults = new HashMap<>();
-        this.INITIAL_STARS = config.getEstrellasIni();
-        this.INITIAL_LIFE = config.getVidaIni();
-        this.DAMAGE_WIN = config.getDanyoVictoria();
-        this.STARS_NEW_ROUND = config.getEstrellasRonda();
-        this.SHOP_REFRESH_PRICE = config.getPrecioRefrescar(); 
+        this.playerResults = new HashMap<>(); 
     }
 
     public GameRoom(String gameRoomId, String player1Name, String player2Name, ConfigPartida config) {
