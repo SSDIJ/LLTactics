@@ -1,5 +1,5 @@
 function joinMatchmaking() {
-    ws.stompClient.send("/app/matchmaking/join", {}, {});
+    go("/game/matchmaking", "POST");
 }
 
 function waitForConnection(callback, interval = 100) {
@@ -13,16 +13,24 @@ function waitForConnection(callback, interval = 100) {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    ws.initialize(iwconfig.socketUrl, ["/user/queue/match"]);
-
     ws.receive = (message) => {
-        const roomId = message.roomId;
-        sessionStorage.setItem('roomId', roomId);
-        sessionStorage.setItem('gameId', roomId);
-        sessionStorage.setItem("socketUrl", iwconfig.socketUrl);
-        window.location.href = `/game/${roomId}`;
+
+        const type = message["mm-type"]
+
+        if (type === "waiting") {
+            // Recibimos que hay un jugador esperando, respondemos aceptando
+            const playerId = message["mm-playerId"]
+            go(`/game/matchmaking?accept=${playerId}`, "POST");
+        }
+
+        if (type === "start") {
+            const roomId = message["mm-roomId"];
+            sessionStorage.setItem('roomId', roomId);
+            sessionStorage.setItem('gameId', roomId);
+            sessionStorage.setItem("socketUrl", iwconfig.socketUrl);
+            window.location.href = `/game/${roomId}`;
+        }
     };
 
-    // Esperar hasta que el WebSocket esté conectado antes de enviar
     waitForConnection(() => joinMatchmaking());
 });

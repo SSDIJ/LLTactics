@@ -1,12 +1,15 @@
 package es.ucm.fdi.iw.controller;
 
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 import java.security.Principal;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 
 @Controller
 public class MatchmakingController {
@@ -17,47 +20,36 @@ public class MatchmakingController {
     @Autowired
     private GameController gameController;
 
-    private Queue<String> waitingPlayers = new LinkedList<>(); // Cola de jugadores esperando
-    private Set<String> playersInQueue = new HashSet<>();      // Seguimiento de jugadores en cola
+    @PostMapping("/game/matchmaking")
+    @ResponseBody
+    public void matchmaking(Principal principal, @RequestParam(required = false) String accept) {
+        String playerName = principal.getName();
 
-    @MessageMapping("/matchmaking/join")
-    public void joinMatchmaking(Principal principal) {
-        String username = principal.getName();
-        System.out.println("Jugador conectado: " + username);
+        if (accept == null) {
+            // Paso 1: Este jugador quiere jugar, anuncia su presencia
+            Map<String, String> payload = new HashMap<>();
+            payload.put("mm-type", "waiting");
+            payload.put("mm-playerId", playerName); // Usamos nombre como identificador único
+            messagingTemplate.convertAndSend("/topic/game/matchmaking", payload);
+        } else {
+            // Paso 2: Este jugador acepta duelo con 'accept'
+            String player1 = accept;
+            String player2 = playerName;
 
-        synchronized (this) {
-            if (playersInQueue.contains(username)) {
-                System.out.println("Jugador ya en cola: " + username);
-                return;
-            }
-
-            waitingPlayers.add(username);
-            playersInQueue.add(username);
-        }
-
-        if (waitingPlayers.size() >= 2) {
-            String player1, player2;
-
-            synchronized (this) {
-                player1 = waitingPlayers.poll();
-                player2 = waitingPlayers.poll();
-                playersInQueue.remove(player1);
-                playersInQueue.remove(player2);
-            }
+            if (player1.equals(player2)) return;
 
             String gameRoomId = UserController.generateRandomBase64Token(9);
-            System.out.println("Emparejando: " + player1 + " y " + player2);
-            System.out.println("Sala creada con ID: " + gameRoomId);
-
-            Map<String, String> response = new HashMap<>();
-            response.put("roomId", gameRoomId);
-
             gameController.addActiveGame(gameRoomId, player1, player2);
 
-            messagingTemplate.convertAndSendToUser(player1, "/queue/match", response);
-            messagingTemplate.convertAndSendToUser(player2, "/queue/match", response);
-        } else {
-            System.out.println("Esperando más jugadores...");
+            // Paso 3: Notificamos a ambos jugadores
+            Map<String, String> payload = new HashMap<>();
+            payload.put("mm-type", "start");
+            payload.put("mm-roomId", gameRoomId);
+            payload.put("mm-player1", player1);
+            payload.put("mm-player2", player2);
+
+            messagingTemplate.convertAndSend("/topic/game/matchmaking", payload);
         }
     }
+    
 }
