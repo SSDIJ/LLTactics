@@ -560,72 +560,85 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 
 	// Funcion que sirve para cargar las fotos de la carpeta al abrir el user.html
 	@GetMapping("/viewProfile")
-public String searchUser(@RequestParam("username") String username, Model model) {
+	public String searchUser(@RequestParam("username") String username, Model model) {
     log.info("Entrando en el método viewProfile");
 
-    Optional<User> usuarioBuscado = userRepository.findByUsernameContainingIgnoreCase(username);
+		Optional<User> usuarioBuscado = userRepository.findByUsernameContainingIgnoreCase(username);
 
-    if (usuarioBuscado.isEmpty()) {
-        log.info("El usuario no existe");
-        model.addAttribute("error", "Usuario no encontrado.");
-        model.addAttribute("usuarioBuscado", null);
-        return "viewProfile";
-    } else {
-        log.info("El usuario existe");
-        User user = usuarioBuscado.get();
-        
+		if (usuarioBuscado.isEmpty()) {
+			log.info("El usuario no existe");
+			model.addAttribute("error", "Usuario no encontrado.");
+			model.addAttribute("usuarioBuscado", null);
+			return "viewProfile";
+		} else {
+			log.info("El usuario existe");
+			User user = usuarioBuscado.get();
+			
 
-        List<FaccionUsos> facciones = faccionUsosRepository.findByUser(user);
-        List<HeroeUsos> heroes = heroeUsosRepository.findByUser(user);
-
-
-        FaccionUsos faccionFavorita = null;
-        int maxUsosFaccion = -1;
-
-        for (FaccionUsos faccion : facciones) {
-            if (faccion.getUsos() > maxUsosFaccion) {
-                maxUsosFaccion = faccion.getUsos();
-                faccionFavorita = faccion;
-            }
-        }
+			List<FaccionUsos> facciones = faccionUsosRepository.findByUser(user);
+			List<HeroeUsos> heroes = heroeUsosRepository.findByUser(user);
 
 
-        if (faccionFavorita != null) {
-            user.setFaccionFavorita(faccionFavorita.getFaccion());
-            log.info("La facción favorita del usuario es: {}", faccionFavorita.getFaccion());
-        } else {
-            log.warn("No se encontraron facciones para este usuario.");
-        }
+			FaccionUsos faccionFavorita = null;
+			int maxUsosFaccion = -1;
+
+			for (FaccionUsos faccion : facciones) {
+				if (faccion.getUsos() > maxUsosFaccion) {
+					maxUsosFaccion = faccion.getUsos();
+					faccionFavorita = faccion;
+				}
+			}
 
 
-        HeroeUsos heroeFavorito = null;
-		Heroe heroeMostrar=null;
-        int maxUsosHeroe = -1;
+			if (faccionFavorita != null) {
+				user.setFaccionFavorita(faccionFavorita.getFaccion());
+				log.info("La facción favorita del usuario es: {}", faccionFavorita.getFaccion());
+			} else {
+				log.warn("No se encontraron facciones para este usuario.");
+			}
 
-        for (HeroeUsos heroeUso : heroes) {
-            if (heroeUso.getUsos() > maxUsosHeroe) {
-                maxUsosHeroe = heroeUso.getUsos();
-                heroeFavorito = heroeUso;
-            }
-        }
 
-        if (heroeFavorito != null) {
-			heroeMostrar=heroeFavorito.getHeroe();
-			List<Heroe> atributoHeroesMostrar= new ArrayList<>();
-			atributoHeroesMostrar.add(heroeMostrar);
-			user.setMasJugados(atributoHeroesMostrar);
-            log.info("El héroe favorito del usuario es: {}", heroeFavorito.getHeroe().getNombre());
-        } else {
-            log.warn("No se encontraron héroes para este usuario.");
-        }
+			HeroeUsos heroeFavorito = null;
+			Heroe heroeMostrar=null;
+			int maxUsosHeroe = -1;
 
-        log.info("El nombre del usuario es: {}", user.getUsername());
-        model.addAttribute("usuarioBuscado", user);
-    }
+			for (HeroeUsos heroeUso : heroes) {
+				if (heroeUso.getUsos() > maxUsosHeroe) {
+					maxUsosHeroe = heroeUso.getUsos();
+					heroeFavorito = heroeUso;
+				}
+			}
 
-    log.info("Salimos de la funcion viewProfile");
-    return "viewProfile";
-}
+			if (heroeFavorito != null) {
+				heroeMostrar=heroeFavorito.getHeroe();
+				List<Heroe> atributoHeroesMostrar= new ArrayList<>();
+				atributoHeroesMostrar.add(heroeMostrar);
+				user.setMasJugados(atributoHeroesMostrar);
+				log.info("El héroe favorito del usuario es: {}", heroeFavorito.getHeroe().getNombre());
+			} else {
+				log.warn("No se encontraron héroes para este usuario.");
+			}
+
+			log.info("El nombre del usuario es: {}", user.getUsername());
+			model.addAttribute("usuarioBuscado", user);
+		}
+
+		log.info("Salimos de la funcion viewProfile");
+		return "viewProfile";
+	}
+
+	@PostMapping("/viewProfile/reportar/{idUser}")
+	public String reportUser(@PathVariable Long idUser,@RequestParam (required = true)String razonBaneo) {
+		User usuario = userRepository.findById(idUser)
+					.orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+		
+		usuario.setEstado(1);
+		usuario.setRazonBaneo(razonBaneo);
+
+		userRepository.save(usuario);
+		return "redirect:/user/{id}";
+	}
+	
 
 
 	@PostMapping("/updateFoto/{id}")

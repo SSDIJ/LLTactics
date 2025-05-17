@@ -22,6 +22,34 @@
     <div th:if="${usuarioBuscado != null}">
         <div class="user">
             <!-- TOP: BARRA DE BÚSQUEDA DE JUGADOR -->
+            <div class="top-user">
+                <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reportModal">
+                    REPORTAR
+                </button>
+                <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form th:action="@{/user/viewProfile/reportar/{idUser}(idUser=${usuarioBuscado.id})}" method="post">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="reportModalLabel">Reportar usuario</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                        <input type="hidden" name="username" th:value="${usuarioBuscado.username}" />
+                        <div class="mb-3">
+                            <label for="razonReporte" class="form-label">Razón del reporte</label>
+                            <textarea class="form-control" id="razonBaneo" name="razonBaneo" rows="3" required></textarea>
+                        </div>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Enviar reporte</button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+                </div>
+                </div>
 
         </div>
 

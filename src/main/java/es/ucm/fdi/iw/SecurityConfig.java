@@ -130,4 +130,7 @@ public class SecurityConfig {
 	 
 	@Autowired
 	private LoginSuccessHandler loginSuccessHandler;
+
+	@Autowired
+	private LoginFailureHandler loginFailureHandler;
 }
