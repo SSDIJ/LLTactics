@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.transaction.Transactional;
+
 
 @Controller
 public class MatchmakingController {
@@ -21,6 +23,7 @@ public class MatchmakingController {
     private GameController gameController;
 
     @PostMapping("/game/matchmaking")
+    @Transactional
     @ResponseBody
     public void matchmaking(Principal principal, @RequestParam(required = false) String accept) {
         String playerName = principal.getName();

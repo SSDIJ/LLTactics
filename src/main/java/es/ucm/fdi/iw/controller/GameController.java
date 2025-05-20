@@ -105,7 +105,6 @@ public class GameController {
     // Método para añadir una sala de juego activa (por ejemplo, desde el
     // matchmaking)
     //ESTO EN VEZ DE AÑADIRLO AL MAP ACTIVEGAMES; DEBERIA HACER UN UPDATE A LA BD
-    @Transactional
     public void addActiveGame(String gameRoomId, String player1, String player2) {
         System.out.println("INTENTANDO GUARDAR PARTIDA EN BD");
 
@@ -557,7 +556,6 @@ public class GameController {
     private SimpMessagingTemplate messagingTemplate;
 
     //FUNCION QUE DEVUELVE LA PARTIDA DESDE LA BD
-    @Transactional
     public GameRoom getGameRoomFromDatabase(String gameRoomId) {
         try {
             // Buscar la partida activa en la base de datos
@@ -584,7 +582,6 @@ public class GameController {
     }
 
     //FUNCION QUE ACTUALIZA LA PARTIDA EN LA BD
-    @Transactional
     public void updateGameRoomInDatabase(String gameRoomId, GameRoom gameRoom) {
         try {
             // Serializar el objeto GameRoom a JSON
@@ -603,7 +600,7 @@ public class GameController {
             entityManager.merge(partida); // Actualizar la entidad en la base de datos
 
             log.info("Estado de la partida actualizado en la base de datos para gameRoomId: {}", gameRoomId);
-        } catch (Exception e) {
+        } catch (JsonProcessingException e) {
             log.error("Error al actualizar el estado de la partida en la base de datos: {}", e.getMessage(), e);
         }
     }
