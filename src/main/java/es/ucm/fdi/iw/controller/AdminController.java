@@ -1,6 +1,7 @@
 package es.ucm.fdi.iw.controller;
 
 import java.io.ObjectInputFilter.Config;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -121,7 +122,7 @@ public class AdminController {
 
     @GetMapping("/gestUsuarios")
     public String showUsuarios(Model model) {
-        List<User> reportados = userRepository.findByEstado(1);
+        List<User> reportados = userRepository.findByEstado(User.Estado.REPORTADO);
         List<User> usuarios = userRepository.findAll();
         model.addAttribute("reportados", reportados);
 
@@ -217,7 +218,8 @@ public class AdminController {
         User usuario = userRepository.findById(idUsuario)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
-        usuario.setEstado(2);
+        usuario.setFechaBaneo(LocalDateTime.now());
+        usuario.setEstado(User.Estado.BANEADO);
         userRepository.save(usuario);
 
         return "redirect:/admin/gestUsuarios";
@@ -229,7 +231,9 @@ public class AdminController {
         User usuario = userRepository.findById(idUsuario)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
-        usuario.setEstado(0);
+        usuario.setEstado(User.Estado.NORMAL);
+        usuario.setFechaBaneo(null);
+        usuario.setRazonBaneo(null);
         userRepository.save(usuario);
 
         return "redirect:/admin/gestUsuarios";
@@ -245,7 +249,7 @@ public class AdminController {
 
         else if ("USER".equals(role)) {
             if (baneado != null) // Filtrar usuarios que sean no admin (o que no tengan el rol ADMIN) y con elestado baneado indicado
-                usuarios = userRepository.findByEstadoAndRolesNotContaining(2, "ADMIN");
+                usuarios = userRepository.findByEstadoAndRolesNotContaining(User.Estado.BANEADO, "ADMIN");
             else // Mostrar todos los usuarios que no sean admin
                 usuarios = userRepository.findByRolesNotContaining("ADMIN");
             

@@ -632,7 +632,7 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		User usuario = userRepository.findById(idUser)
 					.orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 		
-		usuario.setEstado(1);
+		usuario.setEstado(User.Estado.REPORTADO);
 		usuario.setRazonBaneo(razonBaneo);
 
 		userRepository.save(usuario);

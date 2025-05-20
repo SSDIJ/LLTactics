@@ -35,7 +35,7 @@ public class IwUserDetailsService implements UserDetailsService {
 					.setParameter("username", username)
 					.getSingleResult();
 
-			if (u.getEstado() == 2) {
+			if (u.getEstado() == User.Estado.BANEADO) {
 				log.warn("Intento de login de usuario baneado: " + username);
 				throw new DisabledException("Tu cuenta está baneada.");
 			}
