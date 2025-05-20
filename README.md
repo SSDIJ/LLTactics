@@ -1,73 +1,65 @@
-# LLTactics, proyecto de IW
-LLTactics es un juego web de fantasía medieval donde jugadores deberán luchar por la victoria comprando personajes y objetos.
-## Contenido del proyecto
-- **Vista principal** (index.html)
-  * Lo primero que se ve al abrir la web y desde donde puedes acceder al resto de vistas
-- **Vista Juego** (game.html)
-  * Necesario iniciar sesión para acceder
-  * Aunque aún no esté implementado el matchmaking, ya hay una versión funcional del juego con sus rondas: 
-    - 1. Compra de personajes, equipación de objetos 
-    - 2. Batalla
-- **Vista ranking** (ranking.html)
-  * Muestra a los mejores jugadores del server, junto a sus estadísticas
-  * Implementada mediante thymeleaf y fragmentos dinámicos
-  * Se ha creado RankingController.Java, que se apoya en la clase Jugador para mandar a ranking.html las listas de jugadores
-  * La vista es dinámica y permite hacer click en los jugadores para ver su perfil
-- **Vista galería** (galeria.html)
-  * Muestra todos los personajes y objetos disponibles en el juego, así como sus estadísticas y descripciones
-  * Implementada mediante thymeleaf y fragmentos dinámicos
-  * Se ha creado GaleríaController.java, que se apoya en la clase Héroe para mandar a galeria.html las listas de personajes
-  * Galeria.html usa la clase card.html para mostrar a los personajes, con sus estadísticas y su descripción 
 
-- **Vista reglas** (reglas.html)
-  * Muestra las reglas del juego 
-- **Vista autores** (autores.html)
-  * Muestra los nombres de los miembros del grupo y creadores del juego
-- **Vista inicio de sesión** (login.html)
-  * Permite iniciar sesión a los jugadores
+<img src="src/main/resources/static/img/logo.png" alt="Logo de avión" width="75" style="border: 1px solid black; border-radius: 10px;"/>
 
-  **Vista registro** (registro.html)
-  * Permite a los jugadores registrarse y escoger una foto de perfil
+# DESPEGUES
 
-  **Vistas de admin**
-  * Las vistas exclusivas de los administradores, les permitirá llevar un control del sistema y moderarlo
-  * Muestra 3 secciones: 
-    - **Gestión de héroes** (gestHeroes.html)
-        * Permite añadir un héroe nuevo o borrar alguno ya existente
-    - **Gestión de usuarios** (gestUsuarios.html)
-        * Muestra la información de todos los usuarios del servidor y permite visitar su perfil
-        * Incluye un filtro para la búsqueda
-    - **Gestión de partidas** (gestPartidas.html)
-        * Muestra la información de todas las partidas ya jugadas del servidor y permite crear una de prueba
+<code> Repositorio para la asignatura Ingeniería Web </code>
 
-  **Vista de perfil ajeno** (viewProfile.html)
-  * Permite visitar el perfil de otros jugadores y ver sus estadisticas
+## Índice
 
-  **Vista de tu perfil** (user.html)
-  * Permite visitar tu perfil y ver tus estadisticas
+1. [Descripción del proyecto](#1-descripción-del-proyecto)
+2. [Cómo se usa](#2-cómo-se-usa)
+3. [Créditos](#3-créditos)
 
-  **NOTAS:**
-  - Todos los sprites de los personajes pertenecen a [Wesnoth](https://github.com/wesnoth/wesnoth)
-  - Se han usado ciertas imagenes de internet para las fotos de perfil y la decoración del juego
+## 1. Descripción del proyecto
 
-## Implementacion BD Actual
-Las tablas actualmente funcionales de la base de datos son:
-* **IWUser**, que almacena la información de los usuarios
-* **Heroe**, que almacena la informacion de los heroes
-* **Objeto**, que almacena la informacion de los objetos
-* **Partida**, que almacena la informacion de las partidas
+**LLTactics** es un juego web de fantasía medieval inspirado en el modelo autochess. En él, los jugadores compiten por la victoria comprando y mejorando personajes y objetos estratégicamente.
 
-Que se apoyan en sus correspondientes controladores, repositorios y servicios para los accesos e inserciones
+Las partidas se desarrollan en dos fases alternas:
 
-En un futuro, cuando el juego sea completamente funcional mediante websockets, se les dará uso a las tablas Topic y Unidad
+- **Fase de compra**: Los jugadores pueden gastar estrellas para adquirir unidades y objetos, refrescar la tienda, asignar objetos a sus unidades o eliminar elementos de su inventario (mediante doble click).
+- **Fase de batalla**: Los equipos se enfrentan de forma automática hasta que solo quedan unidades vivas de un bando. El jugador perdedor de la ronda pierde puntos de vida. El juego continúa hasta que uno de los jugadores alcanza cero (o menos) puntos de vida.
 
-## Contenido futuro
-- Sistema de mensajería offgame al visitar un perfil ajeno
-- Sistema de matchmaking con otros usuarios, con su correspondiente sincronización, mensajería y guardado en la BD al finalizar
+LLTactics cuenta con un sistema de matchmaking automático. Además, las partidas cuentan con un sistema de chat integrado para que los jugadores puedan comunicarse en tiempo real, así como un botón de reporte que permite denunciar comportamientos inapropiados y mantener una comunidad saludable.
 
-## Miembros del grupo:
+Los jugadores también pueden acceder a diferentes vistas informativas y sociales:
+
+- **Galería de objetos y héroes**: Muestra todos los héroes (ordenados por facciones) y objetos disponibles en el juego, junto con sus estadísticas y descripciones detalladas.
+- **Ranking**: Presenta a los mejores jugadores del servidor, incluyendo sus estadísticas más destacadas. Esta vista es dinámica y permite hacer clic en cada jugador para acceder a su perfil.
+- **Reglas**: Resume claramente las normas del juego para ayudar a nuevos y veteranos a comprender sus mecánicas.
+- **Perfil de usuario**: Muestra información personalizada como la facción favorita del jugador, su personaje más usado, puntos de maestría, y porcentajes de victorias y derrotas.
+
+Los administradores disponen de vistas y herramientas exclusivas para la gestión del entorno del juego:
+
+- **Gestión de partidas y usuarios**: Permite revisar partidas en curso o finalizadas, así como banear usuarios en caso de comportamiento indebido.
+- **Modificación de constantes del juego**: Posibilidad de ajustar parámetros iniciales de las partidas, como economía, vida base u otros factores clave.
+- **Gestión de contenido**: Vista dedicada a añadir, modificar o eliminar héroes y objetos disponibles en el juego, manteniendo el equilibrio.
+
+
+
+## 2. Cómo se usa
+
+En la pantalla de inicio, se pueden introducir credenciales para acceder como:
+
+- **Administrador de prueba**:
+Usuario: <code>POR RELLENAR</code>
+Contraseña: <code>POR RELLENAR</code>
+- **Usuario de prueba**:
+Usuario: <code>POR RELLENAR</code>
+Contraseña: <code>POR RELLENAR</code>
+
+## 3. Créditos
+
+**DESARROLLADORES**
+
 - Samuel Carrillo
 - David Cendejas
 - Sandra Sanz
 - Iván Toribio
 - Javier Martín
+
+**ARTE**
+- Las imágenes de unidades y objetos provienen del juego Battle for Wesnoth, las cuales están licenciadas bajo la GNU General Public License (GPL).
+- El resto de imágenes decorativaS han sido generados con ChatGPT y posteriormente adaptados.
+- Las fuentes tipográficas usadas en los títulos se han obtenido desde Google Fonts.
+- Los iconos provienen del set de Bootstrap Icons, bajo licencia MIT.
