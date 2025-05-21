@@ -93,8 +93,6 @@ public class GameController {
     @Autowired
     private ConfigPartidaRepository configPartidaRepository;
 
-    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4);
-
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
         for (String name : new String[] { "u", "url", "ws", "gameId" }) {

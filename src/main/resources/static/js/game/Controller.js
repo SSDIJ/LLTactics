@@ -722,6 +722,15 @@ async function startTimer(timeLeft) {
 // --- WEBSOCKETS ---
 
 
+function waitForConnection(callback, interval = 100) {
+    const intervalId = setInterval(() => {
+        if (ws.stompClient && ws.stompClient.connected) {
+            clearInterval(intervalId);
+            callback();
+        }
+    }, interval);
+}
+
 document.addEventListener("DOMContentLoaded", () => {  
 
     player1.name = player1NameContainer.innerText;
@@ -734,13 +743,11 @@ document.addEventListener("DOMContentLoaded", () => {
         processAction(action)
     };
 
-    setTimeout(() => {
-        sendAction({
+    waitForConnection(() => sendAction({
             actionType: "GENERAL",
             playerName: player1.name,
             actionDetails: ""
-        });
-    }, 100);
+        }))
 
 });
 

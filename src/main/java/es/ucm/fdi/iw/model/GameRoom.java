@@ -22,11 +22,11 @@ import java.time.ZonedDateTime;
 @Data
 public class GameRoom {
 
-    public static int INITIAL_STARS;
-    public static int INITIAL_LIFE;
-    public static int DAMAGE_WIN;
-    public static int STARS_NEW_ROUND;
-    public static int SHOP_REFRESH_PRICE;
+    public static int INITIAL_STARS = 20;
+    public static int INITIAL_LIFE = 5;
+    public static int DAMAGE_WIN = 1;
+    public static int STARS_NEW_ROUND = 15;
+    public static int SHOP_REFRESH_PRICE = 2;
 
     public enum Phase { WAITING, BUY, BATTLE }
 
