@@ -850,7 +850,15 @@ td img.icon {
         width: 95px !important;
     }
 
+    .unit-container {
+        z-index: 999 !important;
+    }
+
     .unit-stats {
+        height: 20px;
+    }
+
+    .card-body .unit-stats {
         height: 80px;
     }
 
