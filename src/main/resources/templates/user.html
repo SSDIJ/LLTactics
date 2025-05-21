@@ -145,7 +145,8 @@
 
                             <!-- Si hay un personaje, mostramos su imagen -->
                             <div th:unless="${user.masJugados.size() == 0 or user.masJugados.get(0) == null}">
-                                <img th:src="@{${user.masJugados.get(0).imagen}}" alt="Personaje más Jugado"
+                                <img th:src="@{/user/{id}/heroe(id=${user.masJugados.get(0).idHeroe})}" 
+                                    alt="Personaje más Jugado"
                                     class="profile-unit" />
                             </div>
                         </div>

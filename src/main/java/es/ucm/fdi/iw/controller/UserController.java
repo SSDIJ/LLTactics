@@ -288,7 +288,7 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 	private static InputStream defaultPic() {
 		return new BufferedInputStream(Objects.requireNonNull(
 				UserController.class.getClassLoader().getResourceAsStream(
-						"static/img/default-pic.jpg")));
+						"static/img/default-pic.png")));
 	}
 
 	/**

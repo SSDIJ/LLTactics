@@ -188,7 +188,7 @@ function updateUnits(player, isOpponent = false) {
             
             if (unit.image) {
 
-                img.src = unit.image || "";
+                img.setAttribute('src', `/user/${unit.id}/heroe`);
                 img.classList.remove("hidden");
                 unitLife.classList.remove("hidden")
                 unitName.textContent = unit.name;
@@ -210,8 +210,7 @@ function updateUnits(player, isOpponent = false) {
                     const imgObj = unitItemCells[index].querySelector("img");
 
                     if (item) { 
-
-                        imgObj.src = item.imageUrl;
+                        imgObj.setAttribute('src', `/user/${item.id}/objeto`);
                         imgObj.classList.remove("hidden");
                     }
                     else {
@@ -281,7 +280,7 @@ function updateInventory(isOpponent = false) {
             }
 
             if (img) {
-                img.src = item.imageUrl || "";
+                img.setAttribute('src', `/user/${item.id}/objeto`);
             }
 
             const itemTemp = item;
@@ -348,7 +347,7 @@ function updateInventory(isOpponent = false) {
                             if (assigned || !noc.classList.contains("selectable"))
                                 return;
 
-                            
+                    
                             // Asignar el objeto a la unidad
                             const unitIndex = Array.from(unitObjects).indexOf(container);
                             assigned = true;
@@ -359,8 +358,6 @@ function updateInventory(isOpponent = false) {
                                 "playerName": player1.name,
                                 "actionDetails": JSON.stringify(selectedItem)
                             });
-
-                            console.log("OBJETO ASIGNADO");
 
                             // Limpiar selección
                             objectCells.forEach(cell => cell.classList.remove("selected"));
@@ -448,7 +445,7 @@ function updateShop() {
                 valorP.textContent = unidad.price;
 
                 const imagenUnidad = newUnidadDiv.querySelector('.shop-unit-game-img');
-                imagenUnidad.setAttribute('src', unidad.image);
+                imagenUnidad.setAttribute('src', `/user/${unidad.id}/heroe`);
 
                 // Añade la opción de compra de las unidades
                 newUnidadDiv.addEventListener('click', () => {
@@ -488,7 +485,7 @@ function updateShop() {
                 valorP.textContent = item.price;
 
                 const imagenUnidad = newItemDiv.querySelector('.object-img');
-                imagenUnidad.setAttribute('src', item.imageUrl);
+                imagenUnidad.setAttribute('src', `/user/${item.id}/objeto`);
 
                 // Añade la opción de compra de los objetos
                 newItemDiv.addEventListener('click', () => {
@@ -872,6 +869,7 @@ async function processAction(action) {
 
     if (action.phase === "buy") {
         game.round = action.round;
+
         updateRoundNumber();
         timerElement.innerText = `COMPRA`;
 
