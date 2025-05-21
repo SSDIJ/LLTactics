@@ -93,8 +93,6 @@ public class GameController {
     @Autowired
     private ConfigPartidaRepository configPartidaRepository;
 
-    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4);
-
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
         for (String name : new String[] { "u", "url", "ws", "gameId" }) {
@@ -145,11 +143,6 @@ public class GameController {
         // Guardar la partida en la base de datos
         entityManager.persist(partida);
         entityManager.flush();
-
-        scheduler.schedule(() -> {
-            startBuyPhase(gameRoomId);
-        }, 5, TimeUnit.SECONDS);
-        
     }
 
     @GetMapping("/game/{gameRoomId}")
@@ -458,12 +451,12 @@ public class GameController {
             gameRoom.setInTransition(true);
 
             if (gameRoom.isBuyingPhase()) {
-                sendActionToPlayers(gameRoom, new PlayerAction(ActionType.GENERAL, "server", ""));
-                startBuyPhase(gameRoomId);
-            } else {
                 prepareDefaultUnits(gameRoom);
                 sendActionToPlayers(gameRoom, new PlayerAction(ActionType.GENERAL, "server", ""));
                 startBattlePhase(gameRoomId);
+            } else {
+                sendActionToPlayers(gameRoom, new PlayerAction(ActionType.GENERAL, "server", ""));
+                startBuyPhase(gameRoomId);
             }
         }
     }

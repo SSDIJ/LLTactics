@@ -124,8 +124,19 @@ public class AdminController {
             List<Heroe> heroes = heroesService.obtenerHeroesDeFaccion(faccion);
             model.addAttribute("heroes", heroes);
         }
+        List<Objeto> objetos = itemRepository.findAll();
+        model.addAttribute("objetos", objetos);
         return "gestGaleria";
     }
+
+    @GetMapping("/cardObjeto/{index}")
+    public String getObjetoFragment(@PathVariable int index, Model model) {
+    List<Objeto> objetos = itemRepository.findAll();
+    if (index >= 0 && index < objetos.size()) {
+        model.addAttribute("objeto", objetos.get(index));
+    }
+    return "fragments/cardAdminObj :: cartaAdminObj";
+}
 
     @GetMapping("/gestUsuarios")
     public String showUsuarios(Model model) {
@@ -204,6 +215,20 @@ public class AdminController {
         }
     }
 
+    @PostMapping("/gestGaleria/deleteObjeto/{idObjeto}")
+    @Transactional
+    public String deleteObjeto(@PathVariable Long idObjeto, Model model) {
+        try{
+            itemRepository.deleteById(idObjeto);
+            return "redirect:/admin/gestGaleria";
+        }catch(Exception e){
+            model.addAttribute("error", "Error al eliminar el objeto: " + e.getMessage());
+            return "redirect:/admin/gestGaleria";
+        }
+    }
+
+
+
     @PostMapping("/gestGaleria/update/{idHeroe}")
     @Transactional
     public String updateHeroe(
@@ -232,6 +257,36 @@ public class AdminController {
         heroe.setPrecio(precio);
 
         heroeRepository.save(heroe);
+
+        return "redirect:/admin/gestGaleria";
+    }
+
+    @PostMapping("/gestGaleria/updateObjeto/{idObjeto}")
+    @Transactional
+    public String updateObjeto(
+            @PathVariable("idObjeto") Long idObjeto,
+            @RequestParam("nombre") String nombre,
+            @RequestParam("imagen") String imagen,
+            @RequestParam("vida") int vida,
+            @RequestParam("armadura") int armadura,
+            @RequestParam("daño") int daño,
+            @RequestParam("velocidad") int velocidad,
+            @RequestParam("precio") int precio,
+            Model model) {
+
+        Objeto objeto = itemRepository.findById(idObjeto)
+                .orElseThrow(() -> new IllegalArgumentException("Héroe no encontrado"));
+
+        // Si se encuentra, actualizamos cada campo con los datos recibidos
+        objeto.setNombre(nombre);
+        objeto.setImagen(imagen);
+        objeto.setVida(vida);
+        objeto.setArmadura(armadura);
+        objeto.setDaño(daño);
+        objeto.setVelocidad(velocidad);
+        objeto.setPrecio(precio);
+
+        itemRepository.save(objeto);
 
         return "redirect:/admin/gestGaleria";
     }

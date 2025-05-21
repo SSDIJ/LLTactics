@@ -1,0 +1,64 @@
+
+    <div th:fragment="cartaAdminObj(objeto)" class="cardAdminObj">
+        <img th:src="@{/user/{id}/objeto(id=${objeto.idObjeto})}" class="card-img-top" th:alt="${objeto.nombre}">
+        <h5 class="cardAdmin-title" th:text="${objeto.nombre}"></h5>
+
+        <form class="cardAdmin-form" th:action="@{/admin/gestGaleria/updateObjeto/{idObjeto}(idObjeto=${objeto.idObjeto})}"
+        method="post">
+            <input type="hidden" name="idObjeto" th:value="${objeto.idObjeto}" />
+
+            <!-- Nombre -->
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" name="nombre" th:value="${objeto.nombre}" required />
+
+            <!-- Ruta Imagen -->
+            <label class="form-label">Ruta Imagen</label>
+            <input type="text" class="form-control" name="imagen" th:value="${objeto.imagen}" required />
+
+            <!-- Vida y Armadura -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Vida</label>
+                    <input type="number" class="form-control" name="vida" th:value="${objeto.vida}" min="0" required />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Armadura</label>
+                    <input type="number" class="form-control" name="armadura" th:value="${objeto.armadura}" min="0"
+                        required />
+                </div>
+            </div>
+
+            <!-- Daño y Velocidad -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Daño</label>
+                    <input type="number" class="form-control" name="daño" th:value="${objeto.daño}" min="0" required />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Velocidad</label>
+                    <input type="number" class="form-control" name="velocidad" th:value="${objeto.velocidad}" min="0"
+                        required />
+                </div>
+            </div>
+
+            <!-- Precio y Probabilidad -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Precio</label>
+                    <input type="number" class="form-control" name="precio" th:value="${objeto.precio}" min="0"
+                        required />
+                </div>
+            </div>
+
+            <label class="form-label">Descripción</label>
+            <input type="text" class="form-control" name="descripcion" th:value="${objeto.descripcion}" required />
+
+            <!-- Botón para guardar cambios -->
+            <button type="submit" class="btn btn-warning w-100 mt-2">Modificar</button>
+
+        </form>
+            <form th:action="@{/admin/gestGaleria/delete/{idObjeto}(idObjeto=${objeto.idObjeto})}" method="post" class="mt-2">
+                <button type="submit" class="btn btn-danger w-100 mt-2" th:id="'eliminar-' + ${objeto.idObjeto}">Eliminar</button>        
+            </form>
+    </div>
+
