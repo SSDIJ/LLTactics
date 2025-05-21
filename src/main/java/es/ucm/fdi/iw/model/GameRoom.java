@@ -53,7 +53,6 @@ public class GameRoom {
         this.players.put(player1Name, new GamePlayer(player1Name));
         this.players.put(player2Name, new GamePlayer(player2Name));
         this.messageHistory = new ArrayList<>();
-        this.playerResults = new HashMap<>(); 
     }
 
     public GameRoom(String gameRoomId, String player1Name, String player2Name, ConfigPartida config) {
@@ -80,7 +79,6 @@ public class GameRoom {
         SHOP_REFRESH_PRICE = config.getPrecioRefrescar(); 
     }
     
-
     public boolean isInTransition() {
     return inTransition;
     }
@@ -103,6 +101,10 @@ public class GameRoom {
 
     public void nextRound() {
         currentRound++;
+    }
+
+    public Boolean canDoAction(PlayerAction action) {
+        return true; // POR IMPLEMENTAR
     }
 
     public void setPlayerReady(String player) {
@@ -150,16 +152,6 @@ public class GameRoom {
 
     public Map<String, GamePlayer> getPlayers() {
         return players;
-    }
-
-    private Map<String, GameBattleResult> playerResults = new ConcurrentHashMap<>();
-
-    public void setPlayerResult(String playerName, GameBattleResult result) {
-        playerResults.put(playerName, result);
-    }
-
-    public GameBattleResult getPlayerResult(String playerName) {
-        return playerResults.get(playerName);
     }
 
     public void reduceLoserHealth() {

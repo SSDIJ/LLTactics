@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import es.ucm.fdi.iw.model.ConfigPartida;
-import es.ucm.fdi.iw.model.GameBattleResult;
 import es.ucm.fdi.iw.model.GameItem;
 import es.ucm.fdi.iw.model.GameMessage;
 import es.ucm.fdi.iw.model.GamePlayer;
@@ -250,6 +249,9 @@ public class GameController {
             gameRoomId);
             return;
         }
+
+        // Determinamos quién puede hacer qué cuándo
+        if (!gameRoom.canDoAction(action)) return;
          
         try {
             processAction(gameRoom, action, playerName);
@@ -564,7 +566,6 @@ public class GameController {
                 .setParameter("gameRoomId", gameRoomId) // No convertir a Long, ya que gameRoomId es un String
                 .getSingleResult();
 
-            log.info("PARTIDA ENCONTRADAAAAAAAAAAAAAAAAA\n\n");
             // Obtener el estado de la partida en formato JSON
             String estadoPartidaJson = partida.getEstado();
 
