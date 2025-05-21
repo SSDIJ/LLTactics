@@ -9,7 +9,7 @@
         <div th:id="${isOpponent} ? 'opponent-object-container' : 'player-objects-container'"
              class="d-flex flex-column justify-content-center align-items-center gap-4">
             <div th:each="object : ${playerObjects}">
-                <th:block th:replace="fragments/item :: item(${object})"></th:block>
+                <th:block th:replace="~{fragments/item :: item(${object})}"></th:block>
             </div>
         </div>
     </th:block>  

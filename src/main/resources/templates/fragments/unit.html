@@ -30,7 +30,7 @@
             <!-- Contenedor de objetos -->
             <div class="unit-object-container d-flex justify-content-center gap-2">
                 <div th:each="item : ${object.items}">
-                    <div th:replace="/fragments/unit-object-cell :: unit-object-cell(${item})"></div>
+                    <div th:replace="fragments/unit-object-cell :: unit-object-cell(${item})"></div>
                 </div>
             </div>
         </div>

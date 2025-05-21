@@ -36,3 +36,9 @@ build/
 
 ### Logs file ###
 logs/
+
+### Target file ###
+target/
+
+### Deploy file ###
+deploy/
