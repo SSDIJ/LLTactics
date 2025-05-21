@@ -113,7 +113,7 @@
         <div class="sectionEliminar">
             <h2>Eliminar Héroe</h2>
             <div class="col-md-6 mb-3">
-                <form th:action="@{/admin/gestHeroes}" method="get" class="mb-3">
+                <form th:action="@{/admin/gestGaleria}" method="get" class="mb-3">
                     <label for="faccionSelect" class="form-label">Selecciona la Facción:</label>
                     <select id="faccionSelect" name="faccion" class="form-select" onchange="this.form.submit()">
                         <option value="">-- Elige una facción --</option>
@@ -184,7 +184,6 @@
                 .catch(error => console.error("Error al añadir el héroe:", error));
         });
     });
-
 
 
     function closeModal() {

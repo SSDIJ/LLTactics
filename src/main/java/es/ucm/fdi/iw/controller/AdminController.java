@@ -111,13 +111,13 @@ public class AdminController {
     // return "gestHeroes";
     // }
 
-    @GetMapping("/gestHeroes")
-    public String mostrarHeroes(@RequestParam(required = false) String faccion, Model model) {
+    @GetMapping("/gestGaleria")
+    public String mostrarGalería(@RequestParam(required = false) String faccion, Model model) {
         if (faccion != null) {
             List<Heroe> heroes = heroesService.obtenerHeroesDeFaccion(faccion);
             model.addAttribute("heroes", heroes);
         }
-        return "gestHeroes";
+        return "gestGaleria";
     }
 
     @GetMapping("/gestUsuarios")
