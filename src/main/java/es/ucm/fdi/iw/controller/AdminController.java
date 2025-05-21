@@ -93,6 +93,7 @@ public class AdminController {
         @RequestParam("vidaIni") int vidaIni,
         @RequestParam("danyoVictoria") int danyoVictoria,
         @RequestParam("estrellasRonda") int estrellasRonda,
+        @RequestParam("puntosPartida") int puntosPartida,
         @RequestParam("precioRefrescar") int precioRefrescar,
         Model model) {
 
@@ -103,6 +104,7 @@ public class AdminController {
         config.setDanyoVictoria(danyoVictoria);
         config.setEstrellasRonda(estrellasRonda);
         config.setPrecioRefrescar(precioRefrescar);
+        config.setPuntosPorPartida(puntosPartida);
         configPartidaRepository.save(config);
 
         return "redirect:/admin/gestPartidas";

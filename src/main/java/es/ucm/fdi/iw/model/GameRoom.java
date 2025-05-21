@@ -27,6 +27,7 @@ public class GameRoom {
     public static int DAMAGE_WIN;
     public static int STARS_NEW_ROUND;
     public static int SHOP_REFRESH_PRICE;
+    public static int POINTS_PER_GAME;
 
     public enum Phase { WAITING, BUY, BATTLE }
 
@@ -77,6 +78,7 @@ public class GameRoom {
         DAMAGE_WIN = config.getDanyoVictoria();
         STARS_NEW_ROUND = config.getEstrellasRonda();
         SHOP_REFRESH_PRICE = config.getPrecioRefrescar(); 
+        POINTS_PER_GAME= config.getPuntosPorPartida();
     }
     
     public boolean isInTransition() {

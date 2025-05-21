@@ -15,4 +15,5 @@ public class ConfigPartida {
     private int danyoVictoria;
     private int estrellasRonda;
     private int precioRefrescar;
+    private int puntosPorPartida;
 }
