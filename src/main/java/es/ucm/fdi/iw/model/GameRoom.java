@@ -62,12 +62,12 @@ public class GameRoom {
         this.player2Name = player2Name;
         this.players.put(player1Name, new GamePlayer(player1Name));
         this.players.put(player2Name, new GamePlayer(player2Name));
-        this.currentRound = 0;
+        this.currentRound = 1;
         this.messageHistory = new ArrayList<>();
         this.resetReadiness();
         preferredPlayer = new Random().nextBoolean() ? player1Name : player2Name;
         winner = null;
-        this.currentPhase = Phase.WAITING;
+        this.currentPhase = Phase.BUY;
         setConfig(config);
     }
 
@@ -104,7 +104,9 @@ public class GameRoom {
     }
 
     public Boolean canDoAction(PlayerAction action) {
-        return true; // POR IMPLEMENTAR
+        return action.getActionType() != PlayerAction.ActionType.GENERAL 
+            || action.getActionType() != PlayerAction.ActionType.SEND_MESSAGE
+            || currentPhase == Phase.BATTLE;
     }
 
     public void setPlayerReady(String player) {
