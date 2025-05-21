@@ -23,7 +23,17 @@ INSERT INTO "IWUSER"
 (ID, IDFOTO_PERFIL, ENABLED, ESTADO, FACCION_FAVORITA, FECHA_BANEO, FIRST_NAME, LAST_NAME, PARTIDAS_GANADAS, PARTIDAS_PERDIDAS, PASSWORD, PUNTUACION, RAZON_BANEO, ROLES, USERNAME)
 VALUES
 (1, 5, TRUE, 0, 0, null, 'Admin', 'Administrez', 7, 3, '{bcrypt}$2a$10$GU4mO.Uxc.tRP3.DsrBIvO3543uERYAvJwkuplrpFTAYdXoteTFOm', 1134, null, 'ADMIN,USER', 'pruebaAdmin123'),
-(2, 2, TRUE, 0, 0, null, 'Usuario', 'Usuariez', 3, 10, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 675, null, 'USER', 'usuarioMolon77');
+(2, 2, TRUE, 0, 0, null, 'Usuario', 'Usuariez', 3, 10, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 675, null, 'USER', 'usuarioMolon77'),
+(3, 1, TRUE, 0, 0, null, 'Jugador', 'Uno', 5, 5, '{bcrypt}$2a$10$example', 1000, null, 'USER', 'jugador1'),
+(4, 1, TRUE, 0, 0, null, 'Jugador', 'Dos', 8, 2, '{bcrypt}$2a$10$example', 1200, null, 'USER', 'jugador2'),
+(5, 1, TRUE, 0, 0, null, 'Jugador', 'Tres', 3, 7, '{bcrypt}$2a$10$example', 800, null, 'USER', 'jugador3'),
+(6, 1, TRUE, 0, 0, null, 'Jugador', 'Cuatro', 9, 1, '{bcrypt}$2a$10$example', 1300, null, 'USER', 'jugador4'),
+(7, 1, TRUE, 0, 0, null, 'Jugador', 'Cinco', 2, 8, '{bcrypt}$2a$10$example', 700, null, 'USER', 'jugador5'),
+(8, 1, TRUE, 0, 0, null, 'Jugador', 'Seis', 6, 4, '{bcrypt}$2a$10$example', 1100, null, 'USER', 'jugador6'),
+(9, 1, TRUE, 0, 0, null, 'Jugador', 'Siete', 4, 6, '{bcrypt}$2a$10$example', 900, null, 'USER', 'jugador7'),
+(10, 1, TRUE, 0, 0, null, 'Jugador', 'Ocho', 7, 3, '{bcrypt}$2a$10$example', 1150, null, 'USER', 'jugador8'),
+(11, 1, TRUE, 0, 0, null, 'Jugador', 'Nueve', 1, 9, '{bcrypt}$2a$10$example', 650, null, 'USER', 'jugador9'),
+(12, 1, TRUE, 0, 0, null, 'Jugador', 'Diez', 10, 0, '{bcrypt}$2a$10$example', 1400, null, 'USER', 'jugador10');
 
 INSERT INTO "PUBLIC"."FACCION_USOS" 
 (FACCION, VECES_USADO, ID, JID) 

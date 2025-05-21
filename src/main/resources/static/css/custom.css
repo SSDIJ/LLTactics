@@ -142,6 +142,12 @@ img.preview {
     text-align: center;
 }
 
+.tab{
+    display: flex;
+    justify-content: center !important;
+    padding-bottom: 1%;
+}
+
 #title-ranking {
     font-family: "Uncial Antiqua", serif;
     font-size: 3rem;
@@ -564,8 +570,11 @@ td img.icon {
     justify-content: center; /* Asegura que el contenido de la tarjeta esté centrado verticalmente */
     padding-top: 3% !important;
 }
-
-
+.heroe-img {
+width: 150px;
+    height: auto;
+    border-bottom: 2px solid #ddd;
+}
 .profile-body h3 {
     color: var(--COLOR-DARK-1) !important;
 }

@@ -10,7 +10,8 @@
 <body class="h-100" id="ranking">
     <header th:replace="~{fragments/nav.html :: nav}"></header>
 
-    <div id="ranking-main-container" class="container d-flex flex-column align-items-center justify-content-center text-center mt-5">
+    <div id="ranking-main-container"
+        class="container d-flex flex-column align-items-center justify-content-center text-center mt-5">
         <div class="container">
             <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
             <div class="container mt-5">
@@ -22,62 +23,110 @@
         </div>
     </div>
 
-    <!-- Tabla del ranking -->
-    <div id="ranking-container">
-        <p th:if="${#lists.isEmpty(usuarios)}">No hay usuarios disponibles</p>
-        <h1>Ranking de Guerreros</h1>
-        
-        <!-- Contenedor adicional para centrar la tabla -->
-        <div id="ranking-table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                       
-                        <th>Jugador</th>
-                        <th>Puntuación</th>
-                        <th>Partidas Jugadas</th>
-                        <th>Victorias</th>
-                        <th>Derrotas</th>
-                    </tr>
-                </thead>
-               <tbody>
-    <tr th:each="user, stat : ${usuarios}" class="clickable-row" 
-        th:attr="data-href=@{'/user/viewProfile'(username=${user.username})}">
 
-     
+    <div class="tab" >
+   <div class="tab">
+    <button class="tablinks btn btn-outline-secondary btn-sm me-2" onclick="openTab(event, 'ranking-table-wrapper')">Mi ranking</button>
+    <button class="tablinks btn btn-outline-secondary btn-sm" onclick="openTab(event, 'TopGlobal')">Top 10</button>
+</div>
 
-        <!-- Columna del jugador con imagen y nombre -->
-        <td>
-            <div class="d-flex align-items-center">
-                <!-- Imagen de perfil -->
-                <div class="me-2">
-                    <img th:if="${user.idfotoPerfil == null}" 
-                         th:src="@{/img/profile_pics/default_profile.png}" 
-                         alt="Foto de perfil" width="40" height="40"
-                         class="rounded-circle border border-2 shadow-sm" />
 
-                    <img th:unless="${user.idfotoPerfil == null}" 
-                         th:src="@{/user/{id}/pic(id=${user.idfotoPerfil})}" 
-                         alt="Foto de perfil" width="40" height="40"
-                         class="rounded-circle border border-2 shadow-sm" />
-                </div>
-
-                <!-- Nombre de usuario -->
-                <span th:text="${user.username}"></span>
-            </div>
-        </td>
-
-        <td th:text="${user.puntuacion}"></td>
-        <td th:text="${user.partidasGanadas + user.partidasPerdidas}"></td>
-        <td th:text="${user.partidasGanadas}"></td>
-        <td th:text="${user.partidasPerdidas}"></td>
-    </tr>
-</tbody>
-
-            </table>
-        </div>
     </div>
-    
+    <!-- Contenedor adicional para centrar la tabla (la clase es importante para que funcione el script y tal) -->
+    <div id="ranking-table-wrapper" class="tabcontent">
+        <table>
+            <thead>
+                <tr>
+
+                    <th>Jugador</th>
+                    <th>Puntuación</th>
+                    <th>Partidas Jugadas</th>
+                    <th>Victorias</th>
+                    <th>Derrotas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user, stat : ${miRanking}" class="clickable-row"
+                    th:attr="data-href=@{'/user/viewProfile'(username=${user.username})}"> <!--Al pulsar te lleva al viewProfile del usuario-->
+
+
+
+                    <!-- Columna del jugador con imagen y nombre -->
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <!-- Imagen de perfil -->
+                            <div class="me-2">
+                                <img th:if="${user.idfotoPerfil == null}"
+                                    th:src="@{/img/profile_pics/default_profile.png}" alt="Foto de perfil" width="40"
+                                    height="40" class="rounded-circle border border-2 shadow-sm" />
+
+                                <img th:unless="${user.idfotoPerfil == null}"
+                                    th:src="@{/user/{id}/pic(id=${user.idfotoPerfil})}" alt="Foto de perfil" width="40"
+                                    height="40" class="rounded-circle border border-2 shadow-sm" />
+                            </div>
+
+                            <!-- Nombre de usuario -->
+                            <span th:text="${user.username}"></span>
+                        </div>
+                    </td>
+
+                    <td th:text="${user.puntuacion}"></td>
+                    <td th:text="${user.partidasGanadas + user.partidasPerdidas}"></td>
+                    <td th:text="${user.partidasGanadas}"></td>
+                    <td th:text="${user.partidasPerdidas}"></td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+    <div id="TopGlobal" class="tabcontent">
+        <table>
+            <thead>
+                <tr>
+
+                    <th>Jugador</th>
+                    <th>Puntuación</th>
+                    <th>Partidas Jugadas</th>
+                    <th>Victorias</th>
+                    <th>Derrotas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user, stat : ${topRanking}" class="clickable-row"
+                    th:attr="data-href=@{'/user/viewProfile'(username=${user.username})}"> <!--Al pulsar te lleva al viewProfile del usuario-->
+
+
+
+                    <!-- Columna del jugador con imagen y nombre -->
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <!-- Imagen de perfil -->
+                            <div class="me-2">
+                                <img th:if="${user.idfotoPerfil == null}"
+                                    th:src="@{/img/profile_pics/default_profile.png}" alt="Foto de perfil" width="40"
+                                    height="40" class="rounded-circle border border-2 shadow-sm" />
+
+                                <img th:unless="${user.idfotoPerfil == null}"
+                                    th:src="@{/user/{id}/pic(id=${user.idfotoPerfil})}" alt="Foto de perfil" width="40"
+                                    height="40" class="rounded-circle border border-2 shadow-sm" />
+                            </div>
+
+                            <!-- Nombre de usuario -->
+                            <span th:text="${user.username}"></span>
+                        </div>
+                    </td>
+
+                    <td th:text="${user.puntuacion}"></td>
+                    <td th:text="${user.partidasGanadas + user.partidasPerdidas}"></td>
+                    <td th:text="${user.partidasGanadas}"></td>
+                    <td th:text="${user.partidasPerdidas}"></td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+    </div>
+
 
     <div class="degradado"></div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
@@ -85,17 +134,46 @@
     <script type="module" src="/js/homepage-animations.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-          document.querySelectorAll(".clickable-row").forEach(row => {
-            row.addEventListener("click", () => {
-              const href = row.getAttribute("data-href");
-              if (href) {
-                window.location.href = href;
-              }
+            document.querySelectorAll(".clickable-row").forEach(row => {
+                row.addEventListener("click", () => {
+                    const href = row.getAttribute("data-href");
+                    if (href) {
+                        window.location.href = href;
+                    }
+                });
             });
-          });
         });
-      </script>
+    </script>
 
-     
+    <!--Script para los tabs del ranking-->
+  <script>
+  function openTab(evt, tabName) {
+    const tabcontent = document.getElementsByClassName("tabcontent");
+    const tablinks = document.getElementsByClassName("tablinks");
+
+    // Oculta todo el contenido de pestañas
+    for (let i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+    // Elimina la clase 'active' de todos los botones
+    for (let i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Muestra el contenido actual y activa el botón
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+
+  // Abre la primera pestaña por defecto al cargar
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector(".tablinks").click();
+  });
+</script>
+
+
+
 </body>
+
 </html>
