@@ -22,11 +22,11 @@ import java.time.ZonedDateTime;
 @Data
 public class GameRoom {
 
-    public static int INITIAL_STARS = 10;
-    public static int INITIAL_LIFE = 20;
-    public static int DAMAGE_WIN = 2;
-    public static int STARS_NEW_ROUND = 5;
-    public static int SHOP_REFRESH_PRICE = 1;
+    public static int INITIAL_STARS;
+    public static int INITIAL_LIFE;
+    public static int DAMAGE_WIN;
+    public static int STARS_NEW_ROUND;
+    public static int SHOP_REFRESH_PRICE;
 
     public enum Phase { WAITING, BUY, BATTLE }
 
@@ -69,11 +69,11 @@ public class GameRoom {
         preferredPlayer = new Random().nextBoolean() ? player1Name : player2Name;
         winner = null;
         this.currentPhase = Phase.WAITING;
-        this.INITIAL_STARS = config.getEstrellasIni();
-        this.INITIAL_LIFE = config.getVidaIni();
-        this.DAMAGE_WIN = config.getDanyoVictoria();
-        this.STARS_NEW_ROUND = config.getEstrellasRonda();
-        this.SHOP_REFRESH_PRICE = config.getPrecioRefrescar(); 
+        INITIAL_STARS = config.getEstrellasIni();
+        INITIAL_LIFE = config.getVidaIni();
+        DAMAGE_WIN = config.getDanyoVictoria();
+        STARS_NEW_ROUND = config.getEstrellasRonda();
+        SHOP_REFRESH_PRICE = config.getPrecioRefrescar(); 
     }
     
 

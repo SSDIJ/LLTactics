@@ -2,6 +2,8 @@ import Player from "./Player.js";
 import Game from "./Game.js";
 import Unit from "./Unit.js";
 
+let playerReady = false;
+
 // ID de la partida
 const roomId = sessionStorage.getItem('roomId');
 const player1NameContainer = document.getElementById("player1Name");
@@ -729,7 +731,6 @@ document.addEventListener("DOMContentLoaded", () => {
     player1.name = player1NameContainer.innerText;
     player2.name = player2NameContainer.innerText;
     
-    // TODO: ELIMINAR ESTO CUANDO FUNCIONE
     const socketUrl = sessionStorage.getItem("socketUrl")
     ws.initialize(socketUrl, ["/topic/game/" + roomId]);
 
@@ -747,20 +748,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-function sendBattleEnd(player1Wins) {
-    const destination = `/app/game/ready/${roomId}`;
-
-    const battleEndMsg = {
-        "winner": player1Wins ? player1.name : player2.name,
-        "units": {
-            [player1.name]: player1.units,
-            [player2.name]: player2.units
-        }
-        
-    };
-
-    ws.stompClient.send(destination, {}, JSON.stringify(battleEndMsg));
-}
 
 function sendAction(action) {
     go("/game/action/" + roomId, "POST", action);
@@ -820,31 +807,31 @@ async function processAction(action) {
         updateRoundNumber();
 
         
-        /*
         if (action["currentPhase"] == "BUY") {
             console.log(1)
             openShop();
             timerElement.innerText = "COMPRA";
         }
         else if (action["currentPhase"] == "BATTLE") {
-            console.log(2)
             closeAll();
             timerElement.innerText = "BATALLA";
-            readyForNextRound();
+
+            if (!playerReady) {
+                playerReady = true
+                const delay = Math.floor(Math.random() * (10000 - 3000 + 1)) + 3000;
+                await new Promise(resolve => setTimeout(resolve, delay));
+                readyForNextRound();
+            } 
+            
         }
-        else if (action["currentPhase"] == "WAITING") {
-            console.log(3)
-            closeShop();
-            timerElement.innerText = "Esperando";
-        }
+       
 
         const ready = action["ready_" + name1]
 
-        if (ready) {
+        if (ready || action["currentRound"] == 0) {
             closeAll();
         }
-        */
-
+        
         return;
     }
 
@@ -908,13 +895,15 @@ async function processAction(action) {
             updateAllHealthBars(player1, player2);
         }, 300);
 
-        const player1Wins = await game.startBattle();
+        playerReady = false;
 
-        sendBattleEnd(player1Wins);
+        const player1Wins = await game.startBattle();
 
         await new Promise(resolve => setTimeout(resolve, 1000));
         clearInterval(intervalHealthsId);
         winAnimation(!player1Wins);
+
+        playerReady = true;
 
         const delay = Math.floor(Math.random() * (10000 - 3000 + 1)) + 3000;
         await new Promise(resolve => setTimeout(resolve, delay));
