@@ -93,6 +93,9 @@
                                          data-bs-parent="#accordionPartidas">
                                         <div class="accordion-body">
                                             <p><strong>ID:</strong> <span th:text="${partida.idPartida}"></span></p>
+                                            <p><strong>Room ID:</strong><span th:text="${partida.gameRoomId}"></span></p>
+                                            <p><strong>Fecha de inicio:</strong><span th:text="${partida.inicio}"></span></p>
+                                            <p><strong>Fecha de fin:</strong><span th:text="${partida.fin}"></span></p>
                                             <p><strong>Jugador 1:</strong> <span th:text="${partida.jugador1.username}"></span></p>
                                             <p><strong>Jugador 2:</strong> <span th:text="${partida.jugador2.username}"></span></p>
                                             <p><strong>En curso:</strong> <span th:text="${partida.enCurso}"></span> </p>

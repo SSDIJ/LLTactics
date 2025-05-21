@@ -25,10 +25,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.ucm.fdi.iw.model.ConfigPartida;
 import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.Message;
+import es.ucm.fdi.iw.model.Objeto;
 import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.repositories.ConfigPartidaRepository;
 import es.ucm.fdi.iw.repositories.HeroeRepository;
+import es.ucm.fdi.iw.repositories.ItemRepository;
 import es.ucm.fdi.iw.repositories.PartidasRepository;
 import es.ucm.fdi.iw.repositories.UserRepository;
 import es.ucm.fdi.iw.services.HeroesService;
@@ -55,6 +57,9 @@ public class AdminController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ItemRepository itemRepository;
 
     @Autowired
     private HeroesService heroesService; // Inyectamos el servicio de héroes
@@ -130,7 +135,7 @@ public class AdminController {
         return "gestUsuarios";
     }
 
-    @GetMapping("/gestHeroes/{faccion}")
+    @GetMapping("/gestGaleria/{faccion}")
     public ResponseEntity<List<Heroe>> obtenerHeroesPorFaccion(@PathVariable String faccion) {
         List<Heroe> heroes = null;
         switch (faccion) {
@@ -156,8 +161,7 @@ public class AdminController {
         return ResponseEntity.ok(heroes);
     }
 
-    @PostMapping("/gestHeroes/add")
-    @ResponseBody
+    @PostMapping("/gestGaleria/add")
     @Transactional
     public ResponseEntity<String> addHeroe(@RequestBody Heroe heroe) {
         try {
@@ -166,21 +170,39 @@ public class AdminController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error al añadir el héroe: " + e.getMessage());
         }
+
     }
 
-    @PostMapping("/gestHeroes/delete/{idHeroe}")
+    @PostMapping("/gestGaleria/addObjeto")
+    @Transactional
+    public String addObjeto(@RequestParam String nombreObjeto,
+        @RequestParam(required = true) Integer vidaObjeto,
+        @RequestParam(required = true) Integer velocidadObjeto,
+        @RequestParam(required = true) Integer dañoObjeto,
+        @RequestParam(required = true) Integer precioObjeto,
+        @RequestParam(required = true) Integer armaduraObjeto,
+        @RequestParam String imagenObjeto,
+        @RequestParam String descripcionObjeto, Model model){
+        
+        Objeto objeto =new Objeto(imagenObjeto, nombreObjeto, vidaObjeto, armaduraObjeto, dañoObjeto, velocidadObjeto, descripcionObjeto, precioObjeto);
+        itemRepository.save(objeto);
+
+        return "redirect:/admin/gestGaleria";
+    }
+
+    @PostMapping("/gestGaleria/delete/{idHeroe}")
     @Transactional
     public String deleteHeroe(@PathVariable("idHeroe") Long idHeroe, Model model) {
         try {
             heroeRepository.deleteById(idHeroe);
-            return "gestHeroes";
+            return "gestGaleria";
         } catch (Exception e) {
             model.addAttribute("error", "Error al eliminar el héroe: " + e.getMessage());
-            return "gestHeroes";
+            return "redirect:/admin/gestGaleria";
         }
     }
 
-    @PostMapping("/gestHeroes/update/{idHeroe}")
+    @PostMapping("/gestGaleria/update/{idHeroe}")
     @Transactional
     public String updateHeroe(
             @PathVariable("idHeroe") Long idHeroe,
@@ -209,7 +231,7 @@ public class AdminController {
 
         heroeRepository.save(heroe);
 
-        return "gestHeroes";
+        return "redirect:/admin/gestGaleria";
     }
 
     @PostMapping("/banearUsuario/{idUsuario}")

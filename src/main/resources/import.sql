@@ -92,27 +92,27 @@ VALUES
 (10, 2);
 
 -- 1 +/- SELECT COUNT(*) FROM PUBLIC.OBJETO;  
-INSERT INTO "PUBLIC"."OBJETO" VALUES
-(20, 35, 4, 30, 45, 1, NULL, 'Un collar místico con el símbolo del ankh.', '/img/items/ankh-necklace.png', 'Collar Ankh'),
-(10, 15, 3, 20, 25, 2, NULL, 'Un libro con conocimientos antiguos.', '/img/items/book5.png', 'Libro 5'),
-(15, 55, 2, 40, 35, 3, NULL, 'Una espada envuelta en llamas.', '/img/items/flame-sword.png', 'Espada Llameante'),
-(18, 45, 3, 35, 30, 4, NULL, 'Una lanza decorada con detalles intrincados.', '/img/items/spear-fancy.png', 'Lanza Elegante'),
-(25, 50, 2, 38, 50, 5, NULL, 'Una espada bendecida con poder divino.', '/img/items/sword-holy.png', 'Espada Sagrada'),
-(30, 10, 5, 15, 60, 6, NULL, 'Armadura hecha de oro puro, proporciona una gran protección.', '/img/items/armor-golden.png', 'Armadura Dorada'),
-(12, 40, 5, 45, 28, 7, NULL, 'Un arco poderoso con gran precisión.', '/img/items/bow-2.png', 'Arco 2'),
-(5, 5, 4, 15, 10, 8, NULL, 'Una flor rara con propiedades mágicas.', '/img/items/flower3.png', 'Flor Mágica'),
-(15, 40, 3, 50, 25, 9, NULL, 'Una lanza ligera para lanzar.', '/img/items/spear-javelin.png', 'Lanza Jabalina'),
-(20, 42, 4, 48, 30, 10, NULL, 'Una espada pequeña y rápida para golpes rápidos.', '/img/items/sword-short.png', 'Espada Corta'),
-(30, 5, 1, 10, 40, 11, NULL, 'Armadura básica para protección.', '/img/items/armor.png', 'Armadura'),
-(10, 45, 5, 52, 28, 12, NULL, 'Un arco hecho de cristal encantado.', '/img/items/bow-crystal-2.png', 'Arco Cristal 2'),
-(30, 48, 1, 32, 50, 13, NULL, 'Un martillo grabado con runas antiguas.', '/img/items/hammer-runic.png', 'Martillo Rúnico'),
-(18, 35, 3, 30, 30, 14, NULL, 'Una lanza estándar para combate.', '/img/items/spear.png', 'Lanza'),
-(25, 52, 2, 33, 45, 15, NULL, 'Una espada que roba la energía vital de los enemigos.', '/img/items/sword-wraith.png', 'Espada Espectral'),
-(22, 50, 2, 38, 25, 16, NULL, 'Un hacha grande para combate.', '/img/items/axe-2.png', 'Hacha de Batalla'),
-(12, 47, 4, 50, 30, 17, NULL, 'Un arco hecho de cristal mágico.', '/img/items/bow-crystal.png', 'Arco de Cristal'),
-(8, 30, 3, 20, 22, 18, NULL, 'Un collar hecho de huesos de criaturas míticas.', '/img/items/necklace-bone.png', 'Collar de Hueso'),
-(15, 38, 2, 25, 35, 19, NULL, 'Un bastón mágico con poderosos hechizos.', '/img/items/staff-2.png', 'Bastón de Poder'),
-(15, 35, 3, 30, 28, 20, NULL, 'Una espada básica para combate cuerpo a cuerpo.', '/img/items/sword.png', 'Espada');
+INSERT INTO "PUBLIC"."OBJETO" (ARMADURA, DAÑO, PRECIO, VELOCIDAD, VIDA, ID_UNIDAD, DESCRIPCION, IMAGEN, NOMBRE) VALUES
+(20, 35, 4, 30, 45, NULL, 'Un collar místico con el símbolo del ankh.', '/img/items/ankh-necklace.png', 'Collar Ankh'),
+(10, 15, 3, 20, 25, NULL, 'Un libro con conocimientos antiguos.', '/img/items/book5.png', 'Libro 5'),
+(15, 55, 2, 40, 35, NULL, 'Una espada envuelta en llamas.', '/img/items/flame-sword.png', 'Espada Llameante'),
+(18, 45, 3, 35, 30, NULL, 'Una lanza decorada con detalles intrincados.', '/img/items/spear-fancy.png', 'Lanza Elegante'),
+(25, 50, 2, 38, 50, NULL, 'Una espada bendecida con poder divino.', '/img/items/sword-holy.png', 'Espada Sagrada'),
+(30, 10, 5, 15, 60, NULL, 'Armadura hecha de oro puro, proporciona una gran protección.', '/img/items/armor-golden.png', 'Armadura Dorada'),
+(12, 40, 5, 45, 28, NULL, 'Un arco poderoso con gran precisión.', '/img/items/bow-2.png', 'Arco 2'),
+(5, 5, 4, 15, 10, NULL, 'Una flor rara con propiedades mágicas.', '/img/items/flower3.png', 'Flor Mágica'),
+(15, 40, 3, 50, 25, NULL, 'Una lanza ligera para lanzar.', '/img/items/spear-javelin.png', 'Lanza Jabalina'),
+(20, 42, 4, 48, 30, NULL, 'Una espada pequeña y rápida para golpes rápidos.', '/img/items/sword-short.png', 'Espada Corta'),
+(30, 5, 1, 10, 40,NULL, 'Armadura básica para protección.', '/img/items/armor.png', 'Armadura'),
+(10, 45, 5, 52, 28, NULL, 'Un arco hecho de cristal encantado.', '/img/items/bow-crystal-2.png', 'Arco Cristal 2'),
+(30, 48, 1, 32, 50, NULL, 'Un martillo grabado con runas antiguas.', '/img/items/hammer-runic.png', 'Martillo Rúnico'),
+(18, 35, 3, 30, 30, NULL, 'Una lanza estándar para combate.', '/img/items/spear.png', 'Lanza'),
+(25, 52, 2, 33, 45, NULL, 'Una espada que roba la energía vital de los enemigos.', '/img/items/sword-wraith.png', 'Espada Espectral'),
+(22, 50, 2, 38, 25, NULL, 'Un hacha grande para combate.', '/img/items/axe-2.png', 'Hacha de Batalla'),
+(12, 47, 4, 50, 30, NULL, 'Un arco hecho de cristal mágico.', '/img/items/bow-crystal.png', 'Arco de Cristal'),
+(8, 30, 3, 20, 22, NULL, 'Un collar hecho de huesos de criaturas míticas.', '/img/items/necklace-bone.png', 'Collar de Hueso'),
+(15, 38, 2, 25, 35, NULL, 'Un bastón mágico con poderosos hechizos.', '/img/items/staff-2.png', 'Bastón de Poder'),
+(15, 35, 3, 30, 28, NULL, 'Una espada básica para combate cuerpo a cuerpo.', '/img/items/sword.png', 'Espada');
 
 
 INSERT INTO "PUBLIC"."CONFIG_PARTIDA" 

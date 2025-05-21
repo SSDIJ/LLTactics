@@ -1393,7 +1393,14 @@ td img.icon {
     border-radius: 5px;
     background-color: #f9f9f9;
     width: 75%;
-    margin: 50px auto;
+    margin: 50px 20px;
+}
+
+.containerAnadir{
+    padding: 20px;
+    width: 80%;
+    margin: auto auto;
+    display: flex;
 }
 
 .section h2 {

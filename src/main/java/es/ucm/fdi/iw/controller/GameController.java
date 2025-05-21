@@ -307,7 +307,6 @@ public class GameController {
                 log.warn("Acción desconocida: {}", action);
                 break;
         }
-
     }
 
     private void updatePlayerShop(GameRoom gameRoom, String player, boolean cost) {
@@ -385,6 +384,7 @@ public class GameController {
                 String winnerDetails = action.getActionDetails();
                 payload.put("isWinner", true);
                 payload.put("winner", winnerDetails);
+                
                 break;
 
             case REFRESH_SHOP:
