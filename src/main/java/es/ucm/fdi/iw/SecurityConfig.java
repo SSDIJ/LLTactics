@@ -74,8 +74,7 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.POST, "/admin/gestHeroes/update/**").hasRole("ADMIN")
 
 				//.requestMatchers("/user/**").hasRole("USER")     LO HE CAMBIADO DE MOMENTO, REVISAR SI ES NECESARIO HACERLO ASI
-				.requestMatchers("/user/**").permitAll()	   
-				.requestMatchers("/game/refreshShop").hasRole("USER") 
+				.requestMatchers("/user/**").permitAll()
 				
 				.anyRequest().authenticated()
             )
