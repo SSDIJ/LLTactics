@@ -16,7 +16,7 @@ body {
 }
 
 .title {
-    font-family: var(--TITLE-FONT-FAMILY);
+    font-family: var(--TITLE-FONT-FAMILY) !important;
 }
 
 .iwthumb {
@@ -389,10 +389,9 @@ td img.icon {
 }
 
 .barra {
-    width: 240px;
+    width: 120px;
+    max-width: 240px;
 }
-
-
 
 
 /* GALERIA FIN */
@@ -536,7 +535,7 @@ td img.icon {
     border: 4px solid #ccc; /* Bordes sutiles */
     transition: transform 0.3s ease;
     background-color: white;
-    z-index:10 !important;
+    z-index:999 !important;
     position:relative;
 }
 
@@ -851,8 +850,16 @@ td img.icon {
         width: 95px !important;
     }
 
+    .unit-container {
+        z-index: 999 !important;
+    }
+
     .unit-stats {
         height: 20px;
+    }
+
+    .card-body .unit-stats {
+        height: 80px;
     }
 
     .unit-container:has(.missing-unit) {
@@ -1738,4 +1745,20 @@ td img.icon {
     100% {
         text-shadow: 0 0 20px rgba(255, 215, 0, 1), 0 0 40px rgba(255, 215, 0, 0.8);
     }
+}
+
+.profile-pic:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+    transition: transform 0.3s ease, filter 0.3s ease;
+    position: relative; /* Necesario para que z-index tenga efecto */
+    z-index: 10;         /* Asegura que esté por encima de otros elementos */
+}
+
+.profile-unit {
+    width: 150px;
+}
+
+.bot-user {
+    background-color: var(--COLOR-DARK-1) !important;
 }

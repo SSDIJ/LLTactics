@@ -11,7 +11,7 @@
 <body>
     <div th:fragment="cartaAdmin(heroe)" class="cardAdmin">
         <!-- Imagen y nombre -->
-        <img th:src="${heroe.imagen}" class="card-img-top" th:alt="${heroe.nombre}">
+        <img th:src="@{/user/{id}/heroe(id=${heroe.idHeroe})}" class="card-img-top" th:alt="${heroe.nombre}">
         <h5 class="cardAdmin-title" th:text="${heroe.nombre}"></h5>
 
         <!-- Formulario -->

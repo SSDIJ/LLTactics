@@ -53,7 +53,7 @@ class Shop {
                 unitData.daño,
                 unitData.descripcion,
                 unitData.faccion,
-                unitData.id,
+                unitData.idHeroe,
                 unitData.imagen,
                 unitData.nombre,
                 unitData.precio,
