@@ -153,7 +153,7 @@ public class GameUnit {
 
     public static GameUnit getDefaultUnit() {
         return new GameUnit(
-            30, // armor
+            0, // armor
             20, // damage
             "Defiende sus tierras.", // description
             null, // faction (puedes cambiarlo si deseas establecer una facción)

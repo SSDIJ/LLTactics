@@ -199,6 +199,9 @@ function postImage(img, endpoint, name, filename) {
 document.addEventListener("DOMContentLoaded", () => {
     if (iwconfig.socketUrl) {
         let subs = iwconfig.admin ? ["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
+
+        subs = [...subs, "/topic/game/matchmaking"];
+
         if (iwconfig.gameId) {
             subs.push(`/topic/game/${iwconfig.gameId}`);
         }

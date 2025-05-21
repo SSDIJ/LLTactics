@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 import java.util.Set;
@@ -19,10 +22,13 @@ import java.time.ZonedDateTime;
 @Data
 public class GameRoom {
 
-    public static final int INITIAL_STARS = 20;
-    public static final int INITIAL_LIFE = 5;
-    public static final int DAMAGE_WIN = 1;
-    public static final int STARS_NEW_ROUND = 15;
+    public static int INITIAL_STARS;
+    public static int INITIAL_LIFE;
+    public static int DAMAGE_WIN;
+    public static int STARS_NEW_ROUND;
+    public static int SHOP_REFRESH_PRICE;
+
+    public enum Phase { WAITING, BUY, BATTLE }
 
     private final String gameRoomId;
     private final Map<String, GamePlayer> players = new HashMap<>();
@@ -35,6 +41,11 @@ public class GameRoom {
     private String preferredPlayer;
     private String winner;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Phase currentPhase;
+
+    private boolean inTransition = false;
+
     // Constructor por defecto
     public GameRoom() {
         this.gameRoomId = "";
@@ -42,10 +53,9 @@ public class GameRoom {
         this.players.put(player1Name, new GamePlayer(player1Name));
         this.players.put(player2Name, new GamePlayer(player2Name));
         this.messageHistory = new ArrayList<>();
-        this.playerResults = new HashMap<>();
     }
 
-    public GameRoom(String gameRoomId, String player1Name, String player2Name) {
+    public GameRoom(String gameRoomId, String player1Name, String player2Name, ConfigPartida config) {
         this.gameRoomId = gameRoomId;
 
         this.player1Name = player1Name;
@@ -57,10 +67,25 @@ public class GameRoom {
         this.resetReadiness();
         preferredPlayer = new Random().nextBoolean() ? player1Name : player2Name;
         winner = null;
+        this.currentPhase = Phase.WAITING;
+        setConfig(config);
     }
 
-    public enum Phase { WAITING, BUY, BATTLE }
-    private Phase currentPhase = Phase.WAITING;
+    public static void setConfig(ConfigPartida config) {
+        INITIAL_STARS = config.getEstrellasIni();
+        INITIAL_LIFE = config.getVidaIni();
+        DAMAGE_WIN = config.getDanyoVictoria();
+        STARS_NEW_ROUND = config.getEstrellasRonda();
+        SHOP_REFRESH_PRICE = config.getPrecioRefrescar(); 
+    }
+    
+    public boolean isInTransition() {
+    return inTransition;
+    }
+
+    public void setInTransition(boolean inTransition) {
+        this.inTransition = inTransition;
+    }
 
     public boolean isBuyingPhase() {
         return currentRound % 2 == 1;
@@ -76,6 +101,10 @@ public class GameRoom {
 
     public void nextRound() {
         currentRound++;
+    }
+
+    public Boolean canDoAction(PlayerAction action) {
+        return true; // POR IMPLEMENTAR
     }
 
     public void setPlayerReady(String player) {
@@ -125,22 +154,12 @@ public class GameRoom {
         return players;
     }
 
-    private Map<String, GameBattleResult> playerResults = new ConcurrentHashMap<>();
-
-    public void setPlayerResult(String playerName, GameBattleResult result) {
-        playerResults.put(playerName, result);
-    }
-
-    public GameBattleResult getPlayerResult(String playerName) {
-        return playerResults.get(playerName);
-    }
-
     public void reduceLoserHealth() {
         this.players.get(lastRoundLoser).reduceHealth(DAMAGE_WIN);
     }
 
-    public void refreshPlayerShop(String player, List<Heroe> heroes, List<Objeto> items) {
-        this.players.get(player).refreshShop(heroes, items);
+    public void refreshPlayerShop(String player, List<Heroe> heroes, List<Objeto> items, boolean cost) {
+        this.players.get(player).refreshShop(heroes, items, cost);
     }
 
     public void fight() {

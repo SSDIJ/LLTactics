@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>Gestionar héroes</title>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+</head>
+
+<body>
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+     <div class="container mt-5">
+        <h1 class="mt-5 title display-1 text-center">Gestión de Heroes</h1>
+    </div>
+    <div class="containerAdmin">
+        <!-- Apartado para añadir héroes -->
+        <div class="containerAnadir">
+            <div class="sectionAnadir">
+                <h2>Añadir Héroe</h2>
+                <form th:action="@{/admin/gestGaleria/add}" method="post" class="needs-validation" id="formAnadirHeroe" novalidate>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nombre" class="form-label">Nombre del Héroe</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Unidad" required>
+                            <div class="invalid-feedback">
+                                Por favor, introduce el nombre del héroe.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="faccion" class="form-label">Facción</label>
+                            <select class="form-select" id="faccion" name="faccion" required>
+                                <option value="0">Humanos</option>
+                                <option value="1">Dragones</option>
+                                <option value="2">Trolls</option>
+                                <option value="3">No Muertos</option>
+                                <option value="4">Legendarios</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, selecciona una facción.
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="vida" class="form-label">Vida</label>
+                            <input type="number" class="form-control" id="vida" name="vida" min="0" placeholder="250">
+                            <div class="invalid-feedback">
+                                Por favor, introduce un valor válido para la vida.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="armadura" class="form-label">Armadura</label>
+                            <input type="number" class="form-control" id="armadura" name="armadura" min="0" placeholder="55" required>
+                            <div class="invalid-feedback">
+                                Por favor, introduce un valor válido para la armadura.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="velocidad" class="form-label">Velocidad de Ataque</label>
+                            <input type="number" class="form-control" id="velocidad" name="velocidad" min="0" placeholder="40" required>
+                            <div class="invalid-feedback">
+                                Por favor, introduce un valor válido para la velocidad de ataque.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="daño" class="form-label">Daño</label>
+                            <input type="number" class="form-control" id="daño" name="daño" min="0" placeholder="95" required>
+                            <div class="invalid-feedback">
+                                Por favor, introduce un valor válido para el daño.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="precio" class="form-label">Precio</label>
+                            <input type="number" class="form-control" id="precio" name="precio" min="0" placeholder="2" required>
+                            <div class="invalid-feedback">
+                                Por favor, introduce el precio.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="probabilidad" class="form-label">Probabilidad</label>
+                            <input type="number" class="form-control" id="probabilidad" name="probabilidad" step="0.01"
+                                min="0" placeholder="0.3" required>
+                            <div class="invalid-feedback">
+                                Por favor, introduce la probabilidad.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="imagen" class="form-label">Ruta del PNG</label>
+                        <input type="text" class="form-control" id="imagen" name="imagen" placeholder="Ruta" required>
+                        <div class="invalid-feedback">
+                            Por favor, introduce la ruta del PNG.
+                        </div>
+                        <label for="descripcion" class="form-label">Descripcion</label>
+                        <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Breve descripción de la unidad" required>
+                        <div class="invalid-feedback">
+                            Por favor, introduce la descripcion.
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Añadir Héroe</button>
+                </form>
+            </div>
+
+
+            <div class="sectionAnadir">
+                <h2>Añadir Objeto</h2>
+                <form th:action="@{/admin/gestGaleria/addObjeto}" method="post" class="needs-validation" id="formAnadirObjeto" novalidate>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nombreObjeto" class="form-label">Nombre del Objeto</label>
+                            <input type="text" class="form-control" id="nombreObjeto" name="nombreObjeto" placeholder="Objeto" required>
+                            <div class="invalid-feedback">
+                                Por favor, introduce el nombre del objeto.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="vidaObjeto" class="form-label">Vida</label>
+                            <input type="number" class="form-control" id="vidaObjeto" name="vidaObjeto" min="0" placeholder="250" required>
+                            <div class="invalid-feedback">
+                                Por favor, introduce un valor válido para la vida.
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="velocidadObjeto" class="form-label">Velocidad de Ataque</label>
+                                <input type="number" class="form-control" id="velocidadObjeto" name="velocidadObjeto" min="0" placeholder="40" required>
+                                <div class="invalid-feedback">
+                                    Por favor, introduce un valor válido para la velocidad de ataque.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="dañoObjeto" class="form-label">Daño</label>
+                                <input type="number" class="form-control" id="dañoObjeto" name="dañoObjeto" min="0" placeholder="95" required>
+                                <div class="invalid-feedback">
+                                    Por favor, introduce un valor válido para el daño.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="precioObjeto" class="form-label">Precio</label>
+                                <input type="number" class="form-control" id="precioObjeto" name="precioObjeto" min="0" placeholder="2" required>
+                                <div class="invalid-feedback">
+                                    Por favor, introduce el precio.
+                                </div>  
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="armaduraObjeto" class="form-label">Armadura</label>
+                                <input type="number" class="form-control" id="armaduraObjeeto" name="armaduraObjeto" min="0" placeholder="55" required>
+                                <div class="invalid-feedback">
+                                    Por favor, introduce un valor válido para la armadura.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="imagenObjeto" class="form-label">Ruta del PNG</label>
+                            <input type="text" class="form-control" id="imagenObjeto" name="imagenObjeto" placeholder="Ruta" required>
+                            <div class="invalid-feedback">
+                                Por favor, introduce la ruta del PNG.
+                            </div>
+                            <label for="descripcionObjeto" class="form-label">Descripcion</label>
+                            <input type="text" class="form-control" id="descripcionObjeto" name="descripcionObjeto" placeholder="Breve descripción del objeto">
+                            <div class="invalid-feedback">
+                                Por favor, introduce la descripcion.
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Añadir Objeto</button>
+                </form>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Apartado para eliminar héroes -->
+        <div class="sectionEliminar">
+            <h2>Eliminar Héroe</h2>
+            <div class="col-md-6 mb-3">
+                <form th:action="@{/admin/gestGaleria}" method="get" class="mb-3">
+                    <label for="faccionSelect" class="form-label">Selecciona la Facción:</label>
+                    <select id="faccionSelect" name="faccion" class="form-select" onchange="this.form.submit()">
+                        <option value="">-- Elige una facción --</option>
+                        <option value="humanos" th:selected="${faccion=='humanos'}">Humanos</option>
+                        <option value="dragones" th:selected="${faccion=='dragones'}">Dragones</option>
+                        <option value="trolls" th:selected="${faccion=='trolls'}">Trolls</option>
+                        <option value="noMuertos" th:selected="${faccion=='noMuertos'}">No Muertos</option>
+                        <option value="legendarios" th:selected="${faccion=='legendarios'}">Legendarios
+                        </option>
+                    </select>
+                </form>
+            </div>
+
+            <div id="heroesContainer">
+                <div th:if="${heroes != null}" th:each="heroe : ${heroes}">
+                    <div th:replace="fragments/cardAdmin :: cartaAdmin(heroe=${heroe})"></div>
+                </div>
+                <p th:if="${heroes == null}" class="text-muted">Selecciona una facción para ver los héroes.</p>
+            </div>
+        </div>
+
+        <div class="degradado"></div>
+        <th:block th:replace="~{fragments/footer.html :: footer}" />
+</body>
+
+<script>
+    function fieldsToObject(fields) {
+        const o = {};
+        for (let id of fields) {
+            const element = document.getElementById(id);
+            const value = element.value;
+
+            if (element.type === "number")
+                o[id] = parseFloat(value);
+            else
+                o[id] = value;
+        }
+        return o;
+    }
+
+    //AÑADIR HEROES
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("formAnadirHeroe").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const fields = ["nombre", "imagen", "vida", "armadura", "daño", "velocidad", "descripcion", "faccion", "precio", "probabilidad"];
+            const heroe = fieldsToObject(fields);
+
+            fetch(`/admin/gestGaleria/add`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": iwconfig.csrf.value
+                },
+                body: JSON.stringify(heroe)
+            })
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("formAnadirHeroe").reset();
+                    var confirmacionModal = new bootstrap.Modal(document.getElementById('modalAnadir'));
+                    confirmacionModal.show();
+                    actualizarHeroes();
+                })
+                .catch(error => console.error("Error al añadir el héroe:", error));
+        });
+    });
+
+
+    function closeModal() {
+        document.getElementById("modalEliminar").style.display = "none";
+        document.getElementById("modalAnadir").style.display = "none";
+    }
+
+</script>
+
+</html>

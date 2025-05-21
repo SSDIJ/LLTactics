@@ -63,7 +63,7 @@
 
                         <th:block th:if="${u}" >
                             <li class="nav-item mx-3">
-                                <a class="nav-link" id="heroes-btn" th:if="${u.hasRole('ADMIN')}" th:href="@{/admin/gestHeroes}">Héroes</a>
+                                <a class="nav-link" id="heroes-btn" th:if="${u.hasRole('ADMIN')}" th:href="@{/admin/gestGaleria}">Héroes y Objetos</a>
                             </li>
                             <li class="nav-item mx-3">
                                 <a class="nav-link" th:if="${u.hasRole('ADMIN')}" th:href="@{/admin/gestPartidas}">Partidas</a>

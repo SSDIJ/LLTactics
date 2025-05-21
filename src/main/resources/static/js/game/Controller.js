@@ -2,6 +2,8 @@ import Player from "./Player.js";
 import Game from "./Game.js";
 import Unit from "./Unit.js";
 
+let playerReady = false;
+
 // ID de la partida
 const roomId = sessionStorage.getItem('roomId');
 const player1NameContainer = document.getElementById("player1Name");
@@ -186,7 +188,7 @@ function updateUnits(player, isOpponent = false) {
             
             if (unit.image) {
 
-                img.src = unit.image || "";
+                img.setAttribute('src', `/user/${unit.id}/heroe`);
                 img.classList.remove("hidden");
                 unitLife.classList.remove("hidden")
                 unitName.textContent = unit.name;
@@ -208,8 +210,7 @@ function updateUnits(player, isOpponent = false) {
                     const imgObj = unitItemCells[index].querySelector("img");
 
                     if (item) { 
-
-                        imgObj.src = item.imageUrl;
+                        imgObj.setAttribute('src', `/user/${item.id}/objeto`);
                         imgObj.classList.remove("hidden");
                     }
                     else {
@@ -279,7 +280,7 @@ function updateInventory(isOpponent = false) {
             }
 
             if (img) {
-                img.src = item.imageUrl || "";
+                img.setAttribute('src', `/user/${item.id}/objeto`);
             }
 
             const itemTemp = item;
@@ -346,7 +347,7 @@ function updateInventory(isOpponent = false) {
                             if (assigned || !noc.classList.contains("selectable"))
                                 return;
 
-                            
+                    
                             // Asignar el objeto a la unidad
                             const unitIndex = Array.from(unitObjects).indexOf(container);
                             assigned = true;
@@ -357,8 +358,6 @@ function updateInventory(isOpponent = false) {
                                 "playerName": player1.name,
                                 "actionDetails": JSON.stringify(selectedItem)
                             });
-
-                            console.log("OBJETO ASIGNADO");
 
                             // Limpiar selección
                             objectCells.forEach(cell => cell.classList.remove("selected"));
@@ -390,6 +389,10 @@ function openShop() {
         })
     })
 
+    refreshShopBtns.forEach((rb) => {
+        rb.classList.remove("closed");
+    })
+
     readyBtn.classList.remove("closed")
 }
 
@@ -406,6 +409,10 @@ function closeShop() {
         })
     })
 
+    refreshShopBtns.forEach((rb) => {
+        rb.classList.add("closed");
+    })
+    
     readyBtn.classList.add("closed")
 }
 
@@ -437,7 +444,7 @@ function updateShop() {
                 valorP.textContent = unidad.price;
 
                 const imagenUnidad = newUnidadDiv.querySelector('.shop-unit-game-img');
-                imagenUnidad.setAttribute('src', unidad.image);
+                imagenUnidad.setAttribute('src', `/user/${unidad.id}/heroe`);
 
                 // Añade la opción de compra de las unidades
                 newUnidadDiv.addEventListener('click', () => {
@@ -477,7 +484,7 @@ function updateShop() {
                 valorP.textContent = item.price;
 
                 const imagenUnidad = newItemDiv.querySelector('.object-img');
-                imagenUnidad.setAttribute('src', item.imageUrl);
+                imagenUnidad.setAttribute('src', `/user/${item.id}/objeto`);
 
                 // Añade la opción de compra de los objetos
                 newItemDiv.addEventListener('click', () => {
@@ -678,11 +685,15 @@ function readyForNextRound() {
     go("/game/ready/" + roomId, "POST");
 }
 
-
-readyBtn.addEventListener("click", () => {
-    readyForNextRound()
+function closeAll() {
     closeShop();
     closeInventory();
+}
+
+
+readyBtn.addEventListener("click", () => {
+    readyForNextRound();
+    closeAll();
 })
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -716,7 +727,6 @@ document.addEventListener("DOMContentLoaded", () => {
     player1.name = player1NameContainer.innerText;
     player2.name = player2NameContainer.innerText;
     
-    // TODO: ELIMINAR ESTO CUANDO FUNCIONE
     const socketUrl = sessionStorage.getItem("socketUrl")
     ws.initialize(socketUrl, ["/topic/game/" + roomId]);
 
@@ -734,20 +744,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-function sendBattleEnd(player1Wins) {
-    const destination = `/app/game/ready/${roomId}`;
-
-    const battleEndMsg = {
-        "winner": player1Wins ? player1.name : player2.name,
-        "units": {
-            [player1.name]: player1.units,
-            [player2.name]: player2.units
-        }
-        
-    };
-
-    ws.stompClient.send(destination, {}, JSON.stringify(battleEndMsg));
-}
 
 function sendAction(action) {
     go("/game/action/" + roomId, "POST", action);
@@ -795,6 +791,7 @@ async function processAction(action) {
             updateShop()
         }
 
+
         player1.name = action[`name_${name1}`] || name1;
         player2.name = action[`name_${name2}`] || name2;
 
@@ -803,10 +800,34 @@ async function processAction(action) {
         playerPositionElement.innerText = player1.health >= player2.health ? "#1" : "#2";
 
         game.round = action["currentRound"];
-        if (action["currentPhase"] == "WAITING") {
-            closeShop();
-        }
+        updateRoundNumber();
 
+        
+        if (action["currentPhase"] == "BUY") {
+            console.log(1)
+            openShop();
+            timerElement.innerText = "COMPRA";
+        }
+        else if (action["currentPhase"] == "BATTLE") {
+            closeAll();
+            timerElement.innerText = "BATALLA";
+
+            if (!playerReady) {
+                playerReady = true
+                const delay = Math.floor(Math.random() * (10000 - 3000 + 1)) + 3000;
+                await new Promise(resolve => setTimeout(resolve, delay));
+                readyForNextRound();
+            } 
+            
+        }
+       
+
+        const ready = action["ready_" + name1]
+
+        if (ready || action["currentRound"] == 0) {
+            closeAll();
+        }
+        
         return;
     }
 
@@ -847,6 +868,7 @@ async function processAction(action) {
 
     if (action.phase === "buy") {
         game.round = action.round;
+
         updateRoundNumber();
         timerElement.innerText = `COMPRA`;
 
@@ -858,6 +880,7 @@ async function processAction(action) {
             game.changeRound();
         }
     } else if (action.phase === "battle") {
+        closeAll()
         game.round = action.round;
         updateRoundNumber();
         game.changeRound();
@@ -870,14 +893,15 @@ async function processAction(action) {
             updateAllHealthBars(player1, player2);
         }, 300);
 
+        playerReady = false;
+
         const player1Wins = await game.startBattle();
-
-        winAnimation(!player1Wins);
-
-        sendBattleEnd(player1Wins);
 
         await new Promise(resolve => setTimeout(resolve, 1000));
         clearInterval(intervalHealthsId);
+        winAnimation(!player1Wins);
+
+        playerReady = true;
 
         const delay = Math.floor(Math.random() * (10000 - 3000 + 1)) + 3000;
         await new Promise(resolve => setTimeout(resolve, delay));

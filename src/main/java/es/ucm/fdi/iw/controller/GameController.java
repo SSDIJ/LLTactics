@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import es.ucm.fdi.iw.model.GameBattleResult;
+import es.ucm.fdi.iw.model.ConfigPartida;
 import es.ucm.fdi.iw.model.GameItem;
 import es.ucm.fdi.iw.model.GameMessage;
 import es.ucm.fdi.iw.model.GamePlayer;
@@ -28,10 +28,12 @@ import es.ucm.fdi.iw.model.PlayerAction;
 import es.ucm.fdi.iw.model.Topic;
 import es.ucm.fdi.iw.model.Unidad;
 import es.ucm.fdi.iw.model.User.Role;
+import es.ucm.fdi.iw.repositories.ConfigPartidaRepository;
 import es.ucm.fdi.iw.repositories.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.PlayerAction.ActionType;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -88,6 +90,9 @@ public class GameController {
     @Autowired
     private ItemController itemController;
 
+    @Autowired
+    private ConfigPartidaRepository configPartidaRepository;
+
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4);
 
     @ModelAttribute
@@ -97,18 +102,20 @@ public class GameController {
         }
     }
 
-    // Método para añadir una sala de juego activa (por ejemplo, desde el
-    // matchmaking)
-    //ESTO EN VEZ DE AÑADIRLO AL MAP ACTIVEGAMES; DEBERIA HACER UN UPDATE A LA BD
-    @Transactional
+    @PostConstruct
+    public void init() {
+        ConfigPartida config = configPartidaRepository.findAll().stream().findFirst().orElse(null);
+        GameRoom.setConfig(config);
+    }
+
     public void addActiveGame(String gameRoomId, String player1, String player2) {
         System.out.println("INTENTANDO GUARDAR PARTIDA EN BD");
 
-
+        ConfigPartida config = configPartidaRepository.findAll().stream().findFirst().orElse(null);
         // Crear una nueva instancia de GameRoom
-        GameRoom gameRoom = new GameRoom(gameRoomId, player1, player2);
-        updatePlayerShop(gameRoom, gameRoom.getPlayer1Name());
-        updatePlayerShop(gameRoom, gameRoom.getPlayer2Name());
+        GameRoom gameRoom = new GameRoom(gameRoomId, player1, player2, config);
+        updatePlayerShop(gameRoom, gameRoom.getPlayer1Name(), false);
+        updatePlayerShop(gameRoom, gameRoom.getPlayer2Name(), false);
 
         // Serializar el estado inicial de la partida a JSON
         ObjectMapper objectMapper = new ObjectMapper();
@@ -137,10 +144,8 @@ public class GameController {
 
         // Guardar la partida en la base de datos
         entityManager.persist(partida);
-        System.out.println("Partida guardada en la base de datos!!!!!");
         entityManager.flush();
 
-        // TODO: ELIMINAR ESTO
         scheduler.schedule(() -> {
             startBuyPhase(gameRoomId);
         }, 5, TimeUnit.SECONDS);
@@ -159,8 +164,8 @@ public class GameController {
             return "errorPage"; // Devuelve una página de error si la sala no existe
         }
 
-        System.out.println("\n\nMOSTRNADO PARTIDA\n\n");
         String currentUsername = principal.getName();
+
         // Cargar los datos de la sala de juego
         model.addAttribute("gameRoomId", gameRoom.getGameRoomId());
         session.setAttribute("gameId", gameRoom.getGameRoomId());
@@ -238,14 +243,16 @@ public class GameController {
 
         String playerName = principal.getName();
 
-        /*
-         * // Verificar si el jugador está en la partida
-         * if (!gameRoom.getPlayers().contains(playerName)) {
-         * log.error("El jugador {} no pertenece a la partida {}", playerName,
-         * gameRoomId);
-         * return;
-         * }
-         */
+        // Verificar si el jugador está en la partida
+        if (!gameRoom.getPlayers().containsKey(playerName)) {
+            log.error("El jugador {} no pertenece a la partida {}", playerName,
+            gameRoomId);
+            return;
+        }
+
+        // Determinamos quién puede hacer qué cuándo
+        if (!gameRoom.canDoAction(action)) return;
+         
         try {
             processAction(gameRoom, action, playerName);
         } catch (JsonProcessingException e) {
@@ -265,7 +272,6 @@ public class GameController {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
     
-        
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         switch (type) {
@@ -273,8 +279,7 @@ public class GameController {
                 GameUnit unitBought = mapper.readValue(details, GameUnit.class);
                 gameRoom.playerBuyUnit(senderPlayer, unitBought);
                 //ACTUALIZAR AQUI TANTO EL USO DE FACCIONES COMO EL USO DE TROPAS
-               System.out.println("[" + senderPlayer + "] ha comprado la unidad: " + unitBought.getName() + " (ID: " + unitBought.getId() + ")");
-                 userController.updateUserByUsername(senderPlayer, unitBought);
+                userController.updateUserByUsername(senderPlayer, unitBought);
                 break;
             case SELL_UNIT:
                 GameUnit unitSold = mapper.readValue(details, GameUnit.class);
@@ -293,7 +298,7 @@ public class GameController {
                 gameRoom.playerAssignItemToUnit(senderPlayer, itemAssigned.getUnitUnitId(), itemAssigned);
                 break;
             case REFRESH_SHOP:
-                updatePlayerShop(gameRoom, senderPlayer);
+                updatePlayerShop(gameRoom, senderPlayer, true);
                 break;
             case SEND_MESSAGE:
                 gameRoom.addMessage(senderPlayer, details, ZonedDateTime.now());
@@ -302,13 +307,12 @@ public class GameController {
                 log.warn("Acción desconocida: {}", action);
                 break;
         }
-
     }
 
-    private void updatePlayerShop(GameRoom gameRoom, String player) {
+    private void updatePlayerShop(GameRoom gameRoom, String player, boolean cost) {
         List<Heroe> heroes = unitController.getRandomUnits(3);
         List<Objeto> items = itemController.getRandomItems(2);
-        gameRoom.refreshPlayerShop(player, heroes, items);
+        gameRoom.refreshPlayerShop(player, heroes, items, cost);
     }
 
     private void sendActionToPlayers(GameRoom gameRoom, PlayerAction action) {
@@ -352,9 +356,15 @@ public class GameController {
                 break;
 
             case GENERAL:
+
+                Map<String, Boolean> battleReady = gameRoom.getBattleReady();
                 payload.put("updateAll", true);
                 payload.put("currentRound", gameRoom.getCurrentRound());
                 payload.put("currentPhase", gameRoom.getCurrentPhase());
+
+                System.out.println("\n\n\n");
+                System.out.println(gameRoom.getCurrentPhase());
+                System.out.println("\n\n\n");
                 payload.put("preferredPlayer", gameRoom.getPreferredPlayer());
                 for (Map.Entry<String, GamePlayer> entry : gameRoom.getPlayers().entrySet()) {
                     String playerName = entry.getKey();
@@ -365,6 +375,8 @@ public class GameController {
                     payload.put("stars_" + playerName, player.getStars());
                     payload.put("name_" + playerName, player.getName());
                     payload.put("shop_" + playerName, player.getShop());
+                    Boolean isReady = battleReady.getOrDefault(playerName, false);
+                    payload.put("ready_" + playerName, isReady);
                 }
                 break;
 
@@ -372,6 +384,7 @@ public class GameController {
                 String winnerDetails = action.getActionDetails();
                 payload.put("isWinner", true);
                 payload.put("winner", winnerDetails);
+                
                 break;
 
             case REFRESH_SHOP:
@@ -438,11 +451,16 @@ public class GameController {
         updateGameRoomInDatabase(gameRoomId, gameRoom);
 
         if (allReady) {
+            // Control de transición para evitar glitches
+            if (gameRoom.isInTransition()) {
+                return; // Ya se está cambiando de fase, no hacer nada
+            }
+            gameRoom.setInTransition(true);
+
             if (gameRoom.isBuyingPhase()) {
                 sendActionToPlayers(gameRoom, new PlayerAction(ActionType.GENERAL, "server", ""));
                 startBuyPhase(gameRoomId);
-            }
-            else {
+            } else {
                 prepareDefaultUnits(gameRoom);
                 sendActionToPlayers(gameRoom, new PlayerAction(ActionType.GENERAL, "server", ""));
                 startBattlePhase(gameRoomId);
@@ -478,15 +496,23 @@ public class GameController {
         gameRoom.nextRound();
         gameRoom.setBuyPhase();
 
-        updatePlayerShop(gameRoom, gameRoom.getPlayer1Name());
-        updatePlayerShop(gameRoom, gameRoom.getPlayer2Name());
+        System.out.println("\n\n\n");
+        System.out.println(gameRoom.getCurrentPhase());
+        System.out.println("\n\n\n");
 
-        gameRoom.newRoundStars();
+        boolean cost = false;
+
+        updatePlayerShop(gameRoom, gameRoom.getPlayer1Name(), cost);
+        updatePlayerShop(gameRoom, gameRoom.getPlayer2Name(), cost);
+
+        if (gameRoom.getCurrentRound() != 1)
+            gameRoom.newRoundStars();
+
+        // Actualizar el estado de la partida en la base de datos
 
         sendActionToPlayers(gameRoom, new PlayerAction(PlayerAction.ActionType.GENERAL, "server", ""));
         
         log.info("Comienza fase de compra para sala {}", gameRoomId);
-        gameRoom.setCurrentPhase(Phase.BUY);
 
         // Notificar a los jugadores que comienza la fase de compra
         Map<String, Object> payload = Map.of(
@@ -497,7 +523,7 @@ public class GameController {
             "/topic/game/" + gameRoomId,
             payload);
 
-        // Actualizar el estado de la partida en la base de datos
+        gameRoom.setInTransition(false);
         updateGameRoomInDatabase(gameRoomId, gameRoom);
     }
 
@@ -523,6 +549,7 @@ public class GameController {
         
         gameRoom.fight();
         
+        gameRoom.setInTransition(false);
         // Actualizar el estado de la partida en la base de datos
         updateGameRoomInDatabase(gameRoomId, gameRoom);
     }
@@ -531,7 +558,6 @@ public class GameController {
     private SimpMessagingTemplate messagingTemplate;
 
     //FUNCION QUE DEVUELVE LA PARTIDA DESDE LA BD
-    @Transactional
     public GameRoom getGameRoomFromDatabase(String gameRoomId) {
         try {
             // Buscar la partida activa en la base de datos
@@ -540,7 +566,6 @@ public class GameController {
                 .setParameter("gameRoomId", gameRoomId) // No convertir a Long, ya que gameRoomId es un String
                 .getSingleResult();
 
-            log.info("PARTIDA ENCONTRADAAAAAAAAAAAAAAAAA\n\n");
             // Obtener el estado de la partida en formato JSON
             String estadoPartidaJson = partida.getEstado();
 
@@ -558,7 +583,6 @@ public class GameController {
     }
 
     //FUNCION QUE ACTUALIZA LA PARTIDA EN LA BD
-    @Transactional
     public void updateGameRoomInDatabase(String gameRoomId, GameRoom gameRoom) {
         try {
             // Serializar el objeto GameRoom a JSON
@@ -577,7 +601,7 @@ public class GameController {
             entityManager.merge(partida); // Actualizar la entidad en la base de datos
 
             log.info("Estado de la partida actualizado en la base de datos para gameRoomId: {}", gameRoomId);
-        } catch (Exception e) {
+        } catch (JsonProcessingException e) {
             log.error("Error al actualizar el estado de la partida en la base de datos: {}", e.getMessage(), e);
         }
     }

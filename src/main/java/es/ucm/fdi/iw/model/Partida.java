@@ -62,5 +62,6 @@ public class Partida {
         this.estado = estado;
         this.gameRoomId = gameRoomId;
         this.enCurso = true; // Inicialmente la partida está en curso
+        this.inicio=LocalDateTime.now();
     }
 }

@@ -7,9 +7,8 @@ import es.ucm.fdi.iw.model.Objeto;
 
 import java.util.List;
 
-
-
 @Repository
 public interface ItemRepository extends JpaRepository<Objeto, Long> {
    
 }
+

@@ -11,11 +11,11 @@
 <body>
     <div th:fragment="cartaAdmin(heroe)" class="cardAdmin">
         <!-- Imagen y nombre -->
-        <img th:src="${heroe.imagen}" class="card-img-top" th:alt="${heroe.nombre}">
+        <img th:src="@{/user/{id}/heroe(id=${heroe.idHeroe})}" class="card-img-top" th:alt="${heroe.nombre}">
         <h5 class="cardAdmin-title" th:text="${heroe.nombre}"></h5>
 
         <!-- Formulario -->
-        <form class="cardAdmin-form" th:action="@{/admin/gestHeroes/update/{idHeroe}(idHeroe=${heroe.idHeroe})}"
+        <form class="cardAdmin-form" th:action="@{/admin/gestGaleria/update/{idHeroe}(idHeroe=${heroe.idHeroe})}"
             method="post">
             <input type="hidden" name="idHeroe" th:value="${heroe.idHeroe}" />
 
@@ -76,7 +76,7 @@
         </form>
 
         <!-- Botón para eliminar -->
-        <form th:action="@{/admin/gestHeroes/delete/{idHeroe}(idHeroe=${heroe.idHeroe})}" method="post" class="mt-2">
+        <form th:action="@{/admin/gestGaleria/delete/{idHeroe}(idHeroe=${heroe.idHeroe})}" method="post" class="mt-2">
             <button type="submit" class="btn btn-danger w-100 mt-2" th:id="'eliminar-' + ${heroe.idHeroe}">Eliminar</button>        
         </form>
     </div>
