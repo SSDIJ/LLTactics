@@ -24,11 +24,13 @@
     </div>
 
 
-    <div class="tab" >
-   <div class="tab">
-    <button class="tablinks btn btn-outline-secondary btn-sm me-2" onclick="openTab(event, 'ranking-table-wrapper')">Mi ranking</button>
-    <button class="tablinks btn btn-outline-secondary btn-sm" onclick="openTab(event, 'TopGlobal')">Top 10</button>
-</div>
+    <div class="tab">
+        <div class="tab">
+            <button class="tablinks btn btn-outline-secondary btn-sm me-2"
+                onclick="openTab(event, 'ranking-table-wrapper')">Mi ranking</button>
+            <button class="tablinks btn btn-outline-secondary btn-sm" onclick="openTab(event, 'TopGlobal')">Top
+                10</button>
+        </div>
 
 
     </div>
@@ -46,8 +48,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="user, stat : ${miRanking}" class="clickable-row"
-                    th:attr="data-href=@{'/user/viewProfile'(username=${user.username})}"> <!--Al pulsar te lleva al viewProfile del usuario-->
+                <tr th:each="user, stat : ${miRanking}"
+                    th:class="'clickable-row' + (${userLogueado != null and user.username == userLogueado.username} ? ' table-primary' : '')"
+                    th:attr="data-href=@{'/user/viewProfile'(username=${user.username})}">
+                    <!--Al pulsar te lleva al viewProfile del usuario-->
 
 
 
@@ -93,7 +97,8 @@
             </thead>
             <tbody>
                 <tr th:each="user, stat : ${topRanking}" class="clickable-row"
-                    th:attr="data-href=@{'/user/viewProfile'(username=${user.username})}"> <!--Al pulsar te lleva al viewProfile del usuario-->
+                    th:attr="data-href=@{'/user/viewProfile'(username=${user.username})}">
+                    <!--Al pulsar te lleva al viewProfile del usuario-->
 
 
 
@@ -130,8 +135,8 @@
 
     <div class="degradado"></div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
-
     <script type="module" src="/js/homepage-animations.js"></script>
+ 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll(".clickable-row").forEach(row => {
@@ -146,31 +151,31 @@
     </script>
 
     <!--Script para los tabs del ranking-->
-  <script>
-  function openTab(evt, tabName) {
-    const tabcontent = document.getElementsByClassName("tabcontent");
-    const tablinks = document.getElementsByClassName("tablinks");
+    <script>
+        function openTab(evt, tabName) {
+            const tabcontent = document.getElementsByClassName("tabcontent");
+            const tablinks = document.getElementsByClassName("tablinks");
 
-    // Oculta todo el contenido de pestañas
-    for (let i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
-    }
+            // Oculta todo el contenido de pestañas
+            for (let i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
 
-    // Elimina la clase 'active' de todos los botones
-    for (let i = 0; i < tablinks.length; i++) {
-      tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
+            // Elimina la clase 'active' de todos los botones
+            for (let i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
 
-    // Muestra el contenido actual y activa el botón
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
-  }
+            // Muestra el contenido actual y activa el botón
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
 
-  // Abre la primera pestaña por defecto al cargar
-  document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector(".tablinks").click();
-  });
-</script>
+        // Abre la primera pestaña por defecto al cargar
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelector(".tablinks").click();
+        });
+    </script>
 
 
 
