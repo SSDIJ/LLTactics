@@ -436,7 +436,7 @@ public class GameController {
                     .orElse(null);
 
             if (defeated != null) {
-                userController.updateWinner(winner, defeated);
+                userController.updateWinner(winner, defeated, GameRoom.POINTS_PER_GAME);
             }
             return;
         }

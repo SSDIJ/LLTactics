@@ -683,7 +683,8 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 	@ResponseBody
 	public String updateWinner(
 			@RequestParam String winnerUsername,
-			@RequestParam String defeatedUsername) {
+			@RequestParam String defeatedUsername,
+			@RequestParam int puntos) {
 
 		Optional<User> optionalWinnerUser = userRepository.findByUsername(winnerUsername);
 		Optional<User> optionalDefeatedUser = userRepository.findByUsername(defeatedUsername);
@@ -699,9 +700,9 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		int puntuacionWinner = winnerUser.getPuntuacion();
 		int puntuacionDefeated = defeatedUser.getPuntuacion();
 
-		puntuacionWinner += 20;
+		puntuacionWinner += puntos;
 		// Esta funcion basicamente pone la puntuacion a 0 si es menor que 20
-		puntuacionDefeated = Math.max(puntuacionDefeated - 20, 0);
+		puntuacionDefeated = Math.max(puntuacionDefeated - puntos, 0);
 
 		winnerUser.setPuntuacion(puntuacionWinner);
 		defeatedUser.setPuntuacion(puntuacionDefeated);
