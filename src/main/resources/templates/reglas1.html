@@ -27,46 +27,45 @@
                     <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#gameRulesAccordion">
                         <div class="accordion-body">
                             <ul>
-                                <li>Cuatro jugadores se conectan a una partida</li>
-                                <li>Cada jugador selecciona una serie de personajes para colocar en el campo de batalla</li>
+                                <li>Dos jugadores se conectan a una partida</li>
+                                <li>Las partidas se dividen en dos fases: fase de compra y fase de batalla</li>
+                                <li>En la fase de compra, los jugadores adquieren personajes, objetos y gestionan su equipo</li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- Campo de Batalla -->
+                <!-- Fase de Compra -->
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="headingTwo">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            Campo de batalla
+                            Fase de compra
                         </button>
                     </h2>
                     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#gameRulesAccordion">
                         <div class="accordion-body">
                             <ul>
-                                <li>El campo de batalla es una única fila con un frente en el centro</li>
-                                <li>Cada jugador posiciona sus personajes en fila frente a su oponente directo</li>
-                                <li>Los personajes atacan al primer enemigo de la fila contraria</li>
-                                <li>Cuando un personaje es derrotado, el personaje inmediatamente detrás toma su lugar en el frente</li>
+                                <li>Los jugadores usan estrellas para comprar unidades y objetos o refrescar la tienda</li>
+                                <li>Pueden asignar objetos a las unidades o eliminar unidades y objetos de su inventario con doble clic</li>
+                                <li>La gestión estratégica de recursos y sinergias es fundamental para preparar la batalla</li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- Condiciones de Victoria y Derrota -->
+                <!-- Fase de Batalla -->
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="headingThree">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                            Condiciones de victoria y derrota
+                            Fase de batalla
                         </button>
                     </h2>
                     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#gameRulesAccordion">
                         <div class="accordion-body">
                             <ul>
-                                <li>Cada jugador tiene una barra de vida global</li>
-                                <li>Se pierden puntos de vida al perder batallas</li>
-                                <li>Si la barra de vida de un jugador llega a 0, queda eliminado</li>
-                                <li>El último jugador en pie gana la partida</li>
+                                <li>Los equipos se enfrentan automáticamente hasta que sólo quedan unidades vivas de un equipo</li>
+                                <li>El jugador perdedor de la ronda pierde puntos de vida</li>
+                                <li>La partida termina cuando un jugador alcanza 0 o menos puntos de vida</li>
                             </ul>
                         </div>
                     </div>
@@ -82,28 +81,11 @@
                     <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#gameRulesAccordion">
                         <div class="accordion-body">
                             <ul>
-                                <li>Vida: determina cuántos ataques puede resistir un personaje</li>
-                                <li>Armadura: reduce el daño recibido por el personaje</li>
-                                <li>Velocidad: determina el orden de ataque en cada ronda</li>
-                                <li>Daño: cantidad de puntos restados a la vida del enemigo</li>
-                                <li>El daño resultante de un ataque se calcula como: <span class="fw-bold">vidaDespués = vidaAntes - (daño - armadura)</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Selección de Personajes y Objetos -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingFive">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                            Selección de personajes y objetos
-                        </button>
-                    </h2>
-                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#gameRulesAccordion">
-                        <div class="accordion-body">
-                            <ul>
-                                <li>Los personajes y objetos se obtienen a través de dos carruseles que se actualizan cada ronda</li>
-                                <li>Los jugadores pueden elegir qué personajes y objetos comprar</li>
+                                <li><strong>Vida:</strong> determina cuánto daño puede recibir un personaje antes de ser derrotado</li>
+                                <li><strong>Armadura:</strong> reduce el daño recibido por cada ataque</li>
+                                <li><strong>Velocidad:</strong> determina el orden de ataque durante la batalla</li>
+                                <li><strong>Daño:</strong> puntos que restan a la vida del enemigo cuando atacan</li>
+                                <li>El daño efectivo se calcula como: <span class="fw-bold">vidaDespués = vidaAntes - (daño - armadura)</span></li>
                             </ul>
                         </div>
                     </div>
@@ -111,16 +93,16 @@
 
                 <!-- Sinergias -->
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingSix">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                            Sinergias
+                    <h2 class="accordion-header" id="headingFive">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                            Sinergias (WIP)
                         </button>
                     </h2>
-                    <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#gameRulesAccordion">
+                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#gameRulesAccordion">
                         <div class="accordion-body">
                             <ul>
-                                <li>Algunos personajes tienen sinergias entre ellos</li>
-                                <li>Las sinergias otorgan estadísticas de grupo, mejorando el rendimiento de los personajes</li>
+                                <li>Algunos personajes tienen sinergias que mejoran sus estadísticas y rendimiento en grupo</li>
+                                <li>Las sinergias se activan al reunir ciertos personajes en el equipo</li>
                             </ul>
                         </div>
                     </div>
@@ -128,33 +110,50 @@
 
                 <!-- Economía -->
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingSeven">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                    <h2 class="accordion-header" id="headingSix">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
                             Economía
                         </button>
                     </h2>
-                    <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#gameRulesAccordion">
+                    <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#gameRulesAccordion">
                         <div class="accordion-body">
                             <ul>
-                                <li>Los jugadores ganan monedas progresivamente en función de su estado de partida</li>
-                                <li>Las monedas pueden usarse para comprar nuevos personajes o adquirir objetos que mejoren las estadísticas de los personajes</li>
+                                <li>Los jugadores ganan estrellas progresivamente a medida que avanzan las rondas</li>
+                                <li>Las estrellas se usan para comprar unidades, objetos y refrescar la tienda</li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- Mecánica de combate -->
+                <!-- Mecánica de Combate -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingSeven">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                            Mecánica de combate
+                        </button>
+                    </h2>
+                    <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#gameRulesAccordion">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>El combate es automático; las unidades atacan según su velocidad</li>
+                                <li>Las batallas continúan hasta que un equipo pierde todas sus unidades</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comunicación y Comunidad -->
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="headingEight">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
-                            Mecánica de combate
+                            Comunicación y comunidad
                         </button>
                     </h2>
                     <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#gameRulesAccordion">
                         <div class="accordion-body">
                             <ul>
-                                <li>El combate es automático, los personajes atacan según su velocidad</li>
-                                <li>Los ataques continúan hasta que uno de los jugadores queda sin personajes en su fila</li>
+                                <li>Las partidas incluyen un chat en tiempo real para la comunicación entre jugadores</li>
+                                <li>Existe un botón de reporte para denunciar comportamientos inapropiados y mantener una comunidad sana</li>
                             </ul>
                         </div>
                     </div>
