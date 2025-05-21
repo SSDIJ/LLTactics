@@ -59,7 +59,7 @@ Contraseña: <code>POR RELLENAR</code>
 - Javier Martín
 
 **ARTE**
-- Las imágenes de unidades y objetos provienen del juego Battle for Wesnoth, las cuales están licenciadas bajo la GNU General Public License (GPL).
+- Las imágenes de unidades y objetos provienen del juego [Battle for Wesnoth](https://github.com/wesnoth/wesnoth/tree/master), las cuales están licenciadas bajo la GNU General Public License (GPL).
 - El resto de imágenes decorativaS han sido generados con ChatGPT y posteriormente adaptados.
 - Las fuentes tipográficas usadas en los títulos se han obtenido desde Google Fonts.
 - Los iconos provienen del set de Bootstrap Icons, bajo licencia MIT.
