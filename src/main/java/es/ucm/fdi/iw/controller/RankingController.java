@@ -80,7 +80,7 @@ public class RankingController {
         model.addAttribute("usuarios", usuarios);
         model.addAttribute("miRanking", miRanking);
         model.addAttribute("topRanking", topRanking);
-        model.addAttribute("user", session.getAttribute("u"));
+        model.addAttribute("userLogueado", session.getAttribute("u"));
         return "ranking";
     }
 

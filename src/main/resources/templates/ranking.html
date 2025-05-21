@@ -49,7 +49,7 @@
             </thead>
             <tbody>
                 <tr th:each="user, stat : ${miRanking}"
-                    th:class="'clickable-row' + (${userLogueado != null and user.username == userLogueado.username} ? ' table-primary' : '')"
+                    th:class="'clickable-row' + (${userLogueado != null and user.username == userLogueado.username} ? ' fila-destacada' : '')"
                     th:attr="data-href=@{'/user/viewProfile'(username=${user.username})}">
                     <!--Al pulsar te lleva al viewProfile del usuario-->
 

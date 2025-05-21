@@ -144,10 +144,28 @@ img.preview {
 
 .tab{
     display: flex;
-    justify-content: center !important;
+    justify-content: center;
     padding-bottom: 1%;
 }
-
+.tablinks{
+     width: 150px;
+    height: 50px;
+       border-radius: 10px;  
+}
+.tablinks.active{
+   
+    border: 1px solid #d6a75d;
+    color: #3e2c00;
+     background-color: #d6a75d ; 
+     font-weight: bold;
+ 
+}
+.tablinks:hover {
+    background-color: #c8913e; /* ocre más saturado y oscuro */
+    border-color: white;
+    color: white;
+    cursor: pointer;
+}
 #title-ranking {
     font-family: "Uncial Antiqua", serif;
     font-size: 3rem;
@@ -243,6 +261,28 @@ tr:nth-child(even) {
 tr:hover {
     background-color: rgba(221, 221, 221, 0.9);
 }
+
+.fila-destacada {
+    background-color: #d6a75d !important; /* Puedes usar simplemente rgb(23, 28, 91) */
+    font-weight: bold;
+
+    transition: all 0.3s ease;
+}
+
+tr.fila-destacada span {
+      color: #3e2c00 !important; /* Más contraste que #4b3832 para fondo oscuro */
+}
+tr.fila-destacada td {
+       color: #3e2c00 !important; /* Más contraste que #4b3832 para fondo oscuro */
+}
+
+
+/* Hover consistente */
+.fila-destacada:hover {
+
+    box-shadow: 0 0 15px #d6a75d;
+}
+
 
 td img.icon {
     width: 25px;
