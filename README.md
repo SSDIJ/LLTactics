@@ -1,7 +1,7 @@
 
 <img src="src/main/resources/static/img/logo.png" alt="Logo de avión" width="75" style="border: 1px solid black; border-radius: 10px;"/>
 
-# DESPEGUES
+# LL Tactics
 
 <code> Repositorio para la asignatura Ingeniería Web </code>
 
