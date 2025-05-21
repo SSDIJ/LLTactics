@@ -12,7 +12,7 @@
         <h1 class="mt-5 title display-1 text-center">Galería de Héroes</h1>
         <div th:replace="fragments/navFacciones :: navbar-facciones"></div>
 
-        <div id="gallery-description">
+        <div id="gallery-description" class="text-center">
             ¡Conoce a los héroes más valientes y a las criaturas más temidas del reino!
         </div>
 
@@ -118,7 +118,7 @@
         </div>
         <img src="/img/gallery/rune.png" id="img-gallery-bg">
         <div class="degradado"></div>
-        <button id="scrollToTopBtn" onclick="scrollToTop()">Volver Arriba</button>
+        <button id="scrollToTopBtn" onclick="scrollToTop()">Volver arriba</button>
         <th:block th:replace="~{fragments/footer.html :: footer}" />
     </div>
     <script type="module" src="/js/homepage-animations.js">

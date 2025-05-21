@@ -389,10 +389,9 @@ td img.icon {
 }
 
 .barra {
-    width: 240px;
+    width: 120px;
+    max-width: 240px;
 }
-
-
 
 
 /* GALERIA FIN */
@@ -852,7 +851,7 @@ td img.icon {
     }
 
     .unit-stats {
-        height: 20px;
+        height: 80px;
     }
 
     .unit-container:has(.missing-unit) {
