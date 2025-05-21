@@ -34,6 +34,7 @@ import es.ucm.fdi.iw.repositories.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.PlayerAction.ActionType;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -102,9 +103,12 @@ public class GameController {
         }
     }
 
-    // Método para añadir una sala de juego activa (por ejemplo, desde el
-    // matchmaking)
-    //ESTO EN VEZ DE AÑADIRLO AL MAP ACTIVEGAMES; DEBERIA HACER UN UPDATE A LA BD
+    @PostConstruct
+    public void init() {
+        ConfigPartida config = configPartidaRepository.findAll().stream().findFirst().orElse(null);
+        GameRoom.setConfig(config);
+    }
+
     public void addActiveGame(String gameRoomId, String player1, String player2) {
         System.out.println("INTENTANDO GUARDAR PARTIDA EN BD");
 
@@ -141,10 +145,8 @@ public class GameController {
 
         // Guardar la partida en la base de datos
         entityManager.persist(partida);
-        System.out.println("Partida guardada en la base de datos!!!!!");
         entityManager.flush();
 
-        // TODO: ELIMINAR ESTO
         scheduler.schedule(() -> {
             startBuyPhase(gameRoomId);
         }, 5, TimeUnit.SECONDS);
@@ -163,8 +165,8 @@ public class GameController {
             return "errorPage"; // Devuelve una página de error si la sala no existe
         }
 
-        System.out.println("\n\nMOSTRNADO PARTIDA\n\n");
         String currentUsername = principal.getName();
+
         // Cargar los datos de la sala de juego
         model.addAttribute("gameRoomId", gameRoom.getGameRoomId());
         session.setAttribute("gameId", gameRoom.getGameRoomId());
@@ -242,14 +244,13 @@ public class GameController {
 
         String playerName = principal.getName();
 
-        /*
-         * // Verificar si el jugador está en la partida
-         * if (!gameRoom.getPlayers().contains(playerName)) {
-         * log.error("El jugador {} no pertenece a la partida {}", playerName,
-         * gameRoomId);
-         * return;
-         * }
-         */
+        // Verificar si el jugador está en la partida
+        if (!gameRoom.getPlayers().containsKey(playerName)) {
+            log.error("El jugador {} no pertenece a la partida {}", playerName,
+            gameRoomId);
+            return;
+        }
+         
         try {
             processAction(gameRoom, action, playerName);
         } catch (JsonProcessingException e) {
@@ -269,7 +270,6 @@ public class GameController {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
     
-        
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         switch (type) {
@@ -277,8 +277,7 @@ public class GameController {
                 GameUnit unitBought = mapper.readValue(details, GameUnit.class);
                 gameRoom.playerBuyUnit(senderPlayer, unitBought);
                 //ACTUALIZAR AQUI TANTO EL USO DE FACCIONES COMO EL USO DE TROPAS
-               System.out.println("[" + senderPlayer + "] ha comprado la unidad: " + unitBought.getName() + " (ID: " + unitBought.getId() + ")");
-                 userController.updateUserByUsername(senderPlayer, unitBought);
+                userController.updateUserByUsername(senderPlayer, unitBought);
                 break;
             case SELL_UNIT:
                 GameUnit unitSold = mapper.readValue(details, GameUnit.class);
@@ -504,7 +503,8 @@ public class GameController {
         updatePlayerShop(gameRoom, gameRoom.getPlayer1Name(), cost);
         updatePlayerShop(gameRoom, gameRoom.getPlayer2Name(), cost);
 
-        gameRoom.newRoundStars();
+        if (gameRoom.getCurrentRound() != 1)
+            gameRoom.newRoundStars();
 
         // Actualizar el estado de la partida en la base de datos
 

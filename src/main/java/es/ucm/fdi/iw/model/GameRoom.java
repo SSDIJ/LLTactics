@@ -69,6 +69,10 @@ public class GameRoom {
         preferredPlayer = new Random().nextBoolean() ? player1Name : player2Name;
         winner = null;
         this.currentPhase = Phase.WAITING;
+        setConfig(config);
+    }
+
+    public static void setConfig(ConfigPartida config) {
         INITIAL_STARS = config.getEstrellasIni();
         INITIAL_LIFE = config.getVidaIni();
         DAMAGE_WIN = config.getDanyoVictoria();

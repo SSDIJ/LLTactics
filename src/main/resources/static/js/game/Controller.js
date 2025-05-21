@@ -413,7 +413,6 @@ function closeShop() {
         rb.classList.add("closed");
     })
     
-
     readyBtn.classList.add("closed")
 }
 
@@ -881,6 +880,7 @@ async function processAction(action) {
             game.changeRound();
         }
     } else if (action.phase === "battle") {
+        closeAll()
         game.round = action.round;
         updateRoundNumber();
         game.changeRound();
