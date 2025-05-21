@@ -180,9 +180,11 @@
 
         <hr class="divider">
 
-        <!-- Apartado para eliminar héroes -->
+        <!-- Apartado para eliminar y modificar objetos-->
+
+        <!-- Apartado para eliminar y modificar héroes -->
         <div class="sectionEliminar">
-            <h2>Eliminar Héroe</h2>
+            <h2>Eliminar o modificar héroes</h2>
             <div class="col-md-6 mb-3">
                 <form th:action="@{/admin/gestGaleria}" method="get" class="mb-3">
                     <label for="faccionSelect" class="form-label">Selecciona la Facción:</label>
@@ -204,6 +206,27 @@
                 </div>
                 <p th:if="${heroes == null}" class="text-muted">Selecciona una facción para ver los héroes.</p>
             </div>
+        </div>
+
+        <div class="sectionEliminar">
+            <h2>Eliminar o modificar objetos</h2>
+            <div class="row">
+    <!-- Panel lateral con nombres de objetos -->
+    <div class="col-md-4">
+        <ul class="list-group" id="listaObjetos">
+            <li th:each="objeto, iterStat : ${objetos}"
+                th:text="${objeto.nombre}"
+                th:attr="data-index=${iterStat.index}"
+                class="list-group-item objeto-item"
+                th:classappend="${iterStat.index == 0} ? 'active'">
+            </li>
+        </ul>
+    </div>
+    <!-- Área de detalle para mostrar la card del objeto seleccionado -->
+    <div class="col-md-8" id="detalleObjeto">
+    <div th:if="${#lists.size(objetos) > 0}" th:replace="fragments/cardAdminObj :: cartaAdminObj(objeto=${objetos[0]})"></div>
+</div>
+</div>
         </div>
 
         <div class="degradado"></div>
@@ -249,6 +272,28 @@
                     actualizarHeroes();
                 })
                 .catch(error => console.error("Error al añadir el héroe:", error));
+        });
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const items = document.querySelectorAll('.objeto-item');
+        const detalle = document.getElementById('detalleObjeto');
+        const objetos = /*[[${objetos}]]*/ [];
+
+        items.forEach((item, idx) => {
+            item.addEventListener('click', function() {
+                // Quitar 'active' de todos
+                items.forEach(i => i.classList.remove('active'));
+                // Poner 'active' al seleccionado
+                item.classList.add('active');
+                // Cargar la card del objeto seleccionado usando fetch y Thymeleaf fragment
+                fetch(`/admin/cardObjeto/${idx}`)
+                    .then(resp => resp.text())
+                    .then(html => {
+                        detalle.innerHTML = html;
+                    });
+            });
         });
     });
 

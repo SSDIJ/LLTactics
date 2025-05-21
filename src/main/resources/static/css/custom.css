@@ -1668,6 +1668,20 @@ width: 150px;
     padding: 1rem;
 }
 
+.cardAdminObj{
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+    width: 75%;
+    margin: 0px auto;
+}
+
 /* Imagen */
 .cardAdmin img {
     max-height: 150px;
