@@ -434,9 +434,10 @@ public class GameController {
                     .filter(p -> !p.equals(winner))
                     .findFirst()
                     .orElse(null);
-
+            
             if (defeated != null) {
                 userController.updateWinner(winner, defeated, GameRoom.POINTS_PER_GAME);
+                finishGameInDatabase(gameRoomId, winner, defeated); 
             }
             return;
         }
@@ -596,6 +597,38 @@ public class GameController {
             log.info("Estado de la partida actualizado en la base de datos para gameRoomId: {}", gameRoomId);
         } catch (JsonProcessingException e) {
             log.error("Error al actualizar el estado de la partida en la base de datos: {}", e.getMessage(), e);
+        }
+    }
+
+    public void finishGameInDatabase(String gameRoomId, String winnerUsername, String loserUsername) {
+        try {
+            Partida partida = entityManager.createQuery(
+                    "SELECT p FROM Partida p WHERE p.gameRoomId = :gameRoomId", Partida.class)
+                    .setParameter("gameRoomId", gameRoomId)
+                    .getSingleResult();
+
+            partida.setEnCurso(false);
+            partida.setFin(java.time.LocalDateTime.now());
+
+            // Determinar ganador y perdedor
+            if (partida.getJugador1().getUsername().equals(winnerUsername)) {
+                partida.setGanador(1);
+                partida.setPerdedor(2);
+            } else if (partida.getJugador2().getUsername().equals(winnerUsername)) {
+                partida.setGanador(2);
+                partida.setPerdedor(1);
+            } else {
+                partida.setGanador(0);
+                partida.setPerdedor(0);
+            }
+
+            //partida.setEstado(null); // Vacía el campo estado
+
+            entityManager.merge(partida);
+
+            log.info("Partida {} finalizada. Ganador: {}, Perdedor: {}", gameRoomId, winnerUsername, loserUsername);
+        } catch (Exception e) {
+            log.error("Error al finalizar la partida en la base de datos: {}", e.getMessage(), e);
         }
     }
 }
