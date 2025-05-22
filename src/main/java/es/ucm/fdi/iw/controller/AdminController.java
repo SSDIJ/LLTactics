@@ -21,7 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.util.FileCopyUtils;
 
+import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.ConfigPartida;
 import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.Message;
@@ -37,6 +40,9 @@ import es.ucm.fdi.iw.services.HeroesService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
 
 /**
  * Site administration.
@@ -174,43 +180,156 @@ public class AdminController {
         return ResponseEntity.ok(heroes);
     }
 
-    @PostMapping("/gestGaleria/add")
-    @Transactional
-    public ResponseEntity<String> addHeroe(@RequestBody Heroe heroe) {
-        try {
-            heroeRepository.save(heroe);
-            return ResponseEntity.ok("Héroe añadido correctamente");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al añadir el héroe: " + e.getMessage());
-        }
+    @Autowired
+    private LocalData localData;
 
+    @PostMapping("/gestGaleria/addHeroe")
+    @Transactional
+    public String addHeroe(
+        @RequestParam("nombre") String nombre,
+        @RequestParam("imagen") MultipartFile imagenFile,
+        @RequestParam("vida") int vida,
+        @RequestParam("armadura") int armadura,
+        @RequestParam("daño") int daño,
+        @RequestParam("velocidad") int velocidad,
+        @RequestParam("probabilidad") double probabilidad,
+        @RequestParam("precio") int precio,
+        @RequestParam("descripcion") String descripcion,
+        @RequestParam("faccion") int faccion,
+        Model model) {
+
+        try {
+            log.info("LLEGÓ HASTA AQUIIIIIIIIIIIIIIIIIIIIII");
+            log.info("Nombre del archivo recibido: " + imagenFile.getOriginalFilename());
+            log.info("¿Está vacío?: " + imagenFile.isEmpty());
+
+            // 1. Obtener la carpeta de héroes usando LocalData
+            File heroesDir = localData.getFolder("heroes");
+            log.info("Ruta absoluta de heroesDir: " + heroesDir.getAbsolutePath());
+            if (!heroesDir.exists()) {
+                heroesDir.mkdirs();
+            }
+
+            // 2. Buscar el siguiente id vacío
+            int nextId = 1;
+            while (localData.getFile("heroes", nextId + ".png").exists()) {
+                nextId++;
+            }
+            String fileName = nextId + ".png";
+
+            // 3. Obtener el archivo destino usando LocalData
+            File dest = localData.getFile("heroes", fileName);
+            dest.getParentFile().mkdirs();
+
+            // 4. Guardar la imagen usando BufferedOutputStream (como en setPic)
+            if (imagenFile.isEmpty()) {
+                log.info("Fallo al subir la imagen: archivo vacío");
+                model.addAttribute("error", "El archivo de imagen está vacío.");
+                return "redirect:/admin/gestGaleria";
+            } else {
+                try (BufferedOutputStream stream = new BufferedOutputStream(new java.io.FileOutputStream(dest))) {
+                    byte[] bytes = imagenFile.getBytes();
+                    stream.write(bytes);
+                    log.info("Imagen guardada en: " + dest.getAbsolutePath());
+                } catch (Exception e) {
+                    log.error("Error guardando la imagen", e);
+                    model.addAttribute("error", "Error al guardar la imagen: " + e.getMessage());
+                    return "redirect:/admin/gestGaleria";
+                }
+            }
+
+            // 5. Crear y guardar el héroe
+            Heroe heroe = new Heroe();
+            heroe.setNombre(nombre);
+            heroe.setImagen("/iwdata/heroes/" + fileName); // Ruta relativa para la web
+            heroe.setVida(vida);
+            heroe.setArmadura(armadura);
+            heroe.setDaño(daño);
+            heroe.setVelocidad(velocidad);
+            heroe.setProbabilidad(probabilidad);
+            heroe.setPrecio(precio);
+            heroe.setDescripcion(descripcion);
+            heroe.setFaccion(faccion);
+
+            heroeRepository.save(heroe);
+
+            return "redirect:/admin/gestGaleria";
+        } catch (Exception e) {
+            log.error("Error al añadir el héroe", e);
+            model.addAttribute("error", "Error al añadir el héroe: " + e.getMessage());
+            return "redirect:/admin/gestGaleria";
+        }
     }
 
     @PostMapping("/gestGaleria/addObjeto")
     @Transactional
-    public String addObjeto(@RequestParam String nombreObjeto,
-        @RequestParam(required = true) Integer vidaObjeto,
-        @RequestParam(required = true) Integer velocidadObjeto,
-        @RequestParam(required = true) Integer dañoObjeto,
-        @RequestParam(required = true) Integer precioObjeto,
-        @RequestParam(required = true) Integer armaduraObjeto,
-        @RequestParam String imagenObjeto,
-        @RequestParam String descripcionObjeto, Model model){
-        
-        Objeto objeto =new Objeto(imagenObjeto, nombreObjeto, vidaObjeto, armaduraObjeto, dañoObjeto, velocidadObjeto, descripcionObjeto, precioObjeto);
-        itemRepository.save(objeto);
+    public String addObjeto(
+        @RequestParam("nombre") String nombre,
+        @RequestParam("imagen") MultipartFile imagenFile,
+        @RequestParam("vida") int vida,
+        @RequestParam("armadura") int armadura,
+        @RequestParam("daño") int daño,
+        @RequestParam("velocidad") int velocidad,
+        @RequestParam("precio") int precio,
+        @RequestParam("descripcion") String descripcion,
+        Model model) {
 
-        return "redirect:/admin/gestGaleria";
-    }
-
-    @PostMapping("/gestGaleria/delete/{idHeroe}")
-    @Transactional
-    public String deleteHeroe(@PathVariable("idHeroe") Long idHeroe, Model model) {
         try {
-            heroeRepository.deleteById(idHeroe);
-            return "gestGaleria";
+            log.info("Nombre del archivo recibido: " + imagenFile.getOriginalFilename());
+            log.info("¿Está vacío?: " + imagenFile.isEmpty());
+
+            // 1. Obtener la carpeta de objetos usando LocalData
+            File objetosDir = localData.getFolder("objetos");
+            log.info("Ruta absoluta de objetosDir: " + objetosDir.getAbsolutePath());
+            if (!objetosDir.exists()) {
+                objetosDir.mkdirs();
+            }
+
+            // 2. Buscar el siguiente id vacío
+            int nextId = 1;
+            while (localData.getFile("objetos", nextId + ".png").exists()) {
+                nextId++;
+            }
+            String fileName = nextId + ".png";
+
+            // 3. Obtener el archivo destino usando LocalData
+            File dest = localData.getFile("objetos", fileName);
+            dest.getParentFile().mkdirs();
+
+            // 4. Guardar la imagen usando BufferedOutputStream
+            if (imagenFile.isEmpty()) {
+                log.info("Fallo al subir la imagen: archivo vacío");
+                model.addAttribute("error", "El archivo de imagen está vacío.");
+                return "redirect:/admin/gestGaleria";
+            } else {
+                try (BufferedOutputStream stream = new BufferedOutputStream(new java.io.FileOutputStream(dest))) {
+                    byte[] bytes = imagenFile.getBytes();
+                    stream.write(bytes);
+                    log.info("Imagen guardada en: " + dest.getAbsolutePath());
+                } catch (Exception e) {
+                    log.error("Error guardando la imagen", e);
+                    model.addAttribute("error", "Error al guardar la imagen: " + e.getMessage());
+                    return "redirect:/admin/gestGaleria";
+                }
+            }
+
+            // 5. Crear y guardar el objeto
+            Objeto objeto = new Objeto();
+            objeto.setNombre(nombre);
+            objeto.setImagen("/iwdata/objetos/" + fileName); // Ruta relativa para la web
+            objeto.setVida(vida);
+            objeto.setArmadura(armadura);
+            objeto.setDaño(daño);
+            objeto.setVelocidad(velocidad);
+            objeto.setPrecio(precio);
+            objeto.setDescripcion(descripcion);
+
+            itemRepository.save(objeto);
+
+            return "redirect:/admin/gestGaleria";
         } catch (Exception e) {
-            model.addAttribute("error", "Error al eliminar el héroe: " + e.getMessage());
+            log.error("Error al añadir el objeto", e);
+            model.addAttribute("error", "Error al añadir el objeto: " + e.getMessage());
             return "redirect:/admin/gestGaleria";
         }
     }
