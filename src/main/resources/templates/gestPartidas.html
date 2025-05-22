@@ -17,51 +17,51 @@
         <div class="row">
             <!-- Configuración inicial de partidas -->
             <!-- Configuración inicial de partidas -->
-<div class="col-lg-4 col-md-5 mb-4">
-    <div class="sectionAjustesPartida p-3 border rounded bg-light">
-        <h2 class="h4">Configuración inicial de partidas</h2>
-        <form class="initialValues-form" th:action="@{/admin/gestPartidas/updateValues}" method="post">
-            <div class="row">
-                <div class="col-6 mb-3">
-                    <label class="form-label">Estrellas iniciales</label>
-                    <input type="number" class="form-control" name="estrellasIni"
-                           th:value="${configPartida.estrellasIni}" required />
-                </div>
-                <div class="col-6 mb-3">
-                    <label class="form-label">Vida inicial</label>
-                    <input type="number" class="form-control" name="vidaIni"
-                           th:value="${configPartida.vidaIni}" required />
-                </div>
-                <div class="col-6 mb-3">
-                    <label class="form-label">Daño por victoria</label>
-                    <input type="number" class="form-control" name="danyoVictoria"
-                           th:value="${configPartida.danyoVictoria}" required />
-                </div>
-                <div class="col-6 mb-3">
-                    <label class="form-label">Estrellas por ronda</label>
-                    <input type="number" class="form-control" name="estrellasRonda"
-                           th:value="${configPartida.estrellasRonda}" required />
-                </div>
+            <div class="col-lg-4 col-md-5 mb-4">
+                <div class="sectionAjustesPartida p-3 border rounded bg-light">
+                    <h2 class="h4">Configuración inicial de partidas</h2>
+                    <form class="initialValues-form" th:action="@{/admin/gestPartidas/updateValues}" method="post">
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Estrellas iniciales</label>
+                                <input type="number" class="form-control" name="estrellasIni"
+                                    th:value="${configPartida.estrellasIni}" required />
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Vida inicial</label>
+                                <input type="number" class="form-control" name="vidaIni"
+                                    th:value="${configPartida.vidaIni}" required />
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Daño por victoria</label>
+                                <input type="number" class="form-control" name="danyoVictoria"
+                                    th:value="${configPartida.danyoVictoria}" required />
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Estrellas por ronda</label>
+                                <input type="number" class="form-control" name="estrellasRonda"
+                                    th:value="${configPartida.estrellasRonda}" required />
+                            </div>
 
-                <!-- NUEVO CAMPO -->
-                <div class="col-12 mb-3">
-                    <label class="form-label">Puntos por partida</label>
-                    <input type="number" class="form-control" name="puntosPartida"
-                           th:value="${configPartida.puntosPorPartida}" required />
-                </div>
+                            <!-- NUEVO CAMPO -->
+                            <div class="col-12 mb-3">
+                                <label class="form-label">Puntos por partida</label>
+                                <input type="number" class="form-control" name="puntosPartida"
+                                    th:value="${configPartida.puntosPorPartida}" required />
+                            </div>
 
-                <div class="col-12 mb-3">
-                    <label class="form-label">Precio de refrescar la tienda</label>
-                    <input type="number" class="form-control" name="precioRefrescar"
-                           th:value="${configPartida.precioRefrescar}" required />
-                </div>
-                <div class="col-12">
-                    <button type="submit" class="btn btn-success w-100">Guardar cambios</button>
+                            <div class="col-12 mb-3">
+                                <label class="form-label">Precio de refrescar la tienda</label>
+                                <input type="number" class="form-control" name="precioRefrescar"
+                                    th:value="${configPartida.precioRefrescar}" required />
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-success w-100">Guardar cambios</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </form>
-    </div>
-</div>
 
             <!-- Filtrar Partidas -->
             <div class="col-lg-8 col-md-7">

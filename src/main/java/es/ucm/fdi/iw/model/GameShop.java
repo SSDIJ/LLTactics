@@ -2,16 +2,6 @@ package es.ucm.fdi.iw.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DurationFormat.Unit;
-import org.springframework.stereotype.Component;
-
-import es.ucm.fdi.iw.services.HeroesService;
-import es.ucm.fdi.iw.services.ItemService;
 import lombok.Data;
 
 @Data

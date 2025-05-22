@@ -3,6 +3,7 @@ import Unit from "./Unit.js";
 import Shop from "./Shop.js"
 
 class Player {
+    // Representa un jugador dentro de la partida
 
     static MAX_ITEMS = 6;
     static MAX_UNITS = 4;
@@ -25,10 +26,6 @@ class Player {
     getNullUnit(){
         return new Unit(0, 0, "", "", null, "", null, 0, 0, 0, []);
     } 
-
-    getDefaultUnit() {
-        return new Unit(30, 20, "Defiende sus tierras.", 0, 0, "/img/units/humans/0. Campesino/peasant.png", 'Campesino', 0, 10, 150);
-    }
 
     resetUnits() {
         this.units = [
@@ -62,57 +59,6 @@ class Player {
         this.shop.update(shop)
     }
 
-    // Comprar una unidad de la tienda
-    buyUnit(unit, toEnd = true) {
-
-        
-        if (this.stars >= unit.price) {
-            // Busca la primera unidad undefined en el array
-            let index;
-            if (toEnd) index = this.units.slice().reverse().findIndex(unit => unit.image == "");
-            else index = this.units.findIndex(unit => unit.image == "");
-
-            if (index !== -1) {
-
-                index = toEnd ? this.MAX_UNITS - index - 1 : index;
-
-                this.units[index] = unit; 
-            }
-            else {
-                console.log(`${this.name} no puede tener más unidades.`);
-                return false; // No se pudo comprar la unidad
-            }
-
-            this.stars -= unit.price;
-            console.log(`${this.name} compró una unidad: ${unit.name}`);
-            return true;
-        } 
-
-        console.log(`${this.name} no tiene suficientes monedas.`);
-
-        return false;
-    }
-
-    sellUnit(soldUnit) {
-
-        console.log("Vendiendo unidad")
-        console.log(soldUnit)
-        const index = this.units.findIndex(unit => unit.unitID == soldUnit.unitID);
-            
-        // Reemplaza la unidad undefined
-        if (index !== -1) {
-            this.stars += this.units[index].price;
-            this.units[index].items.forEach(item => {
-                if (item)
-                    this.inventory.add(item);
-            })
-            this.units[index] = new Unit(0, 0, "", "", 0, "", null, 0, 0, 0, []); 
-        }
-        
-        console.log(`Se ha vendido la unidad ${soldUnit.nombre}`);
-        console.log("Unidades restantes:")
-        console.log(this.units)
-    }   
 
     // Comprar un objeto de la tienda
     buyItem(item, isOpponent=false) {
@@ -129,7 +75,6 @@ class Player {
     updateUnits(units) {
         if (Array.isArray(units)) {
             this.units = units.map(unitObj => Unit.fromUnit(unitObj));
-            console.log(this.units)
         }
     }
 

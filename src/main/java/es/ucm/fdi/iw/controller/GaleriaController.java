@@ -11,13 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import es.ucm.fdi.iw.model.Heroe;
-import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Objeto;
-import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.repositories.HeroeRepository;
 import es.ucm.fdi.iw.repositories.ItemRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /* Recibe petición HTTP para mostrar la galería y devuelve la vista "galeria" con toda la información de los héroes agrupados por facción */

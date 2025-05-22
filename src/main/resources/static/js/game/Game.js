@@ -1,6 +1,7 @@
 import Unit from "./Unit.js";
 
 class Game {
+    // Representa el estado de una partida
 
     constructor(players) {
         this.round = 1;
@@ -26,6 +27,7 @@ class Game {
         return this.isBattleRound;
     }
 
+    // Comienza el combate entre unidades
     async startBattle() {
         if (this.isBattleRound) {
             return await this.fight(this.players[0], this.players[1]);
@@ -40,14 +42,19 @@ class Game {
         if (!unit1) player1.buyUnit(player1.getDefaultUnit());
         if (!unit2) player2.buyUnit(player2.getDefaultUnit(), false);
 
-        while (true) {
+        let ok = true;
+        while (ok) {
 
+            // Cogemos la primera unidad válida de cada jugador
             let unit1 = player1.units.slice().reverse().find(u => u.unitID && u.unitID !== null);
             let unit2 = player2.units.find(u => u.unitID && u.unitID !== null);
 
-            if (!unit1 || !unit2) break; // End fight if no valid units
+            if (!unit1 || !unit2) ok = false; // Salimos si no hay unidades válidas
 
-            while (unit1.health > 0 && unit2.health > 0) {
+            // Dos unidades se atacan en bucle hasta que una derrota a la otra
+            while (unit1.health > 0 && unit2.health > 0 && ok) {
+
+                // Comparamos las velocidades de las unidades para determinar quién ataca primero
                 if (unit1.speed > unit2.speed) {
                     await this.attackWithDelay(unit1, unit2);
                     if (unit2.health > 0) await this.attackWithDelay(unit2, unit1);
@@ -55,6 +62,7 @@ class Game {
                     await this.attackWithDelay(unit2, unit1);
                     if (unit1.health > 0) await this.attackWithDelay(unit1, unit2);
                 } else {
+
                     // Velocidades iguales → decidir por preferencia
                     if (player1.name == this.preferredPlayer) {
                         await this.attackWithDelay(unit1, unit2);
@@ -76,27 +84,27 @@ class Game {
             }
         }
 
-        // Determine the winner
+        // Determina el ganador
         if (player1.units.every(u => u.health <= 0 || !u.unitID)) {
-            player1.health -= 5;
             return false;
         } else if (player2.units.every(u => u.health <= 0 || !u.unitID)) {
-            player2.health -= 5;
             return true;
         }
     }
 
-    // Perform an attack with delay
+    // Realiza un ataque (con delay para la animación)
     async attackWithDelay(unit1, unit2) {
         await new Promise(resolve => setTimeout(resolve, 200));
         this.attack(unit1, unit2);
     }
 
+    // Realiza un ataque de una unidad a otra
     attack(attacker, defender) {
-        let damage = Math.max(attacker.damage - defender.armor, 1); // Minimum damage of 1
+        let damage = Math.max(attacker.damage - defender.armor, 1); // Daño mínimo = 1
         defender.health -= damage;
     }
 
+    // Resetea la vida de todas las unidades del jugador
     resetHealth() {
         this.players.forEach(p => {
             p.resetUnitHealth();

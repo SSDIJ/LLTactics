@@ -1,4 +1,5 @@
 class Item {
+    // Representa un objeto de la partida
 
     constructor(armor, damage, description, id, imageUrl, name, price, unitUnitId, velocity, life) {
 
