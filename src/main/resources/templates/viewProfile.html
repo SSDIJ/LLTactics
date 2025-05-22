@@ -108,9 +108,8 @@
                                 </div>
 
                                 <!-- Si hay un personaje, mostramos su imagen -->
-                                <div
-                                    th:unless="${usuarioBuscado.masJugados.size() == 0 or usuarioBuscado.masJugados.get(0) == null}">
-                                    <img th:src="@{${usuarioBuscado.masJugados.get(0).imagen}}"
+                                <div th:unless="${usuarioBuscado.masJugados.size() == 0 or usuarioBuscado.masJugados.get(0) == null}">
+                                    <img th:src="@{/user/{id}/heroe(id=${usuarioBuscado.masJugados.get(0).idHeroe})}"
                                         alt="Personaje más Jugado" class="img-fluid rounded-circle" />
                                 </div>
                             </div>
@@ -120,27 +119,9 @@
                         <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
                             <div class="card-body">
                                 <h5 class="card-title">Facción Favorita</h5>
-
-                                <!-- Humanos -->
-                                <img th:if="${usuarioBuscado.faccionFavorita == 0}" src="/img/units/banners/humans.png"
-                                    class="img-fluid" alt="Humanos">
-
-                                <!-- Dragones -->
-                                <img th:if="${usuarioBuscado.faccionFavorita == 1}" src="/img/units/banners/dragons.png"
-                                    class="img-fluid" alt="Dragones">
-
-                                <!-- Trolls -->
-                                <img th:if="${usuarioBuscado.faccionFavorita == 2}" src="/img/units/banners/trolls.png"
-                                    class="img-fluid" alt="Trolls">
-
-                                <!-- No Muertos -->
-                                <img th:if="${usuarioBuscado.faccionFavorita == 3}" src="/img/units/banners/undead.png"
-                                    class="img-fluid" alt="No Muertos">
-
-                                <!-- Criaturas Legendarias -->
-                                <img th:if="${usuarioBuscado.faccionFavorita == 4}"
-                                    src="/img/units/banners/legendaries.png" class="img-fluid"
-                                    alt="Criaturas Legendarias">
+                                <img th:src="@{/user/{id}/faccion(id=${usuarioBuscado.id})}"
+                                    class="img-fluid"
+                                    alt="Facción favorita">
                             </div>
                         </div>
 
