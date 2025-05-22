@@ -199,34 +199,33 @@ public class AdminController {
         Model model) {
 
         try {
-            log.info("LLEGÓ HASTA AQUIIIIIIIIIIIIIIIIIIIIII");
             log.info("Nombre del archivo recibido: " + imagenFile.getOriginalFilename());
             log.info("¿Está vacío?: " + imagenFile.isEmpty());
 
-            // 1. Obtener la carpeta de héroes usando LocalData
-            File heroesDir = localData.getFolder("heroes");
-            log.info("Ruta absoluta de heroesDir: " + heroesDir.getAbsolutePath());
-            if (!heroesDir.exists()) {
-                heroesDir.mkdirs();
-            }
-
-            // 2. Buscar el siguiente id vacío
-            int nextId = 1;
-            while (localData.getFile("heroes", nextId + ".png").exists()) {
-                nextId++;
-            }
-            String fileName = nextId + ".png";
-
-            // 3. Obtener el archivo destino usando LocalData
-            File dest = localData.getFile("heroes", fileName);
-            dest.getParentFile().mkdirs();
-
-            // 4. Guardar la imagen usando BufferedOutputStream (como en setPic)
-            if (imagenFile.isEmpty()) {
-                log.info("Fallo al subir la imagen: archivo vacío");
-                model.addAttribute("error", "El archivo de imagen está vacío.");
-                return "redirect:/admin/gestGaleria";
+            String imagePath;
+            if (imagenFile == null || imagenFile.isEmpty()) {
+                // Imagen por defecto
+                imagePath = "/iwdata/default-pic.png";
             } else {
+                // 1. Obtener la carpeta de héroes usando LocalData
+                File heroesDir = localData.getFolder("heroes");
+                log.info("Ruta absoluta de heroesDir: " + heroesDir.getAbsolutePath());
+                if (!heroesDir.exists()) {
+                    heroesDir.mkdirs();
+                }
+
+                // 2. Buscar el siguiente id vacío
+                int nextId = 1;
+                while (localData.getFile("heroes", nextId + ".png").exists()) {
+                    nextId++;
+                }
+                String fileName = nextId + ".png";
+
+                // 3. Obtener el archivo destino usando LocalData
+                File dest = localData.getFile("heroes", fileName);
+                dest.getParentFile().mkdirs();
+
+                // 4. Guardar la imagen usando BufferedOutputStream (como en setPic)
                 try (BufferedOutputStream stream = new BufferedOutputStream(new java.io.FileOutputStream(dest))) {
                     byte[] bytes = imagenFile.getBytes();
                     stream.write(bytes);
@@ -236,12 +235,13 @@ public class AdminController {
                     model.addAttribute("error", "Error al guardar la imagen: " + e.getMessage());
                     return "redirect:/admin/gestGaleria";
                 }
+                imagePath = "/iwdata/heroes/" + fileName; // Ruta relativa para la web
             }
 
             // 5. Crear y guardar el héroe
             Heroe heroe = new Heroe();
             heroe.setNombre(nombre);
-            heroe.setImagen("/iwdata/heroes/" + fileName); // Ruta relativa para la web
+            heroe.setImagen(imagePath); // Ruta relativa para la web
             heroe.setVida(vida);
             heroe.setArmadura(armadura);
             heroe.setDaño(daño);
@@ -261,6 +261,7 @@ public class AdminController {
         }
     }
 
+    
     @PostMapping("/gestGaleria/addObjeto")
     @Transactional
     public String addObjeto(
@@ -278,30 +279,30 @@ public class AdminController {
             log.info("Nombre del archivo recibido: " + imagenFile.getOriginalFilename());
             log.info("¿Está vacío?: " + imagenFile.isEmpty());
 
-            // 1. Obtener la carpeta de objetos usando LocalData
-            File objetosDir = localData.getFolder("objetos");
-            log.info("Ruta absoluta de objetosDir: " + objetosDir.getAbsolutePath());
-            if (!objetosDir.exists()) {
-                objetosDir.mkdirs();
-            }
-
-            // 2. Buscar el siguiente id vacío
-            int nextId = 1;
-            while (localData.getFile("objetos", nextId + ".png").exists()) {
-                nextId++;
-            }
-            String fileName = nextId + ".png";
-
-            // 3. Obtener el archivo destino usando LocalData
-            File dest = localData.getFile("objetos", fileName);
-            dest.getParentFile().mkdirs();
-
-            // 4. Guardar la imagen usando BufferedOutputStream
-            if (imagenFile.isEmpty()) {
-                log.info("Fallo al subir la imagen: archivo vacío");
-                model.addAttribute("error", "El archivo de imagen está vacío.");
-                return "redirect:/admin/gestGaleria";
+            String imagePath;
+            if (imagenFile == null || imagenFile.isEmpty()) {
+                // Imagen por defecto
+                imagePath = "/iwdata/default-pic.png";
             } else {
+                // 1. Obtener la carpeta de objetos usando LocalData
+                File objetosDir = localData.getFolder("objetos");
+                log.info("Ruta absoluta de objetosDir: " + objetosDir.getAbsolutePath());
+                if (!objetosDir.exists()) {
+                    objetosDir.mkdirs();
+                }
+
+                // 2. Buscar el siguiente id vacío
+                int nextId = 1;
+                while (localData.getFile("objetos", nextId + ".png").exists()) {
+                    nextId++;
+                }
+                String fileName = nextId + ".png";
+
+                // 3. Obtener el archivo destino usando LocalData
+                File dest = localData.getFile("objetos", fileName);
+                dest.getParentFile().mkdirs();
+
+                // 4. Guardar la imagen usando BufferedOutputStream
                 try (BufferedOutputStream stream = new BufferedOutputStream(new java.io.FileOutputStream(dest))) {
                     byte[] bytes = imagenFile.getBytes();
                     stream.write(bytes);
@@ -311,12 +312,13 @@ public class AdminController {
                     model.addAttribute("error", "Error al guardar la imagen: " + e.getMessage());
                     return "redirect:/admin/gestGaleria";
                 }
+                imagePath = "/iwdata/objetos/" + fileName; // Ruta relativa para la web
             }
 
             // 5. Crear y guardar el objeto
             Objeto objeto = new Objeto();
             objeto.setNombre(nombre);
-            objeto.setImagen("/iwdata/objetos/" + fileName); // Ruta relativa para la web
+            objeto.setImagen(imagePath); // Ruta relativa para la web
             objeto.setVida(vida);
             objeto.setArmadura(armadura);
             objeto.setDaño(daño);

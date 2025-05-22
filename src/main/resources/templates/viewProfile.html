@@ -12,13 +12,29 @@
 
     <!-- Fragmentos de Thymeleaf -->
     <th:block th:replace="~{fragments/head :: header}" />
+
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif !important;
+        }
+    </style>
+    
 </head>
 
 <body class="profile-body">
 
     <header th:replace="~{fragments/nav.html :: nav}"></header>
 
-    <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
+    <div th:if="${usuarioBuscado == null}">
+        <!-- Mensaje cuando no se encontró usuario -->
+         <div class="user-not-found">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
+                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708"/>
+            </svg>
+            <p>No se ha encontrado al usuario</p>
+         </div>
+    </div>
+
     <div th:if="${usuarioBuscado != null}">
         <div class="user">
             <!-- TOP: BARRA DE BÚSQUEDA DE JUGADOR -->
@@ -84,6 +100,8 @@
                 </div>
             </div>
 
+            <div id="particulas" class="particulas-container"></div>
+
             <!-- ESTADÍSTICAS DEL PERFIL -->
             <div class="bot-user">
                 <div class="container mt-5" style="min-height: 45vh;">
@@ -91,15 +109,15 @@
                         <!-- Puntuación de Maestría -->
                         <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
                             <div class="card-body">
-                                <h5 class="card-title">Puntuación de Maestría</h5>
-                                <h3 class="text-primary" th:text="${usuarioBuscado.puntuacion}">410</h3>
+                                <h5 class="card-title">Puntuación de maestría</h5>
+                                <h3 class="text-primary title display-1 mt-3" th:text="${usuarioBuscado.puntuacion}">410</h3>
                             </div>
                         </div>
 
                         <!-- Personaje más Jugado -->
                         <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
                             <div class="card-body">
-                                <h5 class="card-title">Personaje más Jugado</h5>
+                                <h5 class="card-title">Personaje más jugado</h5>
 
                                 <!-- Si la lista es vacía o el primer elemento es null, mostramos un mensaje -->
                                 <div
@@ -108,10 +126,9 @@
                                 </div>
 
                                 <!-- Si hay un personaje, mostramos su imagen -->
-                                <div
-                                    th:unless="${usuarioBuscado.masJugados.size() == 0 or usuarioBuscado.masJugados.get(0) == null}">
-                                    <img th:src="@{${usuarioBuscado.masJugados.get(0).imagen}}"
-                                        alt="Personaje más Jugado" class="img-fluid rounded-circle" />
+                                <div th:unless="${usuarioBuscado.masJugados.size() == 0 or usuarioBuscado.masJugados.get(0) == null}">
+                                    <img th:src="@{/user/{id}/heroe(id=${usuarioBuscado.masJugados.get(0).idHeroe})}"
+                                        alt="Personaje más Jugado" class="profile-unit" />
                                 </div>
                             </div>
                         </div>
@@ -120,27 +137,9 @@
                         <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
                             <div class="card-body">
                                 <h5 class="card-title">Facción Favorita</h5>
-
-                                <!-- Humanos -->
-                                <img th:if="${usuarioBuscado.faccionFavorita == 0}" src="/img/units/banners/humans.png"
-                                    class="img-fluid" alt="Humanos">
-
-                                <!-- Dragones -->
-                                <img th:if="${usuarioBuscado.faccionFavorita == 1}" src="/img/units/banners/dragons.png"
-                                    class="img-fluid" alt="Dragones">
-
-                                <!-- Trolls -->
-                                <img th:if="${usuarioBuscado.faccionFavorita == 2}" src="/img/units/banners/trolls.png"
-                                    class="img-fluid" alt="Trolls">
-
-                                <!-- No Muertos -->
-                                <img th:if="${usuarioBuscado.faccionFavorita == 3}" src="/img/units/banners/undead.png"
-                                    class="img-fluid" alt="No Muertos">
-
-                                <!-- Criaturas Legendarias -->
-                                <img th:if="${usuarioBuscado.faccionFavorita == 4}"
-                                    src="/img/units/banners/legendaries.png" class="img-fluid"
-                                    alt="Criaturas Legendarias">
+                                <img th:src="@{/user/{id}/faccion(id=${usuarioBuscado.id})}"
+                                    class="img-fluid mx-auto mt-4 d-block faction-img"
+                                    alt="Facción favorita">
                             </div>
                         </div>
 
@@ -167,10 +166,11 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
+        <script type="module" src="/js/particle-animation.js"></script>
+        <script th:inline="javascript">
             document.addEventListener("DOMContentLoaded", function () {
-                let victorias = [[${ usuarioBuscado.partidasGanadas }]];
-                let derrotas = [[${ usuarioBuscado.partidasPerdidas }]];
+                let victorias = [[${usuarioBuscado.partidasGanadas}]];
+                let derrotas = [[${usuarioBuscado.partidasPerdidas}]];
 
                 const canvas = document.getElementById("winrateChart");
                 if (!canvas) {
@@ -181,41 +181,20 @@
                 const ctx = canvas.getContext("2d");
 
                 new Chart(ctx, {
-                    type: "doughnut",
+                    type: 'doughnut',
                     data: {
-                        labels: ["Victorias", "Derrotas"],
+                        labels: ['Victorias', 'Derrotas'],
                         datasets: [{
-                            label: "Victorias/Derrotas",
                             data: [victorias, derrotas],
-                            backgroundColor: ['#4CAF50', '#F44336'],
-                            borderColor: "#343a40",
-                            borderWidth: 1
+                            backgroundColor: ['#4CAF50', '#F44336']
                         }]
                     },
                     options: {
-                        responsive: true,
                         plugins: {
                             legend: {
-                                position: "bottom",
-                                labels: {
-                                    color: "black",
-                                    font: {
-                                        size: 14
-                                    }
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function (context) {
-                                        const value = context.raw;
-                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                        const porcentaje = ((value / total) * 100).toFixed(1);
-                                        return `${context.label}: ${value.toFixed(1)} (${porcentaje}%)`;
-                                    }
-                                }
+                                display: false
                             }
-                        },
-                        cutout: "60%" // para un efecto más "donut"
+                        }
                     }
                 });
             });
@@ -234,6 +213,7 @@
                 });
             });
         </script>
+
 
 </body>
 

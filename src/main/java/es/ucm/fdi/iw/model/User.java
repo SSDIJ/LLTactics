@@ -69,6 +69,7 @@ public class User implements Transferable<User.Transfer> {
     private int partidasPerdidas;
     @Column(nullable = true)
     private int faccionFavorita;  // 0 = humanos, 1 = dragones, 2 = trolls, 3 = no muertos, 4 = criaturas 
+    @Enumerated(EnumType.ORDINAL) 
     @Column(nullable = true)
     private Estado estado; // 0 = normal, 1 = reportado, 2 = baneado
     @Column(nullable = true)
@@ -83,7 +84,9 @@ public class User implements Transferable<User.Transfer> {
    
    @Column(nullable = true)
    private LocalDateTime fechaBaneo;
-    
+    @ManyToOne
+    @JoinColumn(name = "reportadoPor", referencedColumnName = "id", nullable = true)
+    private User reportadoPor;
    
    //Sin el oneToMany peta (relacion entre 2 clases distintas.)
    @OneToMany

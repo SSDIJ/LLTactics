@@ -321,6 +321,15 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		return os -> FileCopyUtils.copy(in, os);
 	}
 
+	@GetMapping("{id}/faccion")
+	public StreamingResponseBody getFaccionPic(@PathVariable long id) throws IOException {
+		User user = entityManager.find(User.class, id);
+		int faccion = (user != null) ? user.getFaccionFavorita() : 0;
+		File f = localData.getFile("units/banners", faccion + ".png"); // Ajusta la carpeta si usas otra
+		InputStream in = new BufferedInputStream(f.exists() ? new FileInputStream(f) : UserController.defaultPic());
+		return os -> FileCopyUtils.copy(in, os);
+	}
+
 	/**
 	 * Uploads a profile pic for a user id
 	 * 
@@ -568,7 +577,7 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 	public String searchUser(@RequestParam("username") String username, Model model) {
     log.info("Entrando en el método viewProfile");
 
-		Optional<User> usuarioBuscado = userRepository.findByUsernameContainingIgnoreCase(username);
+		Optional<User> usuarioBuscado = userRepository.findByUsernameIgnoreCase(username);
 
 		if (usuarioBuscado.isEmpty()) {
 			log.info("El usuario no existe");
@@ -637,9 +646,14 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		User usuario = userRepository.findById(idUser)
 					.orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 		
+		// Obtener el usuario que reporta usando el nombre de usuario del principal
+    	User reportador = userRepository.findByUsername(principal.getName()).orElse(null);
+
 		usuario.setEstado(User.Estado.REPORTADO);
 		usuario.setRazonBaneo(razonBaneo);
-		
+		usuario.setReportadoPor(reportador); 
+
+
 		userRepository.save(usuario);
 		return "redirect:/user/{id}";
 	}

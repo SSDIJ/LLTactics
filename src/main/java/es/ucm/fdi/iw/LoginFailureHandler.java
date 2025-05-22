@@ -2,8 +2,6 @@ package es.ucm.fdi.iw;
 
 import java.io.IOException;
 
-import javax.naming.AuthenticationException;
-
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
