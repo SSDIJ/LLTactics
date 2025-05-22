@@ -577,7 +577,7 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 	public String searchUser(@RequestParam("username") String username, Model model) {
     log.info("Entrando en el método viewProfile");
 
-		Optional<User> usuarioBuscado = userRepository.findByUsernameContainingIgnoreCase(username);
+		Optional<User> usuarioBuscado = userRepository.findByUsernameIgnoreCase(username);
 
 		if (usuarioBuscado.isEmpty()) {
 			log.info("El usuario no existe");

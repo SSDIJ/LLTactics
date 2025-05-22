@@ -1836,3 +1836,22 @@ width: 150px;
 .bot-user {
     background-color: var(--COLOR-DARK-1) !important;
 }
+
+.user-not-found {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto 0 auto;
+    border: 1px solid black;
+    border-radius: 12px;
+    width: 300px;
+    height: 80px; /* altura fija para centrar verticalmente */
+    text-align: center;
+    font-size: 1.25rem;
+}
+
+.user-not-found p {
+    margin: 0;
+}
