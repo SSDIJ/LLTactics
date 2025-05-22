@@ -54,11 +54,11 @@
             <input type="text" class="form-control" name="descripcion" th:value="${objeto.descripcion}" required />
 
             <!-- Botón para guardar cambios -->
-            <button type="submit" class="btn btn-warning w-100 mt-2">Modificar</button>
+            <button type="submit" th:id="updateObj" class="btn btn-warning w-100 mt-2">Modificar</button>
 
         </form>
-            <form th:action="@{/admin/gestGaleria/delete/{idObjeto}(idObjeto=${objeto.idObjeto})}" method="post" class="mt-2">
-                <button type="submit" class="btn btn-danger w-100 mt-2" th:id="'eliminar-' + ${objeto.idObjeto}">Eliminar</button>        
+            <form th:action="@{/admin/gestGaleria/deleteObjeto/{idObjeto}(idObjeto=${objeto.idObjeto})}" method="post" class="mt-2">
+                <button type="submit" class="btn btn-danger w-100 mt-2" th:id="'eliminarObj-' + ${objeto.idObjeto}">Eliminar</button>        
             </form>
     </div>
 

@@ -116,14 +116,14 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="nombre" class="form-label">Nombre del Objeto</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Objeto" required>
+                            <input type="text" class="form-control" id="item-nombre" name="nombre" placeholder="Objeto" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce el nombre del objeto.
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="vida" class="form-label">Vida</label>
-                            <input type="number" class="form-control" id="vida" name="vida" min="0" placeholder="250" required>
+                            <input type="number" class="form-control" id="item-vida" name="vida" min="0" placeholder="250" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para la vida.
                             </div>
@@ -132,14 +132,14 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="velocidad" class="form-label">Velocidad de Ataque</label>
-                            <input type="number" class="form-control" id="velocidad" name="velocidad" min="0" placeholder="40" required>
+                            <input type="number" class="form-control" id="item-velocidad" name="velocidad" min="0" placeholder="40" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para la velocidad de ataque.
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="daño" class="form-label">Daño</label>
-                            <input type="number" class="form-control" id="daño" name="daño" min="0" placeholder="95" required>
+                            <input type="number" class="form-control" id="item-daño" name="daño" min="0" placeholder="95" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para el daño.
                             </div>
@@ -148,14 +148,14 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="precio" class="form-label">Precio</label>
-                            <input type="number" class="form-control" id="precio" name="precio" min="0" placeholder="2" required>
+                            <input type="number" class="form-control" id="item-precio" name="precio" min="0" placeholder="2" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce el precio.
                             </div>  
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="armadura" class="form-label">Armadura</label>
-                            <input type="number" class="form-control" id="armadura" name="armadura" min="0" placeholder="55" required>
+                            <input type="number" class="form-control" id="item-armadura" name="armadura" min="0" placeholder="55" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para la armadura.
                             </div>
@@ -163,24 +163,23 @@
                     </div>
                     <div class="mb-3">
                         <label for="imagen" class="form-label">Imagen PNG</label>
-                        <input type="file" class="form-control" id="imagen" name="imagen" accept="image/png" required>
+                        <input type="file" class="form-control" id="item-imagen" name="imagen" accept="image/png" required>
                         <div class="invalid-feedback">
                             Por favor, selecciona una imagen PNG.
                         </div>
                         <label for="descripcion" class="form-label">Descripcion</label>
-                        <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Breve descripción del objeto" required>
+                        <input type="text" class="form-control" id="item-descripcion" name="descripcion" placeholder="Breve descripción del objeto" required>
                         <div class="invalid-feedback">
                             Por favor, introduce la descripcion.
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Añadir Objeto</button>
+                    <button id="submit-item-btn" type="submit" class="btn btn-primary">Añadir Objeto</button>
                 </form>
             </div>
         </div>
 
         <hr class="divider">
 
-        <!-- Apartado para eliminar y modificar objetos-->
 
         <!-- Apartado para eliminar y modificar héroes -->
         <div class="sectionEliminar">
@@ -211,26 +210,26 @@
         <div class="sectionEliminar">
             <h2>Eliminar o modificar objetos</h2>
             <div class="row">
-    <!-- Panel lateral con nombres de objetos -->
-    <div class="col-md-4">
-        <ul class="list-group" id="listaObjetos">
-            <li th:each="objeto, iterStat : ${objetos}"
-                th:text="${objeto.nombre}"
-                th:attr="data-index=${iterStat.index}"
-                class="list-group-item objeto-item"
-                th:classappend="${iterStat.index == 0} ? 'active'">
-            </li>
-        </ul>
-    </div>
-    <!-- Área de detalle para mostrar la card del objeto seleccionado -->
-    <div class="col-md-8" id="detalleObjeto">
-    <div th:if="${#lists.size(objetos) > 0}" th:replace="fragments/cardAdminObj :: cartaAdminObj(objeto=${objetos[0]})"></div>
-</div>
-</div>
+                <!-- Panel lateral con nombres de objetos -->
+                <div class="col-md-4">
+                    <ul class="list-group" id="listaObjetos">
+                        <li th:each="objeto, iterStat : ${objetos}"
+                            th:text="${objeto.nombre}"
+                            th:attr="data-index=${iterStat.index}"
+                            class="list-group-item objeto-item"
+                            th:classappend="${iterStat.index == 0} ? 'active'">
+                        </li>
+                    </ul>
+                </div>
+                <!-- Área de detalle para mostrar la card del objeto seleccionado -->
+                <div class="col-md-8" id="detalleObjeto">
+                <div th:if="${#lists.size(objetos) > 0}" th:replace="fragments/cardAdminObj :: cartaAdminObj(objeto=${objetos[0]})"></div>
+            </div>
         </div>
+    </div>
 
-        <div class="degradado"></div>
-        <th:block th:replace="~{fragments/footer.html :: footer}" />
+    <div class="degradado"></div>
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
 </body>
 
 <script>
@@ -248,34 +247,6 @@
         return o;
     }
 
-    /*
-    //AÑADIR HEROES
-    document.addEventListener("DOMContentLoaded", () => {
-        document.getElementById("formAnadirHeroe").addEventListener("submit", function (event) {
-            event.preventDefault();
-
-            const fields = ["nombre", "imagen", "vida", "armadura", "daño", "velocidad", "descripcion", "faccion", "precio", "probabilidad"];
-            const heroe = fieldsToObject(fields);
-
-            /*
-            fetch(`/admin/gestGaleria/add`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": iwconfig.csrf.va lue
-                },
-                body: JSON.stringify(heroe)
-            })
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("formAnadirHeroe").reset();
-                    var confirmacionModal = new bootstrap.Modal(document.getElementById('modalAnadir'));
-                    confirmacionModal.show();
-                    actualizarHeroes();
-                })
-                .catch(error => console.error("Error al añadir el héroe:", error)); 
-        });
-    }); */
     
 
     document.addEventListener("DOMContentLoaded", function() {

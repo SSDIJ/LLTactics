@@ -343,11 +343,23 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/gestGaleria/deleteObjeto/{idObjeto}")
+    @PostMapping("/gestGaleria/delete/{idObjeto}")
     @Transactional
     public String deleteObjeto(@PathVariable Long idObjeto, Model model) {
         try{
             itemRepository.deleteById(idObjeto);
+            return "redirect:/admin/gestGaleria";
+        }catch(Exception e){
+            model.addAttribute("error", "Error al eliminar el objeto: " + e.getMessage());
+            return "redirect:/admin/gestGaleria";
+        }
+    }
+
+    @PostMapping("/gestGaleria/deleteObjeto/{idHeroe}")
+    @Transactional
+    public String deleteHeroe(@PathVariable Long idHeroe, Model model) {
+        try{
+            heroeRepository.deleteById(idHeroe);
             return "redirect:/admin/gestGaleria";
         }catch(Exception e){
             model.addAttribute("error", "Error al eliminar el objeto: " + e.getMessage());
