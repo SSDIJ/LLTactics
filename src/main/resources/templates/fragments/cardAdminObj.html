@@ -1,6 +1,6 @@
 
     <div th:fragment="cartaAdminObj(objeto)" class="cardAdminObj">
-        <img th:src="@{/user/{id}/objeto(id=${objeto.idObjeto})}" class="card-img-top" th:alt="${objeto.nombre}">
+        <img th:src="@{/user/{id}/objeto(id=${objeto.idObjeto})}" class="card-img-top" th:alt="${objeto.nombre}">  //
         <h5 class="cardAdmin-title" th:text="${objeto.nombre}"></h5>
 
         <form class="cardAdmin-form" th:action="@{/admin/gestGaleria/updateObjeto/{idObjeto}(idObjeto=${objeto.idObjeto})}"

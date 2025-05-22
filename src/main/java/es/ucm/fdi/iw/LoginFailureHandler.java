@@ -28,6 +28,5 @@ public class LoginFailureHandler implements AuthenticationFailureHandler{
             request.getSession().setAttribute("loginError", errorMsg);
             response.sendRedirect("/login?error");    
         }
-        
     }
 }

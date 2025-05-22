@@ -34,6 +34,7 @@ import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.repositories.ConfigPartidaRepository;
 import es.ucm.fdi.iw.repositories.HeroeRepository;
+import es.ucm.fdi.iw.repositories.HeroeUsosRepository;
 import es.ucm.fdi.iw.repositories.ItemRepository;
 import es.ucm.fdi.iw.repositories.PartidasRepository;
 import es.ucm.fdi.iw.repositories.UserRepository;
@@ -70,6 +71,9 @@ public class AdminController {
 
     @Autowired
     private HeroesService heroesService; // Inyectamos el servicio de héroes
+
+    @Autowired
+    private HeroeUsosRepository heroesUsosRepository;
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
@@ -343,7 +347,7 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/gestGaleria/delete/{idObjeto}")
+    @PostMapping("/gestGaleria/deleteObjeto/{idObjeto}")
     @Transactional
     public String deleteObjeto(@PathVariable Long idObjeto, Model model) {
         try{
@@ -355,18 +359,17 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/gestGaleria/deleteObjeto/{idHeroe}")
-    @Transactional
-    public String deleteHeroe(@PathVariable Long idHeroe, Model model) {
+        @PostMapping("/gestGaleria/deleteHeroe/{idHeroe}")
+        @Transactional
+        public String deleteHeroe(@PathVariable Long idHeroe, Model model) {
         try{
             heroeRepository.deleteById(idHeroe);
             return "redirect:/admin/gestGaleria";
         }catch(Exception e){
-            model.addAttribute("error", "Error al eliminar el objeto: " + e.getMessage());
+            model.addAttribute("error", "Error al eliminar el héroe: " + e.getMessage());
             return "redirect:/admin/gestGaleria";
         }
     }
-
 
 
     @PostMapping("/gestGaleria/update/{idHeroe}")
