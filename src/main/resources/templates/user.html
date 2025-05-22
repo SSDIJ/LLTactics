@@ -152,29 +152,32 @@
                         </div>
                     </div>
 
-                    <!-- Facción Favorita -->
-                    <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
-                        <div class="card-body">
-                            <h5 class="card-title">Facción favorita</h5>
+                  <!-- Facción Favorita -->
+<!-- Facción Favorita -->
+<div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
+    <div class="card-body">
+        <h5 class="card-title">Facción favorita</h5>
 
-                            <!-- Humanos -->
-                            <img th:if="${user.faccionFavorita == 0}" src="/img/units/banners/humans.png"
-                                class="img-fluid mx-auto mt-4 d-block faction-img" alt="Humanos">
-                            <!-- Dragones -->
-                            <img th:if="${user.faccionFavorita == 1}" src="/img/units/banners/dragons.png"
-                                class="img-fluid mx-auto mt-4 d-block faction-img" alt="Dragones">
-                            <!-- Trolls -->
-                            <img th:if="${user.faccionFavorita == 2}" src="/img/units/banners/trolls.png"
-                                class="img-fluid mx-auto mt-4 d-block faction-img" alt="Trolls">
-                            <!-- No Muertos -->
-                            <img th:if="${user.faccionFavorita == 3}" src="/img/units/banners/undead.png"
-                                class="img-fluid mx-auto mt-4 d-block faction-img" alt="No Muertos">
-                            <!-- Criaturas Legendarias -->
-                            <img th:if="${user.faccionFavorita == 4}" src="/img/units/banners/legendaries.png"
-                                class="img-fluid mx-auto mt-4 d-block faction-img" alt="Legendarias">
+        <!-- Humanos -->
+        <img th:if="${user.faccionFavorita == 0}" src="/img/units/banners/humans.png"
+            style="width: 50%; max-width: 200px; height: auto; display: block; margin: 1rem auto;" alt="Humanos">
+        <!-- Dragones -->
+        <img th:if="${user.faccionFavorita == 1}" src="/img/units/banners/dragons.png"
+            style="width: 50%; max-width: 200px; height: auto; display: block; margin: 1rem auto;" alt="Dragones">
+        <!-- Trolls -->
+        <img th:if="${user.faccionFavorita == 2}" src="/img/units/banners/trolls.png"
+            style="width: 50%; max-width: 200px; height: auto; display: block; margin: 1rem auto;" alt="Trolls">
+        <!-- No Muertos -->
+        <img th:if="${user.faccionFavorita == 3}" src="/img/units/banners/undead.png"
+            style="width: 50%; max-width: 200px; height: auto; display: block; margin: 1rem auto;" alt="No Muertos">
+        <!-- Criaturas Legendarias -->
+        <img th:if="${user.faccionFavorita == 4}" src="/img/units/banners/legendaries.png"
+            style="width: 50%; max-width: 200px; height: auto; display: block; margin: 1rem auto;" alt="Legendarias">
 
-                        </div>
-                    </div>
+    </div>
+</div>
+
+
 
                     <!-- GRÁFICA DE VICTORIAS Y DERROTAS -->
                     <div class="card text-center p-3 mb-3" style="flex: 1 1 22%; min-width: 100px;">
