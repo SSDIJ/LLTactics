@@ -7,7 +7,7 @@ let playerReady = false;
 // ID de la partida
 const roomId = sessionStorage.getItem('roomId');
 const player1NameContainer = document.getElementById("player1Name");
-const player2NameContainer = document.getElementById("player2Name");;
+const player2NameContainer = document.getElementById("player2Name");
 
 // Elementos de una ronda
 const timerElement = document.getElementById('round-timer');
@@ -748,7 +748,6 @@ document.addEventListener("DOMContentLoaded", () => {
             playerName: player1.name,
             actionDetails: ""
         }))
-
 });
 
 

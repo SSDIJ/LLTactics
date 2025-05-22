@@ -236,7 +236,6 @@ table::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('/img/ranking/castle_background.jpg') no-repeat center center;
     background-size: cover;
     opacity: 0.4;
     z-index: -1;

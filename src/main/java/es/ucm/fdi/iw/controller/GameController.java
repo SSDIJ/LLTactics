@@ -214,6 +214,8 @@ public class GameController {
         List<GameMessage> mensajes = gameRoom.getMessageHistory();
         model.addAttribute("mensajes", mensajes);
 
+        model.addAttribute("shopRefreshPrice", GameRoom.SHOP_REFRESH_PRICE);
+
         // Actualizar el estado de la partida en la base de datos
         updateGameRoomInDatabase(gameRoomId, gameRoom);
 
