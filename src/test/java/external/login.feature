@@ -3,16 +3,9 @@ Feature: login en servidor
 #
 #  Este test funciona, pero no es de buena educación martillear una API externa
 #
-Scenario: login malo en github
-    Given driver 'https://github.com/login'
-    And input('#login_field', 'dummy')
-    And input('#password', 'world')
-    When submit().click("input[name=commit]")
-    Then match html('.flash-error') contains 'Incorrect username or password.'
-#
 
   Scenario: login malo en plantilla
-    Given driver baseUrl + '/user/2'
+    Given driver baseUrl + '/login'
     And input('#username', 'dummy')
     And input('#password', 'world')
     When submit().click(".form-signin button")
@@ -25,6 +18,7 @@ Scenario: login malo en github
     And input('#password', 'aa')
     When submit().click(".form-signin button")
     Then waitForUrl(baseUrl + '/user/2')
+    And match driver.url == baseUrl + '/user/2'
 
   @login_a
   Scenario: login correcto como a
@@ -33,6 +27,7 @@ Scenario: login malo en github
     And input('#password', 'aa')
     When submit().click(".form-signin button")
     Then waitForUrl(baseUrl + '/admin')
+    And match driver.url == baseUrl + '/admin/'
 
   Scenario: logout after login
     Given driver baseUrl + '/login'
@@ -40,5 +35,7 @@ Scenario: login malo en github
     And input('#password', 'aa')
     When submit().click(".form-signin button")
     Then waitForUrl(baseUrl + '/admin')
-    When submit().click("{button}logout")
+    And match driver.url == baseUrl + '/admin/'
+    When click("{button}Cerrar sesión")
     Then waitForUrl(baseUrl + '/login')
+    And match driver.url == baseUrl + '/login'
