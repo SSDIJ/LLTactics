@@ -53,6 +53,9 @@ Usuario: <code>b</code>
 
 Contraseña: <code>aa</code>
 
+**Nota** - No hemos podido realizar los tests relacionados con la partida debido a que karate no soporta dos drivers simultáneamente. Aún así, hemos realizado tests externos para toda la demás funcionalidad.
+
+
 ## 3. Créditos
 
 **DESARROLLADORES**
