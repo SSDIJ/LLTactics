@@ -22,8 +22,8 @@
 INSERT INTO "IWUSER"
 (ID, IDFOTO_PERFIL, ENABLED, ESTADO, FACCION_FAVORITA, FECHA_BANEO, FIRST_NAME, LAST_NAME, PARTIDAS_GANADAS, PARTIDAS_PERDIDAS, PASSWORD, PUNTUACION, RAZON_BANEO, ROLES, USERNAME)
 VALUES
-(1, 5, TRUE, 0, 0, null, 'Admin', 'Administrez', 7, 3, '{bcrypt}$2a$10$GU4mO.Uxc.tRP3.DsrBIvO3543uERYAvJwkuplrpFTAYdXoteTFOm', 1134, null, 'ADMIN,USER', 'pruebaAdmin123'),
-(2, 2, TRUE, 0, 0, null, 'Usuario', 'Usuariez', 3, 10, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 675, null, 'USER', 'usuarioMolon77'),
+(1, 5, TRUE, 0, 0, null, 'userA', 'aa', 7, 3, '{bcrypt}$2a$10$GU4mO.Uxc.tRP3.DsrBIvO3543uERYAvJwkuplrpFTAYdXoteTFOm', 2134, null, 'ADMIN,USER', 'a'),
+(2, 2, TRUE, 0, 0, null, 'userB', 'aa', 3, 10, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 3675, null, 'USER', 'b');
 (3, 1, TRUE, 0, 0, null, 'Jugador', 'Uno', 5, 5, '{bcrypt}$2a$10$example', 1000, null, 'USER', 'jugador1'),
 (4, 1, TRUE, 0, 0, null, 'Jugador', 'Dos', 8, 2, '{bcrypt}$2a$10$example', 1200, null, 'USER', 'jugador2'),
 (5, 1, TRUE, 0, 0, null, 'Jugador', 'Tres', 3, 7, '{bcrypt}$2a$10$example', 800, null, 'USER', 'jugador3'),
@@ -34,8 +34,9 @@ VALUES
 (10, 1, TRUE, 0, 0, null, 'Jugador', 'Ocho', 7, 3, '{bcrypt}$2a$10$example', 1150, null, 'USER', 'jugador8'),
 (11, 1, TRUE, 0, 0, null, 'Jugador', 'Nueve', 1, 9, '{bcrypt}$2a$10$example', 650, null, 'USER', 'jugador9'),
 (12, 1, TRUE, 0, 0, null, 'Jugador', 'Diez', 10, 0, '{bcrypt}$2a$10$example', 1400, null, 'USER', 'jugador10'),
-(13, 5, TRUE, 0, 0, null, 'userA', 'aa', 7, 3, '{bcrypt}$2a$10$GU4mO.Uxc.tRP3.DsrBIvO3543uERYAvJwkuplrpFTAYdXoteTFOm', 2134, null, 'ADMIN,USER', 'a'),
-(14, 2, TRUE, 0, 0, null, 'userB', 'aa', 3, 10, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 3675, null, 'USER', 'b');
+(13, 5, TRUE, 0, 0, null, 'Admin', 'Administrez', 7, 3, '{bcrypt}$2a$10$GU4mO.Uxc.tRP3.DsrBIvO3543uERYAvJwkuplrpFTAYdXoteTFOm', 1134, null, 'ADMIN,USER', 'pruebaAdmin123'),
+(14, 2, TRUE, 0, 0, null, 'Usuario', 'Usuariez', 3, 10, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 675, null, 'USER', 'usuarioMolon77'),
+
 
 
 INSERT INTO "PUBLIC"."FACCION_USOS" 
