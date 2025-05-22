@@ -47,13 +47,12 @@ public class RankingController {
         List<User> usuarios = userRepository.findAll();
         List<User> topRanking = new ArrayList<>();
         List<User> miRanking = new ArrayList<>();
+ 
+       usuarios.sort((j1, j2) -> Integer.compare(j2.getPuntuacion(), j1.getPuntuacion()));
 
-        usuarios.sort((j1, j2) -> Integer.compare(
-                j2.getPartidasGanadas() - j2.getPartidasPerdidas(),
-                j1.getPartidasGanadas() - j1.getPartidasPerdidas()));
 
-        // Top 5 ranking
-        int top = Math.min(5, usuarios.size());
+        // Top 10 ranking
+        int top = Math.min(10, usuarios.size());
         for (int j = 0; j < top; j++) {
             topRanking.add(usuarios.get(j));
         }
