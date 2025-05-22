@@ -101,6 +101,8 @@ public class UserController {
 	@Autowired
 	private HeroeUsosRepository heroeUsosRepository;
 
+	// Lo utilizamos para acceder a la modificacion del uso de cada faccion (para el
+	// update de la partida tras cada compra)
 	@Autowired
 	private FaccionRepository faccionUsosRepository;
 
@@ -156,68 +158,67 @@ public class UserController {
 	 * Landing page for a user profile
 	 */
 	@GetMapping("{id}")
-public String index(@PathVariable long id, Model model, HttpSession session) {
-    User target = entityManager.find(User.class, id);
-    model.addAttribute("user", target);
+	public String index(@PathVariable long id, Model model, HttpSession session) {
+		User target = entityManager.find(User.class, id);
+		model.addAttribute("user", target);
 
-    // === Cargar imágenes disponibles ===
-    String rutaImgs = "/img/profile_pics";
-    File folder = new File("src/main/resources/static/" + rutaImgs);
-    File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".png") || name.endsWith(".jpg"));
+		// === Cargar imágenes disponibles ===
+		String rutaImgs = "/img/profile_pics";
+		File folder = new File("src/main/resources/static/" + rutaImgs);
+		File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".png") || name.endsWith(".jpg"));
 
-    List<String> availablePics = new ArrayList<>();
-    if (listOfFiles != null && listOfFiles.length > 0) {
-        for (File file : listOfFiles) {
-            availablePics.add(rutaImgs + "/" + file.getName());
-        }
-    } else {
-        availablePics.add("pepe"); // Imagen por defecto
-    }
-    model.addAttribute("availablePics", availablePics);
+		List<String> availablePics = new ArrayList<>();
+		if (listOfFiles != null && listOfFiles.length > 0) {
+			for (File file : listOfFiles) {
+				availablePics.add(rutaImgs + "/" + file.getName());
+			}
+		} else {
+			availablePics.add("pepe"); // Imagen por defecto
+		}
+		model.addAttribute("availablePics", availablePics);
 
-    // === Obtener facciones y héroes usados del usuario ===
-    List<FaccionUsos> facciones = faccionUsosRepository.findByUser(target);
-    List<HeroeUsos> heroes = heroeUsosRepository.findByUser(target);
+		// === Obtener facciones y héroes usados del usuario ===
+		List<FaccionUsos> facciones = faccionUsosRepository.findByUser(target);
+		List<HeroeUsos> heroes = heroeUsosRepository.findByUser(target);
 
-    // === Facción favorita ===
-    FaccionUsos faccionFavorita = null;
-    int maxUsosFaccion = -1;
+		// === Facción favorita ===
+		FaccionUsos faccionFavorita = null;
+		int maxUsosFaccion = -1;
 
-    for (FaccionUsos faccion : facciones) {
-        if (faccion.getUsos() > maxUsosFaccion) {
-            maxUsosFaccion = faccion.getUsos();
-            faccionFavorita = faccion;
-        }
-    }
+		for (FaccionUsos faccion : facciones) {
+			if (faccion.getUsos() > maxUsosFaccion) {
+				maxUsosFaccion = faccion.getUsos();
+				faccionFavorita = faccion;
+			}
+		}
 
-    if (faccionFavorita != null) {
-        target.setFaccionFavorita(faccionFavorita.getFaccion());
-        model.addAttribute("faccionFavorita", faccionFavorita.getFaccion());
-    }
+		if (faccionFavorita != null) {
+			target.setFaccionFavorita(faccionFavorita.getFaccion());
+			model.addAttribute("faccionFavorita", faccionFavorita.getFaccion());
+		}
 
-    // === Héroe favorito ===
-    HeroeUsos heroeFavorito = null;
-    Heroe heroeMostrar = null;
-    int maxUsosHeroe = -1;
+		// === Héroe favorito ===
+		HeroeUsos heroeFavorito = null;
+		Heroe heroeMostrar = null;
+		int maxUsosHeroe = -1;
 
-    for (HeroeUsos heroeUso : heroes) {
-        if (heroeUso.getUsos() > maxUsosHeroe) {
-            maxUsosHeroe = heroeUso.getUsos();
-            heroeFavorito = heroeUso;
-        }
-    }
+		for (HeroeUsos heroeUso : heroes) {
+			if (heroeUso.getUsos() > maxUsosHeroe) {
+				maxUsosHeroe = heroeUso.getUsos();
+				heroeFavorito = heroeUso;
+			}
+		}
 
-    if (heroeFavorito != null) {
-        heroeMostrar = heroeFavorito.getHeroe();
-        List<Heroe> atributoHeroesMostrar = new ArrayList<>();
-        atributoHeroesMostrar.add(heroeMostrar);
-        target.setMasJugados(atributoHeroesMostrar);
-        model.addAttribute("heroeFavorito", heroeMostrar);
-    }
+		if (heroeFavorito != null) {
+			heroeMostrar = heroeFavorito.getHeroe();
+			List<Heroe> atributoHeroesMostrar = new ArrayList<>();
+			atributoHeroesMostrar.add(heroeMostrar);
+			target.setMasJugados(atributoHeroesMostrar);
+			model.addAttribute("heroeFavorito", heroeMostrar);
+		}
 
-    return "user";
-}
-
+		return "user";
+	}
 
 	/**
 	 * Alter or create a user
@@ -307,6 +308,9 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		return os -> FileCopyUtils.copy(in, os);
 	}
 
+	/*
+	 * Pillar la imagen del heroe para la galeria
+	 */
 	@GetMapping("{id}/heroe")
 	public StreamingResponseBody getHeroePic(@PathVariable long id) throws IOException {
 		File f = localData.getFile("heroes", "" + id + ".png"); // Obtiene la imagen del heroe de iwdata
@@ -314,6 +318,9 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		return os -> FileCopyUtils.copy(in, os);
 	}
 
+	/*
+	 * Pillar la imagen del objeto para la galeria
+	 */
 	@GetMapping("{id}/objeto")
 	public StreamingResponseBody getObjetoPic(@PathVariable long id) throws IOException {
 		File f = localData.getFile("objetos", "" + id + ".png"); // Obtiene la imagen del heroe de iwdata
@@ -321,6 +328,9 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		return os -> FileCopyUtils.copy(in, os);
 	}
 
+	/*
+	 * Pillar la imagen de la faccion
+	 */
 	@GetMapping("{id}/faccion")
 	public StreamingResponseBody getFaccionPic(@PathVariable long id) throws IOException {
 		User user = entityManager.find(User.class, id);
@@ -331,7 +341,7 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 	}
 
 	/**
-	 * Uploads a profile pic for a user id
+	 * Cambiar la imagen de perfil
 	 * 
 	 * @param id
 	 * @return
@@ -532,7 +542,6 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		entityManager.persist(newUser);
 		entityManager.flush(); // Asegura que el usuario se ha guardado y tiene un id válido
 
-
 		for (Heroe heroe : heroes) {
 			HeroeUsos hu = new HeroeUsos();
 			hu.setJugador(newUser);
@@ -575,7 +584,7 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 	// Funcion que sirve para cargar las fotos de la carpeta al abrir el user.html
 	@GetMapping("/viewProfile")
 	public String searchUser(@RequestParam("username") String username, Model model) {
-    log.info("Entrando en el método viewProfile");
+		log.info("Entrando en el método viewProfile");
 
 		Optional<User> usuarioBuscado = userRepository.findByUsernameIgnoreCase(username);
 
@@ -587,11 +596,9 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		} else {
 			log.info("El usuario existe");
 			User user = usuarioBuscado.get();
-			
 
 			List<FaccionUsos> facciones = faccionUsosRepository.findByUser(user);
 			List<HeroeUsos> heroes = heroeUsosRepository.findByUser(user);
-
 
 			FaccionUsos faccionFavorita = null;
 			int maxUsosFaccion = -1;
@@ -603,7 +610,6 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 				}
 			}
 
-
 			if (faccionFavorita != null) {
 				user.setFaccionFavorita(faccionFavorita.getFaccion());
 				log.info("La facción favorita del usuario es: {}", faccionFavorita.getFaccion());
@@ -611,9 +617,8 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 				log.warn("No se encontraron facciones para este usuario.");
 			}
 
-
 			HeroeUsos heroeFavorito = null;
-			Heroe heroeMostrar=null;
+			Heroe heroeMostrar = null;
 			int maxUsosHeroe = -1;
 
 			for (HeroeUsos heroeUso : heroes) {
@@ -624,8 +629,8 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 			}
 
 			if (heroeFavorito != null) {
-				heroeMostrar=heroeFavorito.getHeroe();
-				List<Heroe> atributoHeroesMostrar= new ArrayList<>();
+				heroeMostrar = heroeFavorito.getHeroe();
+				List<Heroe> atributoHeroesMostrar = new ArrayList<>();
 				atributoHeroesMostrar.add(heroeMostrar);
 				user.setMasJugados(atributoHeroesMostrar);
 				log.info("El héroe favorito del usuario es: {}", heroeFavorito.getHeroe().getNombre());
@@ -643,12 +648,13 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 
 	@PostMapping("/viewProfile/reportar/{idUser}")
 	@Transactional
-	public String reportUser(@PathVariable Long idUser,@RequestParam (required = true)String razonBaneo, Principal principal) {
+	public String reportUser(@PathVariable Long idUser, @RequestParam(required = true) String razonBaneo,
+			Principal principal) {
 
 		// Comprobamos que un usuario no se pueda reportar a sí mismo
 		User usuario = userRepository.findById(idUser)
-					.orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
-		
+				.orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
 		if (!usuario.getUsername().equals(principal.getName())) {
 
 			// Obtener el usuario que reporta usando el nombre de usuario del principal
@@ -656,16 +662,13 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 
 			usuario.setEstado(User.Estado.REPORTADO);
 			usuario.setRazonBaneo(razonBaneo);
-			usuario.setReportadoPor(reportador); 
-
+			usuario.setReportadoPor(reportador);
 
 			userRepository.save(usuario);
 		}
 
 		return "redirect:/user/{idUser}";
 	}
-	
-
 
 	@PostMapping("/updateFoto/{id}")
 	@Transactional
@@ -713,27 +716,31 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 			@RequestParam String defeatedUsername,
 			@RequestParam int puntos) {
 
+		// Conseguimos a los jugadores que han ganado o perdido para actualizarlos en la
+		// BD
 		Optional<User> optionalWinnerUser = userRepository.findByUsername(winnerUsername);
 		Optional<User> optionalDefeatedUser = userRepository.findByUsername(defeatedUsername);
 
 		User winnerUser = optionalWinnerUser.orElse(null);
 		User defeatedUser = optionalDefeatedUser.orElse(null);
 
+		// Comprobamos que existan por si acaso
 		if (winnerUser == null || defeatedUser == null) {
 			System.out.println("Hubo problemas para encontrar a los jugadores");
 			return "error";
 		}
-
+		// Cogemos la puntuacion de ambos
 		int puntuacionWinner = winnerUser.getPuntuacion();
 		int puntuacionDefeated = defeatedUser.getPuntuacion();
 
+		// Sumamos y restamos los puntos respectivamente
 		puntuacionWinner += puntos;
 		// Esta funcion basicamente pone la puntuacion a 0 si es menor que 20
 		puntuacionDefeated = Math.max(puntuacionDefeated - puntos, 0);
-
 		winnerUser.setPuntuacion(puntuacionWinner);
 		defeatedUser.setPuntuacion(puntuacionDefeated);
 
+		// Guardamos en la BD
 		userRepository.save(winnerUser);
 		userRepository.save(defeatedUser);
 
@@ -779,7 +786,8 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 			heroeUsosRepository.save(nuevoHeroeUso);
 			System.out.println("Nuevo registro de uso de héroe creado.");
 		}
-		FaccionUsos usosFaccion = faccionUsosRepository.findByUserAndFaccion(updatableUser, updatableHeroe.getFaccion());
+		FaccionUsos usosFaccion = faccionUsosRepository.findByUserAndFaccion(updatableUser,
+				updatableHeroe.getFaccion());
 		if (usosFaccion != null) {
 			usosFaccion.setUsos(usosFaccion.getUsos() + 1);
 			faccionUsosRepository.save(usosFaccion);
