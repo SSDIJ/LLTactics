@@ -19,7 +19,7 @@
         <div class="containerAnadir">
             <div class="sectionAnadir">
                 <h2>Añadir Héroe</h2>
-                <form th:action="@{/admin/gestGaleria/addHeroe}" method="post" enctype="multipart/form-data" class="needs-validation" id="formAnadirHeroe" novalidate>
+                <form th:action="@{/admin/gestGaleria/addHeroe}" method="post" enctype="multipart/form-data" class="needs-validation" id="formAnadirHeroe" >
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="nombre" class="form-label">Nombre del Héroe</label>
@@ -46,7 +46,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="vida" class="form-label">Vida</label>
-                            <input type="number" class="form-control" id="unidad-vida" name="vida" min="0" placeholder="250">
+                            <input type="number" class="form-control" id="unidad-vida" name="vida" min="0" placeholder="250" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para la vida.
                             </div>
@@ -111,7 +111,7 @@
 
             <div class="sectionAnadir">
                 <h2>Añadir Objeto</h2>
-                <form th:action="@{/admin/gestGaleria/addObjeto}" method="post" enctype="multipart/form-data" class="needs-validation" id="formAnadirObjeto" novalidate>
+                <form th:action="@{/admin/gestGaleria/addObjeto}" method="post" enctype="multipart/form-data" class="needs-validation" id="formAnadirObjeto" >
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <div class="row">
                         <div class="col-md-6 mb-3">
