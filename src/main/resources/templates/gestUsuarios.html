@@ -35,7 +35,7 @@
                         <div class="accordion-body">
                             <p><strong>ID:</strong> <span th:text="${usuario.id}"></span></p>
                             <p><strong>Username:</strong>
-                                <a th:href="@{/user/viewProfile(username=${usuario.username})}">
+                                <a th:href="@{'/user/viewProfile'(username=${usuario.username})}">
                                     <strong th:text="${usuario.username}"></strong>
                                 </a>
                             </p>
@@ -103,7 +103,7 @@
                     <tr th:each="usuario : ${usuarios}">
                         <td th:text="${usuario.id}"></td>
                         <td>
-                            <a th:href="@{/user/viewProfile(username=${usuario.username})}">
+                            <a th:href="@{'/user/viewProfile'(username=${usuario.username})}">
                                 <strong th:text="${usuario.username}"></strong>
                             </a>
                         </td>         
