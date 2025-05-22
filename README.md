@@ -42,11 +42,16 @@ Los administradores disponen de vistas y herramientas exclusivas para la gestió
 En la pantalla de inicio, se pueden introducir credenciales para acceder como:
 
 - **Administrador de prueba**:
-Usuario: <code>POR RELLENAR</code>
-Contraseña: <code>POR RELLENAR</code>
+
+Usuario: <code>a</code>
+
+Contraseña: <code>aa</code>
+
 - **Usuario de prueba**:
-Usuario: <code>POR RELLENAR</code>
-Contraseña: <code>POR RELLENAR</code>
+
+Usuario: <code>b</code>
+
+Contraseña: <code>aa</code>
 
 ## 3. Créditos
 
@@ -60,6 +65,6 @@ Contraseña: <code>POR RELLENAR</code>
 
 **ARTE**
 - Las imágenes de unidades y objetos provienen del juego [Battle for Wesnoth](https://github.com/wesnoth/wesnoth/tree/master), las cuales están licenciadas bajo la GNU General Public License (GPL).
-- El resto de imágenes decorativaS han sido generados con ChatGPT y posteriormente adaptados.
+- El resto de imágenes decorativas han sido generados con ChatGPT y posteriormente adaptados.
 - Las fuentes tipográficas usadas en los títulos se han obtenido desde Google Fonts.
 - Los iconos provienen del set de Bootstrap Icons, bajo licencia MIT.
