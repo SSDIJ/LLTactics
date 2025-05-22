@@ -42,17 +42,16 @@ class Game {
         if (!unit1) player1.buyUnit(player1.getDefaultUnit());
         if (!unit2) player2.buyUnit(player2.getDefaultUnit(), false);
 
-        let ok = true;
-        while (ok) {
+        while (true) {
 
             // Cogemos la primera unidad válida de cada jugador
             let unit1 = player1.units.slice().reverse().find(u => u.unitID && u.unitID !== null);
             let unit2 = player2.units.find(u => u.unitID && u.unitID !== null);
 
-            if (!unit1 || !unit2) ok = false; // Salimos si no hay unidades válidas
+            if (!unit1 || !unit2) break; // Salimos si no hay unidades válidas
 
             // Dos unidades se atacan en bucle hasta que una derrota a la otra
-            while (unit1.health > 0 && unit2.health > 0 && ok) {
+            while (unit1.health > 0 && unit2.health > 0) {
 
                 // Comparamos las velocidades de las unidades para determinar quién ataca primero
                 if (unit1.speed > unit2.speed) {
