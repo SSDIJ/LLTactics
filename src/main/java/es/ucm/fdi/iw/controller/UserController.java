@@ -646,9 +646,14 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		User usuario = userRepository.findById(idUser)
 					.orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 		
+		// Obtener el usuario que reporta usando el nombre de usuario del principal
+    	User reportador = userRepository.findByUsername(principal.getName()).orElse(null);
+
 		usuario.setEstado(User.Estado.REPORTADO);
 		usuario.setRazonBaneo(razonBaneo);
-		
+		usuario.setReportadoPor(reportador); 
+
+
 		userRepository.save(usuario);
 		return "redirect:/user/{id}";
 	}

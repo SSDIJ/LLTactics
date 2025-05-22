@@ -261,6 +261,7 @@ public class AdminController {
         }
     }
 
+    
     @PostMapping("/gestGaleria/addObjeto")
     @Transactional
     public String addObjeto(
