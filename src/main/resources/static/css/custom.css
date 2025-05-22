@@ -77,12 +77,15 @@ img.preview {
     opacity: 0.15;
     top: 50%;
     left: 50%;
+    width: 300px;
     transform: translate(-50%, -50%) rotate(180deg) scale(120%);
 }
 
 #homepage-island {
     pointer-events: none;
-    width: 600px;
+    padding: 0;
+    width: 800px;
+    height:120px;
 }
 
 #homepage-character-container {
