@@ -1137,6 +1137,31 @@ width: 150px;
 }
 
 
+.report-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: rgb(33, 37, 41);
+    border: 1px solid white;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.report-btn-big {
+    position: absolute;
+    top: -43px;
+    margin-left: 40px;
+    width: 35px;
+    height: 35px;
+}
+
+.report-btn-off-canvas {
+    margin-left: 10px;
+    width: 35px;
+    height: 35px;
+}
+
 
 .shop-unit {
     position: relative;
@@ -1274,35 +1299,6 @@ width: 150px;
     font-size: 1.5rem; /* Ajusta el tamaño del título si es necesario */
 }
 
-.report-btn {
-    position: absolute;
-    top: -43px;
-    margin-left: 40px;
-    width: 35px;
-    height: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    background-color: rgb(33, 37, 41);
-    border: 1px solid white;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.report-btn-offCanvas {
-    margin-left: 10px;
-    width: 35px;
-    height: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    background-color: rgb(33, 37, 41);
-    border: 1px solid white;
-    border-radius: 10px;
-    cursor: pointer;
-}
 
 .chat-message {
     margin-bottom: 5px;
