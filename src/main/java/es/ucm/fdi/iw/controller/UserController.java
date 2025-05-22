@@ -655,7 +655,7 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 
 
 		userRepository.save(usuario);
-		return "redirect:/user/{id}";
+		return "redirect:/user/{idUser}";
 	}
 	
 
