@@ -2,6 +2,7 @@ package es.ucm.fdi.iw.controller;
 
 import java.io.ObjectInputFilter.Config;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -87,10 +88,16 @@ public class AdminController {
     public String showPartidas(Model model) {
         List<Partida> partidas = partidaRepository.findAll();
         model.addAttribute("partidas", partidas);
-        ConfigPartida config = configPartidaRepository.findAll().stream().findFirst().orElse(new ConfigPartida());
+
+        ConfigPartida config = configPartidaRepository.findAll()
+            .stream()
+            .findFirst()
+            .orElse(new ConfigPartida());
+
         model.addAttribute("configPartida", config);
         return "gestPartidas";
     }
+
 
     @PostMapping("/gestPartidas/updateValues")
     @Transactional

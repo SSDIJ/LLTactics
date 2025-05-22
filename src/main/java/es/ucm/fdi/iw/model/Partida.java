@@ -1,6 +1,8 @@
 package es.ucm.fdi.iw.model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -42,6 +44,14 @@ public class Partida {
 
     @Column(nullable = true)
     private LocalDateTime fin; 
+
+    public String getInicioFormateado() {
+        return inicio != null ? inicio.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "-";
+    }
+
+    public String getFinFormateado() {
+        return fin != null ? fin.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "-";
+    }   
 
   
     @Column(columnDefinition = "TEXT", nullable = true) // Permite almacenar JSON largos
