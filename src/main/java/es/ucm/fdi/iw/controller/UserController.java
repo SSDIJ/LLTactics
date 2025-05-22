@@ -642,25 +642,32 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 	}
 
 	@PostMapping("/viewProfile/reportar/{idUser}")
+	@Transactional
 	public String reportUser(@PathVariable Long idUser,@RequestParam (required = true)String razonBaneo, Principal principal) {
-		User usuario = userRepository.findById(idUser)
-					.orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
-		
-		// Obtener el usuario que reporta usando el nombre de usuario del principal
-    	User reportador = userRepository.findByUsername(principal.getName()).orElse(null);
 
-		usuario.setEstado(User.Estado.REPORTADO);
-		usuario.setRazonBaneo(razonBaneo);
-		usuario.setReportadoPor(reportador); 
+		// Comprobamos que un usuario no se pueda reportar a sí mismo
+		if (!idUser.equals(principal.getName())) {
+			User usuario = userRepository.findById(idUser)
+						.orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+			
+			// Obtener el usuario que reporta usando el nombre de usuario del principal
+			User reportador = userRepository.findByUsername(principal.getName()).orElse(null);
+
+			usuario.setEstado(User.Estado.REPORTADO);
+			usuario.setRazonBaneo(razonBaneo);
+			usuario.setReportadoPor(reportador); 
 
 
-		userRepository.save(usuario);
+			userRepository.save(usuario);
+		}
+
 		return "redirect:/user/{idUser}";
 	}
 	
 
 
 	@PostMapping("/updateFoto/{id}")
+	@Transactional
 	public String updateProfilePicture(@PathVariable Long id, @RequestParam(required = true) Long IdselectedPic,
 			Model model, RedirectAttributes redirectAttributes) {
 		// Buscar al usuario por su id
