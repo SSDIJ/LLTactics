@@ -557,6 +557,12 @@ td img.icon {
 
 .unit-img {
     width: 200px !important;
+    max-height: 100px !important;
+}
+
+.shop-unit-game-img, .unit-game-img {
+    max-width: 200px !important;
+    max-height: 100px !important;
 }
 
 /*COMIEZNO PROFILE*/
@@ -1869,3 +1875,4 @@ width: 150px;
     border-radius: 10px;
     border: 2px solid black;
 }
+
