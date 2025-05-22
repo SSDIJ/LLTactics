@@ -321,6 +321,15 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		return os -> FileCopyUtils.copy(in, os);
 	}
 
+	@GetMapping("{id}/faccion")
+	public StreamingResponseBody getFaccionPic(@PathVariable long id) throws IOException {
+		User user = entityManager.find(User.class, id);
+		int faccion = (user != null) ? user.getFaccionFavorita() : 0;
+		File f = localData.getFile("units/banners", faccion + ".png"); // Ajusta la carpeta si usas otra
+		InputStream in = new BufferedInputStream(f.exists() ? new FileInputStream(f) : UserController.defaultPic());
+		return os -> FileCopyUtils.copy(in, os);
+	}
+
 	/**
 	 * Uploads a profile pic for a user id
 	 * 
