@@ -12,17 +12,17 @@
 <body>
     <header th:replace="~{fragments/nav.html :: nav}"></header>
      <div class="container mt-5">
-        <h1 class="mt-5 title display-1 text-center">Gestión de Heroes</h1>
+        <h1 class="mt-5 title display-1 text-center">Gestión de Galería</h1>
     </div>
     <div class="containerAdmin">
         <!-- Apartado para añadir héroes -->
         <div class="containerAnadir">
             <div class="sectionAnadir">
-                <h2>Añadir Héroe</h2>
+                <h2>Añadir héroe</h2>
                 <form th:action="@{/admin/gestGaleria/addHeroe}" method="post" enctype="multipart/form-data" class="needs-validation" id="formAnadirHeroe" >
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="nombre" class="form-label">Nombre del Héroe</label>
+                            <label for="nombre" class="form-label">Nombre del héroe</label>
                             <input type="text" class="form-control" id="unidad-nombre" name="nombre" placeholder="Unidad" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce el nombre del héroe.
@@ -61,7 +61,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="velocidad" class="form-label">Velocidad de Ataque</label>
+                            <label for="velocidad" class="form-label">Velocidad de ataque</label>
                             <input type="number" class="form-control" id="unidad-velocidad" name="velocidad" min="0" placeholder="40" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para la velocidad de ataque.
@@ -98,7 +98,7 @@
                         <div class="invalid-feedback">
                             Por favor, selecciona una imagen PNG.
                         </div>
-                        <label for="descripcion" class="form-label">Descripcion</label>
+                        <label for="descripcion" class="form-label">Descripción</label>
                         <input type="text" class="form-control" id="unidad-descripcion" name="descripcion" placeholder="Breve descripción de la unidad" required>
                         <div class="invalid-feedback">
                             Por favor, introduce la descripcion.
@@ -110,12 +110,12 @@
 
 
             <div class="sectionAnadir">
-                <h2>Añadir Objeto</h2>
+                <h2>Añadir objeto</h2>
                 <form th:action="@{/admin/gestGaleria/addObjeto}" method="post" enctype="multipart/form-data" class="needs-validation" id="formAnadirObjeto" >
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="nombre" class="form-label">Nombre del Objeto</label>
+                            <label for="nombre" class="form-label">Nombre del objeto</label>
                             <input type="text" class="form-control" id="item-nombre" name="nombre" placeholder="Objeto" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce el nombre del objeto.
@@ -131,7 +131,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="velocidad" class="form-label">Velocidad de Ataque</label>
+                            <label for="velocidad" class="form-label">Velocidad de ataque</label>
                             <input type="number" class="form-control" id="item-velocidad" name="velocidad" min="0" placeholder="40" required>
                             <div class="invalid-feedback">
                                 Por favor, introduce un valor válido para la velocidad de ataque.
@@ -173,7 +173,7 @@
                             Por favor, introduce la descripcion.
                         </div>
                     </div>
-                    <button id="submit-item-btn" type="submit" class="btn btn-primary">Añadir Objeto</button>
+                    <button id="submit-item-btn" type="submit" class="btn btn-primary">Añadir objeto</button>
                 </form>
             </div>
         </div>
@@ -186,7 +186,7 @@
             <h2>Eliminar o modificar héroes</h2>
             <div class="col-md-6 mb-3">
                 <form th:action="@{/admin/gestGaleria}" method="get" class="mb-3">
-                    <label for="faccionSelect" class="form-label">Selecciona la Facción:</label>
+                    <label for="faccionSelect" class="form-label">Selecciona la facción:</label>
                     <select id="faccionSelect" name="faccion" class="form-select" onchange="this.form.submit()">
                         <option value="">-- Elige una facción --</option>
                         <option value="humanos" th:selected="${faccion=='humanos'}">Humanos</option>

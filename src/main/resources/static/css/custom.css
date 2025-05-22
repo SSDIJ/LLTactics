@@ -1688,6 +1688,14 @@ width: 150px;
     margin: 0px auto;
 }
 
+.cardAdminObj img {
+    max-height: 150px;
+    object-fit: cover;
+    align-self: center;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 1rem;
+}
+
 /* Imagen */
 .cardAdmin img {
     max-height: 150px;
