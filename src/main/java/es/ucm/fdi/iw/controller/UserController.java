@@ -506,14 +506,21 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 		newUser.setPassword(encodePassword(newUser.getPassword()));
 		newUser.setEnabled(true); // Activa al usuario por defecto
 		newUser.setRoles("USER");
-
+		newUser.setEstado(User.Estado.NORMAL);
 		newUser.setFaccionFavorita(0);
 		newUser.setPartidasGanadas(0);
 		newUser.setPartidasPerdidas(0);
 		newUser.setPuntuacion(0);
+		newUser.setFechaBaneo(null);
+		newUser.setRazonBaneo(null);
 
 		newUser.setIdfotoPerfil(idprofilePic);
 		List<Heroe> heroes = heroeController.getTodosLosHeroes();
+
+		// Guarda el nuevo usuario en la base de datos
+		entityManager.persist(newUser);
+		entityManager.flush(); // Asegura que el usuario se ha guardado y tiene un id válido
+
 
 		for (Heroe heroe : heroes) {
 			HeroeUsos hu = new HeroeUsos();
@@ -530,10 +537,6 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 			fu.setUsos(0);
 			entityManager.persist(fu);
 		}
-
-		// Guarda el nuevo usuario en la base de datos
-		entityManager.persist(newUser);
-		entityManager.flush(); // Asegura que el usuario se ha guardado y tiene un id válido
 
 		log.info("User {} registered successfully", newUser.getUsername());
 
