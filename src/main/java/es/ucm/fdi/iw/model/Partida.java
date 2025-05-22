@@ -27,7 +27,7 @@ public class Partida {
     @JoinColumn(name = "jid2", referencedColumnName = "id", nullable = false)
     private User jugador2;
 
-    @Column(nullable = true)
+    @Column(nullable = true, unique = true)
     private String gameRoomId; // ID de la sala de juego (tambien aparece en el JSON del estado, pero por comodidad lo añado aquí)
     
     @Column(nullable = true)

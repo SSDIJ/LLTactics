@@ -19,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.access.method.P;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -52,6 +53,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
+import java.security.Principal;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -631,13 +633,13 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 	}
 
 	@PostMapping("/viewProfile/reportar/{idUser}")
-	public String reportUser(@PathVariable Long idUser,@RequestParam (required = true)String razonBaneo) {
+	public String reportUser(@PathVariable Long idUser,@RequestParam (required = true)String razonBaneo, Principal principal) {
 		User usuario = userRepository.findById(idUser)
 					.orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 		
 		usuario.setEstado(User.Estado.REPORTADO);
 		usuario.setRazonBaneo(razonBaneo);
-
+		
 		userRepository.save(usuario);
 		return "redirect:/user/{id}";
 	}
