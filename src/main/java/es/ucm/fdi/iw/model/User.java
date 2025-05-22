@@ -145,5 +145,9 @@ public class User implements Transferable<User.Transfer> {
         REPORTADO,
         BANEADO
     }
+
+    public boolean isBanned() {
+        return estado == Estado.BANEADO;
+    }
 }
 

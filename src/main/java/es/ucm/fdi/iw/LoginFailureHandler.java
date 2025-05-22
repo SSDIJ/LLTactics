@@ -19,8 +19,15 @@ public class LoginFailureHandler implements AuthenticationFailureHandler{
         String errorMsg = "Usuario o contraseña incorrectos";
         if (exception instanceof DisabledException) {
             errorMsg = "Tu cuenta está baneada. Contacta con soporte si crees que es un error.";
+            request.getSession().setAttribute("loginError", errorMsg);
+            response.sendRedirect("/banned");  
         }
-        request.getSession().setAttribute("loginError", errorMsg);
-        response.sendRedirect("/login?error");    
+        else {
+
+            System.out.println("\n\n\n BANEADO \n\n\n");
+            request.getSession().setAttribute("loginError", errorMsg);
+            response.sendRedirect("/login?error");    
+        }
+        
     }
 }

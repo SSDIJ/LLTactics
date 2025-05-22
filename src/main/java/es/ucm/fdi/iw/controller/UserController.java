@@ -646,10 +646,11 @@ public String index(@PathVariable long id, Model model, HttpSession session) {
 	public String reportUser(@PathVariable Long idUser,@RequestParam (required = true)String razonBaneo, Principal principal) {
 
 		// Comprobamos que un usuario no se pueda reportar a sí mismo
-		if (!idUser.equals(principal.getName())) {
-			User usuario = userRepository.findById(idUser)
-						.orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
-			
+		User usuario = userRepository.findById(idUser)
+					.orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+		
+		if (!usuario.getUsername().equals(principal.getName())) {
+
 			// Obtener el usuario que reporta usando el nombre de usuario del principal
 			User reportador = userRepository.findByUsername(principal.getName()).orElse(null);
 
