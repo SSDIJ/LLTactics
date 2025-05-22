@@ -2,6 +2,8 @@ import Player from "./Player.js";
 import Game from "./Game.js";
 import Unit from "./Unit.js";
 
+// NOTA: ACTUALIZACIÓN DE LA INTERFAZ CON WEBSOCKETS ABAJO DEL TODO
+
 let playerReady = false;
 
 // ID de la partida
@@ -40,13 +42,7 @@ const chatSendBtn = document.getElementById("chat-send-btn");
 const reportBtns = document.querySelectorAll(".report-btn");
 
 
-
-function toggleUnitsContainer() {
-    if (playerUnitsContainer.classList.contains("no-click"))
-        playerUnitsContainer.classList.remove("no-click")
-    else playerUnitsContainer.classList.add("no-click")
-}
-
+// Muestra el ganador
 function showWinnerContainer(winner) {
     const container = document.getElementById('winner-container');
     const winnerName = document.getElementById('winnerName');
@@ -57,6 +53,7 @@ function showWinnerContainer(winner) {
     }, 10);
 }
 
+// Mostramos el panel que indica cambio de ronda
 function toggleRoundPanel(text) {
 
     roundPanel.innerText = text;
@@ -68,6 +65,7 @@ function toggleRoundPanel(text) {
     
 }
 
+// Actualiza las barras de vida de todos los jugadores
 function updateAllHealthBars(player, opponent) {
     // Actualizamos las barras de vida del jugador
     const playerUnitCont = playerUnitsContainer;
@@ -377,6 +375,7 @@ function updateInventory(isOpponent = false) {
     });
 }
 
+// Abre la tienda
 function openShop() {
     shopUnitsContainers.forEach((shopUnitsContainer) => {
         Array.from(shopUnitsContainer.children).forEach((c) => {
@@ -397,6 +396,7 @@ function openShop() {
     readyBtn.classList.remove("closed")
 }
 
+// Cierra la tienda
 function closeShop() {
     shopUnitsContainers.forEach((shopUnitsContainer) => {
         Array.from(shopUnitsContainer.children).forEach((c) => {
@@ -417,10 +417,12 @@ function closeShop() {
     readyBtn.classList.add("closed")
 }
 
+// Cierra inventario
 function closeInventory() {
     inventoryContainer.classList.add("closed")
 }
 
+// Abre inventario
 function openInventory() {
     inventoryContainer.classList.remove("closed")
 }
@@ -507,6 +509,7 @@ function updateShop() {
     });
 }
 
+// Creamos los jugadores
 const player1 = new Player("J1");
 const player2 = new Player("J2");
     
@@ -551,22 +554,23 @@ refreshShopBtns.forEach((refreshShopBtn) => {
     });
 });
 
-
-
-
+// Actualizamos las unidades del jugador 2
 updateUnits(player2, true);
 
 const game = new Game([player1, player2]);
 
+// Actualiza el número de ronda
 function updateRoundNumber() {
     roundElement.innerText = `Ronda ${game.getRound()}`;
 }
 
+// Actualiza las estadísticas del jugador
 function updatePlayerStats() {
     playerStarsElement.innerText = player1.getStars();
     playerLifeElement.innerText = player1.getHealth();
 }
 
+// Ejecuta la animación de victoria al final de una batalla
 function winAnimation(isOpponent) {
     const unitCont = isOpponent ? opponentUnitsContainer : playerUnitsContainer;
     const unitCells = unitCont.querySelectorAll(".unit-container");
@@ -585,14 +589,11 @@ function winAnimation(isOpponent) {
                 img.classList.remove("win-effect");
             }, 2000);
         }
-        
-        
-        
+            
     });
 }
 
 // ------ CHAT -------
-
 
 // Función para enviar un mensaje al servidor
 async function sendMessage(chatInput) {
@@ -675,16 +676,18 @@ chatInputs.forEach(chatInput => {
     });  
 })
 
+// Envía un mensaje al servidor cuando está listo para un cambio de ronda
 function readyForNextRound() {
     go("/game/ready/" + roomId, "POST");
 }
 
+// Cierra la tienda y el inventario
 function closeAll() {
     closeShop();
     closeInventory();
 }
 
-
+// Botón de listo
 readyBtn.addEventListener("click", () => {
     readyForNextRound();
     closeAll();
@@ -696,7 +699,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 })
 
-// Iniciar temporizador
+// Iniciar temporizador -> NO SE USA (para futuras implementaciones)
 async function startTimer(timeLeft) {
 
     // Volvemos a iniciar el temporizador cada nueva ronda
@@ -715,7 +718,7 @@ async function startTimer(timeLeft) {
 
 // --- WEBSOCKETS ---
 
-
+// Espera a que se haya suscrito a los canales
 function waitForConnection(callback, interval = 100) {
     const intervalId = setInterval(() => {
         if (ws.stompClient && ws.stompClient.connected) {
@@ -730,13 +733,17 @@ document.addEventListener("DOMContentLoaded", () => {
     player1.name = player1NameContainer.innerText;
     player2.name = player2NameContainer.innerText;
     
+    // Nota: se inicializa de nuevo ws porque no se ha conseguido
+    // recuperar el iwconfig (por algún motivo se queda con la roomId de la partida anterior)
     const socketUrl = sessionStorage.getItem("socketUrl")
     ws.initialize(socketUrl, ["/topic/game/" + roomId]);
 
+    // Cuando recibimos una acción del servidor la procesamos
     ws.receive = (action) => {
         processAction(action)
     };
 
+    // Envía una acción GENERAL para que actualice el estado completo
     waitForConnection(() => sendAction({
             actionType: "GENERAL",
             playerName: player1.name,
@@ -744,17 +751,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }))
 });
 
-
+// Envía una acción al servidor
 function sendAction(action) {
     go("/game/action/" + roomId, "POST", action);
 }
 
+// Procesa una acción recibida del servidor
 async function processAction(action) {
 
     const name1 = player1.name;
     const name2 = player2.name;
 
-
+    // Actualiza las stats
     if (!(action.phase === "buy" || action.phase === "battle")) {
         player1.health = action[`health_${name1}`];
         player2.health = action[`health_${name2}`];
@@ -766,11 +774,13 @@ async function processAction(action) {
 
     updatePlayerStats();
 
+    // Muestra el ganador en caso de haber
     if (action.isWinner !== undefined) {
         showWinnerContainer(action.winner);
         return;
     }
 
+    // Actualiza todo
     if (action.updateAll !== undefined) {
 
         player1.updateUnits((action[`units_${name1}`] || []).reverse());
@@ -795,6 +805,7 @@ async function processAction(action) {
         player1.name = action[`name_${name1}`] || name1;
         player2.name = action[`name_${name2}`] || name2;
 
+        // Jugador favorito -> tiene preferencia en caso de empate en velocidades de unidades
         game.setPreferredPlayer(action["preferredPlayer"]);
 
         playerPositionElement.innerText = player1.health >= player2.health ? "#1" : "#2";
@@ -866,6 +877,7 @@ async function processAction(action) {
         displayMessage(action);
     }
 
+    // Lógica de las rondas
     if (action.phase === "buy") {
         game.round = action.round;
 

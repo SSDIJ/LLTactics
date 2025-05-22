@@ -31,7 +31,7 @@ Los jugadores también pueden acceder a diferentes vistas informativas y sociale
 
 Los administradores disponen de vistas y herramientas exclusivas para la gestión del entorno del juego:
 
-- **Gestión de partidas y usuarios**: Permite revisar partidas en curso o finalizadas, así como banear usuarios en caso de comportamiento indebido.
+- **Gestión de partidas y usuarios**: Permite revisar  partidas en curso o finalizadas, así como banear usuarios en caso de comportamiento indebido y desbanearlos.
 - **Modificación de constantes del juego**: Posibilidad de ajustar parámetros iniciales de las partidas, como economía, vida base u otros factores clave.
 - **Gestión de contenido**: Vista dedicada a añadir, modificar o eliminar héroes y objetos disponibles en el juego, manteniendo el equilibrio.
 
