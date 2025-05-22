@@ -15,7 +15,7 @@
         <h5 class="cardAdmin-title" th:text="${heroe.nombre}"></h5>
 
         <!-- Formulario -->
-        <form class="cardAdmin-form" th:action="@{/admin/gestGaleria/update/{idHeroe}(idHeroe=${heroe.idHeroe})}"
+        <form class="cardAdmin-form" th:id="'form-update-' + ${heroe.idHeroe}" th:action="@{/admin/gestGaleria/update/{idHeroe}(idHeroe=${heroe.idHeroe})}"
             method="post">
             <input type="hidden" name="idHeroe" th:value="${heroe.idHeroe}" />
 
