@@ -39,9 +39,11 @@ import es.ucm.fdi.iw.repositories.ItemRepository;
 import es.ucm.fdi.iw.repositories.PartidasRepository;
 import es.ucm.fdi.iw.repositories.UserRepository;
 import es.ucm.fdi.iw.services.HeroesService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import java.util.Optional;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -94,27 +96,25 @@ public class AdminController {
         model.addAttribute("partidas", partidas);
 
         ConfigPartida config = configPartidaRepository.findAll()
-            .stream()
-            .findFirst()
-            .orElse(new ConfigPartida());
+                .stream()
+                .findFirst()
+                .orElse(new ConfigPartida());
 
         model.addAttribute("configPartida", config);
         return "gestPartidas";
     }
 
-
     @PostMapping("/gestPartidas/updateValues")
     @Transactional
     public String updateValuesPartida(
-        @RequestParam("estrellasIni") int estrellasIni,
-        @RequestParam("vidaIni") int vidaIni,
-        @RequestParam("danyoVictoria") int danyoVictoria,
-        @RequestParam("estrellasRonda") int estrellasRonda,
-        @RequestParam("puntosPartida") int puntosPartida,
-        @RequestParam("precioRefrescar") int precioRefrescar,
-        Model model) {
+            @RequestParam("estrellasIni") int estrellasIni,
+            @RequestParam("vidaIni") int vidaIni,
+            @RequestParam("danyoVictoria") int danyoVictoria,
+            @RequestParam("estrellasRonda") int estrellasRonda,
+            @RequestParam("puntosPartida") int puntosPartida,
+            @RequestParam("precioRefrescar") int precioRefrescar,
+            Model model) {
 
-            
         ConfigPartida config = configPartidaRepository.findAll().stream().findFirst().orElse(new ConfigPartida());
         config.setEstrellasIni(estrellasIni);
         config.setVidaIni(vidaIni);
@@ -148,12 +148,12 @@ public class AdminController {
 
     @GetMapping("/cardObjeto/{index}")
     public String getObjetoFragment(@PathVariable int index, Model model) {
-    List<Objeto> objetos = itemRepository.findAll();
-    if (index >= 0 && index < objetos.size()) {
-        model.addAttribute("objeto", objetos.get(index));
+        List<Objeto> objetos = itemRepository.findAll();
+        if (index >= 0 && index < objetos.size()) {
+            model.addAttribute("objeto", objetos.get(index));
+        }
+        return "fragments/cardAdminObj :: cartaAdminObj";
     }
-    return "fragments/cardAdminObj :: cartaAdminObj";
-}
 
     @GetMapping("/gestUsuarios")
     public String showUsuarios(Model model) {
@@ -197,17 +197,17 @@ public class AdminController {
     @PostMapping("/gestGaleria/addHeroe")
     @Transactional
     public String addHeroe(
-        @RequestParam("nombre") String nombre,
-        @RequestParam("imagen") MultipartFile imagenFile,
-        @RequestParam("vida") int vida,
-        @RequestParam("armadura") int armadura,
-        @RequestParam("daño") int daño,
-        @RequestParam("velocidad") int velocidad,
-        @RequestParam("probabilidad") double probabilidad,
-        @RequestParam("precio") int precio,
-        @RequestParam("descripcion") String descripcion,
-        @RequestParam("faccion") int faccion,
-        Model model) {
+            @RequestParam("nombre") String nombre,
+            @RequestParam("imagen") MultipartFile imagenFile,
+            @RequestParam("vida") int vida,
+            @RequestParam("armadura") int armadura,
+            @RequestParam("daño") int daño,
+            @RequestParam("velocidad") int velocidad,
+            @RequestParam("probabilidad") double probabilidad,
+            @RequestParam("precio") int precio,
+            @RequestParam("descripcion") String descripcion,
+            @RequestParam("faccion") int faccion,
+            Model model) {
 
         try {
             log.info("Nombre del archivo recibido: " + imagenFile.getOriginalFilename());
@@ -272,19 +272,18 @@ public class AdminController {
         }
     }
 
-    
     @PostMapping("/gestGaleria/addObjeto")
     @Transactional
     public String addObjeto(
-        @RequestParam("nombre") String nombre,
-        @RequestParam("imagen") MultipartFile imagenFile,
-        @RequestParam("vida") int vida,
-        @RequestParam("armadura") int armadura,
-        @RequestParam("daño") int daño,
-        @RequestParam("velocidad") int velocidad,
-        @RequestParam("precio") int precio,
-        @RequestParam("descripcion") String descripcion,
-        Model model) {
+            @RequestParam("nombre") String nombre,
+            @RequestParam("imagen") MultipartFile imagenFile,
+            @RequestParam("vida") int vida,
+            @RequestParam("armadura") int armadura,
+            @RequestParam("daño") int daño,
+            @RequestParam("velocidad") int velocidad,
+            @RequestParam("precio") int precio,
+            @RequestParam("descripcion") String descripcion,
+            Model model) {
 
         try {
             log.info("Nombre del archivo recibido: " + imagenFile.getOriginalFilename());
@@ -350,27 +349,31 @@ public class AdminController {
     @PostMapping("/gestGaleria/deleteObjeto/{idObjeto}")
     @Transactional
     public String deleteObjeto(@PathVariable Long idObjeto, Model model) {
-        try{
+        try {
             itemRepository.deleteById(idObjeto);
             return "redirect:/admin/gestGaleria";
-        }catch(Exception e){
+        } catch (Exception e) {
             model.addAttribute("error", "Error al eliminar el objeto: " + e.getMessage());
             return "redirect:/admin/gestGaleria";
         }
     }
 
-        @PostMapping("/gestGaleria/deleteHeroe/{idHeroe}")
-        @Transactional
-        public String deleteHeroe(@PathVariable Long idHeroe, Model model) {
-        try{
+    @PostMapping("/gestGaleria/deleteHeroe/{idHeroe}")
+    @Transactional
+    public String deleteHeroe(@PathVariable Long idHeroe, Model model) {
+        try {
+
+            Heroe deletedHeroe = heroeRepository.findById(idHeroe)
+                    .orElseThrow(() -> new EntityNotFoundException("Héroe no encontrado con id: " + idHeroe));
+
+            heroesUsosRepository.deleteByHeroe(deletedHeroe);
             heroeRepository.deleteById(idHeroe);
             return "redirect:/admin/gestGaleria";
-        }catch(Exception e){
+        } catch (Exception e) {
             model.addAttribute("error", "Error al eliminar el héroe: " + e.getMessage());
             return "redirect:/admin/gestGaleria";
         }
     }
-
 
     @PostMapping("/gestGaleria/update/{idHeroe}")
     @Transactional
@@ -461,20 +464,21 @@ public class AdminController {
         return "redirect:/admin/gestUsuarios";
     }
 
-
     @GetMapping("/filtrarUsuarios")
-    public String filtrarUsuarios(@RequestParam(required = false) String role, @RequestParam(required = false) Boolean baneado, Model model) {
+    public String filtrarUsuarios(@RequestParam(required = false) String role,
+            @RequestParam(required = false) Boolean baneado, Model model) {
         List<User> usuarios;
 
-        if ("ADMIN".equals(role))   // Mostramos solo admins (ignoramos el checkbox baneado)
+        if ("ADMIN".equals(role)) // Mostramos solo admins (ignoramos el checkbox baneado)
             usuarios = userRepository.findByRolesContaining("ADMIN");
 
         else if ("USER".equals(role)) {
-            if (baneado != null) // Filtrar usuarios que sean no admin (o que no tengan el rol ADMIN) y con elestado baneado indicado
+            if (baneado != null) // Filtrar usuarios que sean no admin (o que no tengan el rol ADMIN) y con
+                                 // elestado baneado indicado
                 usuarios = userRepository.findByEstadoAndRolesNotContaining(User.Estado.BANEADO, "ADMIN");
             else // Mostrar todos los usuarios que no sean admin
                 usuarios = userRepository.findByRolesNotContaining("ADMIN");
-            
+
         } else // Si no se selecciona nada, mostramos todos
             usuarios = userRepository.findAll();
 
