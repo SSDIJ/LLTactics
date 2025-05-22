@@ -37,8 +37,9 @@ const refreshShopBtns = document.querySelectorAll(".refresh-btn");
 const chatBoxes = document.querySelectorAll(".chat-box");
 const chatInputs = document.querySelectorAll(".chat-input");
 const chatSendBtn = document.getElementById("chat-send-btn");
-const reportBtn = document.querySelector(".report-btn");
-const reportBtnOffCanvas = document.querySelector(".report-btn-offCanvas");
+const reportBtns = document.querySelectorAll(".report-btn");
+
+
 
 function toggleUnitsContainer() {
     if (playerUnitsContainer.classList.contains("no-click"))
@@ -653,19 +654,12 @@ function displayMessage(messageAction) {
     });
 }
 
-// Configurar el botón de reporte
-if (reportBtn) {
-    reportBtn.addEventListener("click", () => {
-        console.log("Reportar chat (pantalla completa)");
-        // TODO: Lógica de reportar chat
-    });
-}
-if (reportBtnOffCanvas) {
-    reportBtnOffCanvas.addEventListener("click", () => {
-        console.log("Reportar chat (offcanvas)");
-        // TODO: Lógica de reportar chat
-    });
-}
+reportBtns.forEach(repBtn => {
+    repBtn.addEventListener("click", () => {
+        go(`/game/report/${roomId}`, "POST", { username: player2.name });
+        repBtn.classList.add("closed")
+    });  
+})
 
 // Configurar el botón de enviar y la tecla Enter
 chatSendBtn.addEventListener("click", () => {

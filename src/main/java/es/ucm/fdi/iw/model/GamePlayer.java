@@ -157,7 +157,7 @@ public class GamePlayer {
             this.shop.refresh(heroes, items);
             if (cost) stars -= GameRoom.SHOP_REFRESH_PRICE;
         }
-       
+
     }
 
     public void resetHealth() {

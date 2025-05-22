@@ -52,6 +52,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
@@ -89,6 +90,9 @@ public class GameController {
 
     @Autowired
     private ItemController itemController;
+
+    @Autowired
+	private UserRepository userRepository;
 
     @Autowired
     private ConfigPartidaRepository configPartidaRepository;
@@ -633,4 +637,25 @@ public class GameController {
             log.error("Error al finalizar la partida en la base de datos: {}", e.getMessage(), e);
         }
     }
+
+    
+    @PostMapping("/game/report/{roomId}")
+    @Transactional
+    @ResponseBody
+    public void reportUserInGame(@PathVariable String roomId, @RequestBody Map<String, String> payload, Principal principal) {
+
+        String username = payload.get("username");
+        
+        User usuario = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+        
+        if (!username.equals(principal.getName())) {
+            User reportador = userRepository.findByUsername(principal.getName()).orElse(null);
+            usuario.setEstado(User.Estado.REPORTADO);
+            usuario.setRazonBaneo(roomId);
+            usuario.setReportadoPor(reportador);
+            userRepository.save(usuario);
+        }
+    }
+    
 }
