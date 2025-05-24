@@ -648,9 +648,15 @@ public class UserController {
 
 	@PostMapping("/viewProfile/reportar/{idUser}")
 	@Transactional
-	public String reportUser(@PathVariable Long idUser, @RequestParam(required = true) String razonBaneo,
+	public String reportUser(@PathVariable Long idUser, @RequestParam(required = true) String razonBaneo, @RequestParam(required = false) String conductaReporte,
+    @RequestParam(required = false) String insultosReporte,
+    @RequestParam(required = false) String racismoReporte,
+    @RequestParam(required = false) String otroReporte,
 			Principal principal) {
 
+	if(racismoReporte!=null){
+		razonBaneo=racismoReporte+"/"+razonBaneo;
+	}
 		// Comprobamos que un usuario no se pueda reportar a sí mismo
 		User usuario = userRepository.findById(idUser)
 				.orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));

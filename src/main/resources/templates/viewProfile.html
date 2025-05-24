@@ -53,8 +53,20 @@
                         <div class="modal-body">
                         <input type="hidden" name="username" th:value="${usuarioBuscado.username}" />
                         <div class="mb-3">
-                            <label for="razonReporte" class="form-label">Razón del reporte</label>
-                            <textarea class="form-control" id="razonBaneo" name="razonBaneo" rows="3" required></textarea>
+                            <input type ="checkbox" id="conductaReporte" name="conductaReporte">
+                            <label for="conductaReporte"> Conducta inapropiada</label>
+                            <br>
+                            <input type ="checkbox" id="insultosReporte" name="insultosReporte">
+                            <label for="conductaReporte"> Insultos o lenguaje inapropiado</label>
+                            <br>
+                            <input type ="checkbox" id="racismoReporte" name="racismoReporte">
+                            <label for="racismoReporte"> Conducta o lenguaje racista o xenófobo</label>
+                            <br>
+                             <input type ="checkbox" id="otroReporte" name="otroReporte">
+                            <label for="otroReporte"> Otro</label>
+                            <br>
+                            <label for="razonReporte" class="form-label">Indique a continuacion el suceso</label>
+                            <textarea class="form-control" id="razonBaneo" name="razonBaneo" rows="3"></textarea>
                         </div>
                         </div>
                         <div class="modal-footer">
