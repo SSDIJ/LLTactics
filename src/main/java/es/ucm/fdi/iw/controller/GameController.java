@@ -269,6 +269,7 @@ public class GameController {
     }
 
     private void processAction(GameRoom gameRoom, PlayerAction action, String senderPlayer)
+
             throws JsonProcessingException {
         ActionType type = action.getActionType();
         String details = action.getActionDetails();
@@ -289,10 +290,15 @@ public class GameController {
                 GameUnit unitSold = mapper.readValue(details, GameUnit.class);
                 gameRoom.playerSellUnit(senderPlayer, unitSold);
                 break;
+            case SELL_ALL:
+                System.out.println("Vamos a vender");
+                gameRoom.sellAllUnits(senderPlayer);
+                sendActionToPlayers(gameRoom, action);
+                break;
             case BUY_ITEM:
                 GameItem itemBought = mapper.readValue(details, GameItem.class);
                 gameRoom.playerBuyItem(senderPlayer, itemBought);
-                Objeto updatableObject= itemController.getByNombre(itemBought.getName());
+                Objeto updatableObject = itemController.getByNombre(itemBought.getName());
                 userController.updateObjectUseByUsername(senderPlayer, updatableObject);
                 break;
             case SELL_ITEM:
@@ -305,6 +311,11 @@ public class GameController {
                 break;
             case REFRESH_SHOP:
                 updatePlayerShop(gameRoom, senderPlayer, true);
+                break;
+            case KILL:
+                System.out.println("Vamos a matar a todas las unidades del campo");
+                gameRoom.killThemAll();
+                sendActionToPlayers(gameRoom, action);
                 break;
             case SEND_MESSAGE:
                 String recipientPlayerName = gameRoom.getPlayer1Name().equals(senderPlayer)
@@ -324,12 +335,13 @@ public class GameController {
                         .orElseThrow(() -> new IllegalArgumentException("No se encontró al jugador: " + senderPlayer));
                 message.setRecipient(Recipientplayer);
                 message.setSender(Senderplayer);
-                
-                 List<GameMessage> historial= gameRoom.getMessageHistory();
-                 GameMessage messageSent= historial.getLast();
-                 message.setText(messageSent.getMessage());
-               messageRepository.save(message);
+
+                List<GameMessage> historial = gameRoom.getMessageHistory();
+                GameMessage messageSent = historial.getLast();
+                message.setText(messageSent.getMessage());
+                messageRepository.save(message);
                 break;
+
             default:
                 log.warn("Acción desconocida: {}", action);
                 break;
@@ -382,6 +394,43 @@ public class GameController {
                 payload.put("updateItems", true);
                 break;
 
+            case KILL:
+                System.out.println("Ejecutando acción KILL: eliminando todas las unidades...");
+                // Crear la estructura para actualizar ambos jugadores
+                payload.put("updateUnits", true);
+                payload.put("updateItems", false);
+
+                for (Map.Entry<String, GamePlayer> entry : gameRoom.getPlayers().entrySet()) {
+                    String playerName = entry.getKey();
+                    GamePlayer player = entry.getValue();
+                    payload.put("units_" + playerName, player.getUnits());
+                    payload.put("items_" + playerName, new ArrayList<>(player.getInventory()));
+                    payload.put("health_" + playerName, player.getHealth());
+                    payload.put("stars_" + playerName, player.getStars());
+                }
+
+                // Actualizar la base de datos
+                updateGameRoomInDatabase(gameRoom.getGameRoomId(), gameRoom);
+                break;
+
+            case SELL_ALL:
+                System.out.println("vendiendo todo: eliminando todas las unidades...");
+                // Crear la estructura para actualizar ambos jugadores
+                payload.put("updateUnits", true);
+                payload.put("updateItems", false);
+
+                for (Map.Entry<String, GamePlayer> entry : gameRoom.getPlayers().entrySet()) {
+                    String playerName = entry.getKey();
+                    GamePlayer player = entry.getValue();
+                    payload.put("units_" + playerName, player.getUnits());
+                    payload.put("items_" + playerName, new ArrayList<>(player.getInventory()));
+                    payload.put("health_" + playerName, player.getHealth());
+                    payload.put("stars_" + playerName, player.getStars());
+                }
+
+                // Actualizar la base de datos
+                updateGameRoomInDatabase(gameRoom.getGameRoomId(), gameRoom);
+                break;
             case GENERAL:
 
                 Map<String, Boolean> battleReady = gameRoom.getBattleReady();
@@ -437,6 +486,13 @@ public class GameController {
         } catch (JsonProcessingException e) {
             log.error("Error al convertir la acción a JSON: {}", action, e);
         }
+    }
+
+    public void killAllTroups(String gameRoomId) {
+        System.out.println("A MATAR TROPAS");
+        GameRoom gameRoom = getGameRoomFromDatabase(gameRoomId);
+        gameRoom.killThemAll();
+        return;
     }
 
     @PostMapping("/game/ready/{gameRoomId}")

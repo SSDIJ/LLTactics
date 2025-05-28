@@ -17,6 +17,8 @@ import es.ucm.fdi.iw.repositories.PartidasRepository;
 import jakarta.transaction.Transactional;
 import es.ucm.fdi.iw.model.User;
 
+import java.util.List;
+
 @Controller
 public class PartidasController {
 
@@ -78,6 +80,10 @@ public class PartidasController {
         }
         // Redirige a la página principal
         return "redirect:/admin/gestPartidas";
+    }
+
+    public List<Partida> findByUser(User user1){
+        return partidasRepository.findByJugador1(user1);
     }
     
 }

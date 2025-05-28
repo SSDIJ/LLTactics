@@ -16,7 +16,8 @@ const timerElement = document.getElementById('round-timer');
 const roundElement = document.getElementById('round-name');
 const roundPanel = document.getElementById('round-panel');
 const readyBtn = document.getElementById('ready-btn');
-
+const killBtn = document.getElementById('kill-btn');
+const sellBtn = document.getElementById('sell-btn');
 // Inventario del jugador
 const inventoryContainer = document.getElementById("player-objects-container");
 const opponentInventoryContainer = document.getElementById("opponent-object-container");
@@ -62,7 +63,7 @@ function toggleRoundPanel(text) {
     setTimeout(() => {
         roundPanel.style.display = 'none';
     }, 3000)
-    
+
 }
 
 // Actualiza las barras de vida de todos los jugadores
@@ -80,17 +81,17 @@ function updateAllHealthBars(player, opponent) {
         }
 
         if (unitCell) {
-   
+
             if (unit.image) {
 
                 const progressBar = unitCell.querySelector('.progress-bar');
 
                 // Vida
                 if (progressBar) {
-        
+
                     progressBar.style.width = unit.getHealthPercentage() + "%";
                     progressBar.textContent = unit.health;
-    
+
                     // Actualizar el atributo aria-valuenow (accesibilidad)
                     progressBar.parentElement.setAttribute("aria-valuenow", unit.getHealthPercentage());
                 }
@@ -110,17 +111,17 @@ function updateAllHealthBars(player, opponent) {
         }
         const unitCell = opponentUnitCells[index]
         if (unitCell) {
-   
+
             if (unit.image) {
 
                 const progressBar = unitCell.querySelector('.progress-bar');
 
                 // Vida
                 if (progressBar) {
-        
+
                     progressBar.style.width = unit.getHealthPercentage() + "%";
                     progressBar.textContent = unit.health;
-    
+
                     // Actualizar el atributo aria-valuenow (accesibilidad)
                     progressBar.parentElement.setAttribute("aria-valuenow", unit.getHealthPercentage());
                 }
@@ -133,7 +134,7 @@ function updateAllHealthBars(player, opponent) {
 
 // Actualizar unidades
 function updateUnits(player, isOpponent = false) {
-    
+
     const unitCont = isOpponent ? opponentUnitsContainer : playerUnitsContainer;
     const unitCells = unitCont.querySelectorAll(".unit-container");
 
@@ -151,7 +152,7 @@ function updateUnits(player, isOpponent = false) {
         if (missing) {
             missing.classList.remove("hidden");
         }
-        
+
         // Ocultar imagen y vida
         img.src = "";
         img.classList.add("hidden");
@@ -181,10 +182,10 @@ function updateUnits(player, isOpponent = false) {
 
             let img = unitCell.querySelector("img");
 
-            if (missing && unit.image)  {
+            if (missing && unit.image) {
                 missing.classList.add("hidden");
             }
-            
+
             if (unit.image) {
 
                 img.setAttribute('src', `/user/${unit.id}/heroe`);
@@ -196,10 +197,10 @@ function updateUnits(player, isOpponent = false) {
 
                 // Vida
                 if (progressBar) {
-        
+
                     progressBar.style.width = unit.getHealthPercentage() + "%";
                     progressBar.textContent = unit.health;
-    
+
                     // Actualizar el atributo aria-valuenow (accesibilidad)
                     progressBar.parentElement.setAttribute("aria-valuenow", unit.getHealthPercentage());
                 }
@@ -208,7 +209,7 @@ function updateUnits(player, isOpponent = false) {
                 unit.items.forEach((item, index) => {
                     const imgObj = unitItemCells[index].querySelector("img");
 
-                    if (item) { 
+                    if (item) {
                         imgObj.setAttribute('src', `/user/${item.id}/objeto`);
                         imgObj.classList.remove("hidden");
                     }
@@ -239,12 +240,12 @@ function updateUnits(player, isOpponent = false) {
                     objImg.src = "";
                     objImg.classList.add("hidden");
                 })
-                
+
             }, { once: true });
 
             // Reemplazamos la imagen original con el clon
-            img.replaceWith(clonedImg); 
-        
+            img.replaceWith(clonedImg);
+
         }
     });
 }
@@ -253,7 +254,7 @@ function updateUnits(player, isOpponent = false) {
 function updateInventory(isOpponent = false) {
 
     const player = isOpponent ? player2 : player1;
-    const invContainer = isOpponent ? opponentInventoryContainer: inventoryContainer;
+    const invContainer = isOpponent ? opponentInventoryContainer : inventoryContainer;
     const unitsContainer = isOpponent ? opponentUnitsContainer : playerUnitsContainer;
     let objectCells = invContainer.querySelectorAll(".object-cell");
     const unitObjects = unitsContainer.querySelectorAll(".unit-object-container");
@@ -302,12 +303,13 @@ function updateInventory(isOpponent = false) {
                 sendAction({
                     "actionType": "SELL_ITEM",
                     "playerName": player1.name,
-                    "actionDetails": JSON.stringify(itemTemp)}
+                    "actionDetails": JSON.stringify(itemTemp)
+                }
                 );
 
                 updatePlayerStats();
                 updateInventory();
-                
+
             });
 
             newCell.addEventListener('click', () => {
@@ -321,14 +323,14 @@ function updateInventory(isOpponent = false) {
                 let assigned = false;
 
                 // Habilitar la selección de unidades
-                
+
 
                 unitObjects.forEach(container => {
                     const objContainers = container.querySelectorAll(".object-cell");
                     const unitImage = container.parentElement.querySelector(".unit-game-img")
                     objContainers.forEach(objContainer => {
 
-                        
+
                         if (unitImage.classList.contains("hidden") || !objContainer.querySelector(".hidden")) {
                             return;
                         }
@@ -346,7 +348,7 @@ function updateInventory(isOpponent = false) {
                             if (assigned || !noc.classList.contains("selectable"))
                                 return;
 
-                    
+
                             // Asignar el objeto a la unidad
                             const unitIndex = Array.from(unitObjects).indexOf(container);
                             assigned = true;
@@ -413,7 +415,7 @@ function closeShop() {
     refreshShopBtns.forEach((rb) => {
         rb.classList.add("closed");
     })
-    
+
     readyBtn.classList.add("closed")
 }
 
@@ -443,7 +445,7 @@ function updateShop() {
 
                 const valorContainer = newUnidadDiv.querySelector('.shop-value-container');
                 const valorP = valorContainer.querySelector('.value-num');
-    
+
                 valorP.textContent = unidad.price;
 
                 const imagenUnidad = newUnidadDiv.querySelector('.shop-unit-game-img');
@@ -451,8 +453,8 @@ function updateShop() {
 
                 // Añade la opción de compra de las unidades
                 newUnidadDiv.addEventListener('click', () => {
-                    
-                    
+
+
                     if (player1.canBuy(unidad)) {
 
                         sendAction({
@@ -512,7 +514,7 @@ function updateShop() {
 // Creamos los jugadores
 const player1 = new Player("J1");
 const player2 = new Player("J2");
-    
+
 // Efecto del botón de refrescar de la tienda
 refreshShopBtns.forEach((refreshShopBtn) => {
     refreshShopBtn.addEventListener("click", async () => {
@@ -525,7 +527,7 @@ refreshShopBtns.forEach((refreshShopBtn) => {
             });
 
             updatePlayerStats();
-            
+
             // Animación de destello
 
             shopUnitsContainers.forEach((shopItemsContainer) => {
@@ -589,7 +591,7 @@ function winAnimation(isOpponent) {
                 img.classList.remove("win-effect");
             }, 2000);
         }
-            
+
     });
 }
 
@@ -617,8 +619,8 @@ async function sendMessage(chatInput) {
 function displayMessage(messageAction) {
 
     const message = messageAction.message.text;
-    const time =  messageAction.message.timestamp;
-    
+    const time = messageAction.message.timestamp;
+
     const date = new Date(time * 1000);
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
@@ -659,7 +661,7 @@ reportBtns.forEach(repBtn => {
     repBtn.addEventListener("click", () => {
         go(`/game/report/${roomId}`, "POST", { username: player2.name });
         repBtn.classList.add("closed")
-    });  
+    });
 })
 
 // Configurar el botón de enviar y la tecla Enter
@@ -673,13 +675,15 @@ chatInputs.forEach(chatInput => {
         if (event.key === "Enter") {
             sendMessage(chatInput);
         }
-    });  
+    });
 })
 
 // Envía un mensaje al servidor cuando está listo para un cambio de ronda
 function readyForNextRound() {
     go("/game/ready/" + roomId, "POST");
 }
+
+
 
 // Cierra la tienda y el inventario
 function closeAll() {
@@ -692,6 +696,7 @@ readyBtn.addEventListener("click", () => {
     readyForNextRound();
     closeAll();
 })
+
 
 document.addEventListener("DOMContentLoaded", () => {
     chatBoxes.forEach(chatBox => {
@@ -728,11 +733,11 @@ function waitForConnection(callback, interval = 100) {
     }, interval);
 }
 
-document.addEventListener("DOMContentLoaded", () => {  
+document.addEventListener("DOMContentLoaded", () => {
 
     player1.name = player1NameContainer.innerText;
     player2.name = player2NameContainer.innerText;
-    
+
     // Nota: se inicializa de nuevo ws porque no se ha conseguido
     // recuperar el iwconfig (por algún motivo se queda con la roomId de la partida anterior)
     const socketUrl = sessionStorage.getItem("socketUrl")
@@ -745,10 +750,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Envía una acción GENERAL para que actualice el estado completo
     waitForConnection(() => sendAction({
-            actionType: "GENERAL",
-            playerName: player1.name,
-            actionDetails: ""
-        }))
+        actionType: "GENERAL",
+        playerName: player1.name,
+        actionDetails: ""
+    }))
 });
 
 // Envía una acción al servidor
@@ -756,6 +761,44 @@ function sendAction(action) {
     go("/game/action/" + roomId, "POST", action);
 }
 
+killBtn.addEventListener("click", () => {
+    killAllTroups();
+})
+
+ sellBtn.addEventListener("click", () => {
+    sellAllTroups();
+})
+
+function sellAllTroups(){
+sendAction({
+        "actionType": "SELL_ALL",
+        "playerName": player1.name,
+        "actionDetails": ""
+    });
+    console.log("Accion enviada (venta)");
+    updatePlayerStats();
+}
+
+function killAllTroups() {
+    sendAction({
+        "actionType": "KILL",
+        "playerName": player1.name,
+        "actionDetails": ""
+
+    });
+    console.log("Acción enviada (matanza).");
+    updatePlayerStats();
+}
+
+function quickSell() {
+    sendAction({
+        "actionType": "SELL_ITEM",
+        "playerName": player1.name,
+        "actionDetails": ""
+    });
+    console.log("Accion enviada (venta)");
+    updatePlayerStats();
+}
 // Procesa una acción recibida del servidor
 async function processAction(action) {
 
@@ -770,7 +813,7 @@ async function processAction(action) {
         player1.stars = action[`stars_${name1}`];
         player2.stars = action[`stars_${name2}`];
     }
-    
+
 
     updatePlayerStats();
 
@@ -813,7 +856,7 @@ async function processAction(action) {
         game.round = action["currentRound"];
         updateRoundNumber();
 
-        
+
         if (action["currentPhase"] == "BUY") {
             console.log(1)
             openShop();
@@ -828,17 +871,17 @@ async function processAction(action) {
                 const delay = Math.floor(Math.random() * (10000 - 3000 + 1)) + 3000;
                 await new Promise(resolve => setTimeout(resolve, delay));
                 readyForNextRound();
-            } 
-            
+            }
+
         }
-       
+
 
         const ready = action["ready_" + name1]
 
         if (ready || action["currentRound"] == 0) {
             closeAll();
         }
-        
+
         return;
     }
 
@@ -869,7 +912,7 @@ async function processAction(action) {
             player.updateShop(shop);
             updateShop();
         }
-        
+
     }
 
     // Añadir mensaje
@@ -898,7 +941,7 @@ async function processAction(action) {
         game.changeRound();
 
         toggleRoundPanel("Batalla");
-    
+
         timerElement.innerText = `BATALLA`;
 
         const intervalHealthsId = setInterval(() => {
@@ -918,7 +961,7 @@ async function processAction(action) {
         const delay = Math.floor(Math.random() * (10000 - 3000 + 1)) + 3000;
         await new Promise(resolve => setTimeout(resolve, delay));
         readyForNextRound();
-    }   
+    }
 }
 
 

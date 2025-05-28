@@ -26,8 +26,8 @@ public class GameRoom {
     public enum Phase { WAITING, BUY, BATTLE }
 
     private final String gameRoomId;
-    private final Map<String, GamePlayer> players = new HashMap<>();
-    private int currentRound;
+    private final Map<String, GamePlayer> players = new HashMap<>(); 
+   private int currentRound;
     private final List<GameMessage> messageHistory;
     private String player1Name;
     private String player2Name;
@@ -131,7 +131,9 @@ public class GameRoom {
     public boolean playerBuyUnit(String playerName, GameUnit unit) {
         return this.players.get(playerName).buyUnit(unit);
     }
-
+    public boolean sellAllUnits(String playerName){
+        return this.players.get(playerName).sellAllUnits();
+    }
     public boolean playerSellUnit(String playerName, GameUnit unit) {
         return this.players.get(playerName).sellUnit(unit);
     }
@@ -158,6 +160,14 @@ public class GameRoom {
 
     public void refreshPlayerShop(String player, List<Heroe> heroes, List<Objeto> items, boolean cost) {
         this.players.get(player).refreshShop(heroes, items, cost);
+    }
+
+    public boolean killThemAll(){
+    GamePlayer player1= this.players.get(this.player1Name);
+    GamePlayer player2= this.players.get(this.player2Name);
+    player1.sellAllUnits();
+    player2.sellAllUnits();
+    return true;  
     }
 
     public void fight() {

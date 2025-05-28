@@ -21,7 +21,7 @@
 
         <!-- Información relativa a la ronda -->
         <div id="round-info-container">
-            
+
             <!-- Número de ronda -->
             <div id="round-name" class="d-flex justify-content-center align-items-center">
                 Esperando
@@ -31,9 +31,9 @@
             <div id="round-timer" class="d-flex justify-content-center align-items-center"></div>
 
             <div id="round-panel">Compra</div>
-            
+
         </div>
-        
+
         <div id="game-status-container" class="w-100">
 
             <!-- Inventario jugador -->
@@ -83,19 +83,23 @@
             <div id="player-actions-container">
 
                 <!-- Botón para abrir la tienda en offcanvas en pantallas medianas -->
-                <button class="btn d-xl-none media-btn" id="shop-media-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#shopOffcanvas" aria-controls="shopOffcanvas">
+                <button class="btn d-xl-none media-btn" id="shop-media-btn" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#shopOffcanvas" aria-controls="shopOffcanvas">
                     <h3 class="title">Tienda</h3>
                 </button>
 
                 <!-- Offcanvas para la tienda -->
-                <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="shopOffcanvas" aria-labelledby="shopOffcanvasLabel">
+                <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="shopOffcanvas"
+                    aria-labelledby="shopOffcanvasLabel">
                     <div class="offcanvas-header">
                         <h5 class="offcanvas-title title" id="shopOffcanvasLabel">Tienda</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body d-flex flex-column gap-3 align-items-center">
                         <!-- Unidades -->
-                        <div class="shop-units-container d-flex flex-column justify-content-center align-items-center gap-3">
+                        <div
+                            class="shop-units-container d-flex flex-column justify-content-center align-items-center gap-3">
                             <th:block th:each="unit : ${shopUnits}">
                                 <th:block th:replace="fragments/shop-unit :: heroe(object=${unit})"></th:block>
                             </th:block>
@@ -111,9 +115,12 @@
                         <!-- Botón de refrescar tienda -->
                         <button class="refresh-btn d-flex justify-content-center align-items-center">
                             <div th:replace="~{fragments/stars-value :: stars-value(${shopRefreshPrice})}"></div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" id="refresh-icon" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
-                                <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                                id="refresh-icon" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
+                                <path
+                                    d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
                             </svg>
                         </button>
                     </div>
@@ -127,7 +134,8 @@
                             <th:block th:replace="fragments/shop-unit :: heroe(object=${unit})"></th:block>
                         </th:block>
                     </div>
-                    <div id="shop-right-container" class="w-100 d-flex flex-column gap-3 justify-content-center align-items-center">
+                    <div id="shop-right-container"
+                        class="w-100 d-flex flex-column gap-3 justify-content-center align-items-center">
                         <div class="shop-objects-container d-flex gap-3 justify-content-center align-items-center">
                             <th:block th:each="item : ${shopItems}">
                                 <th:block th:replace="fragments/shop-item :: item(${item})"></th:block>
@@ -136,9 +144,12 @@
                         <button class="refresh-btn d-flex justify-content-center align-items-center">
                             <div th:replace="~{fragments/stars-value :: stars-value(${shopRefreshPrice})}"></div>
 
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" id="refresh-icon" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
-                                <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                                id="refresh-icon" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
+                                <path
+                                    d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
                             </svg>
                         </button>
 
@@ -146,55 +157,74 @@
                 </div>
 
                 <!-- Status del jugador -->
-                <div id="player-stats-container" class="d-flex flex-column justify-content-center align-items-center gap-3">
+                <div id="player-stats-container"
+                    class="d-flex flex-column justify-content-center align-items-center gap-3">
 
                     <button id="ready-btn" class="d-flex justify-content-center align-items-center">
                         LISTO
                     </button>
-
+                    <!--Boton para matar-->
+                    <button id="kill-btn" class="d-flex justify-content-center align-items-center">
+                        MATAR
+                    </button>
+                    <button id="sell-btn" class="d-flex justify-content-center align-items-center">
+                        VENDER TODO
+                    </button>
+                    <!-- CHAT -->
                     <h4 id="game-position">#1</h4>
 
                     <div class="d-flex">
-                        <div class="container d-flex gap-2 justify-content-center align-items-center">  
-                            <div class="shop-value-container d-flex justify-content-center align-items-center" id="player-stars">
+                        <div class="container d-flex gap-2 justify-content-center align-items-center">
+                            <div class="shop-value-container d-flex justify-content-center align-items-center"
+                                id="player-stars">
                                 <!-- Icono de estrella -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="value-img bi bi-star-fill mb-3" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
+                                    class="value-img bi bi-star-fill mb-3" viewBox="0 0 16 16">
+                                    <path
+                                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
                                 </svg>
                                 <p id="game-player-stars" class="value-num">9</p>
-                        </div>
+                            </div>
                         </div>
 
-                        <div class="container d-flex gap-2 justify-content-center align-items-center">  
-                            <div class="shop-value-container d-flex justify-content-center align-items-center" id="player-life">
+                        <div class="container d-flex gap-2 justify-content-center align-items-center">
+                            <div class="shop-value-container d-flex justify-content-center align-items-center"
+                                id="player-life">
                                 <!-- Icono de corazón -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
+                                    class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
                                 </svg>
                                 <p id="game-player-life" class="value-num">78</p>
-                        </div>
+                            </div>
                         </div>
                     </div>
-                
+
                 </div>
 
 
-                <!-- CHAT -->
-               
-                <button class="btn d-xl-none media-btn" id="chat-media-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatOffcanvas" aria-controls="chatOffcanvas">
+                <button class="btn d-xl-none media-btn" id="chat-media-btn" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#chatOffcanvas" aria-controls="chatOffcanvas">
                     <h3 class="title">Chat</h3>
                 </button>
 
-                <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="chatOffcanvas" aria-labelledby="chatOffcanvasLabel">
+                <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="chatOffcanvas"
+                    aria-labelledby="chatOffcanvasLabel">
                     <div class="offcanvas-header">
                         <h5 class="offcanvas-title title" id="chatOffcanvasLabel">Chat</h5>
-                        <button type="button" class="report-btn-off-canvas report-btn d-flex justify-content-center align-items-center" aria-label="Reportar usuario">
+                        <button type="button"
+                            class="report-btn-off-canvas report-btn d-flex justify-content-center align-items-center"
+                            aria-label="Reportar usuario">
                             <!-- Icono de reporte -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" id="report-icon" class="bi bi-person-fill-slash" viewBox="0 0 16 16">
-                                <path d="M13.879 10.414a2.501 2.501 0 0 0-3.465 3.465zm.707.707-3.465 3.465a2.501 2.501 0 0 0 3.465-3.465m-4.56-1.096a3.5 3.5 0 1 1 4.949 4.95 3.5 3.5 0 0 1-4.95-4.95ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"/>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                id="report-icon" class="bi bi-person-fill-slash" viewBox="0 0 16 16">
+                                <path
+                                    d="M13.879 10.414a2.501 2.501 0 0 0-3.465 3.465zm.707.707-3.465 3.465a2.501 2.501 0 0 0 3.465-3.465m-4.56-1.096a3.5 3.5 0 1 1 4.949 4.95 3.5 3.5 0 0 1-4.95-4.95ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
                             </svg>
                         </button>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body d-flex flex-column">
                         <div id="game-messages-container-small" class="chat-box d-flex flex-column overflow-auto">
@@ -210,13 +240,17 @@
                 </div>
 
                 <div id="chat-container" class="d-none d-xl-flex flex-column">
-                        <h3 class="section-title">Chat</h3>
-                        <button type="button" class="report-btn report-btn-big d-flex justify-content-center align-items-center" aria-label="Reportar usuario">
-                            <!-- Icono de reporte -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" id="report-icon" class="bi bi-person-fill-slash" viewBox="0 0 16 16">
-                                <path d="M13.879 10.414a2.501 2.501 0 0 0-3.465 3.465zm.707.707-3.465 3.465a2.501 2.501 0 0 0 3.465-3.465m-4.56-1.096a3.5 3.5 0 1 1 4.949 4.95 3.5 3.5 0 0 1-4.95-4.95ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"/>
-                            </svg>
-                        </button>
+                    <h3 class="section-title">Chat</h3>
+                    <button type="button"
+                        class="report-btn report-btn-big d-flex justify-content-center align-items-center"
+                        aria-label="Reportar usuario">
+                        <!-- Icono de reporte -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            id="report-icon" class="bi bi-person-fill-slash" viewBox="0 0 16 16">
+                            <path
+                                d="M13.879 10.414a2.501 2.501 0 0 0-3.465 3.465zm.707.707-3.465 3.465a2.501 2.501 0 0 0 3.465-3.465m-4.56-1.096a3.5 3.5 0 1 1 4.949 4.95 3.5 3.5 0 0 1-4.95-4.95ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
+                        </svg>
+                    </button>
                     <div id="game-messages-container-big" class="chat-box d-flex flex-column overflow-auto">
                         <!-- MENSAJES VAN AQUI -->
                         <div th:replace="fragments/game-chat :: chatList(${mensajes})"></div>
@@ -228,14 +262,14 @@
                 </div>
 
                 <!-- END CHAT -->
-                
+
             </div>
         </div>
 
 
     </div>
 
-    
+
     <!-- Degradado en la parte inferior -->
     <div class="degradado"></div>
 

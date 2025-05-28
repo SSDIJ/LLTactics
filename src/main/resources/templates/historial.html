@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>LL Tactics - Historial</title>
+</head>
+
+<body class="h-100" id="historial">
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+
+    <div id="ranking-main-container"
+        class="container d-flex flex-column align-items-center justify-content-center text-center mt-5">
+        <div class="container">
+            <img src="/img/homepage/sword.png" alt="Espada" id="homepage-sword">
+            <div class="container mt-5">
+                <h1 class="mt-5 title display-1 text-center">Historial</h1>
+            </div>
+        </div>
+        <div id="ranking-description">
+            Observa tus últimas partidas y utiliza ese conocimiento para mejorar
+        </div>
+    </div>
+
+<div id="ranking-table-wrapper" class="tabcontent">
+    <table>
+        <thead>
+            <tr>
+              
+                <th>Jugador 1</th>
+                <th>Jugador 2</th>
+               <th>Resultado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="partida : ${partidas}" th:class="'clickable-row'">
+                
+                <td th:text="${partida.jugador1.username}"></td>
+                <td th:text="${partida.jugador2.username}"></td>
+                
+                <td>
+                    <span th:if="${partida.ganador != null}">Victoria</span>
+               
+                </td>
+            
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+    
+
+    <div class="degradado"></div>
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+    <script type="module" src="/js/homepage-animations.js"></script>
+ 
+
+</body>
+
+</html>

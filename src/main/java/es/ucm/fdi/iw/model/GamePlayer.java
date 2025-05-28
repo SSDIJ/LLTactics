@@ -79,6 +79,24 @@ public class GamePlayer {
         return false;
     }
 
+    public boolean sellAllUnits(){
+        System.out.println("Vendiendo todas las unidades");
+        for (int i = 0; i < units.size(); i++) {
+            GameUnit u = units.get(i);
+                stars += u.getPrice();
+                for (GameItem item : u.getItems()) {
+                    if (item != null) {
+                        inventory.add(item);
+                    }
+                }
+         
+                units.set(i, getNullUnit());
+            
+        }
+        System.out.println("Se vendieron correctamente todas las unidades");
+        return true;
+    }
+
     public  boolean sellUnit(GameUnit soldUnit) {
         System.out.println("Vendiendo unidad: " + soldUnit);
         for (int i = 0; i < units.size(); i++) {
