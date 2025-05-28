@@ -72,6 +72,7 @@
                             <th>J2</th>
                             <th>Estado</th>
                             <th>Ganador</th>
+                            <th>Ver chat</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -88,10 +89,27 @@
                                 </span>
                             </td>
                             <td th:text="${partida.ganador == partida.jugador1.id} ? ${partida.jugador1.username} : (${partida.ganador == partida.jugador2.id} ? ${partida.jugador2.username} : 'N/A')"></td>
-
+                            <td>
+                                
+                                <button class="btn btn-primary chat-btn" type="button" th:attr="data-room-id=${partida.gameRoomId}" data-bs-toggle="offcanvas" data-bs-target="#chatOffcanvas" aria-controls="chatOffcanvas">
+                                    CHAT
+                                </button>
+    
+                            </td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="chatOffcanvas" aria-labelledby="chatOffcanvasLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title title" id="chatOffcanvasLabel">Chat</h5>
+            </div>
+            <div class="offcanvas-body d-flex flex-column">
+                <div id="game-messages-container-small" class="chat-box d-flex flex-column overflow-auto">
+                    <!-- MENSAJES VAN AQUI -->
+                    <div th:replace="fragments/game-chat :: chatList(${mensajes})"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -105,6 +123,49 @@
 
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" defer></script>
     <script>
+        const chatBoxes = document.querySelectorAll(".chat-box");
+            // Función para mostrar un mensaje en el chat
+        function displayMessage(messageAction) {
+
+            const message = messageAction.message;
+            const time =  messageAction.timestamp;
+            
+            const date = new Date(time * 1000);
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const timeFormatted = `${hours}:${minutes}`;
+
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("chat-message");
+
+            // Hora del mensaje
+            const timeElement = document.createElement("span");
+            timeElement.classList.add("chat-time");
+            timeElement.textContent = `[${timeFormatted}] `;
+
+            // Nombre de usuario
+            const userElement = document.createElement("span");
+            userElement.classList.add("chat-username");
+            userElement.textContent = `${messageAction.playerName}:`;
+            userElement.style.cursor = "pointer"; // Cambia el cursor
+
+            // Texto del mensaje
+            const textElement = document.createElement("span");
+            textElement.classList.add("chat-text");
+            textElement.textContent = ` ${message}`;
+
+            // Ensamblar el mensaje
+            messageElement.appendChild(timeElement);
+            messageElement.appendChild(userElement);
+            messageElement.appendChild(textElement);
+
+            chatBoxes.forEach(chatBox => {
+                const clonedMessage = messageElement.cloneNode(true);
+                chatBox.appendChild(clonedMessage);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            });
+        }
+        
         window.addEventListener('DOMContentLoaded', () => {
             const tabla = document.querySelector("#tablaPartidas");
             if (tabla) {
@@ -124,8 +185,29 @@
                     }
                 });
             }
+
+
+
+            const chatContainer = document.getElementById("game-messages-container-small")
+
+            const chatBtns = document.querySelectorAll(".chat-btn");
+            chatBtns.forEach((chatBtn) => {
+                chatBtn.addEventListener("click", (e) => {
+                    chatBoxes.forEach(chatBox => {
+                        chatBox.innerHTML = ""
+                    });
+            
+                    const roomId = e.currentTarget.dataset.roomId;
+                    const msgs = go("/admin/getChat/" + roomId, "GET").then((data) => {
+                        data.chat.forEach((msg) => displayMessage(msg))
+                    })
+                })
+            })
         });
+
+
     </script>
+
    
 </body>
 

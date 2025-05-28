@@ -67,6 +67,15 @@
                 </div>
             </div>
 
+            <!-- Probabilidad de crítico -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Probabilidad de crítico</label>
+                    <input type="number" class="form-control" name="probabilidad_critico" th:value="${heroe.probabilidad_critico}"
+                        step="0.01" min="0" required />
+                </div>
+            </div>
+
             <!-- Descripción -->
             <label class="form-label">Descripción</label>
             <input type="text" class="form-control" name="descripcion" th:value="${heroe.descripcion}" required />

@@ -73,14 +73,15 @@ public class User implements Transferable<User.Transfer> {
     @Column(nullable = true)
     private Estado estado; // 0 = normal, 1 = reportado, 2 = baneado
     @Column(nullable = true)
-   private String razonBaneo;
+    private String razonBaneo;
 
    
-   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HeroeUsos> heroeUsos = new ArrayList<>();
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FaccionUsos> faccionUsos = new ArrayList<>();
    
+    
    
    @Column(nullable = true)
    private LocalDateTime fechaBaneo;

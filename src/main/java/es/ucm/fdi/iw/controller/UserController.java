@@ -7,11 +7,13 @@ import es.ucm.fdi.iw.model.GameUnit;
 import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.HeroeUsos;
 import es.ucm.fdi.iw.model.Message;
+import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.Transferable;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
 import es.ucm.fdi.iw.repositories.UserRepository;
 import es.ucm.fdi.iw.repositories.HeroeUsosRepository;
+import es.ucm.fdi.iw.repositories.PartidasRepository;
 import es.ucm.fdi.iw.repositories.FaccionRepository;
 
 import org.apache.logging.log4j.LogManager;
@@ -58,6 +60,8 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -94,6 +98,9 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private PartidasRepository partidasRepository;
 
 	@Autowired
 	private HeroeController heroeController;
@@ -800,5 +807,17 @@ public class UserController {
 		}
 
 	}
+
+	@GetMapping("/getGameHistory")
+	@ResponseBody
+	public String getMethodName(Principal principal) {
+		String name = principal.getName();
+		User user = userRepository.findByUsername(name).orElse(null);
+		List<Partida> partidas = partidasRepository.findByJugador1AndJugador2Containing(null, null);
+		Collections.sort(partidas, (a,b)->a.getInicio().compareTo(b.getInicio()));
+		partidas.subList(0, 20);
+		return partidas;
+	}	
+	
 
 }

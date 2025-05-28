@@ -5,7 +5,7 @@
     <link th:href="@{/css/styles.css}" rel="stylesheet">
 </head>
 <body>
-    <div th:fragment="carta(id, unit, imgSrc, health, defense, damage, attackSpeed, description, type)" class="card">
+    <div th:fragment="carta(id, unit, imgSrc, health, defense, damage, attackSpeed, description, type, probabilidad_critico)" class="card">
         <img th:src="@{/user/{id}/heroe(id=${id})}" class="card-img-top" alt="Imagen de ${unit}">
         <div class="card-body">
             <h5 class="card-title" th:text="${unit}">Nombre de la unidad</h5>
@@ -49,7 +49,14 @@
                         <div class="progress-bar bg-danger" th:style="'width: ' + ${type == 'heroe' ? #numbers.formatInteger((attackSpeed * 100) / 120, 0) : #numbers.formatInteger((attackSpeed * 100) / 10, 0)} + '%'" th:text="${attackSpeed}"></div>
                     </div>
                 </div>
+
+                <div class="d-flex gap-2">
+                    <p>Crítico: </p>
+                    <p th:text="${probabilidad_critico}"></p>
+                </div>
             </div>
+
+
 
             <!--Descripción-->
             <p class="card-text mt-3"><small class="text-body-secondary" th:text="${description}"></small></p>

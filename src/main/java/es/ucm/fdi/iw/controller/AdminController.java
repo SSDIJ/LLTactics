@@ -4,6 +4,7 @@ import java.io.ObjectInputFilter.Config;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,10 +24,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import org.springframework.util.FileCopyUtils;
 
 import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.ConfigPartida;
+import es.ucm.fdi.iw.model.GameRoom;
 import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Objeto;
@@ -76,6 +83,9 @@ public class AdminController {
 
     @Autowired
     private HeroeUsosRepository heroesUsosRepository;
+
+    @Autowired
+    private GameController gameController;
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
@@ -207,12 +217,12 @@ public class AdminController {
             @RequestParam("precio") int precio,
             @RequestParam("descripcion") String descripcion,
             @RequestParam("faccion") int faccion,
+            @RequestParam("probabilidad_critico") double probabilidad_critico,
             Model model) {
 
         try {
             log.info("Nombre del archivo recibido: " + imagenFile.getOriginalFilename());
             log.info("¿Está vacío?: " + imagenFile.isEmpty());
-
             String imagePath;
             if (imagenFile == null || imagenFile.isEmpty()) {
                 // Imagen por defecto
@@ -261,6 +271,7 @@ public class AdminController {
             heroe.setPrecio(precio);
             heroe.setDescripcion(descripcion);
             heroe.setFaccion(faccion);
+            heroe.setProbabilidad_critico(probabilidad_critico);
 
             heroeRepository.save(heroe);
 
@@ -386,6 +397,7 @@ public class AdminController {
             @RequestParam("daño") int daño,
             @RequestParam("velocidad") int velocidad,
             @RequestParam("probabilidad") double probabilidad,
+            @RequestParam("probabilidad_critico") double probabilidad_critico,
             @RequestParam("precio") int precio,
             Model model) {
 
@@ -401,6 +413,7 @@ public class AdminController {
         heroe.setVelocidad(velocidad);
         heroe.setProbabilidad(probabilidad);
         heroe.setPrecio(precio);
+        heroe.setProbabilidad_critico(probabilidad_critico);
 
         heroeRepository.save(heroe);
 
@@ -488,4 +501,30 @@ public class AdminController {
         model.addAttribute("usuarios", usuarios);
         return "gestUsuarios";
     }
+
+    @GetMapping("/getChat/{roomId}")
+    @Transactional
+    @ResponseBody
+    public String getChat(@PathVariable String roomId) {
+        
+        GameRoom game = gameController.getGameRoomFromDatabase(roomId);
+        System.out.println(game);
+
+        System.out.println(game.getMessageHistory());
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        String jsonChat;
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("chat", game.getMessageHistory());
+            jsonChat = objectMapper.writeValueAsString(response);
+        } catch (JsonProcessingException e) {
+            jsonChat = null;
+        }
+
+        log.info("jsonChat");
+        log.info(jsonChat);
+        return jsonChat;
+    }
+    
 }

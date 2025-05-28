@@ -258,7 +258,13 @@ public class GameRoom {
     }
 
     private void attack(GameUnit attacker, GameUnit defender) {
+        
         int damage = Math.max(attacker.getDamage() - defender.getArmor(), 1);
+
+        double randomNumber = Math.random();
+        if (randomNumber <= attacker.getProbabilidad_critico()) {
+            damage *= 2;
+        }
         defender.setHealth(defender.getHealth() - damage);
     }
 

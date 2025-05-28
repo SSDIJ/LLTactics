@@ -184,6 +184,21 @@
             </div>
         </div>
 
+        <button class="btn btn-primary chat-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatOffcanvas" aria-controls="chatOffcanvas">
+            Historial de partidas
+        </button>
+
+
+        <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="chatOffcanvas" aria-labelledby="chatOffcanvasLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title title" id="chatOffcanvasLabel">Historial</h5>
+            </div>
+            <div class="offcanvas-body d-flex flex-column">
+                <div id="game-messages-container-small" class="chat-box d-flex flex-column overflow-auto">
+                </div>
+            </div>
+        </div>
+
         <!-- Degradado en la parte inferior -->
         <div class="degradado"></div>
 
@@ -240,6 +255,8 @@
                         previewImg.src = imgElement.src;
                     });
                 });
+
+                go("")
             });
         </script>
 
