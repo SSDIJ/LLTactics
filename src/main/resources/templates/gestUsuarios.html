@@ -10,8 +10,8 @@
 <body>
     <header th:replace="~{fragments/nav.html :: nav}"></header>
     <div class="container mt-5">
-                <h1 class="mt-5 title display-1 text-center">Gestión de Usuarios</h1>
-            </div>
+        <h1 class="mt-5 title display-1 text-center">Gestión de Usuarios</h1>
+    </div>
     <div class="containerAdmin">
         <div class="sectionReportados">
             <h2>Usuarios Reportados</h2>
@@ -34,23 +34,25 @@
                             <td th:text="${usuario.id}"></td>
                             <td>
                                 <a th:href="@{'/user/viewProfile'(username=${usuario.username})}"
-
-                                th:text="${usuario.username}"></a>
+                                    th:text="${usuario.username}"></a>
                             </td>
                             <td>
                                 <a th:href="@{'/user/viewProfile'(username=${usuario.reportadoPor.username})}">
                                     <strong th:text="${usuario.reportadoPor.username}"></strong>
                                 </a>
-                            </td> 
+                            </td>
 
                             <td th:text="${usuario.razonBaneo}"></td>
                             <td>
-                                <form th:action="@{/admin/banearUsuario/{idUsuario}(idUsuario=${usuario.id})}" method="post" style="display:inline;">
-                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                                    <button type="submit" class="btn btn-danger btn-sm" th:id="'ban-' + ${usuario.id}">Banear</button>
+                                <form th:action="@{/admin/banearUsuario/{idUsuario}(idUsuario=${usuario.id})}"
+                                    method="post" style="display:inline;">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                        th:id="'ban-' + ${usuario.id}">Banear</button>
                                 </form>
-                                <form th:action="@{/admin/desbanearUsuario/{idUsuario}(idUsuario=${usuario.id})}" method="post" style="display:inline; margin-left: 5px;">
-                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                <form th:action="@{/admin/desbanearUsuario/{idUsuario}(idUsuario=${usuario.id})}"
+                                    method="post" style="display:inline; margin-left: 5px;">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                                     <button type="submit" class="btn btn-success btn-sm">Rechazar</button>
                                 </form>
                             </td>
@@ -109,16 +111,17 @@
                             <a th:href="@{'/user/viewProfile'(username=${usuario.username})}">
                                 <strong th:text="${usuario.username}"></strong>
                             </a>
-                        </td>                  
+                        </td>
                         <td th:text="${usuario.roles}"></td>
                         <td th:text="${usuario.estado}"></td>
                         <!-- Solo se muestra para baneados -->
                         <td th:if="${mostrarBaneo}" th:text="${usuario.fechaBaneo}"></td>
                         <td th:if="${mostrarBaneo}" th:text="${usuario.razonBaneo}"></td>
-                        <td th:if="${mostrarBaneo}" th:text="${usuario.reportadoPor != null ? usuario.reportadoPor.username : 'N/A'}"></td>
+                        <td th:if="${mostrarBaneo}"
+                            th:text="${usuario.reportadoPor != null ? usuario.reportadoPor.username : 'N/A'}"></td>
                         <td th:if="${mostrarBaneo}">
                             <form th:action="@{/admin/desbanearUsuario/{id}(id=${usuario.id})}" method="post">
-                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                                 <button type="submit" class="btn btn-success">Desbanear</button>
                             </form>
                         </td>
@@ -129,30 +132,45 @@
     </div>
 
 
-
-<div id="ranking-table-wrapper" class="tabcontent">
-    <table>
-        <thead>
-            <tr>
-                <th>Emisor</th>
-                <th>Receptor</th>
-                <th>Mensaje</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="mensaje : ${mensajes}" th:class="'clickable-row'">
-                 <td th:text="${mensaje.sender.username}"></td>
-                <td th:text="${mensaje.recipient.username}"></td>
-                <td th:text="${mensaje.text}"></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+  <form action="/admin/gestUsuarios/filtrado" method="post"> <!--LO SUYO SERIA CAMBIAR ESTO POR UN POST-->
+                <!--Poner temas de seguridad-->
+                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                 <!---->
+                <div class="input-group" style="max-width: 300px;">
+                    <span class="input-group-text bg-white border-end-0">
+                        <button type="submit" class="btn btn-light border-0" id="searchBtn2">
+                            <i class="fas fa-search text-muted"></i>
+                        </button>
+                    </span>
+                    <input type="text" id="searchPlayer2" name="username"
+                        class="form-control border-start-0 border-end-0" placeholder="Filtrar por jugador">
+                </div>
+            </form>
+            
+    </div>
+    <div id="ranking-table-wrapper" class="tabcontent">
+        <table>
+            <thead>
+                <tr>
+                    <th>Emisor</th>
+                    <th>Receptor</th>
+                    <th>Mensaje</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="mensaje : ${mensajes}" th:class="'clickable-row'">
+                    <td th:text="${mensaje.sender.username}"></td>
+                    <td th:text="${mensaje.recipient.username}"></td>
+                    <td th:text="${mensaje.text}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <div class="degradado"></div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 
-    
+
 </body>
 
 <script>
@@ -174,5 +192,7 @@
         roleSelect.addEventListener("change", toggleBaneado);
     });
 </script>
+
+
 
 </html>

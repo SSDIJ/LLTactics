@@ -172,6 +172,16 @@ public class AdminController {
         return "gestUsuarios";
     }
 
+     @PostMapping("/gestUsuarios/filtrado")
+    public String showUsuariosFiltrados(@RequestParam("username") String username, Model model) {
+       Optional <User> usuarioBuscadoOpcional= userRepository.findByUsername(username);
+       User usuarioBuscado= usuarioBuscadoOpcional.get();
+       System.out.println("El usuario buscado es "+usuarioBuscado.getUsername());
+       List<Message> mensajes= messageRepository.findBySender(usuarioBuscado);
+       model.addAttribute("mensajes", mensajes);
+        return "gestUsuarios";
+    }
+
     @GetMapping("/gestGaleria/{faccion}")
     public ResponseEntity<List<Heroe>> obtenerHeroesPorFaccion(@PathVariable String faccion) {
         List<Heroe> heroes = null;

@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import es.ucm.fdi.iw.model.Message;
+import es.ucm.fdi.iw.model.User;
+import java.util.List;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
@@ -14,6 +16,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
        // TODO Auto-generated method stub
        throw new UnsupportedOperationException("Unimplemented method 'findById'");
    }
+  List<Message> findBySender(User sender);
    
 }
 
