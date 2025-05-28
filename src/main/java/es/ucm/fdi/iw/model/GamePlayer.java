@@ -20,7 +20,7 @@ public class GamePlayer {
     private GameShop shop;
 
     public GamePlayer() {
-        this.inventory =  new HashSet<>();
+        this.inventory = new HashSet<>();
         this.units = new ArrayList<>();
         this.shop = new GameShop();
     }
@@ -40,7 +40,8 @@ public class GamePlayer {
 
     public void reduceHealth(int amount) {
         health -= amount;
-        if (health < 0) health = 0;
+        if (health < 0)
+            health = 0;
     }
 
     public GameUnit getDefaultUnit() {
@@ -57,14 +58,20 @@ public class GamePlayer {
     public boolean buyUnit(GameUnit unit) {
         if (stars >= unit.getPrice()) {
             int index = -1;
+            int numOfSameFaction = 1;
             for (int i = 0; i < units.size(); i++) {
+
                 if (units.get(i).getImage() == null || units.get(i).getImage().isEmpty()) {
                     index = i;
                     break;
+                } else {
+                    if (units.get(i).getFaction().equals(unit.getFaction()))
+                        numOfSameFaction++;
                 }
             }
-
             if (index != -1) {
+                unit.setMaxHealth(4000 + numOfSameFaction);
+                unit.setHealth(4000 + numOfSameFaction);
                 units.set(index, unit);
                 stars -= unit.getPrice();
                 System.out.println(name + " compró una unidad: " + unit.getName());
@@ -79,25 +86,25 @@ public class GamePlayer {
         return false;
     }
 
-    public boolean sellAllUnits(){
+    public boolean sellAllUnits() {
         System.out.println("Vendiendo todas las unidades");
         for (int i = 0; i < units.size(); i++) {
             GameUnit u = units.get(i);
-                stars += u.getPrice();
-                for (GameItem item : u.getItems()) {
-                    if (item != null) {
-                        inventory.add(item);
-                    }
+            stars += u.getPrice();
+            for (GameItem item : u.getItems()) {
+                if (item != null) {
+                    inventory.add(item);
                 }
-         
-                units.set(i, getNullUnit());
-            
+            }
+
+            units.set(i, getNullUnit());
+
         }
         System.out.println("Se vendieron correctamente todas las unidades");
         return true;
     }
 
-    public  boolean sellUnit(GameUnit soldUnit) {
+    public boolean sellUnit(GameUnit soldUnit) {
         System.out.println("Vendiendo unidad: " + soldUnit);
         for (int i = 0; i < units.size(); i++) {
             GameUnit u = units.get(i);
@@ -148,11 +155,11 @@ public class GamePlayer {
 
         for (GameItem it : getInventory()) {
             if (item.getId() == it.getId()) {
-                for(GameUnit u : units) {
+                for (GameUnit u : units) {
                     if (u.getUnitID() == unitUnitId) {
                         u.addItem(item);
                         removeFromInventory(item);
-                        return true;                    
+                        return true;
                     }
                 }
             }
@@ -173,7 +180,8 @@ public class GamePlayer {
 
         if ((stars >= GameRoom.SHOP_REFRESH_PRICE) || !cost) {
             this.shop.refresh(heroes, items);
-            if (cost) stars -= GameRoom.SHOP_REFRESH_PRICE;
+            if (cost)
+                stars -= GameRoom.SHOP_REFRESH_PRICE;
         }
 
     }
@@ -187,6 +195,5 @@ public class GamePlayer {
     public void addStars(int starsNewRound) {
         stars += starsNewRound;
     }
-    
-}
 
+}
