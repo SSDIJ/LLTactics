@@ -72,6 +72,7 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.DELETE, "/admin/gestHeroes/delete/**").hasRole("ADMIN")
 				.requestMatchers(HttpMethod.POST, "/admin/gestHeroes/add").hasRole("ADMIN")
 				.requestMatchers(HttpMethod.POST, "/admin/gestHeroes/update/**").hasRole("ADMIN")
+				.requestMatchers(HttpMethod.POST, "/admin/gestHeroes/filtrado").hasRole("ADMIN")
 
 				//.requestMatchers("/user/**").hasRole("USER")     LO HE CAMBIADO DE MOMENTO, REVISAR SI ES NECESARIO HACERLO ASI
 				.requestMatchers("/user/**").permitAll()
