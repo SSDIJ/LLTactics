@@ -7,6 +7,7 @@ import es.ucm.fdi.iw.model.Objeto;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Objeto, Long> {
-   
+   public Objeto findByIdObjeto(long id);
+   public Objeto findByNombre(String nombre);
 }
 

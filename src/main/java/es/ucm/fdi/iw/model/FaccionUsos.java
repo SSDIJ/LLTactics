@@ -19,7 +19,7 @@ public class FaccionUsos {
     @Column(nullable = true)
     private int vecesUsado;
 
-         public User getJugador() {
+    public User getJugador() {
         return this.user;
     }
 
@@ -32,7 +32,7 @@ public class FaccionUsos {
     }
 
     public void setFaccion(int faccion) {
-        this.faccion=faccion;
+        this.faccion = faccion;
     }
 
     public int getUsos() {

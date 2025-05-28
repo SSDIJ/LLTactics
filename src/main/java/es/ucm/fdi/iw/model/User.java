@@ -12,9 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.time.LocalDateTime;
 
-import es.ucm.fdi.iw.model.Heroe;
-
-
 /**
  * An authorized user of the system.
  */
@@ -22,26 +19,24 @@ import es.ucm.fdi.iw.model.Heroe;
 @Data
 @NoArgsConstructor
 @NamedQueries({
-        @NamedQuery(name="User.byUsername",
-                query="SELECT u FROM User u "
-                        + "WHERE u.username = :username AND u.enabled = TRUE"),
-        @NamedQuery(name="User.hasUsername",
-                query="SELECT COUNT(u) "
-                        + "FROM User u "
-                        + "WHERE u.username = :username")
+        @NamedQuery(name = "User.byUsername", query = "SELECT u FROM User u "
+                + "WHERE u.username = :username AND u.enabled = TRUE"),
+        @NamedQuery(name = "User.hasUsername", query = "SELECT COUNT(u) "
+                + "FROM User u "
+                + "WHERE u.username = :username")
 })
-@Table(name="IWUser")
+@Table(name = "IWUser")
 public class User implements Transferable<User.Transfer> {
 
     public enum Role {
-        USER,			// normal users 
-        ADMIN,          // admin users
+        USER, // normal users
+        ADMIN, // admin users
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen")
     @SequenceGenerator(name = "gen", sequenceName = "gen")
-	private long id;
+    private long id;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -56,11 +51,11 @@ public class User implements Transferable<User.Transfer> {
     @Column(nullable = true)
     private Long IdfotoPerfil;
 
-
     private boolean enabled;
     private String roles; // split by ',' to separate roles
-    
-    @Getter @Setter
+
+    @Getter
+    @Setter
     @Column(nullable = true)
     private int puntuacion;
     @Column(nullable = true)
@@ -68,44 +63,43 @@ public class User implements Transferable<User.Transfer> {
     @Column(nullable = true)
     private int partidasPerdidas;
     @Column(nullable = true)
-    private int faccionFavorita;  // 0 = humanos, 1 = dragones, 2 = trolls, 3 = no muertos, 4 = criaturas 
-    @Enumerated(EnumType.ORDINAL) 
+    private int faccionFavorita; // 0 = humanos, 1 = dragones, 2 = trolls, 3 = no muertos, 4 = criaturas
+    @Enumerated(EnumType.ORDINAL)
     @Column(nullable = true)
     private Estado estado; // 0 = normal, 1 = reportado, 2 = baneado
     @Column(nullable = true)
-   private String razonBaneo;
+    private String razonBaneo;
 
-   
-   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HeroeUsos> heroeUsos = new ArrayList<>();
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FaccionUsos> faccionUsos = new ArrayList<>();
-   
-   
-   @Column(nullable = true)
-   private LocalDateTime fechaBaneo;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ObjetoUsos> objetoUsos = new ArrayList<>();
+
+    @Column(nullable = true)
+    private LocalDateTime fechaBaneo;
     @ManyToOne
     @JoinColumn(name = "reportadoPor", referencedColumnName = "id", nullable = true)
     private User reportadoPor;
-   
-   //Sin el oneToMany peta (relacion entre 2 clases distintas.)
-   @OneToMany
-   @Column(nullable = true)
-   private List<Heroe> masJugados = new ArrayList<>();  
 
+    // Sin el oneToMany peta (relacion entre 2 clases distintas.)
+    @OneToMany
+    @Column(nullable = true)
+    private List<Heroe> masJugados = new ArrayList<>();
 
-
-	@OneToMany
-	@JoinColumn(name = "sender_id")
-	private List<Message> sent = new ArrayList<>();
-	@OneToMany
-	@JoinColumn(name = "recipient_id")	
-	private List<Message> received = new ArrayList<>();
+    @OneToMany
+    @JoinColumn(name = "sender_id")
+    private List<Message> sent = new ArrayList<>();
+    @OneToMany
+    @JoinColumn(name = "recipient_id")
+    private List<Message> received = new ArrayList<>();
     @ManyToMany(mappedBy = "members")
-    private List<Topic> topics = new ArrayList<>();		
+    private List<Topic> topics = new ArrayList<>();
 
     /**
      * Checks whether this user has a given role.
+     * 
      * @param role to check
      * @return true iff this user has that role.
      */
@@ -117,31 +111,31 @@ public class User implements Transferable<User.Transfer> {
     @Getter
     @AllArgsConstructor
     public static class Transfer {
-		private long id;
+        private long id;
         private String username;
-		private int totalReceived;
-		private int totalSent;
+        private int totalReceived;
+        private int totalSent;
         private String topics;
     }
 
     // Convierte el usuario en un objeto Transfer con info básica
-	@Override
+    @Override
     public Transfer toTransfer() {
         StringBuilder gs = new StringBuilder();
         for (Topic t : topics) {
             gs.append(t.getName());
             gs.append(", ");
         }
-		return new Transfer(id,	username, received.size(), sent.size(), gs.toString());
-	}
-	
-	@Override
-	public String toString() {
-		return toTransfer().toString();
-	}
+        return new Transfer(id, username, received.size(), sent.size(), gs.toString());
+    }
 
-    public enum Estado{
-        NORMAL, 
+    @Override
+    public String toString() {
+        return toTransfer().toString();
+    }
+
+    public enum Estado {
+        NORMAL,
         REPORTADO,
         BANEADO
     }
@@ -150,4 +144,3 @@ public class User implements Transferable<User.Transfer> {
         return estado == Estado.BANEADO;
     }
 }
-

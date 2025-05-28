@@ -32,6 +32,8 @@ import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Objeto;
 import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
+import es.ucm.fdi.iw.model.Message;
+import es.ucm.fdi.iw.repositories.MessageRepository;
 import es.ucm.fdi.iw.repositories.ConfigPartidaRepository;
 import es.ucm.fdi.iw.repositories.HeroeRepository;
 import es.ucm.fdi.iw.repositories.HeroeUsosRepository;
@@ -76,6 +78,9 @@ public class AdminController {
 
     @Autowired
     private HeroeUsosRepository heroesUsosRepository;
+
+    @Autowired
+    private MessageRepository messageRepository;
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
@@ -159,8 +164,10 @@ public class AdminController {
     public String showUsuarios(Model model) {
         List<User> reportados = userRepository.findByEstado(User.Estado.REPORTADO);
         List<User> usuarios = userRepository.findAll();
+        List<Message> mensajes= messageRepository.findAll();
+        System.out.println("Numero de mensajes mandados: "+ mensajes.size());
+        model.addAttribute("mensajes", mensajes);
         model.addAttribute("reportados", reportados);
-
         model.addAttribute("usuarios", usuarios);
         return "gestUsuarios";
     }

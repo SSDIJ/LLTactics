@@ -128,8 +128,31 @@
         </div>
     </div>
 
+
+
+<div id="ranking-table-wrapper" class="tabcontent">
+    <table>
+        <thead>
+            <tr>
+                <th>Emisor</th>
+                <th>Receptor</th>
+                <th>Mensaje</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="mensaje : ${mensajes}" th:class="'clickable-row'">
+                 <td th:text="${mensaje.sender.username}"></td>
+                <td th:text="${mensaje.recipient.username}"></td>
+                <td th:text="${mensaje.text}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
     <div class="degradado"></div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
+
+    
 </body>
 
 <script>

@@ -1,5 +1,6 @@
 package es.ucm.fdi.iw.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,11 +13,15 @@ import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.Objeto;
 import es.ucm.fdi.iw.model.Unidad;
 import es.ucm.fdi.iw.services.ItemService;
+import es.ucm.fdi.iw.repositories.ItemRepository;
 
 @RestController
 public class ItemController {
 
     private final ItemService itemService;
+
+    @Autowired
+    private ItemRepository itemRepository;
 
     public ItemController(ItemService itemService) {
         this.itemService = itemService;
@@ -24,5 +29,13 @@ public class ItemController {
 
     public List<Objeto> getRandomItems(int count) {
         return itemService.getRandomItems(count);
+    }
+
+    public Objeto getById(long id) {
+        return itemRepository.findByIdObjeto(id);
+    }
+
+    public Objeto getByNombre(String nombre) {
+        return itemRepository.findByNombre(nombre);
     }
 }

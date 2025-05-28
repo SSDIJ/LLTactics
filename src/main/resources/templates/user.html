@@ -24,7 +24,10 @@
         <!-- TOP: BARRA DE BÚSQUEDA DE JUGADOR -->
         <div class="top-user">
             <!-- BARRA DE BÚSQUEDA USANDO BOOTSTRAP -->
-            <form action="/user/viewProfile" method="GET">
+            <form action="/user/viewProfile" method="post"> <!--LO SUYO SERIA CAMBIAR ESTO POR UN POST-->
+                <!--Poner temas de seguridad-->
+                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                 <!---->
                 <div class="input-group" style="max-width: 300px;">
                     <span class="input-group-text bg-white border-end-0">
                         <button type="submit" class="btn btn-light border-0" id="searchBtn2">

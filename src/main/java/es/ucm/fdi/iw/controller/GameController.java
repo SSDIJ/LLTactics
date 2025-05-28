@@ -29,6 +29,7 @@ import es.ucm.fdi.iw.model.Topic;
 import es.ucm.fdi.iw.model.Unidad;
 import es.ucm.fdi.iw.model.User.Role;
 import es.ucm.fdi.iw.repositories.ConfigPartidaRepository;
+import es.ucm.fdi.iw.repositories.MessageRepository;
 import es.ucm.fdi.iw.repositories.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import es.ucm.fdi.iw.model.User;
@@ -85,17 +86,20 @@ public class GameController {
     @Autowired
     private UserController userController;
 
-    @Autowired 
+    @Autowired
     private UnitController unitController;
 
     @Autowired
     private ItemController itemController;
 
     @Autowired
-	private UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private ConfigPartidaRepository configPartidaRepository;
+
+    @Autowired
+    private MessageRepository messageRepository;
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
@@ -123,14 +127,14 @@ public class GameController {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         String estadoPartidaJson = "";
-        
-        //Parsea el estado de la partida a JSON
+
+        // Parsea el estado de la partida a JSON
         try {
             estadoPartidaJson = objectMapper.writeValueAsString(gameRoom);
         } catch (JsonProcessingException e) {
             log.error("Error al serializar el estado de la partida: {}", e.getMessage());
             return;
-        } 
+        }
 
         // Buscar los usuarios en la base de datos
         User jugador1 = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
@@ -245,13 +249,14 @@ public class GameController {
         // Verificar si el jugador está en la partida
         if (!gameRoom.getPlayers().containsKey(playerName)) {
             log.error("El jugador {} no pertenece a la partida {}", playerName,
-            gameRoomId);
+                    gameRoomId);
             return;
         }
 
         // Determinamos quién puede hacer qué cuándo
-        if (!gameRoom.canDoAction(action)) return;
-         
+        if (!gameRoom.canDoAction(action))
+            return;
+
         try {
             processAction(gameRoom, action, playerName);
         } catch (JsonProcessingException e) {
@@ -270,14 +275,14 @@ public class GameController {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-    
+
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         switch (type) {
             case BUY_UNIT:
                 GameUnit unitBought = mapper.readValue(details, GameUnit.class);
                 gameRoom.playerBuyUnit(senderPlayer, unitBought);
-                //ACTUALIZAR AQUI TANTO EL USO DE FACCIONES COMO EL USO DE TROPAS
+                // ACTUALIZAR AQUI TANTO EL USO DE FACCIONES COMO EL USO DE TROPAS
                 userController.updateUserByUsername(senderPlayer, unitBought);
                 break;
             case SELL_UNIT:
@@ -287,6 +292,8 @@ public class GameController {
             case BUY_ITEM:
                 GameItem itemBought = mapper.readValue(details, GameItem.class);
                 gameRoom.playerBuyItem(senderPlayer, itemBought);
+                Objeto updatableObject= itemController.getByNombre(itemBought.getName());
+                userController.updateObjectUseByUsername(senderPlayer, updatableObject);
                 break;
             case SELL_ITEM:
                 GameItem itemSold = mapper.readValue(details, GameItem.class);
@@ -300,7 +307,28 @@ public class GameController {
                 updatePlayerShop(gameRoom, senderPlayer, true);
                 break;
             case SEND_MESSAGE:
+                String recipientPlayerName = gameRoom.getPlayer1Name().equals(senderPlayer)
+                        ? gameRoom.getPlayer2Name()
+                        : gameRoom.getPlayer1Name();
+
                 gameRoom.addMessage(senderPlayer, details, ZonedDateTime.now());
+                Partida partida = entityManager.createQuery(
+                        "SELECT p FROM Partida p WHERE p.gameRoomId = :gameRoomId", Partida.class)
+                        .setParameter("gameRoomId", gameRoom.getGameRoomId()) // No convertir a Long, ya que gameRoomId
+                                                                              // es un String
+                        .getSingleResult();
+                Message message = new Message();
+                User Recipientplayer = userRepository.findByUsername(recipientPlayerName).orElseThrow(
+                        () -> new IllegalArgumentException("No se encontró al jugador: " + recipientPlayerName));
+                User Senderplayer = userRepository.findByUsername(senderPlayer)
+                        .orElseThrow(() -> new IllegalArgumentException("No se encontró al jugador: " + senderPlayer));
+                message.setRecipient(Recipientplayer);
+                message.setSender(Senderplayer);
+                
+                 List<GameMessage> historial= gameRoom.getMessageHistory();
+                 GameMessage messageSent= historial.getLast();
+                 message.setText(messageSent.getMessage());
+               messageRepository.save(message);
                 break;
             default:
                 log.warn("Acción desconocida: {}", action);
@@ -383,7 +411,7 @@ public class GameController {
                 String winnerDetails = action.getActionDetails();
                 payload.put("isWinner", true);
                 payload.put("winner", winnerDetails);
-                
+
                 break;
 
             case REFRESH_SHOP:
@@ -425,7 +453,8 @@ public class GameController {
 
         boolean allReady = gameRoom.bothPlayersReady();
 
-        if (allReady) gameRoom.resetReadiness();
+        if (allReady)
+            gameRoom.resetReadiness();
 
         String winner = gameRoom.getWinner();
         if (winner != null) {
@@ -440,10 +469,11 @@ public class GameController {
                     .filter(p -> !p.equals(winner))
                     .findFirst()
                     .orElse(null);
-            
+
             if (defeated != null) {
                 userController.updateWinner(winner, defeated, GameRoom.POINTS_PER_GAME);
-                finishGameInDatabase(gameRoomId, winner, defeated); 
+
+                finishGameInDatabase(gameRoomId, winner, defeated);
             }
             return;
         }
@@ -472,8 +502,10 @@ public class GameController {
         GamePlayer player1 = gameRoom.getPlayers().get(gameRoom.getPlayer1Name());
         GamePlayer player2 = gameRoom.getPlayers().get(gameRoom.getPlayer2Name());
 
-        GameUnit unit1 = gameRoom.getLastValidUnit(player1); // let unit1 = player1.units.slice().reverse().find(u => u.unitID && u.unitID !== null);  
-        GameUnit unit2 = gameRoom.getFirstValidUnit(player2); // let unit2 = player2.units.find(u => u.unitID && u.unitID !== null);
+        GameUnit unit1 = gameRoom.getLastValidUnit(player1); // let unit1 = player1.units.slice().reverse().find(u =>
+                                                             // u.unitID && u.unitID !== null);
+        GameUnit unit2 = gameRoom.getFirstValidUnit(player2); // let unit2 = player2.units.find(u => u.unitID &&
+                                                              // u.unitID !== null);
 
         // Si no hay unidad válida, compra unidad por defecto
         if (unit1 == null) {
@@ -485,7 +517,7 @@ public class GameController {
             unit2 = gameRoom.getFirstValidUnit(player2);
         }
     }
-    
+
     private void startBuyPhase(String gameRoomId) {
 
         GameRoom gameRoom = getGameRoomFromDatabase(gameRoomId);
@@ -511,17 +543,17 @@ public class GameController {
         // Actualizar el estado de la partida en la base de datos
 
         sendActionToPlayers(gameRoom, new PlayerAction(PlayerAction.ActionType.GENERAL, "server", ""));
-        
+
         log.info("Comienza fase de compra para sala {}", gameRoomId);
 
         // Notificar a los jugadores que comienza la fase de compra
         Map<String, Object> payload = Map.of(
                 "phase", "buy",
                 "round", gameRoom.getCurrentRound());
-        
+
         messagingTemplate.convertAndSend(
-            "/topic/game/" + gameRoomId,
-            payload);
+                "/topic/game/" + gameRoomId,
+                payload);
 
         gameRoom.setInTransition(false);
         updateGameRoomInDatabase(gameRoomId, gameRoom);
@@ -543,12 +575,11 @@ public class GameController {
                 "phase", "battle",
                 "round", gameRoom.getCurrentRound());
         messagingTemplate.convertAndSend(
-            "/topic/game/" + gameRoomId,
-            payload);
+                "/topic/game/" + gameRoomId,
+                payload);
 
-        
         gameRoom.fight();
-        
+
         gameRoom.setInTransition(false);
         // Actualizar el estado de la partida en la base de datos
         updateGameRoomInDatabase(gameRoomId, gameRoom);
@@ -557,14 +588,14 @@ public class GameController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    //FUNCION QUE DEVUELVE LA PARTIDA DESDE LA BD
+    // FUNCION QUE DEVUELVE LA PARTIDA DESDE LA BD
     public GameRoom getGameRoomFromDatabase(String gameRoomId) {
         try {
             // Buscar la partida activa en la base de datos
             Partida partida = entityManager.createQuery(
-                "SELECT p FROM Partida p WHERE p.gameRoomId = :gameRoomId", Partida.class)
-                .setParameter("gameRoomId", gameRoomId) // No convertir a Long, ya que gameRoomId es un String
-                .getSingleResult();
+                    "SELECT p FROM Partida p WHERE p.gameRoomId = :gameRoomId", Partida.class)
+                    .setParameter("gameRoomId", gameRoomId) // No convertir a Long, ya que gameRoomId es un String
+                    .getSingleResult();
 
             // Obtener el estado de la partida en formato JSON
             String estadoPartidaJson = partida.getEstado();
@@ -572,7 +603,8 @@ public class GameController {
             // Deserializar el JSON a un objeto GameRoom
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // Ignorar propiedades desconocidas
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // Ignorar propiedades
+                                                                                              // desconocidas
             GameRoom gameRoom = objectMapper.readValue(estadoPartidaJson, GameRoom.class);
 
             return gameRoom;
@@ -582,7 +614,7 @@ public class GameController {
         }
     }
 
-    //FUNCION QUE ACTUALIZA LA PARTIDA EN LA BD
+    // FUNCION QUE ACTUALIZA LA PARTIDA EN LA BD
     public void updateGameRoomInDatabase(String gameRoomId, GameRoom gameRoom) {
         try {
             // Serializar el objeto GameRoom a JSON
@@ -628,7 +660,7 @@ public class GameController {
                 partida.setPerdedor(0);
             }
 
-            //partida.setEstado(null); // Vacía el campo estado
+            // partida.setEstado(null); // Vacía el campo estado
 
             entityManager.merge(partida);
 
@@ -638,17 +670,17 @@ public class GameController {
         }
     }
 
-    
     @PostMapping("/game/report/{roomId}")
     @Transactional
     @ResponseBody
-    public void reportUserInGame(@PathVariable String roomId, @RequestBody Map<String, String> payload, Principal principal) {
+    public void reportUserInGame(@PathVariable String roomId, @RequestBody Map<String, String> payload,
+            Principal principal) {
 
         String username = payload.get("username");
-        
+
         User usuario = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
-        
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
         if (!username.equals(principal.getName())) {
             User reportador = userRepository.findByUsername(principal.getName()).orElse(null);
             usuario.setEstado(User.Estado.REPORTADO);
@@ -657,5 +689,5 @@ public class GameController {
             userRepository.save(usuario);
         }
     }
-    
+
 }

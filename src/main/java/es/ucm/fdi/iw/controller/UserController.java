@@ -9,10 +9,15 @@ import es.ucm.fdi.iw.model.HeroeUsos;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Transferable;
 import es.ucm.fdi.iw.model.User;
+import es.ucm.fdi.iw.model.Objeto;
 import es.ucm.fdi.iw.model.User.Role;
+import es.ucm.fdi.iw.model.ObjetoUsos;
+
 import es.ucm.fdi.iw.repositories.UserRepository;
 import es.ucm.fdi.iw.repositories.HeroeUsosRepository;
 import es.ucm.fdi.iw.repositories.FaccionRepository;
+import es.ucm.fdi.iw.repositories.ObjetoRepository;
+import es.ucm.fdi.iw.repositories.ItemRepository;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -99,12 +104,22 @@ public class UserController {
 	private HeroeController heroeController;
 
 	@Autowired
+	private ItemController itemController;
+
+	@Autowired
 	private HeroeUsosRepository heroeUsosRepository;
+
 
 	// Lo utilizamos para acceder a la modificacion del uso de cada faccion (para el
 	// update de la partida tras cada compra)
 	@Autowired
 	private FaccionRepository faccionUsosRepository;
+
+	@Autowired
+	private ItemRepository itemRepository;
+
+	@Autowired
+	private ObjetoRepository objetoRepository;
 
 	// Añadido para el inicio de sesion automatico tras registrarse
 	@Autowired
@@ -558,6 +573,14 @@ public class UserController {
 			entityManager.persist(fu);
 		}
 
+		List<Objeto> objetos = itemRepository.findAll();
+		for (Objeto objeto : objetos) {
+			ObjetoUsos ou = new ObjetoUsos();
+			ou.setUser(newUser);
+			ou.setVecesUsado(0);
+			ou.setObjeto(objeto);
+		}
+
 		log.info("User {} registered successfully", newUser.getUsername());
 
 		// AUTENTICAR AUTOMÁTICAMENTE AL USUARIO (PAra que inicie sesión automáticamente
@@ -582,7 +605,7 @@ public class UserController {
 	}
 
 	// Funcion que sirve para cargar las fotos de la carpeta al abrir el user.html
-	@GetMapping("/viewProfile")
+	@PostMapping("/viewProfile")
 	public String searchUser(@RequestParam("username") String username, Model model) {
 		log.info("Entrando en el método viewProfile");
 
@@ -648,15 +671,25 @@ public class UserController {
 
 	@PostMapping("/viewProfile/reportar/{idUser}")
 	@Transactional
-	public String reportUser(@PathVariable Long idUser, @RequestParam(required = true) String razonBaneo, @RequestParam(required = false) String conductaReporte,
-    @RequestParam(required = false) String insultosReporte,
-    @RequestParam(required = false) String racismoReporte,
-    @RequestParam(required = false) String otroReporte,
+	public String reportUser(@PathVariable Long idUser, @RequestParam(required = true) String razonBaneo,
+			@RequestParam(required = false) String conductaReporte,
+			@RequestParam(required = false) String insultosReporte,
+			@RequestParam(required = false) String racismoReporte,
+			@RequestParam(required = false) String otroReporte,
 			Principal principal) {
 
-	if(racismoReporte!=null){
-		razonBaneo=racismoReporte+"/"+razonBaneo;
-	}
+		if (racismoReporte != null) {
+			razonBaneo = "Racismo" + "/" + razonBaneo;
+		}
+		if (conductaReporte != null) {
+			razonBaneo = "Conducta negativa" + "/" + razonBaneo;
+		}
+		if (insultosReporte != null) {
+			razonBaneo = "Insultos" + "/" + razonBaneo;
+		}
+		if (otroReporte != null) {
+			razonBaneo = "Otro" + "/" + razonBaneo;
+		}
 		// Comprobamos que un usuario no se pueda reportar a sí mismo
 		User usuario = userRepository.findById(idUser)
 				.orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
@@ -803,6 +836,48 @@ public class UserController {
 			nuevoUso.setFaccion(updatableHeroe.getFaccion());
 			nuevoUso.setUsos(1);
 			faccionUsosRepository.save(nuevoUso);
+		}
+
+	}
+
+	public void updateObjectUseByUsername(String username, Objeto object) {
+		// Buscar al usuario por su nombre de usuario
+		User updatableUser = userRepository.findByUsername(username).orElse(null);
+
+		// Verificar que el usuario exista
+		if (updatableUser == null) {
+			// Manejar el caso cuando el usuario no se encuentra
+			System.out.println("Usuario no encontrado.");
+			return; // O lanzar una excepción
+		}
+
+		// Buscar al héroe por su id
+		Objeto updatableObject = itemController.getById(object.getIdObjeto());
+
+		// Verificar que el héroe exista
+		if (updatableObject == null) {
+			// Manejar el caso cuando el héroe no se encuentra
+			System.out.println("objeto no encontrado.");
+			return; // O lanzar una excepción
+		}
+
+		// Buscar la instancia de HeroeUsos correspondiente al User y Heroe
+		ObjetoUsos objetoUsos = objetoRepository.findByUserAndObjeto(updatableUser, updatableObject);
+
+		if (objetoUsos != null) {
+			// Si ya existe la relación, incrementar las veces jugadas
+			objetoUsos.setVecesUsado(objetoUsos.getVecesUsado()+1);
+			// Guardar los cambios
+			objetoRepository.save(objetoUsos);
+			System.out.println("Veces jugadas de " + updatableObject.getNombre() + " incrementadas en 1.");
+
+		} else {
+			ObjetoUsos nuevoObjetoUso = new ObjetoUsos();
+			nuevoObjetoUso.setUser(updatableUser);
+			nuevoObjetoUso.setObjeto(updatableObject);
+			nuevoObjetoUso.setVecesUsado(1); // Primer uso
+			objetoRepository.save(nuevoObjetoUso);
+			System.out.println("Nuevo registro de uso de héroe creado.");
 		}
 
 	}
