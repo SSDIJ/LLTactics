@@ -3,7 +3,7 @@
 
 <head>
     <th:block th:replace="~{fragments/head :: header}" />
-    <title>LL Tactic - Buscando partida</title>
+    <title>LL Tactics - Buscando partida</title>
 </head>
 
 <body class="h-100">
@@ -11,12 +11,80 @@
     
     <div id="finding-game-container">
 
-        <!-- Spinner -->
-        <div class="spinner-grow spinner-grow-sm" role="status">
-            <span class="visually-hidden">Loading...</span>
+        <div id="actions-first-container">
+            <p class="mb-2">Selecciona el tipo de partida</p>
+
+            <div id="firts-actions-btn-container">
+                <button id="find-normal-game-btn" class="d-flex flex-column justify-content-center align-items-center gap-2">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-1-square-fill" viewBox="0 0 16 16">
+                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm7.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z"/>
+                    </svg>
+                    Oponente aleatorio
+                </button>
+                <button id="custom-game-btn" class="d-flex flex-column justify-content-center align-items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-2-square-fill" viewBox="0 0 16 16">
+                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm4.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306"/>
+                    </svg>
+                    Partida personalizada
+                </button>
+            </div>
+            
         </div>
-        <h1>Buscando partida</h1>
+
+        <div id="searching-game" class="hidden">
+            <!-- Spinner -->
+            <div class="spinner-grow spinner-grow-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <h1>Buscando partida</h1>
+        </div>
         
+        <div id="custom-room-container" class="hidden">
+            <p>Unirse a sala personalizada</p>
+            <form id="join-room-form">
+                <input type="text" id="room-code-input" placeholder="Código de sala" required />
+                <input type="text" id="join-room-password" placeholder="Contraseña de sala" required />
+                <button type="submit">Unirse a la sala</button>
+            </form>
+
+            <h2>O crear una sala nueva</h2>
+            <form id="create-room-form">
+                <!-- Campo de contraseña visible -->
+                <input type="text" id="room-password" placeholder="Contraseña de sala" required />
+                <button type="submit">Crear sala nueva</button>
+            </form>
+        </div>
+
+
+        <div id="created-room-info" class="hidden">
+            
+            <div class="room-detail">
+                <label for="display-room-id">Código de sala</label>
+                <input type="text" id="display-room-id" readonly />
+            </div>
+
+            <div class="room-detail">
+                <label for="display-room-password">Contraseña</label>
+                <input type="text" id="display-room-password" readonly />
+            </div>
+        </div>
+
+        
+    </div>
+
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-danger text-white">
+        <div class="modal-header">
+            <h5 class="modal-title" id="errorModalLabel">Error al unirse a la sala</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body" id="errorModalMessage">
+            Ocurrió un error inesperado.
+        </div>
+        </div>
+    </div>
     </div>
 
     <!-- Degradado en la parte inferior -->

@@ -48,7 +48,7 @@ public class IwUserDetailsService implements UserDetailsService {
 			return new org.springframework.security.core.userdetails.User(
 					u.getUsername(), u.getPassword(), roles);
 		} catch (DisabledException de) {
-			throw de;
+			throw new DisabledException("Tu cuenta está baneada.");
 		} catch (Exception e) {
 			log.info("No such user: " + username + " (error = " + e.getMessage() + ")");
 			throw new UsernameNotFoundException(username);

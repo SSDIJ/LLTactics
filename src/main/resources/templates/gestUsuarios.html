@@ -30,26 +30,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="usuario : ${reportados}">
-                            <td th:text="${usuario.id}"></td>
+                        <tr th:each="reporte : ${reportados}">
+                            <td th:text="${reporte.id}"></td>
                             <td>
-                                <a th:href="@{'/user/viewProfile'(username=${usuario.username})}"
+                                <a th:href="@{'/user/viewProfile'(username=${reporte.reportado.username})}"
 
-                                th:text="${usuario.username}"></a>
+                                th:text="${reporte.getNombreReportado()}"></a>
                             </td>
                             <td>
-                                <a th:href="@{'/user/viewProfile'(username=${usuario.reportadoPor.username})}">
-                                    <strong th:text="${usuario.reportadoPor.username}"></strong>
+                                <a th:href="@{'/user/viewProfile'(username=${reporte.getNombreReportador()})}">
+                                    <strong th:text="${reporte.getNombreReportador()}"></strong>
                                 </a>
                             </td> 
 
-                            <td th:text="${usuario.razonBaneo}"></td>
+                            <td th:text="${reporte.razonReporte}"></td>
                             <td>
-                                <form th:action="@{/admin/banearUsuario/{idUsuario}(idUsuario=${usuario.id})}" method="post" style="display:inline;">
+                                <form th:action="@{/admin/banearUsuario/{idUsuario}(idUsuario=${reporte.reportado.id})}" method="post" style="display:inline;">
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                                    <button type="submit" class="btn btn-danger btn-sm" th:id="'ban-' + ${usuario.id}">Banear</button>
+                                    <button type="submit" class="btn btn-danger btn-sm" th:id="'ban-' + ${reporte.reportado.id}">Banear</button>
                                 </form>
-                                <form th:action="@{/admin/desbanearUsuario/{idUsuario}(idUsuario=${usuario.id})}" method="post" style="display:inline; margin-left: 5px;">
+                                <form th:action="@{/admin/desbanearUsuario/{idUsuario}(idUsuario=${reporte.reportado.id})}" method="post" style="display:inline; margin-left: 5px;">
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                     <button type="submit" class="btn btn-success btn-sm">Rechazar</button>
                                 </form>

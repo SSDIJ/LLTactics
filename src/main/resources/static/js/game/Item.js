@@ -29,6 +29,20 @@ class Item {
             item.life
         );
     }
+
+    getReport() {
+        let report = "\n";
+        report += this.name;
+        report += "\n";
+        report += this.description;
+        report += "\n\n";
+
+        report += "VIDA (+" + this.life + ")\n";
+        report += "ARMADURA (+" + this.armor + ")\n";
+        report += "DAÑO (+" + this.damage + ")\n";
+        report += "VELOCIDAD (+" + this.velocity + ")\n";
+        return report;
+    }
     
 }
 

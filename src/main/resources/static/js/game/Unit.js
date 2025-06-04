@@ -1,3 +1,5 @@
+import Item from "./Item.js";
+
 class Unit {
 
     static nextId = 1;
@@ -34,7 +36,15 @@ class Unit {
         );
 
         newUnit.unitID = otherUnit.unitID;
-        newUnit.items = [...otherUnit.items];
+        newUnit.items = [...otherUnit.items].map((item) => {
+            if (item) {
+                return Item.fromItem(item);
+            }
+            else {
+                return item;
+            }
+            
+        });
         return newUnit;
     }
 
@@ -58,6 +68,20 @@ class Unit {
             }
         }
         return false;
+    }
+
+    getReport() {
+        let report = "\n";
+        report += this.name;
+        report += "\n";
+        report += this.description;
+        report += "\n\n";
+
+        report += "VIDA (" + this.health + " / " + this.maxHealth + ")\n";
+        report += "ARMADURA (" + this.armor + ")\n";
+        report += "DAÑO (" + this.damage + ")\n";
+        report += "VELOCIDAD (" + this.speed + ")\n";
+        return report;
     }
 
     upgradeStats(item) {

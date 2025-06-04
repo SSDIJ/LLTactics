@@ -4,16 +4,21 @@
         <h5 class="cardAdmin-title" th:text="${objeto.nombre}"></h5>
 
         <form class="cardAdmin-form" th:action="@{/admin/gestGaleria/updateObjeto/{idObjeto}(idObjeto=${objeto.idObjeto})}"
-        method="post">
+        method="post" enctype="multipart/form-data">
             <input type="hidden" name="idObjeto" th:value="${objeto.idObjeto}" />
 
             <!-- Nombre -->
             <label class="form-label">Nombre</label>
             <input type="text" class="form-control" name="nombre" th:value="${objeto.nombre}" required />
 
-            <!-- Ruta Imagen -->
-            <label class="form-label">Ruta Imagen</label>
-            <input type="text" class="form-control" name="imagen" th:value="${objeto.imagen}" required />
+
+            <!-- Imagen -->
+            <label for="imagen" class="form-label">Imagen PNG</label>
+            <input type="file" class="form-control" id="objeto-modificar-imagen" name="imagen" accept="image/png">
+            <div class="invalid-feedback">
+                Por favor, selecciona una imagen PNG.
+            </div>
+
 
             <!-- Vida y Armadura -->
             <div class="form-row">

@@ -48,7 +48,8 @@ public class PlayerAction {
         REFRESH_SHOP,
         SEND_MESSAGE, 
         GENERAL,
-        WINNER
+        WINNER,
+        SELL_ALL
     }
 }
 

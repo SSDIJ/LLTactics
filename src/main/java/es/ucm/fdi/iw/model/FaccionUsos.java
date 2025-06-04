@@ -19,7 +19,7 @@ public class FaccionUsos {
     @Column(nullable = true)
     private int vecesUsado;
 
-         public User getJugador() {
+    public User getJugador() {
         return this.user;
     }
 

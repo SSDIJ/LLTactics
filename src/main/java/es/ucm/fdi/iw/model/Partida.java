@@ -45,6 +45,16 @@ public class Partida {
     @Column(nullable = true)
     private LocalDateTime fin; 
 
+    @Column(nullable = true)
+    private Boolean esCustom;
+
+    @Column(nullable = true)
+    private String contraseña;
+
+    @ManyToOne
+    @JoinColumn(name = "creador_id", nullable = true)
+    private User creador;
+
     public String getInicioFormateado() {
         return inicio != null ? inicio.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "-";
     }

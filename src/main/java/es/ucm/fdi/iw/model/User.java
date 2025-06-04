@@ -94,7 +94,9 @@ public class User implements Transferable<User.Transfer> {
    @Column(nullable = true)
    private List<Heroe> masJugados = new ArrayList<>();  
 
-
+   @OneToMany
+   @Column(nullable = true)
+   private List<Reporte> reportes = new ArrayList<>();  
 
 	@OneToMany
 	@JoinColumn(name = "sender_id")
@@ -150,5 +152,8 @@ public class User implements Transferable<User.Transfer> {
     public boolean isBanned() {
         return estado == Estado.BANEADO;
     }
+
+    @OneToMany(mappedBy = "creador")
+    private List<Partida> partidasCreadas = new ArrayList<>();
 }
 

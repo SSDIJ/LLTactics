@@ -3,13 +3,29 @@ package es.ucm.fdi.iw.controller;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.security.Principal;
+import java.time.LocalDateTime;
+
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import es.ucm.fdi.iw.model.GameRoom;
+import es.ucm.fdi.iw.model.Partida;
+import es.ucm.fdi.iw.model.User;
+import es.ucm.fdi.iw.repositories.PartidasRepository;
+import es.ucm.fdi.iw.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 
 
@@ -54,5 +70,105 @@ public class MatchmakingController {
             messagingTemplate.convertAndSend("/topic/game/matchmaking", payload);
         }
     }
-    
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PartidasRepository partidaRepository;
+
+    @PostMapping("/game/createPrivateRoom")
+    @Transactional
+    @ResponseBody
+    public ResponseEntity<String> createPrivateRoom(
+            Principal principal,
+            @RequestBody Map<String, String> body) throws JsonProcessingException {
+
+        String password = body.get("password");
+        String ownerName = principal.getName();
+        User creador = userRepository.findByUsername(ownerName).orElse(null);
+
+        if (creador == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no encontrado");
+        }
+
+        // Generar un gameRoomId único
+        String gameRoomId = UserController.generateRandomBase64Token(9);
+
+        Partida partida = new Partida();
+        partida.setCreador(creador);
+        partida.setJugador1(creador); // jugador2 se añadirá cuando alguien se una
+        partida.setJugador2(creador); // temporal, para cumplir la restricción not null
+        partida.setGameRoomId(gameRoomId);
+        partida.setEnCurso(true);
+        partida.setGanador(0);
+        partida.setPerdedor(0);
+        partida.setInicio(LocalDateTime.now());
+        partida.setEsCustom(true);
+        partida.setContraseña(password);
+        partida.setEstado("{}"); // o estado inicial por defecto
+
+        partidaRepository.save(partida);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("roomId", gameRoomId);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonResponse = mapper.writeValueAsString(response);
+
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/json")
+                .body(jsonResponse);
+    }
+
+    @PostMapping("/game/joinPrivateRoom")
+    @ResponseBody
+    @Transactional
+    public ResponseEntity<?> joinPrivateRoom(
+            Principal principal,
+            @RequestBody Map<String, String> body) {
+
+        String roomId = body.get("roomId");
+        String password = body.get("password");
+
+        if (roomId == null || password == null) {
+            return ResponseEntity.badRequest().body("Faltan parámetros");
+        }
+
+        Partida partida = partidaRepository.findByGameRoomId(roomId).orElse(null);
+
+        if (partida == null || !Boolean.TRUE.equals(partida.getEsCustom())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sala no encontrada");
+        }
+
+        if (!password.equals(partida.getContraseña())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña incorrecta");
+        }
+
+        User jugador = userRepository.findByUsername(principal.getName()).orElse(null);
+        if (jugador == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no válido");
+        }
+
+        // Asignar jugador2 si aún no lo está
+        if (partida.getJugador2() == null || partida.getJugador2().equals(partida.getCreador())) {
+            partida.setJugador2(jugador);
+            partidaRepository.save(partida);
+        }
+        gameController.initializePrivateGameRoom(partida);
+
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.schedule(() -> {
+            messagingTemplate.convertAndSend("/topic/game/privateRoom/" + roomId, Map.of(
+                "type", "join",
+                "username", jugador.getUsername(),
+                "roomId", roomId
+            ));
+        }, 2, TimeUnit.SECONDS);
+
+        return ResponseEntity.ok(Map.of(
+            "message", "Unido correctamente a la sala",
+            "roomId", roomId
+        ));
+    }
 }

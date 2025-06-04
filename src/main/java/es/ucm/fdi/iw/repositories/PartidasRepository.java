@@ -13,5 +13,6 @@ import java.util.List;
 public interface PartidasRepository extends JpaRepository<Partida, Long> {
     Optional<Partida> findByIdPartida(Long id);
     Optional<Partida> findByGameRoomId(String gameRoomId);
-    List<Partida> findByJugador1AndJugador2Containing(User jugador1, User jugador2);
+    List<Partida> findByJugador1(User jugador1);
+    List<Partida> findByJugador2(User jugador2);
 }

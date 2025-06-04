@@ -21,11 +21,10 @@ public class GameUnit {
     private int health;
     private int maxHealth;
     private int unitID;
-    private double probabilidad_critico;
     private GameItem[] items;
 
     public GameUnit(int armor, int damage, String description, String faction, int id,
-                    String image, String name, int price, int speed, int health, double probabilidad_critico) {
+                    String image, String name, int price, int speed, int health) {
         this.armor = armor;
         this.damage = damage;
         this.description = description;
@@ -39,7 +38,6 @@ public class GameUnit {
         this.maxHealth = health;
         this.unitID = (name != null && !name.isEmpty()) ? nextId++ : -1;
         this.items = new GameItem[MAX_ITEMS];
-        this.probabilidad_critico = probabilidad_critico;
         Arrays.fill(this.items, null);
     }
 
@@ -54,8 +52,7 @@ public class GameUnit {
             otherUnit.name,
             otherUnit.price,
             otherUnit.speed,
-            otherUnit.health,
-            otherUnit.probabilidad_critico
+            otherUnit.health
         );
         newUnit.unitID = otherUnit.unitID;
         newUnit.items = Arrays.copyOf(otherUnit.items, otherUnit.items.length);
@@ -83,8 +80,7 @@ public class GameUnit {
             heroe.getNombre(),                // name
             heroe.getPrecio(),                // price
             heroe.getVelocidad(),             // speed
-            heroe.getVida(),                   // health
-            heroe.getProbabilidad_critico()
+            heroe.getVida()                   // health
         );
     }
 
@@ -166,8 +162,7 @@ public class GameUnit {
             "Campesino", // name
             0, // price
             10, // speed
-            150, // health (también se usará como maxHealth)
-            0.1
+            150 // health (también se usará como maxHealth)
         );
     }
 

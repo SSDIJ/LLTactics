@@ -169,6 +169,18 @@ public class GamePlayer {
     public void addStars(int starsNewRound) {
         stars += starsNewRound;
     }
+
+    public void sellAll() {
+        for (GameUnit u : units) {
+            if (u.getId() > 0) {
+                sellUnit(u);
+            }
+        } 
+
+        for (GameItem item : new HashSet<>(inventory)) {
+            sellItem(item);
+        }
+    }
     
 }
 

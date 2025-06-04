@@ -38,12 +38,14 @@ import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Objeto;
 import es.ucm.fdi.iw.model.Partida;
+import es.ucm.fdi.iw.model.Reporte;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.repositories.ConfigPartidaRepository;
 import es.ucm.fdi.iw.repositories.HeroeRepository;
 import es.ucm.fdi.iw.repositories.HeroeUsosRepository;
 import es.ucm.fdi.iw.repositories.ItemRepository;
 import es.ucm.fdi.iw.repositories.PartidasRepository;
+import es.ucm.fdi.iw.repositories.ReporteRepository;
 import es.ucm.fdi.iw.repositories.UserRepository;
 import es.ucm.fdi.iw.services.HeroesService;
 import jakarta.persistence.EntityNotFoundException;
@@ -86,6 +88,9 @@ public class AdminController {
 
     @Autowired
     private GameController gameController;
+
+    @Autowired
+    private ReporteRepository reporteRepository;
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
@@ -167,10 +172,11 @@ public class AdminController {
 
     @GetMapping("/gestUsuarios")
     public String showUsuarios(Model model) {
-        List<User> reportados = userRepository.findByEstado(User.Estado.REPORTADO);
-        List<User> usuarios = userRepository.findAll();
+
+        List<Reporte> reportados = reporteRepository.findAll();
         model.addAttribute("reportados", reportados);
 
+        List<User> usuarios = userRepository.findAll();
         model.addAttribute("usuarios", usuarios);
         return "gestUsuarios";
     }
@@ -217,7 +223,6 @@ public class AdminController {
             @RequestParam("precio") int precio,
             @RequestParam("descripcion") String descripcion,
             @RequestParam("faccion") int faccion,
-            @RequestParam("probabilidad_critico") double probabilidad_critico,
             Model model) {
 
         try {
@@ -271,7 +276,6 @@ public class AdminController {
             heroe.setPrecio(precio);
             heroe.setDescripcion(descripcion);
             heroe.setFaccion(faccion);
-            heroe.setProbabilidad_critico(probabilidad_critico);
 
             heroeRepository.save(heroe);
 
@@ -391,29 +395,58 @@ public class AdminController {
     public String updateHeroe(
             @PathVariable("idHeroe") Long idHeroe,
             @RequestParam("nombre") String nombre,
-            @RequestParam("imagen") String imagen,
             @RequestParam("vida") int vida,
             @RequestParam("armadura") int armadura,
             @RequestParam("daño") int daño,
             @RequestParam("velocidad") int velocidad,
             @RequestParam("probabilidad") double probabilidad,
-            @RequestParam("probabilidad_critico") double probabilidad_critico,
             @RequestParam("precio") int precio,
+            @RequestParam("imagen") MultipartFile imagenFile,
             Model model) {
 
         Heroe heroe = heroeRepository.findById(idHeroe)
                 .orElseThrow(() -> new IllegalArgumentException("Héroe no encontrado"));
-
+            
         // Si se encuentra, actualizamos cada campo con los datos recibidos
         heroe.setNombre(nombre);
-        heroe.setImagen(imagen);
         heroe.setVida(vida);
         heroe.setArmadura(armadura);
         heroe.setDaño(daño);
         heroe.setVelocidad(velocidad);
-        heroe.setProbabilidad(probabilidad);
         heroe.setPrecio(precio);
-        heroe.setProbabilidad_critico(probabilidad_critico);
+        
+        log.info("Nombre del archivo recibido: " + imagenFile.getOriginalFilename());
+        log.info("¿Está vacío?: " + imagenFile.isEmpty());
+        String imagePath;
+        if (!(imagenFile == null || imagenFile.isEmpty())) {
+
+            // 1. Obtener la carpeta de héroes usando LocalData
+            File heroesDir = localData.getFolder("heroes");
+            log.info("Ruta absoluta de heroesDir: " + heroesDir.getAbsolutePath());
+            if (!heroesDir.exists()) {
+                heroesDir.mkdirs();
+            }
+
+            String fileName = idHeroe + ".png";
+
+            // 3. Obtener el archivo destino usando LocalData
+            File dest = localData.getFile("heroes", fileName);
+            dest.getParentFile().mkdirs();
+
+            // 4. Guardar la imagen usando BufferedOutputStream (como en setPic)
+            try (BufferedOutputStream stream = new BufferedOutputStream(new java.io.FileOutputStream(dest))) {
+                byte[] bytes = imagenFile.getBytes();
+                stream.write(bytes);
+                log.info("Imagen guardada en: " + dest.getAbsolutePath());
+            } catch (Exception e) {
+                log.error("Error guardando la imagen", e);
+                model.addAttribute("error", "Error al guardar la imagen: " + e.getMessage());
+                return "redirect:/admin/gestGaleria";
+            }
+            imagePath = "/iwdata/heroes/" + fileName; // Ruta relativa para la web
+            heroe.setImagen(imagePath);
+        }
+
 
         heroeRepository.save(heroe);
 
@@ -425,7 +458,7 @@ public class AdminController {
     public String updateObjeto(
             @PathVariable("idObjeto") Long idObjeto,
             @RequestParam("nombre") String nombre,
-            @RequestParam("imagen") String imagen,
+            @RequestParam("imagen") MultipartFile imagenFile,
             @RequestParam("vida") int vida,
             @RequestParam("armadura") int armadura,
             @RequestParam("daño") int daño,
@@ -438,12 +471,40 @@ public class AdminController {
 
         // Si se encuentra, actualizamos cada campo con los datos recibidos
         objeto.setNombre(nombre);
-        objeto.setImagen(imagen);
         objeto.setVida(vida);
         objeto.setArmadura(armadura);
         objeto.setDaño(daño);
         objeto.setVelocidad(velocidad);
         objeto.setPrecio(precio);
+        String imagePath;
+
+        if (!(imagenFile == null || imagenFile.isEmpty())) {
+                // 1. Obtener la carpeta de objetos usando LocalData
+                File objetosDir = localData.getFolder("objetos");
+                log.info("Ruta absoluta de objetosDir: " + objetosDir.getAbsolutePath());
+                if (!objetosDir.exists()) {
+                    objetosDir.mkdirs();
+                }
+
+                String fileName = idObjeto + ".png";
+
+                // 3. Obtener el archivo destino usando LocalData
+                File dest = localData.getFile("objetos", fileName);
+                dest.getParentFile().mkdirs();
+
+                // 4. Guardar la imagen usando BufferedOutputStream
+                try (BufferedOutputStream stream = new BufferedOutputStream(new java.io.FileOutputStream(dest))) {
+                    byte[] bytes = imagenFile.getBytes();
+                    stream.write(bytes);
+                    log.info("Imagen guardada en: " + dest.getAbsolutePath());
+                } catch (Exception e) {
+                    log.error("Error guardando la imagen", e);
+                    model.addAttribute("error", "Error al guardar la imagen: " + e.getMessage());
+                    return "redirect:/admin/gestGaleria";
+                }
+                imagePath = "/iwdata/objetos/" + fileName; // Ruta relativa para la web
+                objeto.setImagen(imagePath);
+        }
 
         itemRepository.save(objeto);
 

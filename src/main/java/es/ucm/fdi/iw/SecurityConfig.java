@@ -60,8 +60,7 @@ public class SecurityConfig {
 				.ignoringRequestMatchers("/api/**")
 			)
             .authorizeHttpRequests(authorize -> authorize
-				.requestMatchers("/css/**", "/js/**", "/img/**", "/", "/error", "/registro", "/register", "/viewProfile").permitAll()
-				.requestMatchers("/api/**", "/ranking").permitAll()            // <-- public api access
+				.requestMatchers("/css/**", "/js/**", "/img/**", "/", "/error", "/registro", "/register", "/viewProfile", "/banned").permitAll()
 				.requestMatchers("/api/**", "/reglas1").permitAll()            // <-- public api access
 				.requestMatchers("/api/**", "/galeria").permitAll()            // <-- public api access
 				.requestMatchers("/api/**", "/autores").permitAll()            // <-- public api access
@@ -82,6 +81,7 @@ public class SecurityConfig {
                 .loginPage("/login")
                 .permitAll()
 				.successHandler(loginSuccessHandler)  // <-- called when login Ok; can redirect
+				.failureHandler(loginFailureHandler)
             );
 
         return http.build();

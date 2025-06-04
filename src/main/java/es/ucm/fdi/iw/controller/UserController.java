@@ -8,6 +8,7 @@ import es.ucm.fdi.iw.model.Heroe;
 import es.ucm.fdi.iw.model.HeroeUsos;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Partida;
+import es.ucm.fdi.iw.model.Reporte;
 import es.ucm.fdi.iw.model.Transferable;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
@@ -53,6 +54,7 @@ import jakarta.transaction.Transactional;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.*;
 import java.security.Principal;
@@ -62,7 +64,9 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.Optional;
@@ -223,6 +227,15 @@ public class UserController {
 			target.setMasJugados(atributoHeroesMostrar);
 			model.addAttribute("heroeFavorito", heroeMostrar);
 		}
+
+		List<Partida> partidas1 = partidasRepository.findByJugador1(target);
+		List<Partida> partidas2 = partidasRepository.findByJugador2(target);
+
+		List<Partida> newList = new ArrayList<Partida>();
+		newList.addAll(partidas1);
+		newList.addAll(partidas2);
+
+		model.addAttribute("historialPartidas", newList);
 
 		return "user";
 	}
@@ -667,10 +680,12 @@ public class UserController {
 			// Obtener el usuario que reporta usando el nombre de usuario del principal
 			User reportador = userRepository.findByUsername(principal.getName()).orElse(null);
 
-			usuario.setEstado(User.Estado.REPORTADO);
-			usuario.setRazonBaneo(razonBaneo);
-			usuario.setReportadoPor(reportador);
+			Reporte reporte = new Reporte(usuario, reportador, razonBaneo);
 
+			entityManager.persist(reporte);
+			entityManager.flush();
+
+			usuario.setEstado(User.Estado.REPORTADO);
 			userRepository.save(usuario);
 		}
 
@@ -807,17 +822,5 @@ public class UserController {
 		}
 
 	}
-
-	@GetMapping("/getGameHistory")
-	@ResponseBody
-	public String getMethodName(Principal principal) {
-		String name = principal.getName();
-		User user = userRepository.findByUsername(name).orElse(null);
-		List<Partida> partidas = partidasRepository.findByJugador1AndJugador2Containing(null, null);
-		Collections.sort(partidas, (a,b)->a.getInicio().compareTo(b.getInicio()));
-		partidas.subList(0, 20);
-		return partidas;
-	}	
-	
 
 }

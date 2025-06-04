@@ -11,8 +11,10 @@
 2. [Cómo se usa](#2-cómo-se-usa)
 3. [Créditos](#3-créditos)
 
-## 1. Descripción del proyecto
+> [!IMPORTANT]
+> 4. [<u>MEJORAS</u>](#4-mejoras)
 
+## 1. Descripción del proyecto
 **LLTactics** es un juego web de fantasía medieval inspirado en el modelo autochess. En él, los jugadores compiten por la victoria comprando y mejorando personajes y objetos estratégicamente.
 
 Las partidas se desarrollan en dos fases alternas:
@@ -71,3 +73,26 @@ Contraseña: <code>aa</code>
 - El resto de imágenes decorativas han sido generados con ChatGPT y posteriormente adaptados.
 - Las fuentes tipográficas usadas en los títulos se han obtenido desde Google Fonts.
 - Los iconos provienen del set de Bootstrap Icons, bajo licencia MIT.
+
+## 4. MEJORAS
+
+**Autor**
+- Javier Martín Fuentes
+
+**Cambios**
+
+> [!IMPORTANT]
+> 4. [<u>MEJORAS</u>](#4-mejoras)
+
+> [!NOTE]
+> Para probar los cambios, recomiendo primero jugar una partida y escribir algo en el chat antes de ver la vista de gestión de partidas.
+
+- **[EXAMEN - PREGUNTA C]** Se ha añadido el **atributo <code>title</code>** a todos los elementos interactivos o informativos de la partida. Para los objetos y unidades se muestra, entre otros, sus estadísticas.
+- **[EXAMEN - PREGUNTA D]** Se han implementado las **partidas privadas protegidas por contraseña**. Ahora cuando le das al botón de jugar puedes elegir entre la forma anterior (partida pública) o crear / unirte a una partida privada.
+- **[EXAMEN - PREGUNTA E]** Se ha corregido la forma de **modificar la imagen** tanto de héroes como objetos para que sea posible añadir **recursos externos**.
+- **[EXAMEN - PREGUNTA F]** La vista de información de las últimas partidas **ya estaba implementada** (Gestión > Partidas [VER SECCIÓN REGISTRO DE PARTIDAS]). No obstante, se han añadido dos nuevas columnas a la tabla: una que te indica si la partida es pública / privada y otra que contiene un botón que puedes ver el chat de esa partida (creo que es más útil para un administrador que ver los equipos que han batallado en cada ronda y la forma de implementarlo es bastante similar).
+
+- Se ha añadido un botón en la partida para poder vender todas tus unidades y objetos.
+- Se ha añadido en la vista de perfil un botón para que un usuario pueda ver su historial de partidas.
+- Se ha corregido que cuando un usuario baneado intente acceder se muestre la vista baneado (creo que no es la forma más limpia de hacerlo pero funciona).
+- Con respecto al comentario *"a veces se des-sincroniza la cantidad de estrellas que tiene cada jugador de una partida"* no he encontrado el error, ¿puede ser que te refieras a que al comienzo de una nueva ronda de compra se añaden estrellas a ambos jugadores para que puedan comprar?

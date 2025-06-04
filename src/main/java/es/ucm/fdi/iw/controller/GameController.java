@@ -144,8 +144,43 @@ public class GameController {
         // Crear una nueva instancia de Partida
         Partida partida = new Partida(jugador1, jugador2, estadoPartidaJson, gameRoomId);
 
+        partida.setEsCustom(false);
+        
         // Guardar la partida en la base de datos
         entityManager.persist(partida);
+        entityManager.flush();
+    }
+
+    public void initializePrivateGameRoom(Partida partida) {
+        System.out.println("Inicializando GameRoom para partida privada...");
+
+        String player1 = partida.getJugador1().getUsername();
+        String player2 = partida.getJugador2().getUsername();
+        String gameRoomId = partida.getGameRoomId();
+
+        // Obtener configuración de partida
+        ConfigPartida config = configPartidaRepository.findAll().stream().findFirst().orElse(null);
+
+        // Crear instancia de GameRoom con los jugadores
+        GameRoom gameRoom = new GameRoom(gameRoomId, player1, player2, config);
+        updatePlayerShop(gameRoom, player1, false);
+        updatePlayerShop(gameRoom, player2, false);
+
+        // Serializar estado del GameRoom
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
+        String estadoPartidaJson;
+        try {
+            estadoPartidaJson = objectMapper.writeValueAsString(gameRoom);
+        } catch (JsonProcessingException e) {
+            log.error("Error al serializar GameRoom para partida privada: {}", e.getMessage());
+            return;
+        }
+
+        // Actualizar el estado de la partida
+        partida.setEstado(estadoPartidaJson);
+        entityManager.merge(partida); // usar merge ya que es una entidad gestionada previamente
         entityManager.flush();
     }
 
@@ -299,6 +334,9 @@ public class GameController {
             case REFRESH_SHOP:
                 updatePlayerShop(gameRoom, senderPlayer, true);
                 break;
+            case SELL_ALL:
+                gameRoom.playerSellAll(senderPlayer);
+                break;
             case SEND_MESSAGE:
                 gameRoom.addMessage(senderPlayer, details, ZonedDateTime.now());
                 break;
@@ -354,6 +392,7 @@ public class GameController {
                 payload.put("updateItems", true);
                 break;
 
+            case SELL_ALL:
             case GENERAL:
 
                 Map<String, Boolean> battleReady = gameRoom.getBattleReady();

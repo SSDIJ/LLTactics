@@ -260,11 +260,6 @@ public class GameRoom {
     private void attack(GameUnit attacker, GameUnit defender) {
         
         int damage = Math.max(attacker.getDamage() - defender.getArmor(), 1);
-
-        double randomNumber = Math.random();
-        if (randomNumber <= attacker.getProbabilidad_critico()) {
-            damage *= 2;
-        }
         defender.setHealth(defender.getHealth() - damage);
     }
 
@@ -276,6 +271,10 @@ public class GameRoom {
         for (GamePlayer p : players.values()) {
             p.addStars(GameRoom.STARS_NEW_ROUND);
         }
+    }
+
+    public void playerSellAll(String player) {
+        this.players.get(player).sellAll();
     }
 
 }

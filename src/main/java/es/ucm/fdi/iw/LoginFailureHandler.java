@@ -17,7 +17,9 @@ public class LoginFailureHandler implements AuthenticationFailureHandler{
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
             org.springframework.security.core.AuthenticationException exception) throws IOException, ServletException {
         String errorMsg = "Usuario o contraseña incorrectos";
-        if (exception instanceof DisabledException) {
+        System.out.println(errorMsg);
+        System.out.println(exception.getMessage());
+        if (exception.getMessage().equals("Tu cuenta está baneada.")) {
             errorMsg = "Tu cuenta está baneada. Contacta con soporte si crees que es un error.";
             request.getSession().setAttribute("loginError", errorMsg);
             response.sendRedirect("/banned");  

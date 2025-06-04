@@ -71,6 +71,11 @@ public class RootController {
     public String index(Model model) {
         return "index";
     }
+
+    @GetMapping("/banned")
+    public String banned(Model model) {
+        return "banned";
+    }
     
     @GetMapping("/game-queue")
     public String gameQueuePage() {

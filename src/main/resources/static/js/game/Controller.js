@@ -40,6 +40,7 @@ const chatBoxes = document.querySelectorAll(".chat-box");
 const chatInputs = document.querySelectorAll(".chat-input");
 const chatSendBtn = document.getElementById("chat-send-btn");
 const reportBtns = document.querySelectorAll(".report-btn");
+const sellBtn = document.getElementById("sell-all-btn");
 
 
 // Muestra el ganador
@@ -188,6 +189,7 @@ function updateUnits(player, isOpponent = false) {
             if (unit.image) {
 
                 img.setAttribute('src', `/user/${unit.id}/heroe`);
+                img.setAttribute('title', unit.getReport());
                 img.classList.remove("hidden");
                 unitLife.classList.remove("hidden")
                 unitName.textContent = unit.name;
@@ -211,6 +213,8 @@ function updateUnits(player, isOpponent = false) {
                     if (item) { 
                         imgObj.setAttribute('src', `/user/${item.id}/objeto`);
                         imgObj.classList.remove("hidden");
+                        console.log(item)
+                        imgObj.setAttribute('title', item.getReport());
                     }
                     else {
                         imgObj.src = "";
@@ -286,6 +290,10 @@ function updateInventory(isOpponent = false) {
 
             // Limpiar y volver a agregar event listeners
             let newCell = objectCells[index].cloneNode(true);
+
+            if (img) {
+                newCell.setAttribute('title', itemTemp.getReport());
+            }
             objectCells[index].replaceWith(newCell);
 
             if (isOpponent) return;
@@ -487,6 +495,7 @@ function updateShop() {
                 valorP.textContent = item.price;
 
                 const imagenUnidad = newItemDiv.querySelector('.object-img');
+                newItemDiv.setAttribute('title', item.getReport());
                 imagenUnidad.setAttribute('src', `/user/${item.id}/objeto`);
 
                 // Añade la opción de compra de los objetos
@@ -697,6 +706,13 @@ document.addEventListener("DOMContentLoaded", () => {
     chatBoxes.forEach(chatBox => {
         chatBox.scrollTop = chatBox.scrollHeight;
     });
+})
+
+sellBtn.addEventListener("click", () => {
+    sendAction({
+        "actionType": "SELL_ALL",
+        "playerName": player1.name
+    })
 })
 
 // Iniciar temporizador -> NO SE USA (para futuras implementaciones)
