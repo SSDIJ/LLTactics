@@ -905,7 +905,7 @@ width: 150px;
     #player-stats-container {
         flex-direction: row !important;
         height: 50px !important;
-        width: 200px !important;
+        width: 250px !important;
     }
 
     .unit-game-img {
@@ -1175,7 +1175,7 @@ width: 150px;
     border-radius: 10px;
 }
 
-.shop-unit:hover, .object-cell:hover, #ready-btn:hover, .refresh-btn:hover, .send-btn:hover, .report-btn-offCanvas:hover {
+.shop-unit:hover, .object-cell:hover, #ready-btn:hover, .refresh-btn:hover, .send-btn:hover, .report-btn-offCanvas:hover, #sell-all-btn:hover{
     transform: scale(1.1);
     transition: 0.3s;
     box-shadow: inset 0px 0px 15px 5px rgba(255, 255, 255, 0.8);
@@ -2000,4 +2000,16 @@ width: 150px;
   font-size: 1rem;
   background-color: #f5f5f5;
   text-align: center;
+}
+
+#sell-all-btn {
+    border: 1px solid white !important;
+    border-radius: 10px;
+    background-color: rgba(23,28,91,255) !important;
+    padding: 5px;
+    color: white;
+}
+
+.chat-history-user-btn {
+    margin-left: 45px;
 }

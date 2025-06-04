@@ -146,7 +146,7 @@ public class MatchmakingController {
         }
 
         User jugador = userRepository.findByUsername(principal.getName()).orElse(null);
-        if (jugador == null) {
+        if (jugador == null || partida.getJugador1().getUsername().equals(principal.getName())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no válido");
         }
 

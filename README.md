@@ -82,14 +82,15 @@ Contraseña: <code>aa</code>
 **Cambios**
 
 > [!NOTE]
-> Para probar los cambios, recomiendo primero jugar una partida y escribir algo en el chat antes de ver la vista de gestión de partidas.
+> Para probar los cambios, recomiendo primero jugar una partida y escribir algo en el chat antes de ver la vista de gestión de partidas del administrador o el historial de partidas en el perfil de un jugador.
 
 - **[EXAMEN - PREGUNTA C]** Se ha añadido el **atributo <code>title</code>** a todos los elementos interactivos o informativos de la partida. Para los objetos y unidades se muestra, entre otros, sus estadísticas.
 - **[EXAMEN - PREGUNTA D]** Se han implementado las **partidas privadas protegidas por contraseña**. Ahora cuando le das al botón de jugar puedes elegir entre la forma anterior (partida pública) o crear / unirte a una partida privada.
 - **[EXAMEN - PREGUNTA E]** Se ha corregido la forma de **modificar la imagen** tanto de héroes como objetos para que sea posible añadir **recursos externos**.
-- **[EXAMEN - PREGUNTA F]** La vista de información de las últimas partidas **ya estaba implementada** (Gestión > Partidas [VER SECCIÓN REGISTRO DE PARTIDAS]). No obstante, se han añadido dos nuevas columnas a la tabla: una que te indica si la partida es pública / privada y otra que contiene un botón que puedes ver el chat de esa partida (creo que es más útil para un administrador que ver los equipos que han batallado en cada ronda y la forma de implementarlo es bastante similar).
+- **[EXAMEN - PREGUNTA F]** La vista de información de las últimas partidas **ya estaba implementada** (Gestión > Partidas [VER SECCIÓN REGISTRO DE PARTIDAS]). No obstante, se ha añadido una nueva columna a la tabla que contiene un botón que puedes ver el chat de esa partida (creo que es más útil para un administrador que ver los equipos que han batallado en cada ronda y la forma de implementarlo es bastante similar).
 
 - Se ha añadido un botón en la partida para poder vender todas tus unidades y objetos.
 - Se ha añadido en la vista de perfil un botón para que un usuario pueda ver su historial de partidas.
 - Se ha corregido que cuando un usuario baneado intente acceder se muestre la vista baneado (creo que no es la forma más limpia de hacerlo pero funciona).
 - Con respecto al comentario *"a veces se des-sincroniza la cantidad de estrellas que tiene cada jugador de una partida"* no he encontrado el error, ¿puede ser que te refieras a que al comienzo de una nueva ronda de compra se añaden estrellas a ambos jugadores para que puedan comprar?
+- Se ha corregido un error que hacía que las imágenes nuevas de objetos añadidos / modificados ocupaban la pantalla completa en la vista de partida.
