@@ -81,9 +81,6 @@ Contraseña: <code>aa</code>
 
 **Cambios**
 
-> [!IMPORTANT]
-> 4. [<u>MEJORAS</u>](#4-mejoras)
-
 > [!NOTE]
 > Para probar los cambios, recomiendo primero jugar una partida y escribir algo en el chat antes de ver la vista de gestión de partidas.
 
